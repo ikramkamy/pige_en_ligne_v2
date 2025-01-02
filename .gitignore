@@ -1,0 +1,36 @@
+# Ignore package lock file
+package-lock.json
+
+# Ignore node modules
+node_modules/
+
+# Ignore ESLint cache
+.eslintcache
+
+# Ignore assets directory
+/src/assets/
+
+# Ignore build directory
+build/
+
+# Ignore all image files
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.webp
+
+# Ignore all video files
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mpeg
+*.mpg
+*.3gp

@@ -1,0 +1,108 @@
+ date1:dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+date2:dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+
+
+
+  useEffect(() => {
+    if (veilletvData.length > 0) {
+
+
+
+      //const sortedData = veilletvData.filter(elem => {
+      // Check if any of the specified fields are null
+      //   return (
+      //     elem.Insertion_Pub_Name !== null &&
+      //     elem.Insertion_Supports !== null &&
+      //     elem.Insertion_Advertiser_Id !== null &&
+      //     elem.Insertion_Advertiser_Name !== null &&
+      //     elem.Insertion_Brand_Id !== null &&
+      //     elem.Insertion_Brand_Name !== null &&
+      //     elem.Insertion_Classe_Id !== null &&
+      //     elem.Insertion_Classe_Name !== null &&
+      //     elem.Insertion_Diffusion !== null &&
+      //     elem.Insertion_Famille_Id !== null &&
+      //     elem.Insertion_Famille_Name !== null &&
+      //     elem.Insertion_Fichier !== null &&
+      //     elem.Insertion_Format !== null &&
+      //     elem.Insertion_Id !== null &&
+      //     elem.Insertion_Image !== null &&
+      //     elem.Insertion_Premiere !== null &&
+      //     elem.Insertion_Product_Id !== null &&
+      //     elem.Insertion_Product_Name !== null &&
+      //     elem.Insertion_Pub_Id !== null &&
+      //     elem.Insertion_Secteur_Id !== null &&
+      //     elem.Insertion_Secteur_Name !== null &&
+      //     elem.Insertion_Type !== null &&
+      //     elem.Insertion_Variete_Id !== null &&
+      //     elem.Insertion_Variete_Name !== null &&
+      //     elem.Insertion_Version !== null
+      //   );
+      // })
+      // .sort((a, b) => {
+
+      //   if (sortOption === 'dateAsc') {
+      //     return new Date(a.Insertion_Premiere) - new Date(b.Insertion_Premiere);
+      //   } else if (sortOption === 'dateDesc') {
+      //     return new Date(b.Insertion_Premiere) - new Date(a.Insertion_Premiere);
+      //   } else if (sortOption === 'message') {
+      //     return a.Insertion_Pub_Name.localeCompare(b.Insertion_Pub_Name);
+      //   } else if (sortOption === 'product') {
+      //     return a.Insertion_Product_Name.localeCompare(b.Insertion_Product_Name);
+      //   }
+      //   return 0;
+      // });
+
+      const sortedData = [...veilletvData].sort((a, b) => {
+        if (sortOption === 'dateAsc') {
+          return new Date(a.Insertion_Premiere) - new Date(b.Insertion_Premiere);
+        } else if (sortOption === 'dateDesc') {
+          return new Date(b.Insertion_Premiere) - new Date(a.Insertion_Premiere);
+        } else if (sortOption === 'message') {
+          return a.Insertion_Pub_Name.localeCompare(b.Insertion_Pub_Name);
+        } else if (sortOption === 'product') {
+          return a.Insertion_Product_Name.localeCompare(b.Insertion_Product_Name);
+        }
+        return 0;
+      });
+      console.log("sortedData", sortedData)
+      setSdata(sortedData)
+      const filteredData = sortedData.filter((e) => {
+        //console.log("data not available", sortedData)
+        // if (sortedData.length > 0) {
+        //   const searchLower = searchTerm.toLowerCase();
+        //   if (e.Insertion_Product_Name == "") {
+        //     console.log("e.Insertion_Product_Name",
+        //       sortedData.indexOf(e))
+        //   } else {
+        //     //do nothing
+        //   }
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          e.Insertion_Product_Name?.toLowerCase().includes(searchLower) ||
+          e.Insertion_Pub_Id?.toString().includes(searchLower) ||
+          e.Insertion_Famille_Name?.toLowerCase().includes(searchLower) ||
+          e.Insertion_Brand_Name?.toLowerCase().includes(searchLower) ||
+          e.Insertion_Secteur_Name?.toLowerCase().includes(searchLower) ||
+          e.Insertion_Classe_Name?.toLowerCase().includes(searchLower) ||
+          e.Insertion_Variete_Name?.toLowerCase().includes(searchLower) ||
+          //e.Insertion_Supports?.toLowerCase().includes(searchLower) ||
+          e.Insertion_Advertiser_Name?.toLowerCase().includes(searchLower)
+        );
+        // } else {
+        //   console.log("data not available")
+        // }
+
+      });
+
+      const paginatedData = filteredData.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+      console.log("paginatedData", paginatedData)
+      setPdata(paginatedData);
+      // } else {
+      //   //do nothing
+      //   setPdata(veilletvData);
+      // }
+    } else {
+      //
+    }
+
+  }, [veilletvData, searchTerm, sortOption, page])

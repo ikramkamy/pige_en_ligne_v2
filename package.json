@@ -1,0 +1,98 @@
+{
+  "name": "pige_veille",
+  "version": "2.0.1",
+  "homepage": "/",
+  "proxy": "https://pige.immar-media.com",
+  "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@fortawesome/fontawesome-free": "5.15.2",
+    "@heroicons/react": "v1",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.7",
+    "@mui/styles": "^6.3.0",
+    "@mui/x-charts": "^7.14.0",
+    "@mui/x-data-grid": "^7.13.0",
+    "@mui/x-data-grid-generator": "^7.15.0",
+    "@mui/x-date-pickers": "^7.13.0",
+    "@mui/x-date-pickers-pro": "^7.13.0",
+    "ajv": "^8.16.0",
+    "apexcharts": "^3.52.0",
+    "axios": "^1.7.3",
+    "bootstrap": "^5.3.3",
+    "bootstrap-daterangepicker": "^3.1.0",
+    "chartist": "0.11.4",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
+    "echarts": "^5.5.1",
+    "echarts-for-react": "^3.0.2",
+    "file-saver": "^2.0.5",
+    "gulp": "4.0.2",
+    "gulp-append-prepend": "1.0.9",
+    "html2canvas": "^1.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "jspdf": "^2.5.1",
+    "jszip": "^3.10.1",
+    "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "moment-range": "^4.0.2",
+    "playwright": "^1.49.1",
+    "pptxgenjs": "^3.12.0",
+    "react": ">=16.8.0",
+    "react-apexcharts": "^1.4.1",
+    "react-bootstrap": "2.4.0",
+    "react-bootstrap-daterangepicker": "^8.0.0",
+    "react-chartist": "0.14.4",
+    "react-date-range": "^2.0.1",
+    "react-datepicker": "^7.5.0",
+    "react-daterange-picker": "^2.0.1",
+    "react-dom": ">=16.8.0",
+    "react-google-charts": "^4.0.1",
+    "react-notification-alert": "0.0.13",
+    "react-router": "5.2.0",
+    "react-router-dom": "5.2.0",
+    "react-scripts": "5.0.1",
+    "react-use": "^17.5.1",
+    "react-windowed-select": "^5.2.0",
+    "reactstrap": "8.8.1",
+    "rsuite": "^5.75.0",
+    "rsuite-daterangepicker": "^3.0.5",
+    "sass": "1.53.0",
+    "xlsx": "^0.18.5",
+    "zustand": "^4.5.4"
+  },
+  "optionalDependencies": {
+    "jquery": "^3.7.1",
+    "typescript": "4.7.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "cross-env CI=false react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+    "compile:scss": "sass src/assets/scss/light-bootstrap-dashboard-pro-react.scss src/assets/css/light-bootstrap-dashboard-pro-react.css",
+    "minify:scss": "sass src/assets/scss/light-bootstrap-dashboard-pro-react.scss src/assets/css/light-bootstrap-dashboard-pro-react.min.css --style compressed",
+    "build:scss": "npm run compile:scss && npm run minify:scss"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

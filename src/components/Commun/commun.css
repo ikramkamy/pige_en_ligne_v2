@@ -1,0 +1,212 @@
+*{
+
+font-family: "Figtree", serif;
+font-optical-sizing: auto;
+font-weight: 300;
+font-style: normal;
+}
+
+
+
+.hide{
+    display:hidden;
+}
+.light-blue-row { 
+  background-color: #85b0db !important; 
+  color: white;
+}
+.light-blue-row:hover{ 
+  background-color: #00a6e0  !important; 
+  color: black;
+  cursor: pointer;
+}
+.normal-row {
+  background-color: white !important; 
+  cursor: pointer;
+}
+.css-1nnh8nx-MuiDataGrid-root 
+.MuiDataGrid-virtualScrollerContent .MuiDataGrid-row.Mui-selected:hover{
+  background-color: #0a2e52 !important; 
+  color: white;
+}
+
+.custom_tool_bar {
+    text-transform: none;
+    background-color: black;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity))
+  }
+  /* DatePickerStyles.css */
+.react-datepicker {
+    height: 100px; /* Set the height of the date picker */
+    background-color: white;
+  }
+  
+  .react-datepicker__day--highlighted {
+    background-color: #1DC7EA !important; /* Highlighted dates background color */
+    color: white; /* Change text color for better contrast */
+  }
+  
+  .react-datepicker__day--in-range {
+    background-color: #1DC7EA !important; /* Background color for in-range dates */
+    color: white; /* Change text color for better contrast */
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #1DC7EA !important; /* Background color for selected dates */
+    color: white; /* Change text color for better contrast */
+  }
+  
+  .react-datepicker__header {
+    background-color: white !important; /* Set the header background color */
+  }
+  
+  .react-datepicker__day--highlighted {
+    background-color: #1DC7EA !important; /* Highlighted dates background color */
+    color: white; /* Change text color for better contrast */
+  }
+  
+  .react-datepicker__day--in-range {
+    background-color: #1DC7EA !important; /* Background color for in-range dates */
+    color: white; /* Change text color for better contrast */
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #1DC7EA !important; /* Background color for selected dates */
+    color: white; /* Change text color for better contrast */
+  }
+  .react-datepicker__month {
+    margin: 0.4rem;
+    text-align: center;
+    height: 211px;
+   /* background-color: #d0edf3; */
+   background-color: white;
+}
+#pickInput{
+    
+    height: 55px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+}
+/* Adjust the width of the dropdown menu */
+.MuiPaper-root.MuiPopover-paper.MuiMenu-paper {
+  width: 248px !important;
+  /* left: 60px !important; */
+}
+.css-87gls0-MuiFormLabel-root-MuiInputLabel-root{
+  transform: translate(14px, 5px) scale(1) !important;
+}
+
+#pickInput {
+  height: 50px !important;
+  border-radius: 5px;
+  border: 2px solid transparent !important;
+}
+.react-datepicker-wrapper {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  width: 200px !important;
+}
+.react-datepicker__input-container {
+  width: 200px !important;
+}
+.css-13cymwt-control{
+max-height: 50px !important;
+overflow: hidden !important;
+}
+.custom-link {
+  text-decoration: none; /* Remove underline */
+  background-color: #00a6e0; /* Background color */
+  color: white !important; /* Text color */
+  width: 50%;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Corrected "cenetr" to "center" */
+}
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+height: 50px !important;
+
+}
+@media (max-width: 600px) {
+  #pickInput {
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+
+  .react-datepicker {
+    font-size: 14px; /* Adjust datepicker font size */
+  }
+}
+/* Container that holds the DatePicker */
+.date-picker-container {
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Custom input styles for responsiveness */
+.date-picker-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .date-picker-container {
+    width: 100%;
+    /* padding: 10px; */
+  }
+
+  .date-picker-input {
+    font-size: 12px;
+    padding: 6px;
+  }
+  .css-gjgo7x-MuiFormControl-root {
+    background-color: aquamarine !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .date-picker-container {
+    width: 100%;
+    /* padding: 8px; */
+  }
+
+  .date-picker-input {
+    font-size: 12px;
+    padding: 5px;
+  }
+  .react-datepicker-popper {
+   width: 100%;
+}
+@media (max-width:768px) {
+  .react-datepicker {
+    background-color: transparent !important;
+    width: 62%  !important;
+    border: 0px solid transparent    !important;
+  }
+}
+.react-datepicker__month-container{
+  transform: translateX(55%) !important;
+}
+.react-datepicker__navigation--previous {
+  left: 140px !important;
+}
+  /* .css-gjgo7x-MuiFormControl-root{
+    
+  } */
+}

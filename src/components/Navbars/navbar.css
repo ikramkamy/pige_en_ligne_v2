@@ -1,0 +1,24 @@
+/* .no-icon {
+    position: relative; 
+  } */
+  
+  .no-icon p {
+      opacity: 0;
+      color: white;
+  }
+  
+  .no-icon:hover p{
+    display: block; 
+    opacity: 1;
+  }
+  .links {
+    display: flex; /* Default to flex row */
+    flex-direction: row; /* Default direction */
+}
+
+
+@media (max-width: 768px) {
+    .links {
+        flex-direction: column; /* Change to column on small screens */
+    }
+}
