@@ -15,7 +15,13 @@
     display: flex; /* Default to flex row */
     flex-direction: row; /* Default direction */
 }
+.navbar_back{
+  
+  background-image: url('assets/navbar.png');
+  background-size: cover;
+  background-repeat: no-repeat;
 
+}
 
 @media (max-width: 768px) {
     .links {

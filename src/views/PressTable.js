@@ -228,7 +228,7 @@ export default function DataTablePress() {
   //const pageSize = window.localStorage.getItem('pageSize');
   const { autorisePigePresse,
     autorisePigeRadio,
-    autorisePigeTv ,} = UseLoginStore((state) => state)
+    autorisePigeTv ,client,email} = UseLoginStore((state) => state)
   //  console.log('email',email)
   const { getDataPresse, PressData, sendDownloadLink, IsPressdataisFetched, ResePressdataisFetched, } = UsePresseDashboardStore((state) => state);
   const { MediaData, getDataMedia, IsMediadataisFetched, ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
@@ -432,9 +432,6 @@ export default function DataTablePress() {
 
   }
   //const [dataTableShow, setDataTableShow] = React.useState(false);
-  const client = window.localStorage.getItem('user_name')
-  const user_id = window.localStorage.getItem('user_id')
-  const email = window.localStorage.getItem('user_email')
   const [fetchDataTime, setFetchDataTime] = React.useState(0)
   const [popupOpenEmailexport, setPopupOpenEmailexport] = React.useState(false)
   React.useEffect(() => {

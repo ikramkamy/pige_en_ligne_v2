@@ -44,6 +44,18 @@ import { PieChartVelson, PieChartRepartitionFormat } from '../components/Commun/
 import { CircularProgress } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
+import CIcon from '@coreui/icons-react'
+import { cilArrowTop, cilOptions } from '@coreui/icons'
+import { CChartBar, CChartLine } from '@coreui/react-chartjs';
+import {
+  CCol,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
+  CRow,
+  CWidgetStatsA,
+} from '@coreui/react'
 function Dashboard() {
   const slides = [
     <CustomDataLabelFamilles />,
@@ -138,7 +150,7 @@ function Dashboard() {
     getCreationParAnnonceur,
 
   } = UsePresseDashboardStore((state) => state)
-   const {autoriseDash}=UseLoginStore((state)=>state)
+  const { autoriseDash, client, email } = UseLoginStore((state) => state)
   const {
     Filtersupports,
     Filterclassesids,
@@ -277,51 +289,6 @@ function Dashboard() {
 
   }
   const disableButton = (!(media && base))
-  const handel = () => {
-    console.log("part ")
-    //getTop20famillesSectorielles && getTop20famillesSectorielles(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-
-
-    //getTop20Annonceurs && getTop20Annonceurs(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-    // getAnnonceursActif && getAnnonceursActif(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,media,rangs,date1,date2)
-    // getCreationUniques && getCreationUniques(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,media,rangs,date1,date2)
-
-    // getSupportDiffusion && getSupportDiffusion(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,media,rangs,date1,date2)
-    // getBudgetBrut && getBudgetBrut(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,media,rangs,date1,date2)
-    // getDreeTotalDiffusion && getDreeTotalDiffusion(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,media,rangs,date1,date2)
-    // getDreeTotalMoyenne && getDreeTotalMoyenne(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,media,rangs,date1,date2)
-    // getPicCommunication && getPicCommunication(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,media,rangs,date1,date2)
-    //getPrtMarchet && getPrtMarchet(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-    //getTop20Marques &&  getTop20Marques(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-    //getTop20Produits &&  getTop20Produits(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-    //getRepartitionFormat &&  getRepartitionFormat(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-    // getAnnonceursParSupport &&getAnnonceursParSupport(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-    // getCreationParAnnonceur && getCreationParAnnonceur(Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,base,media,rangs,date1,date2)
-    //getDataMedia && getDataMedia(media,Filtersupports,Filterfamilles,Filterclassesids,Filtersecteursids, Filtervarietiesids,Filterannonceursids,Filtermarquesids,Filterproduitsids,rangs,date1,date2)
-  }
-  const client = window.localStorage.getItem('user_name')
-  // useEffect(() => {
-  //   setDataExist(true)
-
-  //   switch (media) {
-  //     case "presse":
-  //       if (VolumePresse === 0) {
-  //         setDataExist(false)
-  //       } else {
-  //         setDataExist(true)
-  //       }
-  //       break;
-
-  //     default:
-  //       if (VolumeMedia === 0) {
-  //         setDataExist(false)
-  //       } else {
-  //         setDataExist(true)
-  //       }
-  //       break;
-  //   }
-  // }, [VolumeMedia, VolumePresse])
-
   const HandelSideBarPisition = () => {
     ManageSideBarfilterDisplay && ManageSideBarfilterDisplay('0%')
   }
@@ -752,37 +719,37 @@ function Dashboard() {
   if (!client) {
     history.push('/login')
   }
-  if(!autoriseDash){
-    return(
-    <Container
-      fluid
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "50vh",
-        backgroundColor: "#f8f9fa",
-        textAlign: "center",
-        borderRadius: "5px",
-        height:"40vh",
-        marginTop:"12%"
-      }}
-    >
-      <Row
-        className="responsive-row"
+  if (!autoriseDash) {
+    return (
+      <Container
+        fluid
         style={{
-          padding: "20px",
-          backgroundColor: "#fff",
-          borderRadius: "10px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+          backgroundColor: "#f8f9fa",
+          textAlign: "center",
+          borderRadius: "5px",
+          height: "40vh",
+          marginTop: "12%"
         }}
       >
-        <b style={{ color: "#00a6e0" }}>
-          vous n'êtes pas abonnés</b>
+        <Row
+          className="responsive-row"
+          style={{
+            padding: "20px",
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <b style={{ color: "#00a6e0" }}>
+            vous n'êtes pas abonnés</b>
 
-      </Row>
-    </Container>)
+        </Row>
+      </Container>)
   }
   return (
     <div style={{
@@ -885,7 +852,9 @@ function Dashboard() {
             {(dashDisplay && !isCalculating &&
               !(Top20produits?.length === 0)) && (<div style={{ width: '100%' }}>
                 <div >
+                <h1 style={{color:"white"}}>hello</h1>
                   <Row className="mt-3" style={{ marginTop: 20 }} id="dashboard" >
+
 
                     <Col lg="3" sm="6">
                       <Card className="card-stats">
@@ -915,6 +884,95 @@ function Dashboard() {
                         </Card.Footer>
                       </Card>
                     </Col>
+                    <CCol sm={6}>
+                      <CWidgetStatsA
+                        className="mb-4"
+                        color="primary"
+                        value={
+                          <>
+                            $9.000{' '}
+                            <span className="fs-6 fw-normal">
+                              (40.9% <CIcon icon={cilArrowTop} />)
+                            </span>
+                          </>
+                        }
+                        title="Widget title"
+                        action={
+                          <CDropdown alignment="end">
+                            <CDropdownToggle color="transparent" caret={false} className="p-0">
+                              <CIcon icon={cilOptions} className="text-white" />
+                            </CDropdownToggle>
+                            <CDropdownMenu>
+                              <CDropdownItem>Action</CDropdownItem>
+                              <CDropdownItem>Another action</CDropdownItem>
+                              <CDropdownItem>Something else here...</CDropdownItem>
+                              <CDropdownItem disabled>Disabled action</CDropdownItem>
+                            </CDropdownMenu>
+                          </CDropdown>
+                        }
+                        chart={
+                          <CChartLine
+                            className="mt-3 mx-3"
+                            style={{ height: '70px' }}
+                            data={{
+                              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                              datasets: [
+                                {
+                                  label: 'My First dataset',
+                                  backgroundColor: 'transparent',
+                                  borderColor: 'rgba(255,255,255,.55)',
+                                  pointBackgroundColor: '#5856d6',
+                                  data: [65, 59, 84, 84, 51, 55, 40],
+                                },
+                              ],
+                            }}
+                            options={{
+                              plugins: {
+                                legend: {
+                                  display: false,
+                                },
+                              },
+                              maintainAspectRatio: false,
+                              scales: {
+                                x: {
+                                  border: {
+                                    display: false,
+                                  },
+                                  grid: {
+                                    display: false,
+                                  },
+                                  ticks: {
+                                    display: false,
+                                  },
+                                },
+                                y: {
+                                  min: 30,
+                                  max: 89,
+                                  display: false,
+                                  grid: {
+                                    display: false,
+                                  },
+                                  ticks: {
+                                    display: false,
+                                  },
+                                },
+                              },
+                              elements: {
+                                line: {
+                                  borderWidth: 1,
+                                  tension: 0.4,
+                                },
+                                point: {
+                                  radius: 4,
+                                  hitRadius: 10,
+                                  hoverRadius: 4,
+                                },
+                              },
+                            }}
+                          />
+                        }
+                      />
+                    </CCol>
                     <Col lg="3" sm="6">
                       <Card className="card-stats">
                         <Card.Body>

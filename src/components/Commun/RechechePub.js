@@ -65,7 +65,13 @@ const handleChange = (event) => {
 }}>
       
         <InputLabel id="demo-multiple-checkbox-label"
-         sx={{ bottom: "15px", color: "#ffc600" }}>
+         sx={{ bottom: "15px",
+          color: "black",
+          '&.Mui-focused': {
+            color: 'transparent',
+            display:'none'
+          },
+          }}>
         1 ére diffusion
         </InputLabel>
         <Select

@@ -69,7 +69,7 @@ export default function MultipleSelectMedia() {
     ResetAllFilters && ResetAllFilters()
     setMediaValue && setMediaValue('')
     if (location.hash.includes('/veille/veille_creations_publicitaires')) {
-      var media_array=[
+      var media_array = [
         {
           label: "Presse",
           value: "presse",
@@ -86,9 +86,9 @@ export default function MultipleSelectMedia() {
           auth: autoriseVeilleTv,
         }
       ]
-      setMediaList(media_array.filter((elem)=>elem.auth==true))
+      setMediaList(media_array.filter((elem) => elem.auth == true))
     } else {
-      var media_array=[
+      var media_array = [
         {
           label: "Presse",
           value: "presse",
@@ -105,16 +105,16 @@ export default function MultipleSelectMedia() {
           auth: autorisePigeTv,
         }
       ]
-      setMediaList(media_array.filter((elem)=>elem.auth==true))
-    
-    
+      setMediaList(media_array.filter((elem) => elem.auth == true))
+
+
     }
   }, [location.hash])
 
-  useEffect(()=>{
-    
+  useEffect(() => {
+
     //setMediaList(mediaList.filter((elem) => elem.auth == true))
-  },[])
+  }, [])
 
   console.log("medialist", mediaList)
 
@@ -150,7 +150,7 @@ export default function MultipleSelectMedia() {
     setMediaValue && setMediaValue(IdrangsSeclected)
     ResetAllFilters && ResetAllFilters()
     //get previleges before getting filters
-    const page=location.hash.split('/')[1]
+    const page = location.hash.split('/')[1]
     console.log('page in media select', location.hash.split('/')[1])
     getUserPrevilege && getUserPrevilege(user_id)
     getFilters && getFilters(
@@ -189,8 +189,15 @@ export default function MultipleSelectMedia() {
       }} >
         {/* <Button onClick={handelgetFilters}>tester</Button> */}
         <InputLabel id="demo-multiple-checkbox-label"
-          sx={{ bottom: "15px", color: "#ffc600" }}  >
-          {/* <RadioIcon style={{color:"#ffc600"}}/> */}
+          sx={{
+            bottom: "15px",
+            color: "black",
+            '&.Mui-focused': {
+              color: 'transparent',
+              display:"none"
+            },
+          }}  >
+
           Media
         </InputLabel>
         <Select
@@ -204,7 +211,9 @@ export default function MultipleSelectMedia() {
           onChange={handleChange}
           input={<OutlinedInput label="Media" />}
           renderValue={(selected) => selected}
+
           MenuProps={MenuProps}>
+
           {mediaList.map((elem) => (
             <MenuItem key={elem.value} value={elem.label} sx={{ width: "100%" }}>
               <Radio checked={previousSelection.indexOf(elem.label) > -1} />

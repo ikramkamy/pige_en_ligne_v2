@@ -1081,6 +1081,46 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@coreui/chartjs@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@coreui/chartjs/-/chartjs-4.0.0.tgz#e8e720a05a74e454e47e2ef34848868123181a01"
+  integrity sha512-gPxmqj6hpC/erZBfyKQ+axWKr1gY4yhj8Dm3WkBp8SG2lUs0lEAQy3XGmmM/42TBTylbq5V4P6jfqim3N0mKmw==
+  dependencies:
+    "@coreui/coreui" "^5.0.0"
+    chart.js "^4.4.2"
+
+"@coreui/coreui@^5.0.0", "@coreui/coreui@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@coreui/coreui/-/coreui-5.2.0.tgz#708f236dc2985daad6ebac06c09d481e5c6ccff5"
+  integrity sha512-DZLWzPIZP3KTNgcaRXny/7lcQm0rDMrheu3VsWpgbln5rUuJwxdopwhTSnOryVyCwjlDbs3Z8ZfIzOeBXNC4GA==
+
+"@coreui/icons-react@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@coreui/icons-react/-/icons-react-2.3.0.tgz#b184c070c7dd2c22c647f8a04cb6b56b4ef9b6e4"
+  integrity sha512-s4jjCrtHnqnu30GLcfDbtWxEaB7imBQ5E6w89JzP5Jd6EV6o38tR0RNix4nXRubayJKAvIjlwZWOKEFNG0NM7Q==
+
+"@coreui/icons@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@coreui/icons/-/icons-3.0.1.tgz#a6b77a3d3578a59b08474fbfe29de0ebc5ea4c80"
+  integrity sha512-u9UKEcRMyY9pa4jUoLij8pAR03g5g6TLWV33/Mx2ix8sffyi0eO4fLV8DSTQljDCw938zt7KYog5cVKEAJUxxg==
+
+"@coreui/react-chartjs@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@coreui/react-chartjs/-/react-chartjs-3.0.0.tgz#f2655df6575076dfb614e15ba686d5c2c49ab86c"
+  integrity sha512-65FAxHHwfMp3HY2yej7a0sLgkQJ49v9oPisuwvShrHOo0cuFVaUGKSa1V+M13W/oKsS6AWEFUooAZdsz/WZrAg==
+  dependencies:
+    "@coreui/chartjs" "^4.0.0"
+    chart.js "^4.4.2"
+
+"@coreui/react@^5.4.1":
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/@coreui/react/-/react-5.4.1.tgz#4971d80be13aa33eed28929e63da0577f9941646"
+  integrity sha512-ycO1XEGWqxa1Yx+1FK9wieEKVxSP8tS9QwgmtyEifZ6ArA6AvG8C1rPBuVb3FNE1SXwSEc50+zmy62QfRLtG0Q==
+  dependencies:
+    "@coreui/coreui" "^5.2.0"
+    "@popperjs/core" "^2.11.8"
+    prop-types "^15.8.1"
+
 "@csstools/normalize.css@*":
   version "12.1.1"
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-12.1.1.tgz#f0ad221b7280f3fc814689786fd9ee092776ef8f"
@@ -1711,6 +1751,11 @@
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
+
+"@kurkle/color@^0.3.0":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@kurkle/color/-/color-0.3.4.tgz#4d4ff677e1609214fc71c580125ddddd86abcabf"
+  integrity sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.5"
@@ -4118,6 +4163,13 @@ char-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-2.0.2.tgz#81385bb071af4df774bff8721d0ca15ef29ea0bb"
   integrity sha512-cbGOjAptfM2LVmWhwRFHEKTPkLwNddVmuqYZQt895yXwAsWsXObCG+YN4DGQ/JBtT4GP1a1lPPdio2z413LmTg==
 
+chart.js@^4.4.2:
+  version "4.4.7"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-4.4.7.tgz#7a01ee0b4dac3c03f2ab0589af888db296d896fa"
+  integrity sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==
+  dependencies:
+    "@kurkle/color" "^0.3.0"
+
 chartist@0.11.4:
   version "0.11.4"
   resolved "https://registry.yarnpkg.com/chartist/-/chartist-0.11.4.tgz#e96e1c573d8b67478920a3a6ae52359d9fc8d8b7"
@@ -4501,6 +4553,11 @@ core-util-is@~1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.3.tgz#a6042d3634c2b27e9328f837b965fac83808db85"
   integrity sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==
+
+core.ui@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/core.ui/-/core.ui-0.0.4.tgz#44f2ed98b5083569b96c5a90d66e162a92ac56e8"
+  integrity sha512-xEf7oyrk9Qv5rLnqosiO2ewLm9yWYQC1a5Waa+H7k7Pate6OjsQX3D/anpfHVNpactYrKSvx0l+BHQin44Cvcg==
 
 cosmiconfig@^6.0.0:
   version "6.0.0"

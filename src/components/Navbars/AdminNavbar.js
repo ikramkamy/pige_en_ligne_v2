@@ -4,7 +4,8 @@ import { Link } from "react-router-dom/cjs/react-router-dom";
 import logoImmar from "assets/logo (2).png";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon } from '@heroicons/react/outline';
-import './navbar.css'
+import './navbar.css';
+import Navback from 'assets/navbar.png'
 function Header() {
   const user_name = window.localStorage.getItem("user_name")
   const location = useLocation();
@@ -41,7 +42,7 @@ function Header() {
   //   }
   // const history=useHistory()
 
-  const handelLogout = () => {
+const handelLogout = () => {
 console.log("call logout function")
     // window.localStorage.clear()
     localStorage.removeItem('user_email');
@@ -50,11 +51,11 @@ console.log("call logout function")
     LougoutRestErrorMessages && LougoutRestErrorMessages()
   }
   return (
-    <div style={{
+    <div className="navbar_back" style={{
       display: "flex", width: "100%",
-      backgroundColor: 'transparent', overflow: "hidden",
       justifyContent: "center", alignItems: "center",
-       backgroundColor: "rgba(255, 255, 255, 0.3)",
+      backgroundSize: 'cover',   
+      backgroundPosition: 'center',
       position:"fixed",
       top:'0px',
       zIndex:"10"
@@ -64,13 +65,14 @@ console.log("call logout function")
       }}>
       <div style={{paddingTop:"10px"}} >
         <Link to="/admin/home">
-          <img src={logoImmar} alt="immar media" width="100px" />
+          <img src={logoImmar} alt="immar media" width="150px" />
         </Link>
 
       </div>
       <div style={{
         display: "flex", width: "30%",
-        display: "flex", justifyContent: "flex-end", alignItems: "center"
+        display: "flex", justifyContent: "flex-end", alignItems: "center",
+        
       }}>
 
         <span className="no-icon" style={{

@@ -12,6 +12,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { InformationCircleIcon } from '@heroicons/react/outline';
 import '../commun.css'
 export default function BaseDialog({ getData, title, openDetails,
     fichier, date, famille, classe, secteur, marque, produit,
@@ -61,8 +62,16 @@ export default function BaseDialog({ getData, title, openDetails,
 
     return (
         <React.Fragment  >
-            <Button variant="" sx={{ color: '#fffff', fontWeight: "bold" }} onClick={handleClickOpen}>
-                Voir
+            <Button 
+              variant="contained"
+              color="primary"
+              sx={{ color: "black", backgroundColor: "lightgrey",
+                margin: '5px',
+                textTransform: 'none',
+               }}
+              startIcon={<InformationCircleIcon />} 
+              onClick={handleClickOpen}>
+                Détails
             </Button>
             <Dialog
                 fullWidth={fullWidth}

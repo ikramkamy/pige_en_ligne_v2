@@ -1,9 +1,10 @@
 *{
 
-font-family: "Figtree", serif;
+font-family: "Figtree", serif !important;
 font-optical-sizing: auto;
 font-weight: 300;
 font-style: normal;
+
 }
 
 

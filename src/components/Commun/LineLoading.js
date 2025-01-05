@@ -40,7 +40,7 @@ const LoadingLineIndicator = ({progressControled,step,totalDuration}) => {
     return (
         <Box sx={{ width: '100%', marginTop: 2 }}>
             <Typography variant="" align="center" width="100%" sx={{color:"white"}}>
-                {`Recherche de données... ${progress}%`}</Typography>
+                {`Chargement... ${progress}%`}</Typography>
             <LinearProgress variant="determinate" value={progress} />
         </Box>
     );

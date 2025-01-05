@@ -1,63 +1,23 @@
 import React, { useEffect, useState } from "react";
-import {UsePresseDashboardStore} from '../store/dashboardStore/PresseDashboardStore';
-import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
-import ImgMediaCard from '../components/Commun/HomeCard';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import {Link} from "react-router-dom/cjs/react-router-dom";
 import back from 'assets/back.jpg'
 import MediaReviewCard from 'components/Commun/HomeCard2';
 import "../components/Commun/commun.css"
-import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon } from '@heroicons/react/outline';
-import {
-  Container,
-  Row,
-} from "react-bootstrap";
+import {ChartBarIcon,SpeakerphoneIcon, SearchCircleIcon } from '@heroicons/react/outline';
+import {Container,Row} from "react-bootstrap";
+import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 function Home() {
   document.title='Accueil'
-  const history=useHistory()
-  const {
-    getVolumePresse,
-    getAnnonceursActifPresse,
-    getCreationUniquesPresse,
-    getBudgetBrutPresse,
-    getSupportDiffusionPresse,
-    getCouleur,
-    base,
-    setBasedeCalucule,
-
-    
-    }=UsePresseDashboardStore((state)=>state)
-   
-    const {
-      supports,
-      familles,
-      classes,
-      secteurs,
-      varieties,
-      annonceurs,
-      marques,
-      produits,
-      setMediaValue,
-      getFilters
-    
-    }=UseFiltersStore((state)=>state)
-
-useEffect(()=>{
-  getVolumePresse &&  getVolumePresse({supports,familles,classes,secteurs,varieties,annonceurs,marques,produits,})
-  getAnnonceursActifPresse && getAnnonceursActifPresse({supports,familles,classes,secteurs,varieties,annonceurs,marques,produits,})
-  getCreationUniquesPresse && getCreationUniquesPresse({supports,familles,classes,secteurs,varieties,annonceurs,marques,produits})
-  getBudgetBrutPresse && getBudgetBrutPresse({supports,familles,classes,secteurs,varieties,annonceurs,marques,produits})
-  getSupportDiffusionPresse && getSupportDiffusionPresse ({supports,familles,classes,secteurs,varieties,annonceurs,marques,produits})
-  getCouleur && getCouleur({supports,familles,classes,secteurs,varieties,annonceurs,marques,produits})
- 
-},[base])
+  const history=useHistory();
+  const {client,email}=UseLoginStore((state)=>state)
+  console.log("email",email,"client",client)
 
 const HomeCardinfo=[{
   icon:<SearchCircleIcon width="25px" style={{marginRight:"10px"}}/>,
   image:back,
   //image:"https://cdn.gencraft.com/prod/user/ca9b8757-6180-4cca-89a1-b1b4d251f340/45cd1f2e-8087-46f6-9f4b-faca65ed9740/image/image1_0.jpg?Expires=1734796930&Signature=gv8gLAfIs9zXEiSLTTR1FE9uKi14OahF0Lwwqq3ps6PppUELriWh1jrIkFyhkI13pCHbmTGnKPEV6UAZKrDK~97VZGIFbdGzJEHIuH5P1v9RJ9ntwbUAipmQ6D~zKdlXE6PXLukTMCpUNJZgDMsqOfsHE9ubvqFVCG~ihHrm1T7xko7CzAYAXW~e7EOIQLir07CX9NIiBlWdAjgOTNDPnPz78Odoc1AezjWHbggIKfPS5xGH4gJbywvMrLHGrC-hZbdRpFvjtQZJ7BTSGAT7jAFnzGYELdCxlavx-QVgwTCXJDSrOa~pNkgn6T4r41lqk30aOuUoSCKrgvpDRP0h2g__&Key-Pair-Id=K3RDDB1TZ8BHT8",
   title:"Pige en ligne",
-  description:"Explorez une vaste bibliothèque de créations publicitaires en ligne pour inspirer vos campagnes.",
+  description:"Notre outil de pige des créations publicitaires vous permet de suivre en temps réel les campagnes diffusées à la radio, à la télévision et dans la presse écrite.",
   url:'/pige/pige_en_ligne'
 },
 {
@@ -75,13 +35,16 @@ const HomeCardinfo=[{
   description:"Visualisez et analysez vos performances publicitaires en temps réel avec notre tableau de bord intuitif.",
   url:"/media/tableau_de_bord"
 }]
-const client =window.localStorage.getItem('user_name')
-console.log("client",client)
-if (!client) {
-history.push('/login')
-}else{
-  history.push('/home')
-}
+
+React.useEffect(() => {
+  if (!client) {
+    history.push('/login')
+    }else{
+      //do nothing
+    }
+
+},[client])
+
   return (
 <Container fluid style={{ display: "flex", 
   justifyContent: "center", alignItems: "center", height: "auto",
@@ -100,7 +63,7 @@ history.push('/login')
                     title={e.title} url={e.url} />
                 ))} */}
                 {HomeCardinfo.map((e,index)=>(
-                <MediaReviewCard ey={index} image={e.image} Description={e.description}
+                <MediaReviewCard key={index} image={e.image} Description={e.description}
                   title={e.title} url={e.url} icon={e.icon}/>
                 ))}
             </Row>

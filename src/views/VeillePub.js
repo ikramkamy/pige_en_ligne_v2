@@ -5,19 +5,10 @@ import MultipleSelectMedia from '../components/Commun/MediaSelect';
 import { UseVeilleStore } from "store/dashboardStore/VeilleMediaStore";
 import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
 import { Button } from "@mui/material";
-import MediaControlCard from 'components/Commun/veille/MediaCard'
 import RecherchePub from "components/Commun/RechechePub";
-import mediaImage from 'assets/img/animated.gif';
-import AnchorTemporaryDrawer from 'components/FixedPlugin/SideDrawer';
-import { HomeWork, AccountBox, Logout } from "@mui/icons-material";
-import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
-import FolderZipIcon from '@mui/icons-material/FolderZip';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import Tablesearchimmage from 'assets/tableSearch.gif';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { Toolbar, Typography, Select, MenuItem, FormControl, InputLabel, Pagination, TextField } from '@mui/material';
-import axios from "axios";
 import LoadingLineIndicator from "components/Commun/LineLoading";
 import DateRangeTest from 'components/Commun/DateRangePickerTest';
 import TableIlustration from 'assets/tableSearch.gif';
@@ -28,9 +19,10 @@ import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import AdvertisementCard from 'components/Commun/veille/MediaCardVeille2';
 import BasicSpeedDial from 'components/Commun/veille/SpeedDealToolBar'
 export default function VeillePub() {
+  const PORT = "https://immar-media.com";
   const { autoriseVeillePresse,
     autoriseVeilleRadio,
-    autoriseVeilleTv, } = UseLoginStore((state) => state)
+    autoriseVeilleTv, client } = UseLoginStore((state) => state)
   const history = useHistory()
   const {
     getveilletvData,
@@ -62,14 +54,13 @@ export default function VeillePub() {
     sideBarFilterPosition,
     typeVeille
   } = UseFiltersStore((state) => state);
-  const PORT = "https://immar-media.com";
   const [mediaUrl, setMediaUrl] = useState("/veille_radio");
   const { DownloadExlsxFile } = UseVeilleStore((state) => state)
   const [disable, setDisable] = useState(true);
   const [dataList, setDataList] = useState([]);
   const [sortOption, setSortOption] = useState('dateAsc');
   const [page, setPage] = useState(1);
-  const itemsPerPage = 5
+  const itemsPerPage = 10
   const [searchTerm, setSearchTerm] = useState('');
   const [pdata, setPdata] = useState([]);
   const [sdata, setSdata] = useState('');
@@ -77,7 +68,6 @@ export default function VeillePub() {
   const [showdataloading, setShowdataloading] = useState(false)
   const [fetchDataTime, setFetchDataTime] = useState(0)
   const [loadingStep, setLoadingStep] = useState(0.5)
-  const client = window.localStorage.getItem('user_name')
   const [displayVeilleDate, setDisplayVeilleDate] = useState(false)
   const [loadingLineDisplay, setLoadingLineDisplay] = useState(false)
   document.title = 'veille publicitaire'
@@ -233,7 +223,6 @@ export default function VeillePub() {
 
     setDisplayVeilleDate(true)
 
-
   }
   const DownloadFile = () => {
     DownloadExlsxFile && DownloadExlsxFile(veilletvData, media)
@@ -334,8 +323,6 @@ export default function VeillePub() {
     marques,
     Filterproduitsids,
     produits])
-
-
   const [resStyle, setResStyle] = useState({
     wrapDiv: 'nowrap',
     marginTopAll: '4%',
@@ -413,7 +400,7 @@ export default function VeillePub() {
   if (!client) {
 
     history.push('/login')
-    
+
   }
 
   return (
@@ -423,7 +410,7 @@ export default function VeillePub() {
     }}
 
     >
-      <Container >
+      <Container style={{ maxWidth: "100%" }}>
         <div style={{
           display: "flex", alignItems: "center",
           justifyContent: 'space-between',
@@ -437,12 +424,6 @@ export default function VeillePub() {
           }}>
             <MultipleSelectMedia />
             <RecherchePub />
-
-         
-
-
-
-
             <div style={{
               width: "100%", height: "auto",
               marginTop: resStyle.paddingLeftBtn,
@@ -451,26 +432,26 @@ export default function VeillePub() {
               <DateRangeTest />
             </div>
 
-          
+
           </div>
-          {ShowSearchKey &&(  <TextField
-              label="Chercher..."
-              variant="outlined"
-              size="small"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setPage(1);
-              }}
-              style={{
-                marginRight: resStyle.MarginRightbtn,
-                marginTop: resStyle.paddingLeftBtn,
-                backgroundColor:"white",
-                borderRadius:"5px",
-                height:"50px",
-                border:"none"
-              }}
-            />)}
+          {ShowSearchKey && (<TextField
+            label="Chercher..."
+            variant="outlined"
+            size="small"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setPage(1);
+            }}
+            style={{
+              marginRight: resStyle.MarginRightbtn,
+              marginTop: resStyle.paddingLeftBtn,
+              backgroundColor: "white",
+              borderRadius: "5px",
+              height: "50px",
+              border: "none"
+            }}
+          />)}
           <div style={{
             display: "flex",
             justifyContent: "space-between", alignItems: "center",
@@ -511,7 +492,7 @@ export default function VeillePub() {
           {welcomVeille ? (
             <div style={{ marginBottom: "10%" }}>
               {showdataloading ? (
-                <div>
+                <div style={{width:"100%"}}>
                   {loadingLineDisplay && <LoadingLineIndicator step={loadingStep} totalDuration={fetchDataTime} />}
                   {(displayVeilleDate && !loadingLineDisplay) && (
                     // <Toolbar sx={{
@@ -619,8 +600,13 @@ export default function VeillePub() {
 
                   )}
                   {(displayVeilleDate && !loadingLineDisplay) && (
-
-                    <div className="veilledata tootbal-element" style={{ display: "flex", flexWrap: "wrap" }}>
+                    <div className="veilledata tootbal-element"
+                    style={{width:"100%",display:"flex",
+                       justifyContent:"center", 
+                      flexDirection:"column"
+                     
+                    }}
+                     >
                       {/* {pdata?.map((e) => (<MediaControlCard
                         key={veilletvData.indexOf(e)}
                         diffusion_first={e.Insertion_Premiere}
@@ -641,36 +627,40 @@ export default function VeillePub() {
                         annonceur={e.Insertion_Advertiser_Name}
                         id={media === "presse" ? e.Insertion_Id : e.Insertion_Fichier}
                       />)) */}
-                      {pdata?.map((e) => (<AdvertisementCard
-                        key={veilletvData.indexOf(e)}
-                        diffusion_first={e.Insertion_Premiere}
-                        creation={`${PORT}/${e.Insertion_Image}`}
-                        product={e.Insertion_Product_Name}
-                        id_message={e.Insertion_Pub_Id}
-                        message={e.Insertion_Pub_Name}
-                        format={e.Insertion_Format}
-                        version={e.Insertion_Version}
-                        fichier={`${PORT}${mediaUrl}/${e.Insertion_Fichier}`}
-                        famille={e.Insertion_Famille_Name}
-                        classe={e.Insertion_Classe_Name}
-                        secteur={e.Insertion_Secteur_Name}
-                        marque={e.Insertion_Brand_Name}
-                        support={e.Insertion_Supports}
-                        produit={e.Insertion_Product_Name}
-                        variete={e.Insertion_Variete_Name}
-                        annonceur={e.Insertion_Advertiser_Name}
-                        id={media === "presse" ? e.Insertion_Id : e.Insertion_Fichier}
-                      />))
+                      <div  style={{
+                        display: "flex", flexWrap: "wrap",
+                        justifyContent:"space-between" , 
+                        marginTop:"20px"                      
+                      }}>
+                        {pdata?.map((e) => (<AdvertisementCard
+                          key={veilletvData.indexOf(e)}
+                          diffusion_first={e.Insertion_Premiere}
+                          creation={`${PORT}/${e.Insertion_Image}`}
+                          product={e.Insertion_Product_Name}
+                          id_message={e.Insertion_Pub_Id}
+                          message={e.Insertion_Pub_Name}
+                          format={e.Insertion_Format}
+                          version={e.Insertion_Version}
+                          fichier={`${PORT}${mediaUrl}/${e.Insertion_Fichier}`}
+                          famille={e.Insertion_Famille_Name}
+                          classe={e.Insertion_Classe_Name}
+                          secteur={e.Insertion_Secteur_Name}
+                          marque={e.Insertion_Brand_Name}
+                          support={e.Insertion_Supports}
+                          produit={e.Insertion_Product_Name}
+                          variete={e.Insertion_Variete_Name}
+                          annonceur={e.Insertion_Advertiser_Name}
+                          id={media === "presse" ? e.Insertion_Id : e.Insertion_Fichier}
+                          
 
-
-
-                      }
-
+                        />))
+                        }
+                      </div>
                       <Pagination
                         count={Math.ceil(sdata.length / itemsPerPage)}
                         page={page}
                         onChange={handlePageChange}
-                        color="secondary"
+                        color="primary"
                         sx={{
                           display: 'flex', justifyContent: 'center',
                           marginTop: '20px', marginBottom: '20px',
@@ -681,7 +671,6 @@ export default function VeillePub() {
                         }}
                       />
                     </div>
-
                   )
                   }
                   {(!displayVeilleDate && dataVeilleISFetched) && (
@@ -715,9 +704,6 @@ export default function VeillePub() {
 
                   )
                   }
-
-
-
                 </div>)
                 : (
                   <div></div>
@@ -725,13 +711,14 @@ export default function VeillePub() {
             </div>
           ) : (
             <div className="w-100 justify-content-center" style={{ display: "flex" }}>
-              <img src={TableIlustration} alt="immar media" width={resStyle.widthImage} height={resStyle.widthImage} />
+              <img src={TableIlustration}
+                alt="immar media"
+                width={resStyle.widthImage}
+                height={resStyle.widthImage} />
             </div>
 
           )}
         </div>
-
-
         <AutomaticSideFilterBar getData={getData} />
       </Container>
     </div>

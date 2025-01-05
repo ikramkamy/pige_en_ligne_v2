@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,54 +20,62 @@ const MenuProps = {
 };
 
 export default function MultipleSelectBase() {
-  const {media, setBase,base}=UseFiltersStore((state)=>state)
+  const { media, setBase, base } = UseFiltersStore((state) => state)
   const [previousSelection, setPreviousSelection] = useState([]);
-  const [selectedBase, setSelectedBase]=useState('')
-  const [bases, setBases]=useState([
-    {label:"volume",
-      value:"volume"
+  const [selectedBase, setSelectedBase] = useState('')
+  const [bases, setBases] = useState([
+    {
+      label: "volume",
+      value: "volume"
     },
-    {label:"Durée",
-      value:"duree"
+    {
+      label: "Durée",
+      value: "duree"
     },
-    {label:"budget",
-      value:"budget"
+    {
+      label: "budget",
+      value: "budget"
     }
- ])
-useEffect(()=>{
-
-if(media ==='presse'){
-  setBases([
-    {label:"volume",
-      value:"volume"
-    },
-    {label:"budget",
-      value:"budget"
-    }
-
   ])
-  }else{
-    setBases([
-      {label:"volume",
-        value:"volume"
-      },
-      {label:"durée",
-        value:"duree"
-      },
-      {label:"budget",
-        value:"budget"
-      }
-   ])
-}
+  useEffect(() => {
 
-},[media])
+    if (media === 'presse') {
+      setBases([
+        {
+          label: "volume",
+          value: "volume"
+        },
+        {
+          label: "budget",
+          value: "budget"
+        }
+
+      ])
+    } else {
+      setBases([
+        {
+          label: "volume",
+          value: "volume"
+        },
+        {
+          label: "durée",
+          value: "duree"
+        },
+        {
+          label: "budget",
+          value: "budget"
+        }
+      ])
+    }
+
+  }, [media])
   const handleChange = (event) => {
     setSelectedBase(event.target.value);
-    var RangSelected=bases.filter((elem)=>elem.label==event.target.value)
-    var IdrangsSeclected=RangSelected.map((elem)=>elem.value)
+    var RangSelected = bases.filter((elem) => elem.label == event.target.value)
+    var IdrangsSeclected = RangSelected.map((elem) => elem.value)
     setBase && setBase(IdrangsSeclected[0])
-  
-    
+
+
   };
   useEffect(() => {
 
@@ -77,22 +85,28 @@ if(media ==='presse'){
   }, [base]);
   return (
     <div>
-      <FormControl 
-    sx={{ 
-    m: 0, 
-    width: 150, 
-    marginRight: { xs: 0, sm: "10px"} 
-  }}>
-        <InputLabel id="demo-multiple-checkbox-label" 
-        sx={{ bottom: "15px", color: "#ffc600" }}>Base</InputLabel>
+      <FormControl
+        sx={{
+          m: 0,
+          width: 150,
+          marginRight: { xs: 0, sm: "10px" }
+        }}>
+        <InputLabel id="demo-multiple-checkbox-label"
+          sx={{
+            bottom: "15px",
+            color: "black",
+            '&.Mui-focused': {
+              color: 'transparent',
+            },
+          }}>Base</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
-          value={previousSelection.map((e)=>e.label)}
+          value={previousSelection.map((e) => e.label)}
           onChange={handleChange}
           input={<OutlinedInput label="Volume" />}
           renderValue={(selected) => selected}
           MenuProps={MenuProps}
-          sx={{backgroundColor:"white", height:"50px"}}
+          sx={{ backgroundColor: "white", height: "50px" }}
         >
           {bases.map((elem) => (
             <MenuItem key={elem.value} value={elem.label} >

@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom";
+import '../Navbars/navbar.css'
 function Footer () {
   
     return (
-      <footer  className="" style={{backgroundColor:"transparent", width:'100%',
+      <footer  className="navbar_back" 
+      style={{
+        //backgroundColor:"transparent", 
+        width:'100%',
        display:"flex",
        justifyContent:'center',
        alignItems:"center",

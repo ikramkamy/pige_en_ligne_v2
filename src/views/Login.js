@@ -20,14 +20,11 @@ export default function SignIn() {
     pass: ""
   })
 
-  
-
   const user_id = window.localStorage.getItem('user_id')
   const history = useHistory()
   const { Loginuser, errormessage, showAlert2, showAlert1,
     setLoginInputs, setTestvalue, test,ReseAlertShwing,client,email } = UseLoginStore((state) => state)
-
-
+    console.log('email ',email,"client",client)
 const handleChange = (event) => {
     const { name, value } = event.target;
     setUser((prevUser) => ({
@@ -51,10 +48,10 @@ const handleChange = (event) => {
     Loginuser && Loginuser(user)
 
   }
-console.log('email',email)
+
   React.useEffect(() => {
     if (email) {
-     history.push("/home")
+     history.push("/admin/home")
     } else {
       //console.log('notallowed')
     }

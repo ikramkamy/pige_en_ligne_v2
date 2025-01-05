@@ -60,16 +60,14 @@ export const UseLoginStore = create((set, get) => ({
   },
   LougoutRestErrorMessages: async (user) => {
     set({
-
       showAlert1: false,
       showAlert2: false,
+      client:"",
+      email:"",
     })
-
     try {
-
       let response = await axios.get(`${PORT}/deconnexion.php`)
     } catch (error) {
-
     }
   },
   Loginuser: async (user) => {
@@ -81,8 +79,9 @@ export const UseLoginStore = create((set, get) => ({
       });
 
    console.log("response",response)
-      if (response.data.message === "connexion établie avec succès.") {
+      if (response.data.message === "Connexion établie avec succès."){
          var decoded = jwtDecode(response.data.payload);
+         console.log("email",decoded.user_id.email,"client",decoded.user_id.utilisateur)
         set({
           
           client:decoded.user_id.utilisateur,
