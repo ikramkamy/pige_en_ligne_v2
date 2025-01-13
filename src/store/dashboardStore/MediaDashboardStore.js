@@ -73,8 +73,7 @@ export const UseMediaDashboardStore= create((set, get)=>({
       });
       console.log('date',date1)
       console.log('date',date2)
-      console.log("date radio/ tv data", response);
-      
+      console.log("date radio/ tv data", response);     
       // Assuming you want to set the MediaData in your state management
       set({
         MediaData: response.data.data

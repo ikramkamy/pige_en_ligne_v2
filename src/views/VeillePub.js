@@ -17,7 +17,8 @@ import LoadingButtonData from "components/Commun/LoadingBtnData";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import AdvertisementCard from 'components/Commun/veille/MediaCardVeille2';
-import BasicSpeedDial from 'components/Commun/veille/SpeedDealToolBar'
+import BasicSpeedDial from 'components/Commun/veille/SpeedDealToolBar';
+import 'components/Commun/commun.css'
 export default function VeillePub() {
   const PORT = "https://immar-media.com";
   const { autoriseVeillePresse,
@@ -173,7 +174,6 @@ export default function VeillePub() {
     }
   }, [veilletvData, searchTerm, sortOption, page]);
 
-
   const handlePageChange = (event, value) => {
     console.log("page value", value)
     setPage(value);
@@ -323,7 +323,7 @@ export default function VeillePub() {
     marques,
     Filterproduitsids,
     produits])
-  const [resStyle, setResStyle] = useState({
+    const [resStyle, setResStyle] = useState({
     wrapDiv: 'nowrap',
     marginTopAll: '4%',
     widthRightbtns: '',
@@ -493,7 +493,8 @@ export default function VeillePub() {
             <div style={{ marginBottom: "10%" }}>
               {showdataloading ? (
                 <div style={{width:"100%"}}>
-                  {loadingLineDisplay && <LoadingLineIndicator step={loadingStep} totalDuration={fetchDataTime} />}
+                  {loadingLineDisplay && <LoadingLineIndicator 
+                  step={loadingStep} totalDuration={fetchDataTime} />}
                   {(displayVeilleDate && !loadingLineDisplay) && (
                     // <Toolbar sx={{
                     //   background: "#f8f9fa",
@@ -627,7 +628,7 @@ export default function VeillePub() {
                         annonceur={e.Insertion_Advertiser_Name}
                         id={media === "presse" ? e.Insertion_Id : e.Insertion_Fichier}
                       />)) */}
-                      <div  style={{
+                      <div className="advertisment_wrap" style={{
                         display: "flex", flexWrap: "wrap",
                         justifyContent:"space-between" , 
                         marginTop:"20px"                      

@@ -179,6 +179,9 @@ height: 50px !important;
   .css-gjgo7x-MuiFormControl-root {
     background-color: aquamarine !important;
   }
+  .advertisment_wrap{
+    background-color: "red";
+  }
 }
 
 @media (max-width: 480px) {
