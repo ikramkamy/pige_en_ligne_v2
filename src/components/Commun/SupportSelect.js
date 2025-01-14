@@ -20,11 +20,18 @@ const MenuProps = {
 };
 
 export default function MultipleSelectSupports() {
-  const { supports, Filtersupports, setFiltersupports } = UseFiltersStore((state) => state);
+  const {supports, Filtersupports, setFiltersupports } = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = React.useState('');
-  const [selectedItems, setSelectedItems] = React.useState(supports.map((item) => item.support_id));
+  const [selectedItems, setSelectedItems] = React.useState([]);
+  const [previousSelection, setPreviousSelection] = React.useState([]);
+
+  React.useEffect(() => {
+    
+    setSelectedItems(Filtersupports)
+    setPreviousSelection(Filtersupports);
+  }, [Filtersupports]);
   const filteredElems = supports.filter((item) => {
-    return item.support_name.toLowerCase().startsWith(inputValue.toLowerCase());
+    return item.Support_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
 
   const handleSelectAll = () => {
@@ -32,14 +39,14 @@ export default function MultipleSelectSupports() {
       setSelectedItems([]);
       setFiltersupports && setFiltersupports([]);
     } else {
-      setSelectedItems(filteredElems.map((item) => item.support_id));
-      setFiltersupports && setFiltersupports(filteredElems.map((item) => item.support_id));
+      setSelectedItems(filteredElems.map((item) => item.Support_Id));
+      setFiltersupports && setFiltersupports(filteredElems.map((item) => item.Support_Id));
     }
   };
 
   const handleAutocompleteChange = (event, value) => {
-    setSelectedItems([...value.map((item) => item.support_id)]);
-    const listOfIdsSelected = value.map((e) => e.support_id);
+    setSelectedItems([...value.map((item) => item.Support_Id)]);
+    const listOfIdsSelected = value.map((e) => e.Support_Id);
     setFiltersupports && setFiltersupports(listOfIdsSelected);
   };
 
@@ -48,7 +55,8 @@ export default function MultipleSelectSupports() {
   };
 
   const isAllSelected = selectedItems.length === filteredElems.length;
-
+  console.log("filteredElems supports",filteredElems)
+  console.log("previousSelection",previousSelection)
   return (
     <FormControl sx={{ m: 1, width: "100%", }}>
       {/* Custom Select All option */}
@@ -59,28 +67,26 @@ export default function MultipleSelectSupports() {
         </MenuItem>
       </div>
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-
-      <Autocomplete
-     
+      <Autocomplete     
         multiple
         freeSolo
         options={filteredElems}
-        value={supports.filter((item) =>  selectedItems.includes(item.support_id))}
+        value={supports.filter((item) =>  previousSelection.includes(item.Support_Id))}
         onChange={handleAutocompleteChange}
-        getOptionLabel={(option) => option.support_name}
+        getOptionLabel={(option) => option.Support_Lib}
         inputValue={inputValue}
         onInputChange={onInputChange}
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`supports (${Filtersupports.length})`} 
+            label={`supports (${previousSelection.length})`} 
             variant="outlined"
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.support_name} value={option.support_id}>
-            <Checkbox  defaultChecked checked={selectedItems.includes(option.support_id)} />
-            <ListItemText primary={option.support_name} />
+          <MenuItem {...props} key={option.Support_Lib} value={option.Support_Id}>
+            <Checkbox   checked={previousSelection.includes(option.Support_Id)} />
+            <ListItemText primary={option.Support_Lib} />
           </MenuItem>
         )}
         renderTags={(value, getTagProps) => null}

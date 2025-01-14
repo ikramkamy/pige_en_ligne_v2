@@ -300,13 +300,12 @@ role="presentation"
 )} */}
 
 
-<List >
-
-        
+<List >      
     <Row style={{ justifyContent: "center", padding: "50px" }} >
         <Col style={{ width: "30%" }}>
        
         {showVeilleFilters && (<TypePub />)}
+        {showRang && (<MultipleSelectSupports /> )}
             <MultipleSelectFamilles />
             <MultipleSelectClasses />
             <MultipleSelectSecteurs />
@@ -325,15 +324,15 @@ role="presentation"
           paddingRight:"50px"}}> 
         
     <Col style={{ width: "30%" }}>
-        {showRang && (
-                 <MultipleSelectSupports />
+        {/* {showRang && (
+          
                 // <MultipleSelectRangs />
            )
        }
         {showBase && (<div></div>
                 //    <MultipleSelectBase />                           
         )
-        }
+        } */}
         </Col>
         
 </Row>

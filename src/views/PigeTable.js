@@ -64,45 +64,38 @@ export default function DataTablePige() {
   const widthSmallData = 200
   const widthXsmallData = 70
   const widthLargeData = 250
-
   const columns = [
-    { field: "id", headerName: "Id", width: 130, hide: false },
-    { field: "Titre_Lib", headerName: "Support", width: 100 },
-    { field: "date", headerName: "Date", width: 100 },
-    { field: "produit", headerName: "Produit", width: 130, sortable: true },
-    { field: "classe", headerName: "Classe", width: 130, sortable: true },
-
+    { field: "Id", headerName: "Id", width: 130, hide: false },
+    { field: "Support_Lib", headerName: "Support", width: 100 },
+    { field: "Date", headerName: "Date", width: 100 },
+    { field: "Produit_Lib", headerName: "Produit", width: 130, sortable: true },
+    { field: "Classe_Lib", headerName: "Classe", width: 130, sortable: true },
+  
     {
-      field: "couleur",
+      field: "Format",
       headerName: "Format",
       width: widthLargeData,
       sortable: true,
       renderCell: (params) => (
         <div>
-          {`${params.row.format} - ${params.row.PressePub_Couleur} - ${params.row.Rubrique}`}
+          {`${params.row.Format} - ${params.row.NB_C} - ${params.row.Rubrique}`}
         </div>
       ),
     },
-    { field: "page", headerName: "Page", width: 130, sortable: true },
-    { field: "annonceur", headerName: "Annonceur", width: 130, sortable: true, hide: true },
-    { field: "famille", headerName: "Famille", width: 130, sortable: true, hide: false },
-    { field: "categorie", headerName: "Catégorie", width: 130, sortable: true, hide: false },
-    { field: "marque", headerName: "Marque", width: 130, sortable: true, hide: false },
-    // { field: "version_pub", headerName: "Version Pub", width: 130, sortable: true ,hide: false },
-    { field: "version", headerName: "Version", width: 130, sortable: true, hide: false },
-    { field: "tarif", headerName: "Tarif", width: 130, sortable: true, hide: false },
-    { field: "periode", headerName: "Periode", width: 130, sortable: true, hide: false },
-    { field: "variete", headerName: "Varieté", width: 130, sortable: true, hide: false },
-    { field: "annee", headerName: "année", width: 130, sortable: true, hide: false },
-    // { field: "langue", headerName: "Langue", width: 130, sortable: true ,hide: false },
-    { field: "mois", headerName: "mois", width: 130, sortable: true, hide: false },
-    // { field: "supprimer", headerName: "supprimer", width: 130, sortable: true ,hide: false },
-    // { field: "url", headerName: "url", width: 130, sortable: true ,hide: false },
-    // { field: "utilisateurs", headerName: "Utilisateurs", width: 130, sortable: true ,hide: false },
-    // { field: "pub", headerName: "Presse Pub ", width: 130, sortable: true ,hide: false },
-
+    { field: "Page", headerName: "Page", width: 130, sortable: true },
+    { field: "Annonceur_Lib", headerName: "Annonceur", width: 130, sortable: true, hide: true },
+    { field: "Famille_Lib", headerName: "Famille", width: 130, sortable: true, hide: false },
+    { field: "Secteur_Lib", headerName: "Catégorie", width: 130, sortable: true, hide: false },
+    { field: "Marque_Lib", headerName: "Marque", width: 130, sortable: true, hide: false },
+    { field: "Version", headerName: "Version", width: 130, sortable: true, hide: false },
+    { field: "Tarif", headerName: "Tarif", width: 130, sortable: true, hide: false },
+    { field: "Période", headerName: "Période", width: 130, sortable: true, hide: false },
+    { field: "Variété_Lib", headerName: "Varieté", width: 130, sortable: true, hide: false },
+    { field: "Année", headerName: "Année", width: 130, sortable: true, hide: false },
+    { field: "Mois", headerName: "Mois", width: 130, sortable: true, hide: false },
+  
     {
-      field: "message",
+      field: "Message_Lib",
       headerName: "Msg",
       width: 90,
       renderCell: (params) => (
@@ -117,14 +110,15 @@ export default function DataTablePige() {
       ),
     },
   ];
-
+  
+  
   const columns2 = [
-    { field: "id", headerName: "Id", width: 130 },
-    { field: "Titre_Lib", headerName: "Support", width: 130 },
-    { field: "date", headerName: "Date", width: 130 },
-    { field: "produit", headerName: "Produit", width: widthLargeData, sortable: true },
+    { field: "Id", headerName: "Id", width: 130 },
+    { field: "Support_Lib", headerName: "Support", width: 130 },
+    { field: "Date", headerName: "Date", width: 130 },
+    { field: "Produit_Lib", headerName: "Produit", width: widthLargeData, sortable: true },
     {
-      field: "message",
+      field: "Message_Lib",
       headerName: "Msg",
       width: 90,
       renderCell: (params) => (
@@ -135,46 +129,27 @@ export default function DataTablePige() {
           onClick={() => handleRowClick(params.row)}
         >
           {params.value}
-
         </div>
       ),
     },
-    { field: "heure", headerName: "Heure", width: 100, sortable: true },
-    { field: "duree", headerName: "Durée", width: widthXsmallData, sortable: true },
-    { field: "rang", headerName: "Rang", width: widthXsmallData, sortable: true },
-    { field: "encomb", headerName: "Encomb", width: widthXsmallData, sortable: true },
-    { field: "annonceur", headerName: "Annonceur", width: 130, sortable: true, hide: true },
-    { field: "famille", headerName: "Famille", width: 130, sortable: true, hide: false },
-    { field: "categorie", headerName: "Secteurs", width: 130, sortable: true, hide: false },
-    { field: "classe", headerName: "Classe", width: 130, sortable: true, hide: false },
-    { field: "marque", headerName: "Marque", width: 130, sortable: true, hide: false },
-    { field: "version_pub", headerName: "Version Pub", width: 130, sortable: true, hide: false },
-    // { field: "version", headerName: "Version", width: 130, sortable: true ,hide: false },
-
-    { field: "tarif", headerName: "Tarif", width: 130, sortable: true, hide: false },
-
-    // { field: "periode", headerName: "Periode", width: 130, sortable: true ,hide: false },
-
-    { field: "variete", headerName: "Varieté", width: 130, sortable: true, hide: false },
-    { field: "annee", headerName: "année", width: 130, sortable: true, hide: false },
-    // { field: "langue", headerName: "Langue", width: 130, sortable: true ,hide: false },
-    { field: "mois", headerName: "mois", width: 130, sortable: true, hide: false },
-    // { field: "url", headerName: "url", width: 130, sortable: true ,hide: false },
-    // { field: "utilisateurs", headerName: "Utilisateurs", width: 130, sortable: true ,hide: false }, 
-    //  { field: "pub", headerName: "Presse Pub ", width: 130, sortable: true ,hide: false },
-    {
-      field: "prog_avant",
-      headerName: "Prog avant",
-      width: widthLargeData,
-      sortable: true,
-    },
-    {
-      field: "prog_apres",
-      headerName: "Prog apres",
-      width: widthLargeData,
-      sortable: true,
-    },
+    { field: "Heure", headerName: "Heure", width: 100, sortable: true },
+    { field: "Durée", headerName: "Durée", width: widthXsmallData, sortable: true },
+    { field: "Rang", headerName: "Rang", width: widthXsmallData, sortable: true },
+    { field: "Encombrement", headerName: "Encomb", width: widthXsmallData, sortable: true },
+    { field: "Annonceur_Lib", headerName: "Annonceur", width: 130, sortable: true, hide: true },
+    { field: "Famille_Lib", headerName: "Famille", width: 130, sortable: true, hide: false },
+    { field: "Secteur_Lib", headerName: "Secteurs", width: 130, sortable: true, hide: false },
+    { field: "Classe_Lib", headerName: "Classe", width: 130, sortable: true, hide: false },
+    { field: "Marque_Lib", headerName: "Marque", width: 130, sortable: true, hide: false },
+    { field: "Version", headerName: "Version Pub", width: 130, sortable: true, hide: false },
+    { field: "Tarif", headerName: "Tarif", width: 130, sortable: true, hide: false },
+    { field: "Variété_Lib", headerName: "Varieté", width: 130, sortable: true, hide: false },
+    { field: "Année", headerName: "Année", width: 130, sortable: true, hide: false },
+    { field: "Mois", headerName: "Mois", width: 130, sortable: true, hide: false },
+    { field: "Prog_avant", headerName: "Prog avant", width: widthLargeData, sortable: true },
+    { field: "Prog_après", headerName: "Prog après", width: widthLargeData, sortable: true },
   ];
+  
   const frenchLocaleText = {
     // Toolbar
     toolbarDensity: 'Densité',
@@ -226,16 +201,16 @@ export default function DataTablePige() {
     errorOverlayDefaultLabel: 'Une erreur est survenue.',
   };
   const [pageSize, setPageSize] = React.useState(25);
-
-  //const pageSize = window.localStorage.getItem('pageSize');
   const { autorisePigePresse,
     autorisePigeRadio,
     autorisePigeTv ,client,email} = UseLoginStore((state) => state)
-  //  console.log('email',email)
-  const { getDataPresse, PressData, sendDownloadLink, 
-    IsPressdataisFetched, ResePressdataisFetched, } =
+  const { getDataPresse,sendDownloadLink, 
+    IsPressdataisFetched, ResePressdataisFetched } =
      UsePigeDashboardStore((state) => state);
-  const { MediaData, getDataMedia, IsMediadataisFetched, ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
+
+const [PressData,setPressData]=React.useState([])
+  const { MediaData, getDataMedia, IsMediadataisFetched, 
+    ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [popupOpen, setPopupOpen] = React.useState(false);
@@ -246,73 +221,59 @@ export default function DataTablePige() {
   var list2 = [];
   const dataArray = PressData?.map((elem) => {
     var item = {
-      id: elem.Insertion_Id,
-      Titre_Lib: elem.Titre_Lib,
-      date: elem.Insertion_Date,
-      message: elem.PressePub_Id,
-      produit: elem.Produit_Lib,
-      //couleur:elem.PressePub_Couleur,
-      couleur: `${elem.format} - ${elem.PressePub_Couleur} - ${elem.Rubrique}`,
-      format: elem.format, // Keep original fields for use in renderCell
-      PressePub_Couleur: elem.PressePub_Couleur,
-      Rubrique: elem.Rubrique,
-      page: elem.PressePub_Format,
-      Rubrique: elem.Rubrique,
-      PressePub_Lib: elem.PressePub_Lib,
-      annonceur: elem.Annonceur_Nom,
-      famille: elem.Famille,
-      categorie: elem.Categorie_lib,
-      marque: elem.Marque_Lib,
-      pub: elem.PressePub_Lib,
-      version_pub: elem.PressePub_Version,
-      version: elem.version,
-      tarif: elem.Tarif,
-      variete: elem.Variete_lib,
-      annee: elem.annee,
-      langue: elem.langue,
-      mois: elem.mois,
-      supprimer: elem.supprimer,
-      url: elem.url,
-      utilisateurs: elem.utilisateurs,
-
+      Id: elem.Id, // Matches "Id"
+      Support_Lib: elem.Support_Lib, // Matches "Support_Lib"
+      Date: elem.Date, // Matches "Date"
+      Produit_Lib: elem.Produit_Lib, // Matches "Produit_Lib"
+      Classe_Lib: elem.Classe_Lib, // Matches "Classe_Lib"
+      Format: `${elem.Format} - ${elem.NB_C} - ${elem.Rubrique}`, // Matches "Format", combined values
+      Page: elem.Page, // Matches "Page"
+      Annonceur_Lib: elem.Annonceur_Lib, // Matches "Annonceur_Lib"
+      Famille_Lib: elem.Famille_Lib, // Matches "Famille_Lib"
+      Secteur_Lib: elem.Secteur_Lib, // Matches "Secteur_Lib"
+      Marque_Lib: elem.Marque_Lib, // Matches "Marque_Lib"
+      Version: elem.Version, // Matches "Version"
+      Tarif: elem.Tarif, // Matches "Tarif"
+      Période: elem.Période, // Matches "Période"
+      Variété_Lib: elem.Variété_Lib, // Matches "Variété_Lib"
+      Année: elem.Année, // Matches "Année"
+      Mois: elem.Mois, // Matches "Mois"
+      Message_Lib: elem.Message_Lib, // Matches "Message_Lib"
     };
+    
     return list.push(item);
   });
 
   const dataArray2 = MediaData?.map((elem) => {
     var item2 = {
-      id: elem.media_id,
-      Titre_Lib: elem.support,
-      date: elem.media_Date,
-      message: elem.Pub_ID,
-      produit: elem.Product_Name,
-      heure: elem.media_Hour,
-      duree: elem.Pub_Format,
-      rang: elem.Pub_Rank,
-      encomb: elem.media_Encomb,
-      annonceur: elem.annonceur,
-      famille: elem.famille,
-      categorie: elem.categorie,
-      classe: elem.groupe,
-      marque: elem.marque,
-      version_pub: elem.pubVersion,
-      tarif: elem.tarif,
-      variete: elem.variete,
-      annee: elem.annee,
-      mois: elem.mois,
-      utilisateur: elem.utilisateurs,
-      langue: elem.langue,
-      // message:elem.Pub_Msg,
-      prog_avant: elem.Prog_Avant,
-      prog_apres: elem.Prog_Apres,
+      Id: elem.media_id,
+      Support_Lib: elem.support,
+      Date: elem.media_Date,
+      Produit_Lib: elem.Product_Name,
+      Message_Lib: elem.Pub_ID,
+      Heure: elem.media_Hour,
+      Durée: elem.Pub_Format,
+      Rang: elem.Pub_Rank,
+      Encombrement: elem.media_Encomb,
+      Annonceur_Lib: elem.annonceur,
+      Famille_Lib: elem.famille,
+      Secteur_Lib: elem.categorie,
+      Classe_Lib: elem.groupe,
+      Marque_Lib: elem.marque,
+      Version: elem.pubVersion,
+      Tarif: elem.tarif,
+      Variété_Lib: elem.variete,
+      Année: elem.annee,
+      Mois: elem.mois,
+      Prog_avant: elem.Prog_Avant,
+      Prog_après: elem.Prog_Apres
     };
+    
     return list2.push(item2);
   });
   const [filteredData, setFilteredData] = React.useState(list);
   const [filteredData2, setFilteredData2] = React.useState(list2);
-  //const [showDataGrid,setShowDataGrid]=React.useState(false);
-  //const [showDataGridIfNotEmpty,setShowDataGridIfNotEmpty] = React.useState(true)
-  // Update filtered data based on search term
+
   React.useEffect(() => {
     console.log("calling use effect presse")
     const lowercasedSearchTerm = searchTerm.toLowerCase();
@@ -351,13 +312,12 @@ export default function DataTablePige() {
         value.toString().toLowerCase().includes(lowercasedSearchTerm)
       )
     );
-
     setFilteredData(newFilteredData);
-    console.log("newFilteredData", newFilteredData);
+    //console.log("newFilteredData", newFilteredData);
   }, [searchTerm, PressData]);
   let i = 0;
   React.useEffect(() => {
-    console.log("calling use effect media")
+    console.log("calling use effect media",MediaData )
     setFilteredData2(MediaData)
     const lowercasedSearchTerm = searchTerm.toLowerCase();
     const newFilteredData = MediaData.map((elem) => ({
@@ -370,8 +330,6 @@ export default function DataTablePige() {
       duree: elem.Pub_Format,
       rang: elem.Pub_Rank,
       encomb: elem.media_Encomb,
-
-
       annonceur: elem.annonceur,
       famille: elem.famille,
       categorie: elem.categorie,
@@ -396,6 +354,7 @@ export default function DataTablePige() {
       }
       )
     );
+
     setFilteredData2(newFilteredData);
     if (MediaData.length > 100000) {
       setPopupDataLageData(true)
@@ -498,7 +457,10 @@ export default function DataTablePige() {
     if (media === "presse") {
       setDataTableShow(true)
       setLoadingshow(true)
-      getDataPresse && getDataPresse(
+      setPressData(MediaData)
+      getDataMedia && getDataMedia(
+        email,
+        media,
         Filtersupports,
         Filterfamilles,
         Filterclassesids,
@@ -507,13 +469,16 @@ export default function DataTablePige() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
+        rangs,
         date1,
         date2
       )
     } else {
       setDataTableShow(false)
       setLoadingshow(true)
-      getDataMedia && getDataMedia(media,
+      getDataMedia && getDataMedia(
+        email,
+        media,
         Filtersupports,
         Filterfamilles,
         Filterclassesids,
@@ -531,7 +496,6 @@ export default function DataTablePige() {
     setFetchDataTime(endTime - startTime);
   }
   React.useEffect(() => {
-   
     ResePressdataisFetched && ResePressdataisFetched()
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
     setShowDataGrid && setShowDataGrid(false)
@@ -566,25 +530,24 @@ export default function DataTablePige() {
       }
     }
   }, [filteredData2, increment])
+
   const [loadingFilters,setLoadingFilters]=React.useState(false)
-
-  const HandelSideBarPisition = () => {
-    getFilters && getFilters(email,media,date1,date2)
-    setLoadingFilters(true)
-    setTimeout(() => {
-      setLoadingFilters(false)
-      ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
-    }, 5000);
-   
-    setPopupDataLageData(false)
+  const HandelSideBarPisition = async() => {
+  setLoadingFilters(true)
+  try {
+    await getFilters && getFilters(email,media,date1,date2) 
+  } catch (error) {
+    alert("Filtres introuvables")
   }
-
+     console.log('filtres trouvé')
+    setPopupDataLageData(false)
+    setLoadingFilters(false)
+    ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+  }
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
   }
 
-  console.log("location", location)
-  
   React.useEffect(() => {
     if (filteredData2.length !== 0) {
       FilterDataMediaByrangs && FilterDataMediaByrangs(rangs, filteredData2, media)
@@ -606,27 +569,6 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
     marginTopAll: '4%',
     jCToolbar:"space-between"
   });
-
-  // React.useEffect(() => {
-  //   const handleResize = () => {
-  //     setResStyle({
-  //       justifyContent: window.innerWidth < 768 ? 'center' : 'space-between',
-  //       width: window.innerWidth < 768 ? '100%' : '50%',
-  //       widthRightbtns: window.innerWidth < 768 ? '100%' : '',
-  //       paddingLeftBtn: window.innerWidth < 768 ? '10px' : '0px',
-  //       widthLefbtnWrapper: window.innerWidth < 768 ? '100%' : '',
-  //       justifyContentRightBtnWrapper: window.innerWidth < 768 ? 'space-between' : 'center',
-  //       marginTopAll: window.innerWidth < 768 ? '10vh' : '4%',
-  //       jCToolbar:window.innerWidth < 768 ? 'center' : 'space-between'
-
-  //     });
-  //   };
-  //   handleResize();
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -680,7 +622,8 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
         }}
       >
         <b style={{ color: "#00a6e0" }}>
-          vous n'êtes pas abonnés</b>
+          vous n'êtes pas abonnés
+          </b>
 
       </Row>
     </Container>)

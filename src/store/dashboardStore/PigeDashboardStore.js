@@ -111,10 +111,8 @@ ResePressdataisFetched:()=>{
 },
 getDataPresse: async(supports,familles,classes,secteurs,varieties,annonceurs,marques,produits,date1,date2)=>{  
 let isfetched=false;
-console.log('date 1',date1)
-console.log('date 2',date2)
   try {
-  axios.post(`${PORT}/getfilters2.php`,
+  axios.post(`${PORT}/presse/table`,
    { 
     supports:supports,
     familles:familles,
@@ -1093,8 +1091,6 @@ getAnnonceursParSupport:async(
     console.log(error);
   }
 },
-
-
 
 getCreationParAnnonceur:async(
   supports,

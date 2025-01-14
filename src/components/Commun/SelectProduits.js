@@ -73,7 +73,7 @@ export default function MultipleSelectProducts() {
   const filteredElems = Filterproduits.filter((item) => {
     return item.Produit_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   }) 
-  const isAllSelected = selectedItems.length === filteredElems.length;
+  const isAllSelected = previousSelection.length === Filterproduits.length;
   
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
@@ -136,7 +136,7 @@ export default function MultipleSelectProducts() {
         )}
         renderOption={(props, option) => (
           <MenuItem {...props} key={option.Produit_Id} value={option.Produit_Id}>
-            <Checkbox defaultChecked checked={previousSelection.includes(option.Produit_Id)} />
+            <Checkbox  checked={previousSelection.includes(option.Produit_Id)} />
             <ListItemText primary={option.Produit_Lib} />
           </MenuItem>
         )}

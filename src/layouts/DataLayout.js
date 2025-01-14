@@ -10,7 +10,7 @@ import { Row, Col, Container } from 'react-bootstrap';
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 function DataLayout() {
-  const {usePrevilegesFamilles}=UseLoginStore((state)=>state)
+  const {usePrevilegesFamilles}=UseLoginStore((state)=>state);
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);

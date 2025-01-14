@@ -23,6 +23,7 @@ export default function MultipleSelectMarques() {
 
   useEffect(() => {
     setPreviousSelection(Filtermarquesids);
+    setSelectedItems(Filtermarquesids)
   }, [Filtermarquesids]);
 
   const handleSelectAll = () => {
@@ -46,7 +47,7 @@ export default function MultipleSelectMarques() {
     setInputValue(newInputValue);
   };
 
-  const isAllSelected = selectedItems.length === filteredElems.length;
+  const isAllSelected = previousSelection.length === filteredElems.length;
 
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
@@ -81,7 +82,7 @@ export default function MultipleSelectMarques() {
         )}
         renderOption={(props, option) => (
           <MenuItem {...props} key={option.Marque_id} value={option.Marque_id}>
-            <Checkbox defaultChecked checked={previousSelection.includes(option.Marque_id)} />
+            <Checkbox checked={previousSelection.includes(option.Marque_id)} />
             <ListItemText primary={option.Marque_Lib} />
           </MenuItem>
         )}

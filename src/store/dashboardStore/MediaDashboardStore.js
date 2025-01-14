@@ -1,8 +1,6 @@
 import { create  } from "zustand";
 import axios  from "axios";
-const PORT="https://immar-media.com"
-//const PORT="http://localhost/pigeonligne"
-
+const PORT = "https://pige-dev.immar-media.com/api/index.php"
 export const UseMediaDashboardStore= create((set, get)=>({
     MediaData:[],
     IsMediadataisFetched:false,
@@ -51,12 +49,13 @@ export const UseMediaDashboardStore= create((set, get)=>({
   //       }
         
   //       },
-  getDataMedia :async (media, supports, familles, classes, 
+  getDataMedia :async (email,media, supports, familles, classes, 
     secteurs, varieties, annonceurs, marques, produits, rangs, date1, date2) => {
      let isDataFetched = false;
     
      try {
-      const response = await axios.post(`${PORT}/getfilters2.php`, {
+      const response = await axios.post(`${PORT}/${media}/table`, {
+        email:email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -64,30 +63,31 @@ export const UseMediaDashboardStore= create((set, get)=>({
         varieties: varieties,
         annonceurs: annonceurs,
         marques: marques,
-        produits: produits,
-        rangs: rangs,
-        media: media,
-        fetchdata: "fetchdata",
-        date1: date1,
-        date2: date2,
+        produits: produits,     
+        media: media,       
+        date_debut: date1,
+        date_fin: date2,
       });
       console.log('date',date1)
       console.log('date',date2)
-      console.log("date radio/ tv data", response);     
+      console.log("date pige", response);     
       // Assuming you want to set the MediaData in your state management
       set({
-        MediaData: response.data.data
+        MediaData: response.data
       });
       isDataFetched=true; 
       set({IsMediadataisFetched:true}) 
       // Return the data for further use
-      return response.data.data;
+      return response.data;
   
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error; // Optionally rethrow the error for further handling
     }
     },
+
+
+    
     FilterDataMediaByrangs:async(rangs,data,media)=>{
 console.log(rangs)
 

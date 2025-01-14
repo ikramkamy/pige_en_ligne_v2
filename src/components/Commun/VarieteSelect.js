@@ -18,9 +18,9 @@ export default function MultipleSelectVarieties() {
   const [previousSelection, setPreviousSelection] = useState([]);
 
 
-  const filteredElems = inputValue.length > 0 ? Filtervarieties.filter((item) => {
+  const filteredElems =Filtervarieties.filter((item) => {
     return item.Variété_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
-  }) : [];
+  });
   // const filteredElems =Filtervarieties.filter((item) => {
   //   return item.Variété_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   // })
@@ -37,10 +37,10 @@ export default function MultipleSelectVarieties() {
       setSelectedItems(filteredElems.map((item) => item.Variété_Id));
       const ids = filteredElems.map((item) => item.Variété_Id);
       setFiltervariete && setFiltervariete(ids, produits, annonceurs, marques);
-      console.log("varieties filter", ids);
+      //console.log("varieties filter", ids);
     }
   };
-  console.log('Filtervarietiesids', Filtervarietiesids)
+  //console.log('Filtervarietiesids', Filtervarietiesids)
   const handleAutocompleteChange = (event, value) => {
     setSelectedItems([...value.map((item) => item.Variété_Id)]);
     const ids = value.map((item) => item.Variété_Id);
@@ -51,7 +51,7 @@ export default function MultipleSelectVarieties() {
     setInputValue(newInputValue);
   };
 
-  const isAllSelected = selectedItems.length === filteredElems.length;
+  const isAllSelected = previousSelection.length === filteredElems.length;
   const [openSeachVarities, setOpenSeachVarities] = useState(false)
   const [showloadingPopup, setShowloadingPopup] = useState(false)
   const handleCloseSearchVarieties = () => {
@@ -95,13 +95,14 @@ export default function MultipleSelectVarieties() {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label={`Variétés (${previousSelection.length})`} // Display the count of selected items
+                label={`Variétés (${previousSelection.length})`} 
+                // Display the count of selected items
                 variant="outlined"
               />
             )}
             renderOption={(props, option) => (
               <MenuItem {...props} key={option.Variété_Id} value={option.Variété_Id}>
-                <Checkbox defaultChecked checked={previousSelection.includes(option.Variété_Id)} />
+                <Checkbox  checked={previousSelection.includes(option.Variété_Id)} />
                 <ListItemText primary={option.Variété_Lib} />
               </MenuItem>
             )}

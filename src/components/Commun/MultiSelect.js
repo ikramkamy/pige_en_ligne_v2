@@ -13,15 +13,23 @@ import './commun.css';
 
 export default function MultipleSelectFamilles() {
   const { familles,Filterclasses,setFilterfamilles, Filterfamilles,
-     classes, secteurs, varieties, annonceurs, produits, marques } = UseFiltersStore((state) => state);
+    classes, secteurs, varieties, annonceurs, produits, marques } = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = React.useState('');
   //codeFamilles est devenue Famille_Id
-  const [selectedItems, setSelectedItems] = React.useState(familles.map((item) => item.Famille_Id));
+  const [selectedItems, setSelectedItems] = React.useState([]);
   const [previousSelection, setPreviousSelection] = React.useState([]);
+
+  React.useEffect(()=>{ 
+    setSelectedItems(Filterfamilles.map((item) => item.Famille_Id))
+    console.log("famille ms",familles);
+    console.log("famille ms selectedItems",
+    familles.map((item) => item.Famille_Id));
+    
+  },[Filterfamilles])
 //Famille est devenu Famille_Lib
   const filteredElems = familles.filter((item) => {
     return item.Famille_Lib.toLowerCase().startsWith(inputValue.toLowerCase())});
-  console.log("famille ms",familles);
+ 
   const handleAutocompleteChange = (event, value) => {
     setSelectedItems([...value.map((item) => item.Famille_Id)]);
     const listOfIdsSelected = value.map((e) => e.Famille_Id);

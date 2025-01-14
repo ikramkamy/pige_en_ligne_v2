@@ -25,6 +25,7 @@ import logoImmar from "assets/images.png";
 import Alert from '@mui/material/Alert';
 import { Container, Row, Col } from "react-bootstrap";
 import WarningIcon from '@mui/icons-material/Warning';
+import ExcelIcon from 'assets/img/icons/xls-file.png'
 const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchTerm, 
   setSearchTerm,
   handelOpenRechercheAvance
@@ -53,7 +54,7 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
     setOpen(false);
   };
 
-  const { sendDownloadLink } = UsePresseDashboardStore((state) => state)
+  const { sendDownloadLink } = UsePigeDashboardStore((state) => state)
 
   const today = dayjs();
   const formattedDate = today.format('DD/MM/YYYY');
@@ -112,57 +113,6 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
     errorOverlayDefaultLabel: 'Une erreur est survenue.',
   };
   const exportToExcel = () => {
-    // Convert JSON data to worksheet
-    //   console.log(filteredData)
-    // var dataToexport=[];
-
-    //   if(media=='presse'){
-    //     dataToexport=filteredData;
-    //     console.log('filteredData for excel export',filteredData)
-    //     const worksheet = XLSX.utils.json_to_sheet(dataToexport, { header: columns.map(col => col.field) });
-    //     const workbook = XLSX.utils.book_new();
-    //     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
-    //        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    //        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-
-    //        // Create a URL for the Blob
-    //        const url = URL.createObjectURL(blob);
-
-    //       //  // Send the download link to the email address
-    //       //  const emailAddress = 'ikramzerkut13@gmail.com'; // Replace with the actual email address
-    //       //  const subject = 'Pige en ligne Immar Media Télècharger votre Excel';
-    //       // const body = `Veuillez trouver 
-    //       // ci-dessous le lien relatif à la pige radio du ${date1} au ${date2}: ${url}`;
-
-    //        // Use a mailto link to open the user's email client
-    //        //window.location.href = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    //        // Optionally, revoke the object URL after sending the email
-    //        URL.revokeObjectURL(url);
-    //        var support = Filtersupports
-    //        var annonceur="ALGERIE  TELECOM"
-    //        var type = 'ALL'
-    //        var famille = 'ALL'
-    //        var classe = 'ALL'
-    //        var marque = 'ALL'
-    //        var produit = "158,188,291,386,408,419,1433,2280,3655,4046"
-    //         const urltosend="https://immar-media.com/phpexcel/ex/calcul_pige_presse_limite4.php?chaine=" + support + "&type_diffusion=" + type + "&Annonceur_Nom=" + annonceur + "&Produit_Lib=" + produit + "&Marque_Lib=" + marque + "&type_recherche=en_cours&date1=" + date1 + "&date2=" + date2 + "&CodeFamille=" + famille + "&classe=" + classe
-
-    //        sendDownloadLink && sendDownloadLink(urltosend)
-
-
-    //   }else{
-    //           dataToexport=filteredData2;
-    //           console.log('filteredData for excel export',filteredData2)
-    //           const worksheet = XLSX.utils.json_to_sheet(dataToexport, { header: columns2.map(col => col.field) });
-    //           const workbook = XLSX.utils.book_new();
-    //           XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
-    //          // Write the workbook to file
-    //           XLSX.writeFile(workbook, `immarmedia_${media}.xlsx`);
-    //   }
-
     if(Filterannonceursids<30){
       handleClickOpen()
       sendDownloadLink && sendDownloadLink(Filtersupports, Filterannonceursids,
@@ -232,12 +182,17 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
           justifyContent: "center",
           alignItems: "center"
         }} onClick={exportToExcel}>
-
-          <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium 
+        <img src={ExcelIcon} alt="excel file" />
+          {/* <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium 
      css-i4bv87-MuiSvgIcon-root"
             style={{ color: "#007bff", width: "19px", marginRight: "2px" }}
-            focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SaveAltIcon">
-            <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"></path></svg>
+            focusable="false" aria-hidden="true" viewBox="0 0 24 24"
+             data-testid="SaveAltIcon">
+            <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 
+            2h14c1.1 0 2-.9 2-2v-7h-2zm-6 
+            .67l2.59-2.58L17 11.5l-5 5-5-5 
+            1.41-1.41L11 12.67V3h2z"></path>
+            </svg> */}
           Exporter
         </div>
         <GridToolbarQuickFilter />

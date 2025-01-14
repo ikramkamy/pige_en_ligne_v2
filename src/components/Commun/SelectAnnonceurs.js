@@ -7,27 +7,31 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore } from '../../store/dashboardStore/FiltersStore';
 import { Autocomplete } from '@mui/material';
 import { TextField } from '@mui/material';
-import Alert from '@mui/material/Alert';
+
 
 export default function MultipleSelectAnnonceurs() {
   const { Filterannonceurs, marques, produits, setFilterannonceur, Filterannonceursids ,annonceurs} = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = useState('');
-  const [selectedItems, setSelectedItems] = useState(Filterannonceursids);
   const [previousSelection, setPreviousSelection] = useState(Filterannonceursids);
-
+  const [selectedItems, setSelectedItems] = useState(Filterannonceursids);
+  console.log('selectedItems source',Filterannonceursids)
+  
+  useEffect(() => {
+    console.log('selectedItems 1',selectedItems)
+  }, [selectedItems]);
   // Filter annonceurs based on input value
   // const filteredElems = inputValue.length > 0 ? Filterannonceurs.filter((item) => {
   //   return item.Annonceur_Nom.toLowerCase().startsWith(inputValue.toLowerCase());
   // }) : [];
-
-
   //Annonceur_nom est devenue Annonceur_Lib
+
  const filteredElems =Filterannonceurs.filter((item) => {
     return item.Annonceur_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
-console.log('annoncerus',Filterannonceursids)
+
   useEffect(() => {
     setPreviousSelection(Filterannonceursids);
+    setSelectedItems(Filterannonceursids);
   },[Filterannonceursids]);
 
   const handleSelectAll = () => {
@@ -40,7 +44,7 @@ console.log('annoncerus',Filterannonceursids)
       setFilterannonceur && setFilterannonceur(ids, marques, produits);
     }
   };
-
+  
   const handleAutocompleteChange = (event, value) => {
     setSelectedItems([...value.map((item) => item.Annonceur_Id)]);
     const ids = value.map((item) => item.Annonceur_Id);
@@ -50,12 +54,9 @@ console.log('annoncerus',Filterannonceursids)
   const onInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
+  console.log('selectedItems 6',selectedItems)
+  const isAllSelected = selectedItems.length == filteredElems.length;
 
-  const isAllSelected = selectedItems.length === filteredElems.length;
-// console.log("selectedItems ann",annonceurs)  
-console.log("selectedItems ids",Filterannonceursids) 
-console.log("selectedItems filtred",Filterannonceurs) 
-// console.log("selectedItems",Filterannonceurs.map((e)=>e.Annonceur_Id))
 
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
