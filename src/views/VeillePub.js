@@ -462,6 +462,7 @@ export default function VeillePub() {
               getData={getData}
               isloading={false}
               isSucces={false}
+              title="Afficher"
               disablebtn={!media || dataVeilleISFetched}
             //disablebtn={!media}
             />

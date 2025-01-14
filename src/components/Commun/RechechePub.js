@@ -8,7 +8,7 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
-import { UsePresseDashboardStore } from 'store/dashboardStore/PresseDashboardStore';
+import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
 
 import { Search } from '@mui/icons-material';
@@ -24,7 +24,7 @@ const MenuProps = {
 };
 export default function RecherchePub() {
   const { setMediaValue,getFilters,ResetAllFilters,setVeilleDiffusion}=UseFiltersStore((state)=>state)
-  const {ResetDataArrays}=UsePresseDashboardStore((state)=>state)
+  const {ResetDataArrays}=UsePigeDashboardStore((state)=>state)
   
   const [selectedMediaPub, setSelectedMediaPub]=useState('')
   const [mediaList, setMediaList]=useState([

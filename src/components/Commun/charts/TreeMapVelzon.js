@@ -1,5 +1,5 @@
 import getChartColorsArray from "./ChartsDynamicColor";
-import { UsePresseDashboardStore } from '../../../store/dashboardStore/PresseDashboardStore';
+import { UsePigeDashboardStore } from '../../../store/dashboardStore/PigeDashboardStore';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import ReactApexChart from "react-apexcharts";
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ export const DiffColorTreemap = () => {
         "#8F9E45", // Earthy brown
         "#FF9900" // Warm red
       ]
-    const {PartMarche}=UsePresseDashboardStore((state)=>state);
+    const {PartMarche}=UsePigeDashboardStore((state)=>state);
     const {base, media}=UseFiltersStore((state)=>state);
     const [average, setAverage]=useState(0);
     const [array, setArray]=useState([{
@@ -335,7 +335,7 @@ export const TreemapRepartitionFormat = () => {
         "#00171a",
         "#001415"
       ];
-    const {FormatRepartition}=UsePresseDashboardStore((state)=>state);
+    const {FormatRepartition}=UsePigeDashboardStore((state)=>state);
     const {base, media}=UseFiltersStore((state)=>state);
     const [average, setAverage]=useState(0);
     const [array, setArray]=useState([{

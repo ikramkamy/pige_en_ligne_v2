@@ -18,13 +18,13 @@ import Button from "@mui/material/Button";
 import { Row, Col } from "react-bootstrap";
 import GridDemo from 'components/Commun/charts/TOP20Charts';
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
-import { UsePresseDashboardStore } from "store/dashboardStore/PresseDashboardStore";
+import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import logoImmar from "assets/images.png";
-import DataTablePress from "../../views/PressTable";
+import DataTablePress from "../../views/PigeTable";
 import { useLocation } from 'react-router-dom';
 import TypePub from 'components/Commun/TypePub';
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
@@ -45,47 +45,8 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
     const { getDataMedia } = UseMediaDashboardStore((state) => state);
     const { filterVeilledata, veilletvData } = UseVeilleStore((state) => state);
     const [sideShow, setSideShow] = React.useState(false)
-    const {
-        usePrevilegesSupport_radio,
-        usePrevilegeschainetv,
-        usePrevilegesFamilles,
-        usePrevilegesClasse,
-        usePrevilegesSecteur,
-        usePrevilegesVarietes,
-        usePrevilegesProduit,
-        usePrevilegesAnnonceurs,
-        usePrevilegesMarques}=UseLoginStore((state)=>state)
-    const {
-        getAnnonceursActifPresse,
-        getAnnonceursActif,
-        getCreationUniques,
-
-
-        getBudgetBrut,
-        getSupportDiffusion,
-
-
-        getDreeTotalDiffusion,
-        getDreeTotalMoyenne,
-
-        getPicCommunication,
-
-        getPrtMarchet,
-        getVolumePresse,
-        getTop20Annonceurs,
-        getCreationUniquesPresse,
-        getBudgetBrutPresse,
-        getSupportDiffusionPresse,
-        getCouleur,
-        getTop20famillesSectorielles,
-
-        getTop20Marques,
-        getTop20Produits,
-        getRepartitionFormat,
-        getAnnonceursParSupport,
-        getCreationParAnnonceur,
-    } = UsePresseDashboardStore((state) => state)
-    const {
+    const {email}=UseLoginStore((state)=>state)
+ const {
 
         Filtersupports,
         supports,
@@ -113,6 +74,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
        
 
     } = UseFiltersStore((state) => state);
+    //console.log('familles',Filterclassesids,familles)
     const location = useLocation();
     const [state, setState] = React.useState({
         top: false,
@@ -345,7 +307,6 @@ role="presentation"
         <Col style={{ width: "30%" }}>
        
         {showVeilleFilters && (<TypePub />)}
-            <MultipleSelectSupports />
             <MultipleSelectFamilles />
             <MultipleSelectClasses />
             <MultipleSelectSecteurs />
@@ -359,23 +320,23 @@ role="presentation"
             <MultipleSelectProducts />
         </Col>
     </Row>
-    {/* <Row style={{ justifyContent: "center",
+    <Row style={{ justifyContent: "center",
           width:"50%", paddingLeft:"50px",
           paddingRight:"50px"}}> 
         
     <Col style={{ width: "30%" }}>
         {showRang && (
-                
-                <MultipleSelectRangs />
+                 <MultipleSelectSupports />
+                // <MultipleSelectRangs />
            )
        }
-        {showBase && (
-                   <MultipleSelectBase />                           
+        {showBase && (<div></div>
+                //    <MultipleSelectBase />                           
         )
         }
         </Col>
         
-</Row> */}
+</Row>
 
     
     <Row className="mt-10">
@@ -387,6 +348,7 @@ role="presentation"
                 isloading={isloading}
                 isSucces={isSucces}
                 disablebtn={!media && !base}
+                title="Afficher"
             />
             <Button
                 sx={{ textTransform: "none", width: "fit-content", backgroundColor:"#00a6e0",

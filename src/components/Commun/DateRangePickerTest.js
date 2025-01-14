@@ -6,12 +6,12 @@ import moment from "moment";
 import './commun.css';
 import { fr } from "date-fns/locale";
 import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
-import { UsePresseDashboardStore } from "store/dashboardStore/PresseDashboardStore";
+import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 
 export default function DateRangeTest() {
   const { setDateRang, setShowDataGridIfNotEmpty, setShowDataGrid, setDataTableShow, setLoadingshow } = UseFiltersStore((state) => state);
-  const { ResetBasedeCalucule, ResetDataArrays } = UsePresseDashboardStore((state) => state);
+  const { ResetBasedeCalucule, ResetDataArrays } = UsePigeDashboardStore((state) => state);
   const { RestRadioTvData } = UseMediaDashboardStore((state) => state);
   const date_debut = window.localStorage.getItem('date_debut');
   const date_fin = window.localStorage.getItem('date_fin');

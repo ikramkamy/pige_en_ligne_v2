@@ -3,7 +3,7 @@ import axios  from "axios";
 import dayjs from "dayjs";
 const PORT="https://immar-media.com";
 //const PORT="http://localhost/pigeonligne"
-export const UsePresseDashboardStore= create((set, get)=>({
+export const UsePigeDashboardStore= create((set, get)=>({
     PressData:[],
     VolumePresse :0,
     VolumePresseLastYear:0,
@@ -819,8 +819,6 @@ getTop20Annonceurs: async (
        date1:date1,
        date2:date2, 
        rangs:rangs,
-
-
      });
      
      console.log('rangs',rangs)
@@ -1688,7 +1686,6 @@ getPicCommunicationLastYear:async(
 
 
 },
-
 
 sendDownloadLink:async(Filtersupports,
   annonceurs,produits,

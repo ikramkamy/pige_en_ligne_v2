@@ -3,7 +3,7 @@ import UserProfile from "views/UserProfile.js";
 import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Home from "views/Home";
-import DataTablePress from "views/PressTable";
+import DataTablePige from "views/PigeTable";
 import SignIn from "views/Login";
 import Register from "./views/SignUp";
 import MotDePasseOublier from "views/MotdePassOublier";
@@ -101,16 +101,16 @@ const dashboardRoutes = [
     path: "/pige_en_ligne",
     name: "Table List",
     icon: "nc-icon nc-notes",
-    component: DataTablePress,
+    component: DataTablePige,
     layout: "/pige"
   },
-  {
-    path: "/tablepresse",
-    name: "Table presse",
-    icon: "nc-icon nc-notes",
-    component:DataTablePress,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/tablepresse",
+  //   name: "Table presse",
+  //   icon: "nc-icon nc-notes",
+  //   component:DataTablePige,
+  //   layout: "/admin"
+  // },
   {
     path: "/veille_creations_publicitaires",
     name: "Veille Des Créations Publicitaires",

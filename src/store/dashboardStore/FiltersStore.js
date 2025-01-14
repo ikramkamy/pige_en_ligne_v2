@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import axios from 'axios';
-const PORT = "https://immar-media.com/"
-//const PORT="http://localhost/pigeonligne"
+//const PORT = "https://immar-media.com/"
+const PORT = "https://pige-dev.immar-media.com/api/index.php"
 import dayjs from "dayjs";
 export const UseFiltersStore = create((set, get) => ({
   supports: [],
@@ -171,167 +171,45 @@ export const UseFiltersStore = create((set, get) => ({
 
   },
   getFilters: async (
-    media,
-    user_id,
-    usePrevilegesSupport_radio,
-    usePrevilegeschainetv,
-    usePrevilegesFamilles,
-    usePrevilegesClasse,
-    usePrevilegesSecteur,
-    usePrevilegesVarietes,
-    usePrevilegesProduit,
-    usePrevilegesAnnonceurs,
-    usePrevilegesMarques,
-    userPrevilegesVeille,
-    page
+  email,
+  media,
+  date1,
+  date2
   ) => {
-    try {
-      console.log("page",page)
-      set({ isLoading: true });
-      console.log("usePrevilegesSupport_radio", usePrevilegesSupport_radio)
-
-      let response = await axios.post(`${PORT}/getfilters2.php`, {
-        media: media,
-        filters: 'filters',
-      });
-      console.log("response filters", response)
-
-      if(page !== "veille") {
-       console.log("calling pige + dashboard filters")
-        var prevfamilleIDS = usePrevilegesFamilles.map((e) => e.famille_id)
-        var famillesPrev = response.data.data.familles.filter(
-          (elem) => prevfamilleIDS.includes(elem.CodeFamille))
-        // console.log('fam prev',famillesPrev)
-  
-        var FamillePrevIds = famillesPrev.map((elem) => elem.CodeFamille)
-        //console.log("FamillePrevIds", FamillePrevIds)
-  
-        var prevclassesIDS = usePrevilegesClasse.map((e) => e.classe_id)
-        var classesPrev = response.data.data.classes.filter((elem) =>
-          prevclassesIDS.includes(elem.Groupe_Id)
-        )
-        //console.log('classes with prev', classesPrev)
-        var secteursprevIDS = usePrevilegesSecteur.map((e) => e.secteur_id)
-        var secteurPrev = response.data.data.categories.filter((elem) => secteursprevIDS.includes(elem.Categorie_Id))
-        //console.log('secteurs prev', usePrevilegesSecteur)
-  
-        var varietiesprevIDS = usePrevilegesVarietes.map((e) => e.variete_id)
-        var varitiesPrev = response.data.data.varieties.filter((elem) => varietiesprevIDS.includes(elem.Variete_id))
-        //console.log("var prev", varitiesPrev)
-        //console.log("usePrevilegesAnnonceurs", usePrevilegesAnnonceurs)
-        var annonceursprevIDS = usePrevilegesAnnonceurs.map((e) => e.annonceur_id)
-        var annonceursprevnames = usePrevilegesAnnonceurs.map((e) => e.annonceur)
-        //console.log("annonceur names", annonceursprevnames)
-        //  I will use names instead
-        //var annonceurPrev=response.data.data.annonceurs.filter((elem)=>annonceursprevIDS.includes(elem.Annonceur_Id)) 
-        var annonceurPrev = response.data.data.annonceurs.filter((elem) =>
-          annonceursprevIDS.includes(elem.Annonceur_Id))
-        console.log("ann prev", annonceurPrev)
-        //console.log('usePrevilegesMarques', usePrevilegesMarques)
-        var marquesprevIDS = usePrevilegesMarques.map((e) => e.marque_id)
-        var marquePrev = response.data.data.marques.filter((elem) => marquesprevIDS.includes(elem.Marque_id))
-        //console.log("mar prev", marquePrev)
-        //console.log('usePrevilegesProduit', usePrevilegesProduit)
-        var produitsprevIDE = usePrevilegesProduit.map((e) => e.produit_id)
-        //console.log("produitsprevIDE", produitsprevIDE)
-        var produitPrev = response.data.data.produits.filter((elem) =>
-          produitsprevIDE.includes(elem.Produit_Id))
-        // console.log("prod prev",produitPrev)
-        console.log("selectedItems  filtered", annonceurPrev) 
-        console.log("selectedItems ids ",  annonceurPrev.map((e)=>e.Annonceur_Id)) 
-
-        
-        
+    try {   
+      
+      let response=await axios.post(`${PORT}/${media}/filters`,{
+        email:email,
+        date_debut:date1,
+        date_fin:date2
+      })
+      console.log("response filters",response,`${PORT}/${media}/filters`,email,date1,date2)
         set({
+          supports: response.data.supports,
+          Filtersupports: response.data.supports,
+          familles: response.data.familles,
+          Filterfamilles: response.data.familles.map((e)=>e.Famille_Id),
 
-          familles: famillesPrev,
-          Filterfamilles: FamillePrevIds,
-          classes: classesPrev,
-          Filterclasses: classesPrev,
+          classes: response.data.classes,
+          Filterclasses: response.data.classes,
   
-          secteurs: secteurPrev,
-          Filtersecteurs: secteurPrev,
+          secteurs: response.data.secteurs,
+          Filtersecteurs: response.data.secteurs,
 
-          varieties: varitiesPrev,
-          Filtervarieties: varitiesPrev,
+          varieties: response.data.varietes,
+          Filtervarieties: response.data.varietes,
 
-          annonceurs: annonceurPrev,
-          Filterannonceurs: annonceurPrev,
-          Filterannonceursids:annonceurPrev.map((e)=>e.Annonceur_Id),
+          annonceurs: response.data.annonceurs,
+          Filterannonceurs: response.data.annonceurs,
 
-          marques: marquePrev,
-          produits: produitPrev,
-          Filterproduits: produitPrev,
+          Filterannonceursids:response.data.annonceurs.map((e)=>e.Annonceur_Id),
+          marques:response.data.marques,
+          Filtermarques: response.data.marques,
 
-          Filtermarques: marquePrev,
+          produits: response.data.produits,
+          Filterproduits: response.data.produits,
   
         });
-        switch (media) {
-          case 'presse':
-            let IDSSupports = response.data.data.supports.map((elem) => elem.support_id)
-            set({
-              supports: response.data.data.supports,
-              Filtersupports: IDSSupports,
-            })
-            // console.log("presse supports are ready to go",response.data.data.supports)
-            break;
-          case 'radio':
-            var prevSupporIDS = usePrevilegesSupport_radio.map((e) => e.media_id)
-            var prevradioChannels = response.data.data.supports.filter((elem) =>
-              prevSupporIDS.includes(elem.support_id))
-            var chaineRadioIds = prevradioChannels.map((elem) => elem.support_id)
-            set({
-              supports: prevradioChannels,
-              Filtersupports: chaineRadioIds
-            })
-            console.log("radio", prevradioChannels)
-            break;
-          case 'television':
-            // console.log("media",media)
-            var prevSupporIDS = usePrevilegeschainetv.map((e) => e.media_id)
-            var prevradioChannels = response.data.data.supports.filter((elem) =>
-              prevSupporIDS.includes(elem.support_id))
-            var chaineivIds = prevradioChannels.map((elem) => elem.support_id)
-            set({
-              supports: prevradioChannels,
-              Filtersupports: chaineivIds,
-
-            })
-            //console.log("tv",prevradioChannels)
-            break;
-        }
-      }else {
-        
-    //pour la veille les priviléges sont appliquer que les familles
-          var prevfamilleIDS = userPrevilegesVeille.map((e) => e.CodeFamille)       
-          var famillesPrev = response.data.data.familles.filter(
-          (elem) => prevfamilleIDS.includes(elem.CodeFamille))
-          console.log("veille familles",famillesPrev.slice(0,10) )        
-          var FamillePrevIds = famillesPrev.map((elem) => elem.CodeFamille)
-          set({
-        
-            familles: famillesPrev.slice(0,10),
-            Filterfamilles: FamillePrevIds.slice(0,10),
-   
-            classes:response.data.data.classes,
-            Filterclasses: response.data.data.classes,
-    
-            secteurs: response.data.data.categories,
-            Filtersecteurs: response.data.data.categories,
-    
-            varieties: response.data.data.varieties,
-            Filtervarieties: response.data.data.varieties,
-    
-            annonceurs: response.data.data.annonceurs,
-            Filterannonceurs: response.data.data.annonceurs,
-    
-            marques: response.data.data.marques,
-            produits: response.data.data.marques,
-            Filterproduits: response.data.data.produits,
-            Filtermarques: response.data.data.produits,
-    
-          });
-      }
     } catch (error) {
       console.log(error);
     }
@@ -385,24 +263,22 @@ export const UseFiltersStore = create((set, get) => ({
         var marquesByFamille = [];
 
       } else {
-        var classesByFamilles = classes.filter((elem) => ids.includes(elem.CodeFamille));
-        var classesids = classesByFamilles.map((elem) => elem.Groupe_Id)
+        var classesByFamilles = classes.filter((elem) => ids.includes(elem.Famille_Id));
+        var classesids = classesByFamilles.map((elem) => elem.Classe_Id)
 
-        var secteurByFamille = secteurs.filter((elem) => ids.includes(elem.famille_id));
-        var secteurids = secteurByFamille.map((elem) => elem.Categorie_Id);
+        var secteurByFamille = secteurs.filter((elem) => ids.includes(elem.Famille_Id));
+        var secteurids = secteurByFamille.map((elem) => elem.Classe_Id);
 
-
-
-        var varietiesByFamille = varieties.filter((elem) => ids.includes(elem.famille_id));
-        var varietiesids = varietiesByFamille.map((elem) => elem.Variete_id);
+        var varietiesByFamille = varieties.filter((elem) => ids.includes(elem.Famille_Id));
+        var varietiesids = varietiesByFamille.map((elem) => elem.Variété_Id);
 
 
-        var produitsByFamille = produits.filter((elem) => ids.includes(elem.famille_id));
+        var produitsByFamille = produits.filter((elem) => ids.includes(elem.Famille_Id));
         var produitsids = produitsByFamille.map((elem) => elem.Produit_Id);
 
 
         //var annonceurIdsinproduits=produitsByFamille.map((elem)=>elem.Annonceur_id)
-        var annonceurIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Annonceur_id))];
+        var annonceurIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Annonceur_Id))];
         var annonceursByFamille = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
         console.log("annonceursByFamille", annonceursByFamille)
 
@@ -452,29 +328,27 @@ export const UseFiltersStore = create((set, get) => ({
 
       } else {
 
-        var secteurByClasse = secteurs.filter((elem) => ids.includes(elem.Groupe_Id));
-        var secteurids = secteurByClasse.map((elem) => elem.Categorie_Id);
+        var secteurByClasse = secteurs.filter((elem) => ids.includes(elem.Classe_Id));
+        var secteurids = secteurByClasse.map((elem) => elem.Secteur_Id);
+
+
+        var varietiesByClasse = varieties.filter((elem) => ids.includes(elem.Classe_Id));
+        var varietiesids = varietiesByClasse.map((elem) => elem.Variété_Id);
 
 
 
-
-        var varietiesByClasse = varieties.filter((elem) => ids.includes(elem.classe_id));
-        var varietiesids = varietiesByClasse.map((elem) => elem.Variete_id);
-
-
-
-        var produitsByClasse = produits.filter((elem) => ids.includes(elem.classe_id));
+        var produitsByClasse = produits.filter((elem) => ids.includes(elem.Classe_Id));
         var produitsids = produitsByClasse.map((elem) => elem.Produit_Id);
 
 
 
-        var annonceurIdsinproduits = [...new Set(produitsByClasse.map((elem) => elem.Annonceur_id))]
+        var annonceurIdsinproduits = [...new Set(produitsByClasse.map((elem) => elem.Annonceur_Id))]
         var annonceursByClassse = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
-        console.log("annonceursByClassse", annonceursByClassse)
+        //console.log("annonceursByClassse", annonceursByClassse)
 
 
-        var marquesIdsinproduits = [...new Set(produitsByClasse.map((elem) => elem.Marque_id))]
-        var marquesByClassse = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_id))
+        var marquesIdsinproduits = [...new Set(produitsByClasse.map((elem) => elem.Marque_Id))]
+        var marquesByClassse = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_Id))
 
       }
 
@@ -522,21 +396,20 @@ export const UseFiltersStore = create((set, get) => ({
       } else {
 
 
-        var varietiesBySecteur = varieties.filter((elem) => ids.includes(elem.Categorie_id));
-        var varietiesids = varietiesBySecteur.map((elem) => elem.Variete_id);
+        var varietiesBySecteur = varieties.filter((elem) => ids.includes(elem.Secteur_Id));
+        var varietiesids = varietiesBySecteur.map((elem) => elem.Variété_Id);
 
 
-        var produitsBySecteur = produits.filter((elem) => ids.includes(elem.secteur_id));
+        var produitsBySecteur = produits.filter((elem) => ids.includes(elem.Secteur_Id));
         var produitsids = produitsBySecteur.map((elem) => elem.Produit_Id);
 
 
-        var annonceurIdsinproduits = [...new Set(produitsBySecteur.map((elem) => elem.Annonceur_id))]
+        var annonceurIdsinproduits = [...new Set(produitsBySecteur.map((elem) => elem.Annonceur_Id))]
         var annonceursBySecteur = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
 
-          console.log('annonceursBySecteur',annonceursBySecteur)
-        var marquesIdsinproduits = [...new Set(produitsBySecteur.map((elem) => elem.Marque_id))]
-        var marquesBySecteur = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_id))
-
+          //console.log('annonceursBySecteur',annonceursBySecteur)
+        var marquesIdsinproduits = [...new Set(produitsBySecteur.map((elem) => elem.Marque_Id))]
+        var marquesBySecteur = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_Id))
       }
 
       set({
@@ -570,13 +443,13 @@ export const UseFiltersStore = create((set, get) => ({
         var annonceursByVariete = [];
         var marquesByVariete = [];
       } else {
-        var produitsByVariete = produits.filter((elem) => ids.includes(elem.Variete_id));
+        var produitsByVariete = produits.filter((elem) => ids.includes(elem.Variété_Id));
         var produitsids = produitsByVariete.map((elem) => elem.Produit_Id);
-        var annonceurIdsinproduits = [...new Set(produitsByVariete.map((elem) => elem.Annonceur_id))];
-        var annonceursByVariete = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
-        console.log("annonceursByVariete",annonceursByVariete)
-        var marquesIdsinproduits = [...new Set(produitsByVariete.map((elem) => elem.Marque_id))]
-        var marquesByVariete = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_id))
+        var annonceurIdsinproduits = [...new Set(produitsByVariete.map((elem) => elem.Annonceur_Id))];
+        var annonceursByVariete = annonceurs.filter((elem) =>annonceurIdsinproduits.includes(elem.Annonceur_Id));
+        //console.log("annonceursByVariete",annonceursByVariete)
+        var marquesIdsinproduits = [...new Set(produitsByVariete.map((elem) => elem.Marque_Id))]
+        var marquesByVariete = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_Id))
 
       }
       set({
@@ -609,12 +482,12 @@ export const UseFiltersStore = create((set, get) => ({
 
 
       } else {
-        var annonceursIds = [...new Set(produitsSelected.map((elem) => elem.Annonceur_id))];
-        var marquesIds = [...new Set(produitsSelected.map((elem) => elem.Marque_id))];
+        var annonceursIds = [...new Set(produitsSelected.map((elem) => elem.Annonceur_Id))];
+        var marquesIds = [...new Set(produitsSelected.map((elem) => elem.Marque_Id))];
 
 
         var annonceursByProduit = annonceurs.filter((elem) => (annonceursIds.includes(elem.Annonceur_Id)))
-        var marquesByProduit = marques.filter((elem) => marquesIds.includes(elem.Marque_id))
+        var marquesByProduit = marques.filter((elem) => marquesIds.includes(elem.Marque_Id))
 
       }
 
@@ -645,11 +518,11 @@ export const UseFiltersStore = create((set, get) => ({
 
       } else {
 
-        var marquesByAnnonceur = marques.filter((elem) => ids.includes(elem.Annonceur_id))
-        var produitsByAnnonceur = produits.filter((elem) => ids.includes(elem.Annonceur_id))
+        var marquesByAnnonceur = marques.filter((elem) => ids.includes(elem.Annonceur_Id))
+        var produitsByAnnonceur = produits.filter((elem) => ids.includes(elem.Annonceur_Id))
 
 
-        var marquesIds = [...new Set(marquesByAnnonceur.map((elem) => elem.Marque_id))];
+        var marquesIds = [...new Set(marquesByAnnonceur.map((elem) => elem.Marque_Id))];
         var produitsids = produitsByAnnonceur.map((elem) => elem.Produit_Id);
 
 
@@ -683,10 +556,10 @@ export const UseFiltersStore = create((set, get) => ({
 
       } else {
 
-        var produitsByMarque = produits.filter((elem) => ids.includes(elem.Marque_id))
+        var produitsByMarque = produits.filter((elem) => ids.includes(elem.Marque_Id))
         var produitsids = produitsByMarque.map((elem) => elem.Produit_Id);
 
-        var annonceurByMarqueIds = [...new Set(produitsByMarque.map((elem) => elem.Annonceur_id))]
+        var annonceurByMarqueIds = [...new Set(produitsByMarque.map((elem) => elem.Annonceur_Id))]
         var annonceurByMarque = annonceurs.filter((elem) => annonceurByMarqueIds.includes(elem.Annonceur_Id))
 
 
@@ -712,7 +585,6 @@ export const UseFiltersStore = create((set, get) => ({
 
   },
   ManageSideBarfilterDisplay: async (e) => {
-    console.log('here', e)
     set({ SideBarFilterPosition: e })
   },
 }))

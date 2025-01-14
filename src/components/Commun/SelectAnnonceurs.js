@@ -19,8 +19,11 @@ export default function MultipleSelectAnnonceurs() {
   // const filteredElems = inputValue.length > 0 ? Filterannonceurs.filter((item) => {
   //   return item.Annonceur_Nom.toLowerCase().startsWith(inputValue.toLowerCase());
   // }) : [];
-    const filteredElems =Filterannonceurs.filter((item) => {
-    return item.Annonceur_Nom.toLowerCase().startsWith(inputValue.toLowerCase());
+
+
+  //Annonceur_nom est devenue Annonceur_Lib
+ const filteredElems =Filterannonceurs.filter((item) => {
+    return item.Annonceur_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
 console.log('annoncerus',Filterannonceursids)
   useEffect(() => {
@@ -74,7 +77,7 @@ console.log("selectedItems filtred",Filterannonceurs)
         options={filteredElems}
         value={Filterannonceurs.filter((item) =>previousSelection.includes(item.Annonceur_Id))}
         onChange={handleAutocompleteChange}
-        getOptionLabel={(option) => option.Annonceur_Nom}
+        getOptionLabel={(option) => option.Annonceur_Lib}
         inputValue={inputValue}
         onInputChange={onInputChange}
         renderInput={(params) => (
@@ -87,7 +90,7 @@ console.log("selectedItems filtred",Filterannonceurs)
         renderOption={(props, option) => (
           <MenuItem {...props} key={option.Annonceur_Id} value={option.Annonceur_Id}>
             <Checkbox defaultChecked checked={previousSelection.includes(option.Annonceur_Id)} />
-            <ListItemText primary={option.Annonceur_Nom} />
+            <ListItemText primary={option.Annonceur_Lib} />
           </MenuItem>
         )}
         renderTags={(value, getTagProps) => null}

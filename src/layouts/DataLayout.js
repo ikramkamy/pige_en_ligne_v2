@@ -59,15 +59,15 @@ function DataLayout() {
     };
   }, []);
 
-  React.useEffect(() => {
-    //this is to ensure a login after each page reloaging
-      if (usePrevilegesFamilles.length===0) { 
-        localStorage.clear(); 
-        localStorage.setItem('hasReloaded', 'true');
-      } else {
-          //do nothing 
-      }
-    }, []);
+  // React.useEffect(() => {
+  //   //this is to ensure a login after each page reloaging
+  //     if (usePrevilegesFamilles.length===0) { 
+  //       localStorage.clear(); 
+  //       localStorage.setItem('hasReloaded', 'true');
+  //     } else {
+  //         //do nothing 
+  //     }
+  //   }, []);
 
 
   return (

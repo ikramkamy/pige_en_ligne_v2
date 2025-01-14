@@ -18,13 +18,13 @@ import Button from "@mui/material/Button";
 import { Row, Col } from "react-bootstrap";
 import GridDemo from 'components/Commun/charts/TOP20Charts';
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
-import { UsePresseDashboardStore } from "store/dashboardStore/PresseDashboardStore";
+import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import logoImmar from "assets/images.png";
-import DataTablePress from "../../views/PressTable";
+import DataTablePress from "../../views/PigeTable";
 import { useLocation } from 'react-router-dom';
 import TypePub from 'components/Commun/TypePub';
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
@@ -72,7 +72,7 @@ const AnchorTemporaryDrawer = ({ getData, DashboardData,
     getRepartitionFormat,
     getAnnonceursParSupport,
     getCreationParAnnonceur,
-  } = UsePresseDashboardStore((state) => state)
+  } = UsePigeDashboardStore((state) => state)
   const {
     
     Filtersupports,

@@ -5,33 +5,32 @@ import { UseFiltersStore } from '../../store/dashboardStore/FiltersStore';
 import './commun.css';
 
 export default function MultipleSelectVarietiesWindow() {
-  const { Filtervarieties, produits, setFiltervariete, annonceurs, marques, Filtervarietiesids } = UseFiltersStore((state) => state);
+  const { Filtervarieties, produits, setFiltervariete, 
+    annonceurs, marques, Filtervarietiesids } = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
   const [previousSelection, setPreviousSelection] = useState([]);
-
   useEffect(() => {
     setPreviousSelection(Filtervarietiesids);
   }, [Filtervarietiesids]);
-
   // Ensure inputValue is always a string before calling .toLowerCase()
   const filteredElems = Filtervarieties.filter((item) => {
     const input = inputValue || '';  
-    return item.Variete_Lib.toLowerCase().startsWith(input.toLowerCase());
+    return item.Variété_Lib.toLowerCase().startsWith(input.toLowerCase());
   }); 
   const handleSelectAll = () => {
     if (selectedItems.length === filteredElems.length) {
       setSelectedItems([]);
       setFiltervariete && setFiltervariete([], produits, annonceurs, marques);
     } else {
-      const allIds = filteredElems.map((item) => item.Variete_id);
+      const allIds = filteredElems.map((item) => item.Variété_Id);
       setSelectedItems(allIds);
       setFiltervariete && setFiltervariete(allIds, produits, annonceurs, marques);
     }
   };
 
   const handleChange = (selectedOptions) => {
-    const ids = selectedOptions.map((item) => item.Variete_id);
+    const ids = selectedOptions.map((item) => item.Variété_Id);
     setSelectedItems(ids);
     setFiltervariete && setFiltervariete(ids, produits, annonceurs, marques);
   };
@@ -43,11 +42,11 @@ export default function MultipleSelectVarietiesWindow() {
   };
 
   const formatOptionLabel = (option) => {
-    const isChecked = previousSelection.includes(option.Variete_id);
+    const isChecked = previousSelection.includes(option.Variété_Id);
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Checkbox checked={isChecked} readOnly />
-        {option.Variete_Lib}
+        {option.Variété_Lib}
       </div>
     );
   };
@@ -66,14 +65,14 @@ export default function MultipleSelectVarietiesWindow() {
       <WindowedSelect
         options={filteredElems}
         onChange={handleChange}
-        value={filteredElems.filter((item) => previousSelection.includes(item.Variete_id))}
+        value={filteredElems.filter((item) => previousSelection.includes(item.Variété_Id))}
         formatOptionLabel={formatOptionLabel}
         isMulti
         closeMenuOnSelect={false}
         inputValue={inputValue}
         onInputChange={(e)=>onInputChange(e)}
         placeholder={`variétés (${selectedItems.length})`} 
-        getOptionValue={(option) => option.Variete_id}
+        getOptionValue={(option) => option.Variété_Id}
         
         renderInput={(props) => (
           <div {...props} style={{ display: 'flex', alignItems: 'center', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}>

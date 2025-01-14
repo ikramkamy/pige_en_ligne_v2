@@ -7,7 +7,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import ListItemText from '@mui/material/ListItemText';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
-import { UsePresseDashboardStore } from 'store/dashboardStore/PresseDashboardStore';
+import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import {ArrowUpward } from '@mui/icons-material';
 import LoadingBarIndicator from '../LineLoading';
 const ITEM_HEIGHT = 48;
@@ -40,7 +40,7 @@ export default function DropDownBaseRepartitionFormat({getData}) {
   
     baseGraphe,
 }=UseFiltersStore((state)=>state)
-  const{getPrtMarchet}=UsePresseDashboardStore((state)=>state)
+  const{getPrtMarchet}=UsePigeDashboardStore((state)=>state)
   const [progressControled,setProgressControled]=useState(0);
   const [selectedBase, setSelectedBase]=useState('')
   const [basesg, setBasesg]=useState([

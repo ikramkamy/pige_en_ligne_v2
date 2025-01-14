@@ -16,9 +16,9 @@ export default function MultipleSelectSecteurs() {
   const [inputValue, setInputValue] = React.useState('');
   const [selectedItems, setSelectedItems] = React.useState(Filtersecteursids);
   const [previousSelection, setPreviousSelection] = useState([]);
-  
+  //Secteur_Lib est devenue 
   const filteredElems = Filtersecteurs.filter((item) => {
-    return item.Categorie_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
+    return item.Secteur_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
 
   useEffect(() => {
@@ -30,15 +30,15 @@ export default function MultipleSelectSecteurs() {
       setSelectedItems([]);
       setFiltersecteur && setFiltersecteur([], varieties, produits, marques, annonceurs);
     } else {
-      setSelectedItems(filteredElems.map((item) => item.Categorie_Id));
-      var ids = filteredElems.map((item) => item.Categorie_Id);
+      setSelectedItems(filteredElems.map((item) => item.Secteur_Id));
+      var ids = filteredElems.map((item) => item.Secteur_Id);
       setFiltersecteur && setFiltersecteur(ids, varieties, produits, marques, annonceurs);
     }
   };
 
   const handleAutocompleteChange = (event, value) => {
-    setSelectedItems([...value.map((item) => item.Categorie_Id)]);
-    var ids = value.map((item) => item.Categorie_Id);
+    setSelectedItems([...value.map((item) => item.Secteur_Id)]);
+    var ids = value.map((item) => item.Secteur_Id);
     setFiltersecteur && setFiltersecteur(ids, varieties, produits, marques, annonceurs);
   };
 
@@ -68,9 +68,9 @@ export default function MultipleSelectSecteurs() {
         multiple
         freeSolo
         options={filteredElems}
-        value={Filtersecteurs.filter((item) => previousSelection.includes(item.Categorie_Id))}
+        value={Filtersecteurs.filter((item) => previousSelection.includes(item.Secteur_Id))}
         onChange={handleAutocompleteChange}
-        getOptionLabel={(option) => option.Categorie_Lib}
+        getOptionLabel={(option) => option.Secteur_Lib}
         inputValue={inputValue}
         onInputChange={onInputChange}
         renderInput={(params) => (
@@ -81,9 +81,9 @@ export default function MultipleSelectSecteurs() {
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.Categorie_Lib} value={option.Categorie_Id}>
-            <Checkbox defaultChecked checked={previousSelection.includes(option.Categorie_Id)} />
-            <ListItemText primary={option.Categorie_Lib} />
+          <MenuItem {...props} key={option.Secteur_Lib} value={option.Secteur_Id}>
+            <Checkbox defaultChecked checked={previousSelection.includes(option.Secteur_Id)} />
+            <ListItemText primary={option.Secteur_Lib} />
           </MenuItem>
         )}
         renderTags={(value, getTagProps) => null}

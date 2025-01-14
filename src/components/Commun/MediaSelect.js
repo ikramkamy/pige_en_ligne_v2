@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';
 import Spinner from 'react-bootstrap/Spinner';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
-import { UsePresseDashboardStore } from 'store/dashboardStore/PresseDashboardStore';
+import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
 import { UseLoginStore } from 'store/dashboardStore/useLoginStore';
 import RadioIcon from '@mui/icons-material/Radio';
@@ -44,6 +44,7 @@ export default function MultipleSelectMedia() {
     autoriseVeillePresse,
     autoriseVeilleRadio,
     autoriseVeilleTv,
+    email,
 
   } = UseLoginStore((state) => state)
   const user_id = window.localStorage.getItem('user_id')
@@ -59,7 +60,7 @@ export default function MultipleSelectMedia() {
     media,
 
   } = UseFiltersStore((state) => state)
-  const { ResetDataArrays } = UsePresseDashboardStore((state) => state)
+  const { ResetDataArrays } = UsePigeDashboardStore((state) => state)
   const { resetVeilletvdata } = UseVeilleStore((state) => state)
   const [selectedMedia, setSelectedMedia] = useState('')
   const [previousSelection, setPreviousSelection] = useState([]);
@@ -120,19 +121,6 @@ export default function MultipleSelectMedia() {
 
   useEffect(() => {
     setShowSpinner(true)
-    // getFilters && getFilters(
-    //   media,
-    //   user_id,
-    //   usePrevilegesSupport_radio,
-    //   usePrevilegeschainetv,
-    //   usePrevilegesFamilles,
-    //   usePrevilegesClasse,
-    //   usePrevilegesSecteur,
-    //   usePrevilegesVarietes,
-    //   usePrevilegesProduit,
-    //   usePrevilegesAnnonceurs,
-    //   usePrevilegesMarques,
-    // )
     setShowSpinner(false)
   }, [media])
 
@@ -152,24 +140,17 @@ export default function MultipleSelectMedia() {
     //get previleges before getting filters
     const page = location.hash.split('/')[1]
     console.log('page in media select', location.hash.split('/')[1])
-    getUserPrevilege && getUserPrevilege(user_id)
-    getFilters && getFilters(
-      IdrangsSeclected[0],
-      user_id,
-      usePrevilegesSupport_radio,
-      usePrevilegeschainetv,
-      usePrevilegesFamilles,
-      usePrevilegesClasse,
-      usePrevilegesSecteur,
-      usePrevilegesVarietes,
-      usePrevilegesProduit,
-      usePrevilegesAnnonceurs,
-      usePrevilegesMarques,
-      userPrevilegesVeille,
-      page
-    )
+    // getUserPrevilege && getUserPrevilege(user_id)
+    // getFilters && getFilters(
+    //   IdrangsSeclected[0],
+    //   email,
+    //   date1,
+    //   date2,
+    //   page
+    // )
     ResetDataArrays && ResetDataArrays()
   };
+  
   useEffect(() => {
     const prevSelection = mediaList.filter((elem) => elem.value == media)
     console.log("media in media", prevSelection)

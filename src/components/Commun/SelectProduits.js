@@ -85,7 +85,7 @@ export default function MultipleSelectProducts() {
         </MenuItem>
       </div>
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-      <Button
+      {/* <Button
               sx={{
                 textTransform: 'none',
                 width: '100%',
@@ -107,9 +107,9 @@ export default function MultipleSelectProducts() {
               // startIcon={showloadingPopup ? <CircularProgress size={20} color="red" /> : null}
             >
               produits {previousSelection.length}
-            </Button>
+            </Button> */}
           
-      {/* <Autocomplete
+      <Autocomplete
         multiple
         freeSolo
         options={filteredElems}
@@ -142,7 +142,7 @@ export default function MultipleSelectProducts() {
         )}
         renderTags={(value, getTagProps) => null}
         disableCloseOnSelect
-      /> */}
+      />
       <SearchPopupProduits 
        openSearchPop={openSearchPop}
        handleCloseSearchPop={handleCloseSearchPop}/>

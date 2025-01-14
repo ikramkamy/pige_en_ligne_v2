@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { UsePresseDashboardStore } from '../../../store/dashboardStore/PresseDashboardStore';
+import { UsePigeDashboardStore } from '../../../store/dashboardStore/PigeDashboardStore';
 import { Card, Col, Row } from 'react-bootstrap';
 import CardHeader from 'react-bootstrap/esm/CardHeader';
 import ReactEcharts from "echarts-for-react";

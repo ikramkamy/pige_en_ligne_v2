@@ -22,8 +22,11 @@ const  SearchPopupVarieties=({openSeachVarities,handleCloseSearchVarieties}) =>{
 //   );
 console.log('selectedOptions Filtervarietiesids',Filtervarietiesids)
 console.log('selectedOptions',selectedOptions)
+
+//Variete_Lib est devenue  
+
   const filteredOptions =Filtervarieties.filter((item) => {
-    return item.Variete_Lib.toLowerCase().startsWith(searchTerm.toLowerCase());
+    return item.Variété_Lib.toLowerCase().startsWith(searchTerm.toLowerCase());
   })
   // Handle checkbox selection/deselection
   const handleCheckboxChange = (event, optionId) => { 

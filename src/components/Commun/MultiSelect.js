@@ -12,30 +12,32 @@ import { Chip } from '@mui/material';
 import './commun.css';
 
 export default function MultipleSelectFamilles() {
-  const { familles,Filterclasses,setFilterfamilles, Filterfamilles, classes, secteurs, varieties, annonceurs, produits, marques } = UseFiltersStore((state) => state);
+  const { familles,Filterclasses,setFilterfamilles, Filterfamilles,
+     classes, secteurs, varieties, annonceurs, produits, marques } = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = React.useState('');
-  const [selectedItems, setSelectedItems] = React.useState(familles.map((item) => item.CodeFamille));
+  //codeFamilles est devenue Famille_Id
+  const [selectedItems, setSelectedItems] = React.useState(familles.map((item) => item.Famille_Id));
   const [previousSelection, setPreviousSelection] = React.useState([]);
-
+//Famille est devenu Famille_Lib
   const filteredElems = familles.filter((item) => {
-    return item.Famille.toLowerCase().startsWith(inputValue.toLowerCase());
-  });
+    return item.Famille_Lib.toLowerCase().startsWith(inputValue.toLowerCase())});
   console.log("famille ms",familles);
   const handleAutocompleteChange = (event, value) => {
-    setSelectedItems([...value.map((item) => item.CodeFamille)]);
-    const listOfIdsSelected = value.map((e) => e.CodeFamille);
-    setFilterfamilles && setFilterfamilles(listOfIdsSelected, classes, secteurs, varieties, produits, annonceurs, marques);
+    setSelectedItems([...value.map((item) => item.Famille_Id)]);
+    const listOfIdsSelected = value.map((e) => e.Famille_Id);
+    setFilterfamilles && setFilterfamilles(listOfIdsSelected, classes,
+       secteurs, varieties, produits, annonceurs, marques);
   };
   
   const handleSelectAll = (event) => {
     if (!event.target.checked) {
       setSelectedItems([]);
-      var ids = filteredElems.map((item) => item.CodeFamille);
+      var ids = filteredElems.map((item) => item.Famille_Id);
       setFilterfamilles && setFilterfamilles([], classes, secteurs, varieties, 
         produits, annonceurs, marques);
     } else {
-      setSelectedItems(filteredElems.map((item) => item.CodeFamille));
-      var ids = filteredElems.map((item) => item.CodeFamille);
+      setSelectedItems(filteredElems.map((item) => item.Famille_Id));
+      var ids = filteredElems.map((item) => item.Famille_Id);
       setFilterfamilles && setFilterfamilles(ids, classes, secteurs, 
         varieties, produits, annonceurs, marques);
     }
@@ -66,9 +68,9 @@ console.log("isAllSelected",selectedItems)
         multiple
         freeSolo
         options={filteredElems}
-        value={familles.filter((item) => previousSelection.includes(item.CodeFamille))}
+        value={familles.filter((item) => previousSelection.includes(item.Famille_Id))}
         onChange={handleAutocompleteChange}
-        getOptionLabel={(option) => option.Famille}
+        getOptionLabel={(option) => option.Famille_Lib}
         inputValue={inputValue}
         onInputChange={onInputChange}
         renderInput={(params) => (
@@ -92,9 +94,9 @@ console.log("isAllSelected",selectedItems)
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.Famille} value={option.CodeFamille}>
-            <Checkbox checked={previousSelection.includes(option.CodeFamille)} />
-            <ListItemText primary={option.Famille} />
+          <MenuItem {...props} key={option.Famille_Lib} value={option.Famille_Id}>
+            <Checkbox checked={previousSelection.includes(option.Famille_Id)} />
+            <ListItemText primary={option.Famille_Lib} />
           </MenuItem>
         )}
         renderTags={(value, getTagProps) => null}

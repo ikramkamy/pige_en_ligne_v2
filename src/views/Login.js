@@ -14,12 +14,10 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 
 export default function SignIn() {
-
   const [user, setUser] = useState({
     email: "",
     pass: ""
   })
-
   const user_id = window.localStorage.getItem('user_id')
   const history = useHistory()
   const { Loginuser, errormessage, showAlert2, showAlert1,

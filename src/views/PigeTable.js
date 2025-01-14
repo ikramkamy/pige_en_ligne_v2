@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { UsePresseDashboardStore } from "store/dashboardStore/PresseDashboardStore";
+import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 import AnchorTemporaryDrawer from '../components/FixedPlugin/SideDrawer';
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
@@ -9,6 +9,7 @@ import Alert from '@mui/material/Alert';
 import CustomToolbar from 'components/Commun/CustomToolBar'
 import WarningIcon from '@mui/icons-material/Warning';
 import AutomaticSideFilterBar from "components/FixedPlugin/AutomatiSideFilterBar";
+import LoadingButtonFilter from "components/Commun/LoadingBtnFilters";
 import {
   Dialog,
   DialogTitle,
@@ -33,7 +34,7 @@ import LoadingLineIndicator from "components/Commun/LineLoading";
 import { Link, useHistory, useLocation } from "react-router-dom/cjs/react-router-dom";
 import DateRangeTest from "components/Commun/DateRangePickerTest";
 import '../components/Commun/commun.css'
-export default function DataTablePress() {
+export default function DataTablePige() {
   document.title = 'pige publicitaire'
   const history = useHistory()
   const location = useLocation()
@@ -57,7 +58,8 @@ export default function DataTablePress() {
     showDataGrid, setShowDataGrid,
     dataTableShow, setDataTableShow,
     ManageSideBarfilterDisplay,
-    SideBarFilterPosition
+    SideBarFilterPosition,
+    getFilters
   } = UseFiltersStore((state) => state);
   const widthSmallData = 200
   const widthXsmallData = 70
@@ -230,7 +232,9 @@ export default function DataTablePress() {
     autorisePigeRadio,
     autorisePigeTv ,client,email} = UseLoginStore((state) => state)
   //  console.log('email',email)
-  const { getDataPresse, PressData, sendDownloadLink, IsPressdataisFetched, ResePressdataisFetched, } = UsePresseDashboardStore((state) => state);
+  const { getDataPresse, PressData, sendDownloadLink, 
+    IsPressdataisFetched, ResePressdataisFetched, } =
+     UsePigeDashboardStore((state) => state);
   const { MediaData, getDataMedia, IsMediadataisFetched, ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -488,9 +492,9 @@ export default function DataTablePress() {
       Filterproduitsids, date1, date2, media, client, email, user_id)
   }
   const getData = () => {
-    console.log("calling get data")
+    //console.log("calling get data")
     const startTime = new Date().getTime();
-    console.log("Filtermarquesids to gat data with", Filtermarquesids)
+    //console.log("Filtermarquesids to gat data with", Filtermarquesids)
     if (media === "presse") {
       setDataTableShow(true)
       setLoadingshow(true)
@@ -527,7 +531,7 @@ export default function DataTablePress() {
     setFetchDataTime(endTime - startTime);
   }
   React.useEffect(() => {
-    console.log("calling use effect")
+   
     ResePressdataisFetched && ResePressdataisFetched()
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
     setShowDataGrid && setShowDataGrid(false)
@@ -560,12 +564,18 @@ export default function DataTablePress() {
         setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(false)
         setShowDataGrid && setShowDataGrid(true)
       }
-
-
     }
   }, [filteredData2, increment])
+  const [loadingFilters,setLoadingFilters]=React.useState(false)
+
   const HandelSideBarPisition = () => {
-    ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+    getFilters && getFilters(email,media,date1,date2)
+    setLoadingFilters(true)
+    setTimeout(() => {
+      setLoadingFilters(false)
+      ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+    }, 5000);
+   
     setPopupDataLageData(false)
   }
 
@@ -710,9 +720,6 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
               <DateRangeTest />
             </div>
           </div>
-
-
-
           <div style={{
             display: "flex", width: resStyle.width,
             justifyContent: "flex-end", alignItems: "center",
@@ -725,31 +732,23 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
               justifyContent: resStyle.justifyContentRightBtnWrapper,
               width: resStyle.widthRightbtns
             }}>
-
               <LoadingButtonData
                 getData={getData}
                 isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
                 isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
                 //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                 disablebtn={!media}
+                title="Afficher"
               />
-              <Button
-                onClick={HandelSideBarPisition}
-                disabled={!media}
-                sx={{
-                  textTransform: "none",
-                  width: "100%",
-                  textTransform: "none",
-                  backgroundColor: '#00a6e0',
-                  textTransform: "none",
-                  width: "fit-content",
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: '#00a6e0',
-                  }
-                }}>
-                Recherche avancée
-              </Button>
+              <LoadingButtonData
+                getData={HandelSideBarPisition}
+                isloading={loadingFilters}
+                isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
+                disablebtn={!media && !date1 && !date2}
+                title="Recherche avancée"              
+              />
+             
               <AutomaticSideFilterBar getData={getData} />
               {/* <Button onClick={handelSendingLink}>download</Button> */}
               {/* <AnchorTemporaryDrawer getData={getData}

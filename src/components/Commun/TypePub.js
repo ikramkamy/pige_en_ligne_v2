@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';
 
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
-import { UsePresseDashboardStore } from 'store/dashboardStore/PresseDashboardStore';
+import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import RadioIcon from '@mui/icons-material/Radio';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import './commun.css'
@@ -26,7 +26,7 @@ const MenuProps = {
 
 export default function TypePub() {
   const { setTypeVeilleValue,getFilters,ResetAllFilters}=UseFiltersStore((state)=>state)
-  const {ResetDataArrays}=UsePresseDashboardStore((state)=>state)
+  const {ResetDataArrays}=UsePigeDashboardStore((state)=>state)
   
   const [selectedtypeveille, setSelectedtypeveille]=useState('')
   const [mediaList, setMediaList]=useState([

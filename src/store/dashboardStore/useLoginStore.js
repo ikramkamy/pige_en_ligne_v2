@@ -78,7 +78,7 @@ export const UseLoginStore = create((set, get) => ({
         email: user.email
       });
 
-   console.log("response",response)
+      console.log("response",response)
       if (response.data.message === "Connexion établie avec succès."){
          var decoded = jwtDecode(response.data.payload);
          console.log("email",decoded.user_id.email,"client",decoded.user_id.utilisateur)
@@ -88,33 +88,6 @@ export const UseLoginStore = create((set, get) => ({
           email:decoded.user_id.email,
           showAlert1: true,
           showAlert2: false,
-          // usePrevilegesSupport_radio: response.data.privileges.auth_5,
-          // usePrevilegeschainetv: response.data.privileges.auth_6,
-          // usePrevilegesFamilles: response.data.privileges.auth_7,
-          // usePrevilegesClasse: response.data.privileges.auth_8,
-          // usePrevilegesSecteur: response.data.privileges.auth_9,
-          // usePrevilegesVarietes: response.data.privileges.auth_10,
-          // usePrevilegesProduit: response.data.privileges.auth_11,
-          // usePrevilegesAnnonceurs: response.data.privileges.auth_12,
-          // usePrevilegesMarques: response.data.privileges.auth_13,
-          // userPrevilegesVeille: response.data.veille_auth,
-          // historyExportUser: response.data.export,
-
-          // autorisePigePresse: response.data.privileges.media_auth[4] == "oui" ? true : false,
-          // autoriseVeillePresse: response.data.privileges.media_auth[5] == "oui" ? true : false,
-          // autorisePigeRadio: response.data.privileges.media_auth[9] == "oui" ? true : false,
-          // autoriseVeilleRadio: response.data.privileges.media_auth[10] == "oui" ? true : false,
-          // autorisePigeTv: response.data.privileges.media_auth[7] == "oui" ? true : false,
-          // autoriseVeilleTv: response.data.privileges.media_auth[8] == "oui" ? true : false,
-          // autoriseDash: response.data.privileges.media_auth[13] == "oui" ? true : false,
-
-          // usePrevilegesSupport_radio: decoded.user_id.privileges.pige.supports_radio,
-          // usePrevilegeschainetv: decoded.user_id.privileges.pige.supports_television,
-          // usePrevilegesFamilles: decoded.user_id.privileges.pige.familles,
-          // usePrevilegesClasse: decoded.user_id.privileges.pige.classes,
-          // usePrevilegesSecteur: decoded.user_id.privileges.pige.secteurs,
-          // usePrevilegesVarietes: decoded.user_id.privileges.pige.varietes,
-         // usePrevilegesProduit: decoded.user_id.privileges.pige.supports_radio,
           usePrevilegesAnnonceurs:[],
           usePrevilegesMarques: [],
           userPrevilegesVeille: [],

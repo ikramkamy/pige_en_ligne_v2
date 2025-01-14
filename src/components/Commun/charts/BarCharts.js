@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactApexChart from "react-apexcharts";
 import user from "assets/img/new_logo.png";
-import { UsePresseDashboardStore } from 'store/dashboardStore/PresseDashboardStore';
+import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import getChartColorsArray from "./ChartsDynamicColor";
 //import WatingChart from 'assets/img/loading.gif';
@@ -54,7 +54,7 @@ const Basic = ({ dataColors }) => {
 };
 const CustomDataLabelFamilles = () => {
     //var chartDatalabelsBarColors = getChartColorsArray(dataColors);
-    const { Top20famillesSectorielles, getTop20famillesSectorielles } = UsePresseDashboardStore((state) => state)
+    const { Top20famillesSectorielles, getTop20famillesSectorielles } = UsePigeDashboardStore((state) => state)
     const { base, media, Filtersupports, Filterfamilles,
         Filterclassesids, Filtersecteursids,
         Filtervarietiesids, Filterannonceursids,
@@ -400,7 +400,7 @@ const CustomDataLabelFamilles = () => {
 };
 const CustomDataLabelAnnonceurs = () => {
     //var chartDatalabelsBarColors = getChartColorsArray(dataColors);
-    const { Top20Annonceurs, getTop20Annonceurs } = UsePresseDashboardStore((state) => state)
+    const { Top20Annonceurs, getTop20Annonceurs } = UsePigeDashboardStore((state) => state)
     const { base, media, Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
 
     const [data, setData] = useState([])
@@ -740,7 +740,7 @@ const CustomDataLabelAnnonceurs = () => {
 };
 const CustomDataLabelMarques = () => {
     //var chartDatalabelsBarColors = getChartColorsArray(dataColors);
-    const { Top20marques, getTop20Marques } = UsePresseDashboardStore((state) => state)
+    const { Top20marques, getTop20Marques } = UsePigeDashboardStore((state) => state)
     const { base, media, Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
 
     const [data, setData] = useState([])
@@ -1063,7 +1063,7 @@ const CustomDataLabelMarques = () => {
 };
 const CustomDataLabelProduits = () => {
 
-    const { Top20produits, getTop20Produits } = UsePresseDashboardStore((state) => state)
+    const { Top20produits, getTop20Produits } = UsePigeDashboardStore((state) => state)
     const { base, media, Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
 
     const [data, setData] = useState([])
@@ -1389,7 +1389,7 @@ const CustomDataLabelProduits = () => {
 };
 const CustomDataLabelAnnonceurParSupport = () => {
 
-    const { AnnonceurParSupport } = UsePresseDashboardStore((state) => state)
+    const { AnnonceurParSupport } = UsePigeDashboardStore((state) => state)
     const { base, media } = UseFiltersStore((state) => state)
 
     const [data, setData] = useState([])
@@ -1620,7 +1620,7 @@ const CustomDataLabelAnnonceurParSupport = () => {
 
 const CustomDataLabelCreationParAnnonceur = () => {
 
-    const { CreationParAnnonceur } = UsePresseDashboardStore((state) => state)
+    const { CreationParAnnonceur } = UsePigeDashboardStore((state) => state)
     const { base, media } = UseFiltersStore((state) => state)
 
     const [data, setData] = useState([])

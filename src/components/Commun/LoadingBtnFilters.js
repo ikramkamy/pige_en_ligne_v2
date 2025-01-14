@@ -3,7 +3,7 @@ import { Button, CircularProgress, Box } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
-const LoadingButtonData = ({title,isloading,isSucces,handelUpdatePassword,disablebtn, getData}) => {
+const LoadingButtonFilter = ({title,isloading,isSucces,handelUpdatePassword,disablebtn, getData}) => {
   const { getDataPresse, PressData, sendDownloadLink ,IsPressdataisFetched,ResePressdataisFetched} = UsePigeDashboardStore((state) => state);
   const [loading, setLoading] = useState(false);
   const {media,
@@ -71,4 +71,4 @@ console.log('is loading',isloading)
   );
 };
 
-export default LoadingButtonData;
+export default LoadingButtonFilter;

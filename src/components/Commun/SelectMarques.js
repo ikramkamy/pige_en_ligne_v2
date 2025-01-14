@@ -10,15 +10,16 @@ import { TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
 export default function MultipleSelectMarques() {
-  const { Filtermarques, annonceurs, produits, setFiltermarque, Filtermarquesids } = UseFiltersStore((state) => state);
+  const { Filtermarques, annonceurs, produits,
+     setFiltermarque, Filtermarquesids } = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
   const [previousSelection, setPreviousSelection] = useState([]);
 
   // Filter brands based on input value
-  const filteredElems = inputValue.length > 0 ? Filtermarques.filter((item) => {
+  const filteredElems =Filtermarques.filter((item) => {
     return item.Marque_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
-  }) : [];
+  });
 
   useEffect(() => {
     setPreviousSelection(Filtermarquesids);
@@ -73,7 +74,8 @@ export default function MultipleSelectMarques() {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`Marques (${previousSelection.length})`} // Display the count of selected items
+            label={`Marques (${previousSelection.length})`} 
+           
             variant="outlined"
           />
         )}
