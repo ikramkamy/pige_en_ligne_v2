@@ -2,14 +2,11 @@ import * as React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
-import AnchorTemporaryDrawer from '../components/FixedPlugin/SideDrawer';
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
-import * as XLSX from 'xlsx';
 import Alert from '@mui/material/Alert';
 import CustomToolbar from 'components/Commun/CustomToolBar'
 import WarningIcon from '@mui/icons-material/Warning';
 import AutomaticSideFilterBar from "components/FixedPlugin/AutomatiSideFilterBar";
-import LoadingButtonFilter from "components/Commun/LoadingBtnFilters";
 import {
   Dialog,
   DialogTitle,
@@ -18,22 +15,20 @@ import {
   Button,
   Typography,
   Box,
+  Grid
 } from "@mui/material";
 import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
 import MultipleSelectMedia from "../components/Commun/MediaSelect";
-import ResponsiveDateRangePickers from "../components/Commun/DatePicker";
-import Input from "@mui/material/Input";
-import illustration from "assets/img/animated.gif";
 import { useDemoData } from '@mui/x-data-grid-generator';
 import { UseLoginStore } from "../store/dashboardStore/useLoginStore";
 import { Container, Row, Col } from "react-bootstrap";
-import LoadingIndicator from "components/Commun/LoadingIndcator";
 import TableIlustration from 'assets/tableSearch.gif'
-
 import LoadingLineIndicator from "components/Commun/LineLoading";
-import { Link, useHistory, useLocation } from "react-router-dom/cjs/react-router-dom";
+import {useHistory, useLocation } from "react-router-dom/cjs/react-router-dom";
 import DateRangeTest from "components/Commun/DateRangePickerTest";
-import '../components/Commun/commun.css'
+import '../components/Commun/commun.css';
+import MessageLibPopUp from "components/Commun/popups/MessageLibPopup";
+
 export default function DataTablePige() {
   document.title = 'pige publicitaire'
   const history = useHistory()
@@ -41,7 +36,6 @@ export default function DataTablePige() {
   const { media,
     Filtersupports,
     Filterfamilles,
-
     Filterclassesids,
     Filtersecteursids,
     Filtervarietiesids,
@@ -65,12 +59,12 @@ export default function DataTablePige() {
   const widthXsmallData = 70
   const widthLargeData = 250
   const columns = [
-    { field: "Id", headerName: "Id", width: 130, hide: false },
+    { field: "id", headerName: "id", width: 130, hide: false },
     { field: "Support_Lib", headerName: "Support", width: 100 },
     { field: "Date", headerName: "Date", width: 100 },
     { field: "Produit_Lib", headerName: "Produit", width: 130, sortable: true },
     { field: "Classe_Lib", headerName: "Classe", width: 130, sortable: true },
-  
+
     {
       field: "Format",
       headerName: "Format",
@@ -93,9 +87,9 @@ export default function DataTablePige() {
     { field: "Variété_Lib", headerName: "Varieté", width: 130, sortable: true, hide: false },
     { field: "Année", headerName: "Année", width: 130, sortable: true, hide: false },
     { field: "Mois", headerName: "Mois", width: 130, sortable: true, hide: false },
-  
+
     {
-      field: "Message_Lib",
+      field: "Message_Id",
       headerName: "Msg",
       width: 90,
       renderCell: (params) => (
@@ -110,15 +104,13 @@ export default function DataTablePige() {
       ),
     },
   ];
-  
-  
   const columns2 = [
-    { field: "Id", headerName: "Id", width: 130 },
+    { field: "id", headerName: "id", width: 130 },
     { field: "Support_Lib", headerName: "Support", width: 130 },
     { field: "Date", headerName: "Date", width: 130 },
     { field: "Produit_Lib", headerName: "Produit", width: widthLargeData, sortable: true },
     {
-      field: "Message_Lib",
+      field: "Message_Id",
       headerName: "Msg",
       width: 90,
       renderCell: (params) => (
@@ -141,15 +133,16 @@ export default function DataTablePige() {
     { field: "Secteur_Lib", headerName: "Secteurs", width: 130, sortable: true, hide: false },
     { field: "Classe_Lib", headerName: "Classe", width: 130, sortable: true, hide: false },
     { field: "Marque_Lib", headerName: "Marque", width: 130, sortable: true, hide: false },
-    { field: "Version", headerName: "Version Pub", width: 130, sortable: true, hide: false },
+    { field: "Version", headerName: "Version", width: 130, sortable: true, hide: false },
     { field: "Tarif", headerName: "Tarif", width: 130, sortable: true, hide: false },
     { field: "Variété_Lib", headerName: "Varieté", width: 130, sortable: true, hide: false },
     { field: "Année", headerName: "Année", width: 130, sortable: true, hide: false },
     { field: "Mois", headerName: "Mois", width: 130, sortable: true, hide: false },
     { field: "Prog_avant", headerName: "Prog avant", width: widthLargeData, sortable: true },
     { field: "Prog_après", headerName: "Prog après", width: widthLargeData, sortable: true },
+
   ];
-  
+
   const frenchLocaleText = {
     // Toolbar
     toolbarDensity: 'Densité',
@@ -203,14 +196,14 @@ export default function DataTablePige() {
   const [pageSize, setPageSize] = React.useState(25);
   const { autorisePigePresse,
     autorisePigeRadio,
-    autorisePigeTv ,client,email} = UseLoginStore((state) => state)
-  const { getDataPresse,sendDownloadLink, 
+  autorisePigeTv, client, email } = UseLoginStore((state) => state)
+  const { getDataPresse, sendDownloadLink,
     IsPressdataisFetched, ResePressdataisFetched } =
-     UsePigeDashboardStore((state) => state);
+    UsePigeDashboardStore((state) => state);
 
-const [PressData,setPressData]=React.useState([])
-  const { MediaData, getDataMedia, IsMediadataisFetched, 
-    ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
+  const [pressData, setPressData] = React.useState([])
+  const { MediaData, getDataMedia, IsMediadataisFetched,
+  ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [popupOpen, setPopupOpen] = React.useState(false);
@@ -219,142 +212,91 @@ const [PressData,setPressData]=React.useState([])
   const [showLoadingComponenet, setShowLoadingComponenet] = React.useState(true)
   var list = [];
   var list2 = [];
-  const dataArray = PressData?.map((elem) => {
-    var item = {
-      Id: elem.Id, // Matches "Id"
-      Support_Lib: elem.Support_Lib, // Matches "Support_Lib"
-      Date: elem.Date, // Matches "Date"
-      Produit_Lib: elem.Produit_Lib, // Matches "Produit_Lib"
-      Classe_Lib: elem.Classe_Lib, // Matches "Classe_Lib"
-      Format: `${elem.Format} - ${elem.NB_C} - ${elem.Rubrique}`, // Matches "Format", combined values
-      Page: elem.Page, // Matches "Page"
-      Annonceur_Lib: elem.Annonceur_Lib, // Matches "Annonceur_Lib"
-      Famille_Lib: elem.Famille_Lib, // Matches "Famille_Lib"
-      Secteur_Lib: elem.Secteur_Lib, // Matches "Secteur_Lib"
-      Marque_Lib: elem.Marque_Lib, // Matches "Marque_Lib"
-      Version: elem.Version, // Matches "Version"
-      Tarif: elem.Tarif, // Matches "Tarif"
-      Période: elem.Période, // Matches "Période"
-      Variété_Lib: elem.Variété_Lib, // Matches "Variété_Lib"
-      Année: elem.Année, // Matches "Année"
-      Mois: elem.Mois, // Matches "Mois"
-      Message_Lib: elem.Message_Lib, // Matches "Message_Lib"
-    };
-    
-    return list.push(item);
-  });
 
-  const dataArray2 = MediaData?.map((elem) => {
-    var item2 = {
-      Id: elem.media_id,
-      Support_Lib: elem.support,
-      Date: elem.media_Date,
-      Produit_Lib: elem.Product_Name,
-      Message_Lib: elem.Pub_ID,
-      Heure: elem.media_Hour,
-      Durée: elem.Pub_Format,
-      Rang: elem.Pub_Rank,
-      Encombrement: elem.media_Encomb,
-      Annonceur_Lib: elem.annonceur,
-      Famille_Lib: elem.famille,
-      Secteur_Lib: elem.categorie,
-      Classe_Lib: elem.groupe,
-      Marque_Lib: elem.marque,
-      Version: elem.pubVersion,
-      Tarif: elem.tarif,
-      Variété_Lib: elem.variete,
-      Année: elem.annee,
-      Mois: elem.mois,
-      Prog_avant: elem.Prog_Avant,
-      Prog_après: elem.Prog_Apres
-    };
-    
-    return list2.push(item2);
-  });
   const [filteredData, setFilteredData] = React.useState(list);
   const [filteredData2, setFilteredData2] = React.useState(list2);
-
   React.useEffect(() => {
-    console.log("calling use effect presse")
-    const lowercasedSearchTerm = searchTerm.toLowerCase();
-    const newFilteredData = PressData.map((elem) => ({
-      id: elem.Insertion_Id,
-      Titre_Lib: elem.Titre_Lib,
-      date: elem.Insertion_Date,
-      message: elem.PressePub_Id,
-      produit: elem.Produit_Lib,
-      classe: elem.Groupe_Lib,
-      //couleur: elem.PressePub_Couleur,
-      couleur: `${elem.format} - ${elem.PressePub_Couleur} - ${elem.Rubrique}`,
-      format: elem.format,
-      PressePub_Couleur: elem.PressePub_Couleur,
-      Rubrique: elem.Rubrique,
-      page: elem.PressePub_Format,
-      PressePub_Lib: elem.PressePub_Lib,
-      annonceur: elem.Annonceur_Nom,
-      famille: elem.Famille,
-      categorie: elem.Categorie_lib,
-      marque: elem.Marque_Lib,
-      pub: elem.PressePub_Lib,
-      version: elem.PressePub_Version,
-      tarif: elem.Tarif,
-      periode: elem.Titre_Period,
-      variete: elem.Variete_lib,
-      annee: elem.annee,
-      // langue:elem.langue,
-      mois: elem.mois,
-      // supprimer:elem.supprimer,
-      // url:elem.url,
-      // utilisateurs:elem.utilisateurs,
+    if(media ==="presse"){
+      setPressData(MediaData)
+      setFilteredData(MediaData)
+        const lowercasedSearchTerm = searchTerm.toLowerCase();
+        //console.log("MediaData",MediaData)
+        const newFilteredData = MediaData.map((elem) => ({
+        id: elem.Id,
+        Support_Lib: elem.Support_Lib,
+        Période:elem.Période,
+        Date: elem.Date,
+        Message_Id: elem.Message_Id,
+        Message_Lib: elem.Message_Lib,
+        Produit_Lib: elem.Produit_Lib,
+        Classe_Lib: elem.Classe_Lib,
+        Format: `${elem.Format} - ${elem.NB_C} - ${elem.Rubrique}`,
+        Format: elem.Format,
+        NB_C:elem.NB_C,
+        Rubrique:elem.Rubrique,
+        Page: elem.Page, 
+        Annonceur_Lib: elem.Annonceur_Lib,
+        Famille_Lib: elem.Famille_Lib,
+        Secteur_Lib: elem.Secteur_Lib,
+        Marque_Lib: elem.Marque_Lib,
+        Version: elem.Version,
+        Tarif: elem.Tarif,
+        Période: elem.Période,
+        Variété_Lib: elem.Variété_Lib,
+        Année: elem.Année,
+        Mois: elem.Mois,
+      })).filter((item) =>
+        Object.values(item).some((value) =>
+          value?.toString()?.toLowerCase()?.includes(lowercasedSearchTerm)
+        )
+      );
+      setFilteredData(newFilteredData);
+    }else{
+      //do nothing
+    }
 
-    })).filter((item) =>
-      Object.values(item).some((value) =>
-        value.toString().toLowerCase().includes(lowercasedSearchTerm)
-      )
-    );
-    setFilteredData(newFilteredData);
-    //console.log("newFilteredData", newFilteredData);
-  }, [searchTerm, PressData]);
+ 
+  },[MediaData,searchTerm]);
+ 
   let i = 0;
   React.useEffect(() => {
-    console.log("calling use effect media",MediaData )
-    setFilteredData2(MediaData)
+    if(media !=="presse"){ 
+    setFilteredData2(MediaData)   
     const lowercasedSearchTerm = searchTerm.toLowerCase();
     const newFilteredData = MediaData.map((elem) => ({
-      id: elem.media_id,
-      Titre_Lib: elem.support,
-      date: elem.media_Date,
-      message: elem.Pub_ID,
-      produit: elem.Product_Name,
-      heure: elem.media_Hour,
-      duree: elem.Pub_Format,
-      rang: elem.Pub_Rank,
-      encomb: elem.media_Encomb,
-      annonceur: elem.annonceur,
-      famille: elem.famille,
-      categorie: elem.categorie,
-      classe: elem.groupe,
-      marque: elem.marque,
-      version_pub: elem.pubVersion,
-      tarif: elem.tarif,
-      variete: elem.variete,
-      annee: elem.annee,
-      mois: elem.mois,
-      // utilisateur:elem.utilisateur,
-      // langue:elem.langue,
-      prog_avant: elem.Prog_Avant,
-      prog_apres: elem.Prog_Apres,
+      id: elem.Id,
+      Support_Lib: elem.Support_Lib,
+      Date: elem.Date,
+      Message_Id: elem.Message_Id,
+      Message_Lib: elem.Message_Lib,
+      Produit_Lib: elem.Produit_Lib,
+      Heure: elem.Heure,
+      Durée: elem.Durée,
+      Durée_Réelle: elem.Durée_Réelle,
+      Rang: elem.Rang,
+      Encombrement: elem.Encombrement,
+      Annonceur_Lib: elem.Annonceur_Lib,
+      Famille_Lib: elem.Famille_Lib,
+      Secteur_Lib: elem.Secteur_Lib,
+      Classe_Lib: elem.Classe_Lib,
+      Marque_Lib: elem.Marque_Lib,
+      Version: elem.Version,
+      Tarif_30: elem.Tarif_30,
+      Tarif: elem.Tarif,
+      Variété_Lib: elem.Variété_Lib,
+      Année: elem.Année,
+      Mois: elem.Mois,
+      Prog_avant: elem.Prog_avant,
+      Prog_après: elem.Prog_après,
     })).filter((item) =>
       Object.values(item).some((value) => {
         if (value !== undefined && value !== null) {
           return value.toString().toLowerCase().includes(lowercasedSearchTerm);
         }
-        return false;
-        // value.toString().toLowerCase().includes(lowercasedSearchTerm)
+        return false;      
       }
       )
     );
-
     setFilteredData2(newFilteredData);
     if (MediaData.length > 100000) {
       setPopupDataLageData(true)
@@ -362,6 +304,10 @@ const [PressData,setPressData]=React.useState([])
       setPopupDataLageData(false)
     }
     // console.log("newFilteredData2", newFilteredData);
+    }else{
+      //do nothing
+    }
+
   }, [MediaData, searchTerm])
 
   const { data } = useDemoData({
@@ -373,7 +319,7 @@ const [PressData,setPressData]=React.useState([])
   const handleRowClick = (row) => {
     // Fetch additional information here if needed
     // For demonstration, we are setting the row data directly
-    console.log("row", row)
+    //console.log("row", row)
     setPopupData(row);
     setPopupOpen(true);
   };
@@ -399,7 +345,6 @@ const [PressData,setPressData]=React.useState([])
   const [popupOpenEmailexport, setPopupOpenEmailexport] = React.useState(false)
   React.useEffect(() => {
     setFetchDataTime(0)
-    console.log("calling use effect")
     if (media === "radio" || media === 'television') {
       setLoading(false)
       setLoadingshow && setLoadingshow(false)
@@ -418,46 +363,19 @@ const [PressData,setPressData]=React.useState([])
 
     }
   }, [media, date1, date2,
-    // Filtersupports,
-    // Filterfamilles,
-    // Filterclassesids,
-    // Filtersecteursids,
-    // Filtervarietiesids,
-    // Filterannonceursids,
-    // Filtermarquesids,
-    // Filterproduitsids,
-  
   ]);
   const [increment, setIncrement] = React.useState(0)
-  const exportToExcel = () => {
-    // Convert JSON data to worksheet
-    console.log(filteredData)
-    var dataToexport = [];
 
-    if (media == 'presse') {
-      dataToexport = filteredData;
-    } else {
-      dataToexport = filteredData2;
-    }
-    const worksheet = XLSX.utils.json_to_sheet(dataToexport, { header: columns.map(col => col.field) });
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
-    // Write the workbook to file
-    XLSX.writeFile(workbook, 'data.xlsx');
-  }
-  const handelSendingLink = () => {
-    sendDownloadLink && sendDownloadLink(Filtersupports, Filterannonceursids,
-      Filterproduitsids, date1, date2, media, client, email, user_id)
-  }
+  //console.log('presse media', MediaData)
+  
   const getData = () => {
     //console.log("calling get data")
     const startTime = new Date().getTime();
+    
     //console.log("Filtermarquesids to gat data with", Filtermarquesids)
     if (media === "presse") {
       setDataTableShow(true)
       setLoadingshow(true)
-      setPressData(MediaData)
       getDataMedia && getDataMedia(
         email,
         media,
@@ -473,6 +391,7 @@ const [PressData,setPressData]=React.useState([])
         date1,
         date2
       )
+      setPressData(MediaData)
     } else {
       setDataTableShow(false)
       setLoadingshow(true)
@@ -495,6 +414,7 @@ const [PressData,setPressData]=React.useState([])
     const endTime = new Date().getTime();
     setFetchDataTime(endTime - startTime);
   }
+ 
   React.useEffect(() => {
     ResePressdataisFetched && ResePressdataisFetched()
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
@@ -510,6 +430,7 @@ const [PressData,setPressData]=React.useState([])
     }
 
   }, [filteredData, increment])
+
   React.useEffect(() => {
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
     setShowDataGrid && setShowDataGrid(false)
@@ -531,15 +452,15 @@ const [PressData,setPressData]=React.useState([])
     }
   }, [filteredData2, increment])
 
-  const [loadingFilters,setLoadingFilters]=React.useState(false)
-  const HandelSideBarPisition = async() => {
-  setLoadingFilters(true)
-  try {
-    await getFilters && getFilters(email,media,date1,date2) 
-  } catch (error) {
-    alert("Filtres introuvables")
-  }
-     console.log('filtres trouvé')
+  const [loadingFilters, setLoadingFilters] = React.useState(false)
+  const HandelSideBarPisition = async () => {
+    setLoadingFilters(true)
+    try {
+      await getFilters && getFilters(email, media, date1, date2)
+    } catch (error) {
+      alert("Filtres introuvables")
+    }
+    console.log('filtres trouvé')
     setPopupDataLageData(false)
     setLoadingFilters(false)
     ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
@@ -558,7 +479,7 @@ const [PressData,setPressData]=React.useState([])
 
   }, [rangs])
   //Responsive tool bar on top 
-const [mediaResponsive,setMediaResponsive]=React.useState(false)
+  const [mediaResponsive, setMediaResponsive] = React.useState(false)
   const [resStyle, setResStyle] = React.useState({
     justifyContent: 'space-between',
     width: "50%",
@@ -567,7 +488,7 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
     widthLefbtnWrapper: '',
     justifyContentRightBtnWrapper: '',
     marginTopAll: '4%',
-    jCToolbar:"space-between"
+    jCToolbar: "space-between"
   });
 
   React.useEffect(() => {
@@ -584,7 +505,7 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
         marginTopAll: window.innerWidth < 768 ? '14vh' : '4%',
         marginBtm: window.innerWidth < 768 ? '10px' : '0px',
         widthImage: window.innerWidth < 768 ? '250px' : '250px',
-         jCToolbar:window.innerWidth < 768 ? 'center' : 'space-between'
+        jCToolbar: window.innerWidth < 768 ? 'center' : 'space-between'
       });
     };
     handleResize();
@@ -593,40 +514,40 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  
+
   console.log('is loadind', !showDataGrid && showDataGridIfNotEmpty)
-  
-  if(!(autorisePigePresse || autorisePigeRadio || autorisePigeTv)){
-    return(
-    <Container
-      fluid
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "50vh",
-        backgroundColor: "#f8f9fa",
-        textAlign: "center",
-        borderRadius: "5px",
-        marginTop:"12%"
-      }}
-    >
-      <Row
-        className="responsive-row"
+
+  if (!(autorisePigePresse || autorisePigeRadio || autorisePigeTv)) {
+    return (
+      <Container
+        fluid
         style={{
-          padding: "20px",
-          backgroundColor: "#fff",
-          borderRadius: "10px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+          backgroundColor: "#f8f9fa",
+          textAlign: "center",
+          borderRadius: "5px",
+          marginTop: "12%"
         }}
       >
-        <b style={{ color: "#00a6e0" }}>
-          vous n'êtes pas abonnés
+        <Row
+          className="responsive-row"
+          style={{
+            padding: "20px",
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <b style={{ color: "#00a6e0" }}>
+            vous n'êtes pas abonnés
           </b>
 
-      </Row>
-    </Container>)
+        </Row>
+      </Container>)
   }
   if (!client) {
     history.push('/login')
@@ -635,31 +556,32 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
     <div style={{
       height: "auto", width: "100%", padding: "2%",
       marginTop: resStyle.marginTopAll,
- 
+
 
     }} >
-      <div class="" style={{ width: "100%" , 
-       }}>
+      <div class="" style={{
+        width: "100%",
+      }}>
 
         <div class="" style={{
           display: "flex", flexWrap: "nowrap",
           alignItems: "center", marginBottom: "10px",
-          flexDirection:resStyle.FlexDirection,
-         
-         justifyContent:resStyle.jCToolbar
+          flexDirection: resStyle.FlexDirection,
+
+          justifyContent: resStyle.jCToolbar
         }}>
           <div class="" style={{
             marginLeft: "0px", display: "flex",
             justifyContent: "space-between", alignItems: "center",
             width: resStyle.widthRightbtns,
-            flexDirection:resStyle.FlexDirection,
-        
+            flexDirection: resStyle.FlexDirection,
+
           }}>
-            <div style={{display:"flex",justifyContent:"space-between",width:"100%" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
               <MultipleSelectMedia />
-              {mediaResponsive &&(<div><MultipleSelectMedia /></div>)}
+              {mediaResponsive && (<div><MultipleSelectMedia /></div>)}
             </div>
-            <div style={{ width: "100%", height: "auto",marginTop:resStyle.paddingLeftBtn}}>
+            <div style={{ width: "100%", height: "auto", marginTop: resStyle.paddingLeftBtn }}>
               <DateRangeTest />
             </div>
           </div>
@@ -689,9 +611,9 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                 isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
                 //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                 disablebtn={!media && !date1 && !date2}
-                title="Recherche avancée"              
+                title="Recherche avancée"
               />
-             
+
               <AutomaticSideFilterBar getData={getData} />
               {/* <Button onClick={handelSendingLink}>download</Button> */}
               {/* <AnchorTemporaryDrawer getData={getData}
@@ -717,28 +639,22 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                   {(showDataGridIfNotEmpty && showDataGrid && filteredData.length) && (
                     <DataGrid
                       className="table_styling"
+                       density="compact"
                       style={{ marginBottom: "0px", width: '100%', backgroundColor: "white" }}
                       rows={filteredData}
                       columns={columns}
                       pagination
-                      pageSize={pageSize}
-                      //onPageSizeChange={(newPageSize) => setPageSize(newPageSize)} // Update page size on change
-                      //rowsPerPageOptions={[30, 50, 100]} // Options for page size
+                      pageSize={pageSize}                      
                       initialState={{
-                        // pagination: {
-                        //   paginationModel: { page: 0, pageSize: pageSize },
-                        // },
-
                         columns: {
                           columnVisibilityModel: {
-                            famille: true, // Hide the 'famille' column by default
+                            famille: true, 
                             id: false,
                             annonceur: false,
                             categorie: true,
                             marque: true,
                             classe: true,
                             pub: false,
-                            // version_pub:false,
                             version: false,
                             tarif: false,
                             periode: false,
@@ -747,8 +663,7 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                             langue: false,
                             mois: false,
                             supprimer: false,
-                            // url:false,
-                            // utilisateurs:false,
+                        
                           },
                         },
                       }}
@@ -761,8 +676,8 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                           filteredData: filteredData, filteredData2:
                             filteredData2, columns: columns, columns2: columns2,
                           setSearchTerm: setSearchTerm, searchTerm: searchTerm,
-                          handelOpenRechercheAvance:HandelSideBarPisition,
-                          
+                          handelOpenRechercheAvance: HandelSideBarPisition,
+
                         }
                       }}
                       pageSizeOptions={[25, 50, 80, 100]}
@@ -818,6 +733,7 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                 <Box sx={{ marginBottom: 20, width: "100%" }}>
                   {(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0) && (
                     <DataGrid
+                      density="compact"
                       style={{
                         marginBottom: 10,
                         width: '100%',
@@ -828,6 +744,11 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                         '& .MuiDataGrid-cell:hover': {
                           color: 'primary.main',
                         },
+                        '& .MuiDataGrid-footer': {
+                          backgroundColor: '#f5f5f5',  // Custom background color
+                          padding: '10px',
+                        }          // Custom padding
+
                       }}
 
                       rows={filteredData2}
@@ -874,14 +795,14 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                           filteredData: filteredData, filteredData2:
                             filteredData2, columns: columns, columns2: columns2,
                           setSearchTerm: setSearchTerm, searchTerm: searchTerm,
-                          handelOpenRechercheAvance:HandelSideBarPisition,
-                          
+                          handelOpenRechercheAvance: HandelSideBarPisition,
+
                         }
                       }}
                       getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'light-blue-row' : 'normal-row')}
                       //checkboxSelection
                       localeText={frenchLocaleText}
-                      
+
                     />)}
 
                   {(!showDataGrid && showDataGridIfNotEmpty) && (<LoadingLineIndicator totalDuration={fetchDataTime} />)}
@@ -923,11 +844,11 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
                   justifyContent: "center", alignItems: "start"
                 }}>
 
-                  <img 
-                  src={TableIlustration} 
+                  <img
+                    src={TableIlustration}
 
-                  
-                  alt="immar media"
+
+                    alt="immar media"
                     width={resStyle.widthImage} height={resStyle.widthImage} />
                   {/* <CircularProgressWithLabel value={50} /> */}
                   {/* <LinearIndeterminate/> */}
@@ -937,7 +858,7 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
             </div>
           )}
 
-  
+
 
 
         </div>
@@ -1034,49 +955,14 @@ const [mediaResponsive,setMediaResponsive]=React.useState(false)
       </Dialog>
 
 
-      {/* Popup Dialog */}
-      <Dialog open={popupOpen} onClose={handleClosePopup}>
-        <DialogTitle>Details</DialogTitle>
-        <DialogContent>
-          {popupData ? (
-            <>
-              <Typography variant="h6">Id: {popupData.id}</Typography>
-              <Typography variant="body1">
-                Support: {popupData.Titre_Lib}
-              </Typography>
-              <Typography variant="body1">Date: {popupData.date}</Typography>
-              <Typography variant="body1">
-                Produit: {popupData.produit}
-              </Typography>
-              <Typography variant="body1">
-                Format: {media ? (media === "presse" ? popupData.couleur : popupData.duree) : popupData.Pub_Format}
+      {/* Popup Dialog Message*/}
 
-
-              </Typography>
-              {media ? (
-                media === "presse" ? (
-                  <Typography variant="body1">
-                    Page: {popupData.page}
-                  </Typography>
-                ) : ""
-              ) : ""}
-
-              <Typography variant="body1">
-                Msg: {media === "presse" ? popupData.PressePub_Lib : popupData.message}
-              </Typography>
-            </>
-          ) : (
-            <Typography>No data available</Typography>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClosePopup} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-
+      <MessageLibPopUp popupOpen={popupOpen} 
+      handleClosePopup={handleClosePopup} 
+      popupData={popupData}
+      media={media}
+      />
+  
       {/* Popup Dialog Email export envoyé */}
       <Dialog open={popupOpenEmailexport}>
         {/* <DialogTitle>Details</DialogTitle> */}

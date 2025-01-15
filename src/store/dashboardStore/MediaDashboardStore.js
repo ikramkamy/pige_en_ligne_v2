@@ -68,10 +68,8 @@ export const UseMediaDashboardStore= create((set, get)=>({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log('date',date1)
-      console.log('date',date2)
-      console.log("date pige", response);     
-      // Assuming you want to set the MediaData in your state management
+      console.log("data pige", response.data);     
+      //Assuming you want to set the MediaData in your state management
       set({
         MediaData: response.data
       });

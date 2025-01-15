@@ -26,7 +26,7 @@ import Alert from '@mui/material/Alert';
 import { Container, Row, Col } from "react-bootstrap";
 import WarningIcon from '@mui/icons-material/Warning';
 import ExcelIcon from 'assets/img/icons/xls-file.png'
-const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchTerm, 
+const CustomToolbar = ({filteredData,filteredData2,columns,columns2,searchTerm, 
   setSearchTerm,
   handelOpenRechercheAvance
 }) => {
@@ -115,10 +115,19 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
   const exportToExcel = () => {
     if(Filterannonceursids<30){
       handleClickOpen()
-      sendDownloadLink && sendDownloadLink(Filtersupports, Filterannonceursids,
-        Filterproduitsids, date1, date2, media,
-        client,
+      sendDownloadLink && sendDownloadLink(
         email,
+        date1,
+        date2,
+        media,
+        Filterannonceursids,
+        Filterproduitsids, 
+        Filtervarietiesids,
+        Filtermarquesids,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids, 
+        client,
         user_id,    
       )
     }else{
@@ -127,24 +136,16 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
    
   }
 
-  const { userIdentifications } = UseLoginStore((state) => state)
-  //window.localStorage.setItem('pageSize', 100)
-  //const pageSize= window.localStorage.getItem('pageSize');
+  const { email } = UseLoginStore((state) => state)
   const handelchange = (size) => {
     setPageSize && setPageSize(size)
-    // window.localStorage.setItem('pageSize', size)
-    // console.log('page size',size)
-    // console.log("pageSize from local storage", pageSize)
-    // //return pageSize ? parseInt(pageSize, 10) : 30; 
   }
   const handeldownloadExcelFile = () => {
     console.log("link to download")
 
   }
-  //const [dataTableShow, setDataTableShow] = React.useState(false);
   const client = window.localStorage.getItem('user_name')
   const user_id = window.localStorage.getItem('user_id')
-  const email = window.localStorage.getItem('user_email')
   const handeClosePopUpNotAllowed=()=>{
     setNotAllowed(false)
     handelOpenRechercheAvance()
@@ -160,8 +161,6 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
         sx={{
           textTransform: '',
           backgroundColor: "#f8f9fa",
-
-          //marginRight: 2,
           color: "red",
           display: "flex",
           justifyContent: "space-between",
@@ -182,17 +181,8 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
           justifyContent: "center",
           alignItems: "center"
         }} onClick={exportToExcel}>
-        <img src={ExcelIcon} alt="excel file" />
-          {/* <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium 
-     css-i4bv87-MuiSvgIcon-root"
-            style={{ color: "#007bff", width: "19px", marginRight: "2px" }}
-            focusable="false" aria-hidden="true" viewBox="0 0 24 24"
-             data-testid="SaveAltIcon">
-            <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 
-            2h14c1.1 0 2-.9 2-2v-7h-2zm-6 
-            .67l2.59-2.58L17 11.5l-5 5-5-5 
-            1.41-1.41L11 12.67V3h2z"></path>
-            </svg> */}
+        <img src={ExcelIcon} alt="excel file" width="25px"/>
+       
           Exporter
         </div>
         <GridToolbarQuickFilter />
@@ -208,30 +198,15 @@ const CustomToolbar = ({ filteredData, filteredData2, columns, columns2, searchT
             {/* <img src={logoImmar} alt="immar media" width="100px" /> */}
             
             </div>
-          <DialogTitle>Pige  {media === "radio"
+          {/* <DialogTitle>Pige  {media === "radio"
             ? "Radio"
             : media === "presse"
               ? "Presse"
               : media === "television"
                 ? "Télévision"
-                : "Unknown media type"}</DialogTitle>
+                : "Unknown media type"}</DialogTitle> */}
           <DialogContent>
-            {/* <DialogContentText>
-              Un lien deTélechargement a été envoyé à l'address suivante
-              <b style={{ marginLeft: "5px", marginRight: "5px" }}>{user_email}</b>.<br />
-              veuillez vérifier SVP
-            </DialogContentText> */}
-            {/* <Box
-              noValidate
-              component="form"
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                m: 'auto',
-                width: '500',
-              }}
-            >
-            </Box> */}
+
 
             <Typography sx={{width:"100%"}}>
            

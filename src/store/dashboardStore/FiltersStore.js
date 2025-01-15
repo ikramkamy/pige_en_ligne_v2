@@ -1,8 +1,6 @@
 import { create } from 'zustand'
 import axios from 'axios';
-//const PORT = "https://immar-media.com/"
 const PORT = "https://pige-dev.immar-media.com/api/index.php"
-import dayjs from "dayjs";
 export const UseFiltersStore = create((set, get) => ({
   supports: [],
   familles: [],
@@ -64,7 +62,7 @@ export const UseFiltersStore = create((set, get) => ({
 
   dataTableShow: true,
   setDataTableShow: (e) => {
-    console.log("att data presse", e)
+    //console.log("att data presse", e)
     set({ dataTableShow: e })
   },
   showDataGridIfNotEmpty: true,
@@ -73,7 +71,7 @@ export const UseFiltersStore = create((set, get) => ({
   },
   showDataGrid: false,
   setShowDataGrid: (e) => {
-    console.log('att data line loading', e)
+    //console.log('att data line loading', e)
     set({ showDataGrid: e })
   },
   setVeilleDiffusion: async (i) => {
@@ -183,7 +181,7 @@ export const UseFiltersStore = create((set, get) => ({
         date_debut:date1,
         date_fin:date2
       })
-      console.log("response filters",response,`${PORT}/${media}/filters`,email,date1,date2)
+      //console.log("response filters",response,`${PORT}/${media}/filters`,email,date1,date2)
         set({
           supports: response.data.supports,
           Filtersupports: response.data.supports,

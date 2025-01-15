@@ -86,3 +86,62 @@
     "Veille_Support_Id": "8",
     "Veille_Support_Lib": "El Watan"
 }
+
+
+
+
+  const dataArray = pressData?.map((elem) => {
+    var item = {
+      id: elem.id, // Matches "Id"
+      Support_Lib: elem.Support_Lib, // Matches "Support_Lib"
+      Date: elem.Date, // Matches "Date"
+      Produit_Lib: elem.Produit_Lib, // Matches "Produit_Lib"
+      Classe_Lib: elem.Classe_Lib, // Matches "Classe_Lib"
+      Format: `${elem.Format} - ${elem.NB_C} - ${elem.Rubrique}`, // Matches "Format", combined values
+      Page: elem.Page, // Matches "Page"
+      Annonceur_Lib: elem.Annonceur_Lib, // Matches "Annonceur_Lib"
+      Famille_Lib: elem.Famille_Lib, // Matches "Famille_Lib"
+      Secteur_Lib: elem.Secteur_Lib, // Matches "Secteur_Lib"
+      Marque_Lib: elem.Marque_Lib, // Matches "Marque_Lib"
+      Version: elem.Version, // Matches "Version"
+      Tarif: elem.Tarif, // Matches "Tarif"
+      Période: elem.Période, // Matches "Période"
+      Variété_Lib: elem.Variété_Lib, // Matches "Variété_Lib"
+      Année: elem.Année, // Matches "Année"
+      Mois: elem.Mois, // Matches "Mois"
+      Message_Lib: elem.Message_Lib, // Matches "Message_Lib"
+    };
+
+    return list.push(item);
+  });
+
+  // const dataArray2 = MediaData?.map((elem) => {
+  //   //to define which fields to display
+  //   var item2 = {
+  //     id: elem.id,
+  //     Support_Lib: elem.Support_Lib,
+  //     Date: elem.Date,
+  //     Produit_Lib: elem.Produit_Lib,
+  //     Message_Id: elem.Message_Id,
+  //     Message_Lib: elem.Message_Lib,
+  //     Heure: elem.Heure,
+  //     Durée: elem.Durée,
+  //     Rang: elem.Rang,
+  //     Encombrement: elem.Encombrement,
+  //     Annonceur_Lib: elem.Annonceur_Lib,
+  //     Famille_Lib: elem.Famille_Lib,
+  //     Secteur_Lib: elem.Secteur_Lib,
+  //     Classe_Lib: elem.Classe_Lib,
+  //     Marque_Lib: elem.Marque_Lib,
+  //     Version: elem.Version,
+  //     Tarif_30: elem.Tarif_30,
+  //     Tarif: elem.Tarif,
+  //     Variété_Lib: elem.Variété_Lib,
+  //     Année: elem.Année,
+  //     Mois: elem.Mois,
+  //     Prog_avant: elem.Prog_avant,
+  //     Prog_après: elem.Prog_après
+  //   };
+
+  //   return list2.push(item2);
+  // });

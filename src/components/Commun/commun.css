@@ -27,7 +27,7 @@ font-style: normal;
 }
 .css-1nnh8nx-MuiDataGrid-root 
 .MuiDataGrid-virtualScrollerContent .MuiDataGrid-row.Mui-selected:hover{
-  background-color: #0a2e52 !important; 
+  background-color: #008fc4 !important; 
   color: white;
 }
 
@@ -133,8 +133,15 @@ overflow: hidden !important;
 }
 .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
 height: 50px !important;
-
 }
+.MuiTablePagination-selectLabel{
+margin-bottom: 3px !important;
+}
+.MuiTablePagination-displayedRows{
+  
+  margin-bottom: 3px !important;
+}
+
 @media (max-width: 600px) {
   #pickInput {
     font-size: 14px; /* Adjust font size for smaller screens */

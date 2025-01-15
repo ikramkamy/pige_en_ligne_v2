@@ -25,7 +25,6 @@ export const UseLoginStore = create((set, get) => ({
   usePrevilegesAnnonceurs: [],
   usePrevilegesMarques: [],
   userPrevilegesVeille: [],
-  //update password variables
   messageUpdatePassword: "",
   isloading: false,
   isSucces: false,
@@ -129,7 +128,7 @@ export const UseLoginStore = create((set, get) => ({
   },
   GetUserData: async (user) => {
     try {
-      let response = await axios.post(`${PORT}/login.php`, {
+      let response = await axios.post(`${PORT}/forgot`, {
         user_id: user
       });
       console.log("response", response)
@@ -161,7 +160,7 @@ export const UseLoginStore = create((set, get) => ({
         showAlert4: false,
       })
       try {
-        let response = await axios.post(`${PORT}/login.php`, {
+        let response = await axios.post(`${PORT}/login`, {
           reenitialiserMotDepasse: "Resetpasseword",
           email: email,
         });
@@ -178,7 +177,7 @@ export const UseLoginStore = create((set, get) => ({
           // console.log('decoded email',decodedEmail)
 
           const linkToReset = `${PORT}/#/login/reinitialiser/${encodedEmail}`
-          let response2 = await axios.post(`${PORT}/phpexcel/ex/ResetPassword.php`, {
+          let response2 = await axios.post(`${PORT}/reset`, {
             reenitialiserMotDepasse: "reset",
             linkToReset: linkToReset,
             email: email,

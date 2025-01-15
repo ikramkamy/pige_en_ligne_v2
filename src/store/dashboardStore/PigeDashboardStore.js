@@ -1,8 +1,7 @@
 import { create  } from "zustand";
 import axios  from "axios";
 import dayjs from "dayjs";
-const PORT="https://immar-media.com";
-//const PORT="http://localhost/pigeonligne"
+const PORT="https://pige-dev.immar-media.com/api/index.php";
 export const UsePigeDashboardStore= create((set, get)=>({
     PressData:[],
     VolumePresse :0,
@@ -1683,141 +1682,38 @@ getPicCommunicationLastYear:async(
 
 },
 
-sendDownloadLink:async(Filtersupports,
-  annonceurs,produits,
-  date1,date2,media,
-  client,email,user_id
+sendDownloadLink:async(
+  email,
+  date1,
+  date2,
+  media,
+  annonceurs,
+  produits,
+  varietes,
+  marques,
+  familles,
+  classes,
+  secteurs,  
+  client,
+  user_id
 )=>{
- console.log("we are sending user_id ",user_id)
-console.log("Filtersupports",Filtersupports)
-// console.log("annonceurs",annonceurs.join(","))
-// console.log("produits",produits.join(","))
-// console.log("date1",date1)
-var support=Filtersupports.length===0? "56" : Filtersupports.join(",")
-var annonceur=annonceurs.length===0?"15,16,13" :annonceurs.join(",")
-var produit =produits.length===0? "13,14,16": produits.join(",")
-var type= 'ALL'
-var famille = 'ALL'
-var classe = 'ALL'
-var urlsend="https://immar-media.com/phpexcel/ex/calcul_pige_presse_limite4_v2.php?chaine="+
-support+"&type_diffusion="+type +"ALL&Annonceur_Nom="
-+annonceur+"&Produit_Lib="+produit+ 
-"&Marque_Lib=ALL"+ "&type_recherche=en_cours"+"&date1="
-+date1+"&date2="+date2+"&CodeFamille=ALL&classe=ALL+&user_id="+user_id+"&email="+email+"&client="+client
-var urlsend_radio="https://immar-media.com/phpexcel/ex/calcul_pige_radio_limite4_v2.php?chaine="+support+"&type_diffusion="+type +"ALL&Annonceur_Nom="+annonceur+"&Produit_Lib="+produit+"&Marque_Lib=ALL"+"&type_recherche=en_cours"+"&date1="+date1+"&date2="+date2+"&CodeFamille=ALL&classe=ALL+&user_id="+user_id+"&email="+email+"&client="+client
-var urlsend_tv="https://immar-media.com/phpexcel/ex/calcul_pige_tv_limite4_v2.php?chaine="+support+"&type_diffusion="+type +"ALL&Annonceur_Nom="+annonceur+"&Produit_Lib="+produit+ "&Marque_Lib=ALL"+ "&type_recherche=en_cours"+"&date1="+date1+"&date2="+date2+"&CodeFamille=ALL&classe=ALL+&user_id="+user_id+"&email="+email+"&client="+client
-//https://immar-media.com/phpexcel/ex/calcul_pige_presse_limite4.php?chaine=56&type_diffusion=ALL&Annonceur_Nom=ALGERIE%20TELECOM&Produit_Lib=152,158,166,168,237,291,539,1433,1974,2280,7201,9194&Marque_Lib=ALL&type_recherche=en_cours&date1=09-12-2024&date2=09-12-2024&CodeFamille=ALL&classe=AL
 
-urlsend = urlsend.split(" ").join("%20")
-urlsend_radio=urlsend_radio.split(" ").join("%20")
-urlsend_tv=urlsend_tv.split(" ").join("%20")
-
-console.log("urlsend", urlsend)
-switch(media){
-  case "presse":
-    await axios.get(urlsend).then(res => {
-      console.log("response link sending", res)
-             if (parseInt(res.data.total_export) >= 30) {
-             console.log(res)
-               set({
-                   errorSendingLink: 'vous avez atteint votre limite quotidienne !'
-               })
-           }
-           if (parseInt(res.data.total_annonceur) >= 30) {
-             console.log(res)
-              set({
-                   errorSendingLink: 'vous avez atteint votre total max d\'annonceur !'
-               })
-           }
-           if (parseInt(res.data.total_export) < 30 && parseInt(res.data.total_annonceur) < 30) {
-             console.log("email response",res)
-               if (res.data.sent_email == 1) {
-                 console.log("email sent succesfully")
-                   set({
-                       errorSendingLink: 'lien de téléchargement envoyé. veuillez consulter votre boîte de réception.'
-                   })
-               } else {            
-                 console.log("emai sent succesfully")
-                  set({
-                    errorSendingLink: 'Une erreur est survenue lors de l\'exportation, veuillez réessayer !'
-                   })
-               }
-           }
-        
-       }).catch(err => {
-           console.log(err)
-       })
-  break;
-  case "radio":
-    await axios.get(urlsend_radio).then(res => {
-      console.log("response", res)
-      if (parseInt(res.data.total_export) >= 30) {
-        console.log(res)
-          set({
-              errorSendingLink: 'vous avez atteint votre limite quotidienne !'
-          })
-      }
-      if (parseInt(res.data.total_annonceur) >= 30) {
-        console.log(res)
-         set({
-              errorSendingLink: 'vous avez atteint votre total max d\'annonceur !'
-          })
-      }
-      if (parseInt(res.data.total_export) < 30 && parseInt(res.data.total_annonceur) < 30) {
-        console.log("email response",res)
-          if (res.data.sent_email == 1) {
-            console.log("emai sent succesfully")
-              set({
-                  errorSendingLink: 'lien de téléchargement envoyé. veuillez consulter votre boîte de réception.'
-              })
-          } else {            
-            console.log("emai sent succesfully")
-             set({
-               errorSendingLink: 'Une erreur est survenue lors de l\'exportation, veuillez réessayer !'
-              })
-          }
-      }
-           
-        
-       }).catch(err => {
-           console.log(err)
-       })
-  break;
-  case "television":
-    await axios.get(urlsend_tv).then(res => {
-      console.log("response", res)
-     
-      if (parseInt(res.data.total_export) >= 30) {
-        console.log(res)
-          set({
-              errorSendingLink: 'vous avez atteint votre limite quotidienne !'
-          })
-      }
-      if (parseInt(res.data.total_annonceur) >= 30) {
-        console.log(res)
-         set({
-              errorSendingLink: 'vous avez atteint votre total max d\'annonceur !'
-          })
-      }
-      if (parseInt(res.data.total_export) < 30 && parseInt(res.data.total_annonceur) < 30) {
-        console.log("email response",res)
-          if (res.data.sent_email == 1) {
-            console.log("emai sent succesfully")
-              set({
-                  errorSendingLink: 'lien de téléchargement envoyé. veuillez consulter votre boîte de réception.'
-              })
-          } else {            
-            console.log("emai sent succesfully")
-             set({
-               errorSendingLink: 'Une erreur est survenue lors de l\'exportation, veuillez réessayer !'
-              })
-          }
-      }
-        
-       }).catch(err => {
-           console.log(err)
-       })
-  break;
+try {
+  let response=await axios.post(`${PORT}/${media}/excel`,{
+     email:email,
+     date_debut:date1,
+     date_fin:date2,
+     annonceurs_ids:annonceurs,
+     produits_ids:produits,
+     marques_ids:marques,    
+     familles_ids:familles,
+     classes_ids:classes,
+     secteurs_ids:secteurs,
+     varietes_ids:varietes
+  })
+console.log("response excel",response)
+} catch (error) {
+  
 }
 
 }
