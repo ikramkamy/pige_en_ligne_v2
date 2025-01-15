@@ -23,10 +23,12 @@ export default function VeillePub() {
   const PORT = "https://immar-media.com";
   const { autoriseVeillePresse,
     autoriseVeilleRadio,
-    autoriseVeilleTv, client } = UseLoginStore((state) => state)
+    autoriseVeilleTv,
+     client,email } = UseLoginStore((state) => state)
   const history = useHistory()
   const {
     getveilletvData,
+    getveilletvData_encours,
     veilletvData,
     getVeilleSearch,
     getVeilleById,
@@ -185,10 +187,32 @@ export default function VeillePub() {
     //setPdata([]);
     const startTime = new Date().getTime();
     setWelcomVeille(true)
-    getveilletvData && getveilletvData(
+    // getveilletvData && getveilletvData(
+    //   date1,
+    //   date2,
+    //   veille_diffusion,
+    //   media,
+    //   typeVeille,
+    //   Filterfamilles,
+    //   familles,
+    //   Filtersupports, supports,
+    //   classes,
+    //   Filterclassesids,
+    //   Filtersecteursids,
+    //   secteurs,
+    //   Filtervarietiesids,
+    //   varieties,
+    //   Filterannonceursids,
+    //   annonceurs,
+    //   Filtermarquesids,
+    //   marques,
+    //   Filterproduitsids,
+    //   produits,)
+
+    getveilletvData_encours && getveilletvData_encours(
+      email,
       date1,
       date2,
-      veille_diffusion,
       media,
       typeVeille,
       Filterfamilles,
@@ -205,7 +229,8 @@ export default function VeillePub() {
       Filtermarquesids,
       marques,
       Filterproduitsids,
-      produits,)
+      produits,
+    )
     //it is not working
     setTimeout(() => {
       setShowdataloading(true)
@@ -220,10 +245,9 @@ export default function VeillePub() {
     setTimeout(() => {
       setLoadingLineDisplay(false)
     }, 5000);
-
     setDisplayVeilleDate(true)
-
   }
+
   const DownloadFile = () => {
     DownloadExlsxFile && DownloadExlsxFile(veilletvData, media)
   }
@@ -483,11 +507,44 @@ export default function VeillePub() {
               }}>
               Recherche avancée
             </Button>
-
+           
+ <Button
+              onClick={handeOpenSideBar}
+              disabled={!media}
+              sx={{
+                textTransform: "none",
+                width: "100%",
+                textTransform: "none",
+                backgroundColor: '#00a6e0',
+                textTransform: "none",
+                width: "fit-content",
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#00a6e0',
+                }
+              }}>
+              Recherche avancée
+            </Button>
             {/* <AnchorTemporaryDrawer getData={getData} /> */}
           </div>
 
-
+          <Button
+              onClick={getData}
+              
+              sx={{
+                textTransform: "none",
+                width: "100%",
+                textTransform: "none",
+                backgroundColor: '#00a6e0',
+                textTransform: "none",
+                width: "fit-content",
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#00a6e0',
+                }
+              }}>
+              TEST
+            </Button>
         </div>
         <div onClick={() => handeToggleSideBar()}>
           {welcomVeille ? (

@@ -39,17 +39,11 @@ export const UseVeilleStore = create((set, get) => ({
     produits,
   ) => {   
     try {
-     let response = await axios.post("https://immar-media.com/pub_online_rechercherv2.php",{
-          media:media,
-          diffusion:veille_diffusion,
-          date1:date1,
-          date2:date2,
-          supports:Filtersupports,
-          familles:Filterfamilles,
-          classes:Filterclassesids,
-          secteurs:Filtersecteursids,
-          varieties:Filtervarietiesids,
+     let response = await axios.post(`${PORT}/${media}/presse-veille-progress/table`,{
+          date_debut:date1,
+          date_fin:date2,
           annonceurs:Filterannonceursids,
+          familles:Filterfamilles, 
           marques:Filtermarquesids,
           produits:Filterproduitsids,
         })
@@ -77,7 +71,62 @@ export const UseVeilleStore = create((set, get) => ({
 
     }
   },
- 
+  getveilletvData_encours: async (
+    date1,
+    date2,
+    media,
+    typeVeille,
+    Filterfamilles,
+    familles,
+    Filtersupports, supports,
+    classes,
+    Filterclassesids,
+    Filtersecteursids,
+    secteurs,
+    Filtervarietiesids,
+    varieties,
+    Filterannonceursids,
+    annonceurs,
+    Filtermarquesids,
+    marques,
+    Filterproduitsids,
+    produits,
+  ) => {   
+    console.log("caling v")
+    try {
+     let response = await axios.post(`${PORT}/${media}/presse-veille-progress/table`,{
+          email,
+          date_debut:date1,
+          date_fin:date2,
+          annonceurs:Filterannonceursids,
+          familles:Filterfamilles, 
+          marques:Filtermarquesids,
+          produits:Filterproduitsids,
+        })
+    console.log('data_veille encours',response)  
+    set({veilletvData:response.data,
+         dataVeilleISFetched: true})
+        // switch (typeVeille) {
+        //   case "BIL":
+        //     console.log("BIL")
+        //     dataFiltred.filter((item) => item.Insertion_Type == "BIL")
+        //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type === "BIL") })
+        //     break;
+        //   case "autre":
+        //     console.log("autre")
+        //     // filterddata.filter((item)=>item.Insertion_Type !=="BIL")
+        //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type !== "BIL") })
+        //     break;
+        //   case "":
+        //     set({ veilletvData: dataFiltred })
+        //     break;
+        // }
+    } catch (error) {
+      console.log(error);
+      set({ veilletvData: [] })
+
+    }
+  },
   resetVeilletvdata: async () => {
     set({ veilletvData: [] });
   },
