@@ -10,6 +10,7 @@ import { TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import { Button, CircularProgress, Box } from '@mui/material';
 import SearchPopupVarieties from './SearchPopupVarities';
+import "./commun.css"
 export default function MultipleSelectVarieties() {
   const { Filtervarieties, produits, setFiltervariete, 
     annonceurs, marques, Filtervarietiesids } = UseFiltersStore((state) => state);
@@ -73,7 +74,7 @@ export default function MultipleSelectVarieties() {
       //onClick={handelopenPopup}
       >
         {/* Custom Select All option */}
-        <div style={{ marginTop: 10, }}>
+        <div style={{ marginTop: 10}}>
           <MenuItem onClick={handleSelectAll}>
             <Checkbox checked={isAllSelected} />
             <ListItemText primary="variétés" />
@@ -83,6 +84,7 @@ export default function MultipleSelectVarieties() {
 
 
             <Autocomplete 
+            sx={{height:"40px"}}
             multiple
             freeSolo
             options={filteredElems}

@@ -117,7 +117,7 @@ export default function MultipleSelectMedia() {
     //setMediaList(mediaList.filter((elem) => elem.auth == true))
   }, [])
 
-  console.log("medialist", mediaList)
+  //console.log("medialist", mediaList)
 
   useEffect(() => {
     setShowSpinner(true)
@@ -139,7 +139,7 @@ export default function MultipleSelectMedia() {
     ResetAllFilters && ResetAllFilters()
     //get previleges before getting filters
     const page = location.hash.split('/')[1]
-    console.log('page in media select', location.hash.split('/')[1])
+    //console.log('page in media select', location.hash.split('/')[1])
     // getUserPrevilege && getUserPrevilege(user_id)
     // getFilters && getFilters(
     //   IdrangsSeclected[0],
@@ -153,7 +153,7 @@ export default function MultipleSelectMedia() {
   
   useEffect(() => {
     const prevSelection = mediaList.filter((elem) => elem.value == media)
-    console.log("media in media", prevSelection)
+    //console.log("media in media", prevSelection)
     setPreviousSelection(prevSelection);
   }, [media]);
 
@@ -171,8 +171,10 @@ export default function MultipleSelectMedia() {
         {/* <Button onClick={handelgetFilters}>tester</Button> */}
         <InputLabel id="demo-multiple-checkbox-label"
           sx={{
-            bottom: "15px",
+            //bottom: "10px",
             color: "black",
+            position:"absolute",
+            top:"-10px",
             '&.Mui-focused': {
               color: 'transparent',
               display:"none"
@@ -183,8 +185,9 @@ export default function MultipleSelectMedia() {
         </InputLabel>
         <Select
           sx={{
-            backgroundColor: "white", height: "50px",
+            backgroundColor: "white", height: "40px",
             display: "flex", justifyContent: "center", alignItems: "cenetr"
+
           }}
           defaultValue={media}
           labelId="demo-multiple-checkbox-label"

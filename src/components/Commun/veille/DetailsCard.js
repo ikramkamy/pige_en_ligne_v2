@@ -79,7 +79,8 @@ export default function BaseDialog({ getData, title, openDetails,
                 open={open}
                 sx={{ height: "auto" }}
                 onClose={handleClose}>
-                {/* <div style={{backgroundImage:`url(${mediaImage})`,backgroundSize:"cover", padding:"20px"}} >    */}
+                {/* <div style={{backgroundImage:
+                `url(${mediaImage})`,backgroundSize:"cover", padding:"20px"}} >    */}
                 <Card sx={{
                     maxWidth: 800, margin: 'auto', padding: 2, backgroundColor: '#f5f5f5',
                     borderRadius: 2, boxShadow: 3,
@@ -232,7 +233,6 @@ export default function BaseDialog({ getData, title, openDetails,
                             }}
                         >Annuler
                         </Button>
-                        {/* <Link to={`${PORT}${urlDownload}${id}`} style={{textDecoration:"none"}}> */}
                         <a href={`${PORT}${urlDownload}${id}`}
                             className='custom-link'
                             style={{
@@ -249,7 +249,8 @@ export default function BaseDialog({ getData, title, openDetails,
 
 
                             }}>
-                                Télècharger {mediaPubfile}</a>
+                                Télècharger 
+                            {mediaPubfile}</a>
 
                         {/* </Link>  */}
 

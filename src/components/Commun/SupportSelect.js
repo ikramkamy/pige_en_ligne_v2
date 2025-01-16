@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore, setFiltersupports } from '../../store/dashboardStore/FiltersStore';
 import { Autocomplete } from '@mui/material';
 import { TextField } from '@mui/material';
+import './commun.css';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -25,11 +26,12 @@ export default function MultipleSelectSupports() {
   const [selectedItems, setSelectedItems] = React.useState([]);
   const [previousSelection, setPreviousSelection] = React.useState([]);
 
-  React.useEffect(() => {
-    
-    setSelectedItems(Filtersupports)
+
+  React.useEffect(() => {  
+    setSelectedItems(Filtersupports.map((e)=>e.Support_Id));
     setPreviousSelection(Filtersupports);
   }, [Filtersupports]);
+  console.log("prev supports",previousSelection,Filtersupports)
   const filteredElems = supports.filter((item) => {
     return item.Support_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
@@ -53,12 +55,10 @@ export default function MultipleSelectSupports() {
   const onInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
+  const isAllSelected = previousSelection.length === filteredElems.length;
 
-  const isAllSelected = selectedItems.length === filteredElems.length;
-  console.log("filteredElems supports",filteredElems)
-  console.log("previousSelection",previousSelection)
   return (
-    <FormControl sx={{ m: 1, width: "100%", }}>
+    <FormControl sx={{ m: 1, width: "100%"}}>
       {/* Custom Select All option */}
       <div style={{ marginTop: 10 }}>
         <MenuItem onClick={handleSelectAll}>
@@ -66,8 +66,13 @@ export default function MultipleSelectSupports() {
           <ListItemText primary="supports" />
         </MenuItem>
       </div>
-      <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-      <Autocomplete     
+      <InputLabel id="demo-multiple-checkbox-label" 
+      >
+      </InputLabel>
+      <Autocomplete 
+      sx={{
+          height:"40px"
+      }}    
         multiple
         freeSolo
         options={filteredElems}
@@ -81,6 +86,7 @@ export default function MultipleSelectSupports() {
             {...params}
             label={`supports (${previousSelection.length})`} 
             variant="outlined"
+            sx={{top:"-10px"}}
           />
         )}
         renderOption={(props, option) => (

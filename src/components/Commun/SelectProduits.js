@@ -7,9 +7,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore } from '../../store/dashboardStore/FiltersStore';
 import { Autocomplete } from '@mui/material';
 import { TextField, CircularProgress } from '@mui/material';
-import Alert from '@mui/material/Alert';
-import { Button,Box } from '@mui/material';
 import SearchPopupProduits from './SearchpopupProduits';
+import "./commun.css";
 export default function MultipleSelectProducts() {
   const { annonceurs, produits, Filterproduits, marques, setFilterproduit, Filterproduitsids } = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = useState('');
@@ -81,7 +80,7 @@ export default function MultipleSelectProducts() {
       <div style={{ marginTop: 10, }} onClick={handelopenPopup}>
         <MenuItem onClick={handleSelectAll}>
           <Checkbox checked={isAllSelected} />
-          <ListItemText primary="products" />
+          <ListItemText primary="produits" />
         </MenuItem>
       </div>
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
@@ -110,6 +109,7 @@ export default function MultipleSelectProducts() {
             </Button> */}
           
       <Autocomplete
+       sx={{height:"40px"}}
         multiple
         freeSolo
         options={filteredElems}

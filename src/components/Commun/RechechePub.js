@@ -29,10 +29,10 @@ export default function RecherchePub() {
   const [selectedMediaPub, setSelectedMediaPub]=useState('')
   const [mediaList, setMediaList]=useState([
     {label:"Diffusion en cours",
-      value:"en_cours"
+      value:"progress"
     },
     {label:"1 ère Diffusion",
-      value:"premiere"
+      value:"first"
     },
 
 ])
@@ -65,7 +65,8 @@ const handleChange = (event) => {
 }}>
       
         <InputLabel id="demo-multiple-checkbox-label"
-         sx={{ bottom: "15px",
+         sx={{ 
+          top:"-10px",
           color: "black",
           '&.Mui-focused': {
             color: 'transparent',
@@ -77,7 +78,7 @@ const handleChange = (event) => {
         <Select
           labelId="demo-multiple-checkbox-label"
           value={selectedMediaPub}
-           sx={{backgroundColor:"white", height:"50px"}}
+           sx={{backgroundColor:"white", height:"40px"}}
           onChange={handleChange}
           input={<OutlinedInput label="Diffusion en cours" />}
           renderValue={(selected) => selected}

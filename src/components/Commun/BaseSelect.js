@@ -93,7 +93,7 @@ export default function MultipleSelectBase() {
         }}>
         <InputLabel id="demo-multiple-checkbox-label"
           sx={{
-            bottom: "15px",
+            top: "-10px",
             color: "black",
             '&.Mui-focused': {
               color: 'transparent',
@@ -106,7 +106,7 @@ export default function MultipleSelectBase() {
           input={<OutlinedInput label="Volume" />}
           renderValue={(selected) => selected}
           MenuProps={MenuProps}
-          sx={{ backgroundColor: "white", height: "50px" }}
+          sx={{ backgroundColor: "white", height: "40px" }}
         >
           {bases.map((elem) => (
             <MenuItem key={elem.value} value={elem.label} >

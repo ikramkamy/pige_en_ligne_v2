@@ -9,118 +9,70 @@ export const UseVeilleStore = create((set, get) => ({
   veilletvSearch: [{}],
   veilletvById: [{}],
   dataVeilleISFetched: false,
-  ShowSearchKey:false,
+  ShowSearchKey: false,
 
-    setShowSearchKey: () => set((state) => ({ ShowSearchKey: !state.ShowSearchKey })),
+  setShowSearchKey: () => set((state) => ({ ShowSearchKey: !state.ShowSearchKey })),
 
   ResetDataveilleFetched: () => {
     set({ dataVeilleISFetched: false })
   },
-  getveilletvData: async (
+  getVeilleCount: async (
+    media,
     date1,
     date2,
-    veille_diffusion,
-    media,
-    typeVeille,
-    Filterfamilles,
-    familles,
-    Filtersupports, supports,
-    classes,
-    Filterclassesids,
-    Filtersecteursids,
-    secteurs,
-    Filtervarietiesids,
-    varieties,
-    Filterannonceursids,
-    annonceurs,
-    Filtermarquesids,
-    marques,
-    Filterproduitsids,
-    produits,
-  ) => {   
+    annonceurs_ids,
+    marques_ids,
+    produits_ids,
+    familles_ids,
+  ) => {
     try {
-     let response = await axios.post(`${PORT}/${media}/presse-veille-progress/table`,{
-          date_debut:date1,
-          date_fin:date2,
-          annonceurs:Filterannonceursids,
-          familles:Filterfamilles, 
-          marques:Filtermarquesids,
-          produits:Filterproduitsids,
-        })
-    console.log('data_veille',response)  
-    set({veilletvData:response.data,
-         dataVeilleISFetched: true})
-        // switch (typeVeille) {
-        //   case "BIL":
-        //     console.log("BIL")
-        //     dataFiltred.filter((item) => item.Insertion_Type == "BIL")
-        //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type === "BIL") })
-        //     break;
-        //   case "autre":
-        //     console.log("autre")
-        //     // filterddata.filter((item)=>item.Insertion_Type !=="BIL")
-        //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type !== "BIL") })
-        //     break;
-        //   case "":
-        //     set({ veilletvData: dataFiltred })
-        //     break;
-        // }
+      let response = await axios.post(`${PORT}/${media}-veille-first/count`)
+      console.log("response get data presse", response)
     } catch (error) {
-      console.log(error);
-      set({ veilletvData: [] })
 
     }
   },
-  getveilletvData_encours: async (
+  getveilletvData: async (
+    email,
     date1,
     date2,
     media,
-    typeVeille,
+    veille_diffusion,
     Filterfamilles,
-    familles,
-    Filtersupports, supports,
-    classes,
-    Filterclassesids,
-    Filtersecteursids,
-    secteurs,
-    Filtervarietiesids,
-    varieties,
     Filterannonceursids,
-    annonceurs,
     Filtermarquesids,
-    marques,
     Filterproduitsids,
-    produits,
-  ) => {   
-    console.log("caling v")
+  ) => {
     try {
-     let response = await axios.post(`${PORT}/${media}/presse-veille-progress/table`,{
-          email,
-          date_debut:date1,
-          date_fin:date2,
-          annonceurs:Filterannonceursids,
-          familles:Filterfamilles, 
-          marques:Filtermarquesids,
-          produits:Filterproduitsids,
-        })
-    console.log('data_veille encours',response)  
-    set({veilletvData:response.data,
-         dataVeilleISFetched: true})
-        // switch (typeVeille) {
-        //   case "BIL":
-        //     console.log("BIL")
-        //     dataFiltred.filter((item) => item.Insertion_Type == "BIL")
-        //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type === "BIL") })
-        //     break;
-        //   case "autre":
-        //     console.log("autre")
-        //     // filterddata.filter((item)=>item.Insertion_Type !=="BIL")
-        //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type !== "BIL") })
-        //     break;
-        //   case "":
-        //     set({ veilletvData: dataFiltred })
-        //     break;
-        // }
+      let response = await axios.post(`${PORT}/${media}-veille-${veille_diffusion}/table`, {
+        email:email,
+        date_debut: date1,
+        date_fin: date2,
+        annonceurs: Filterannonceursids,
+        familles: Filterfamilles,
+        marques: Filtermarquesids,
+        produits: Filterproduitsids,
+      })
+      console.log('data_veille encours', response)
+      set({
+        veilletvData: response.data,
+        dataVeilleISFetched: true
+      })
+      // switch (typeVeille) {
+      //   case "BIL":
+      //     console.log("BIL")
+      //     dataFiltred.filter((item) => item.Insertion_Type == "BIL")
+      //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type === "BIL") })
+      //     break;
+      //   case "autre":
+      //     console.log("autre")
+      //     // filterddata.filter((item)=>item.Insertion_Type !=="BIL")
+      //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type !== "BIL") })
+      //     break;
+      //   case "":
+      //     set({ veilletvData: dataFiltred })
+      //     break;
+      // }
     } catch (error) {
       console.log(error);
       set({ veilletvData: [] })
@@ -197,9 +149,6 @@ export const UseVeilleStore = create((set, get) => ({
       console.log(error);
     }
   },
-
-
-
   //to get filters of each media
   getVeilleSearch: async (
     date1,
@@ -220,7 +169,7 @@ export const UseVeilleStore = create((set, get) => ({
       );
       // console.log("veille diffusion", veille_diffusion)
       // console.log("posting to path for veille search",`${PORT2}${media}`)
-       console.log('veille serach response', response)
+      console.log('veille serach response', response)
       //set({veilletvSearch: response});
     } catch (error) {
       console.log(error);

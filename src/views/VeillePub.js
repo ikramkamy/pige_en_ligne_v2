@@ -18,17 +18,20 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import AdvertisementCard from 'components/Commun/veille/MediaCardVeille2';
 import BasicSpeedDial from 'components/Commun/veille/SpeedDealToolBar';
-import 'components/Commun/commun.css'
+import 'components/Commun/commun.css';
+import presse_mini from 'assets/img/veille/presse_mini.jpg';
+import radio_mini from 'assets/img/veille/radio_mini.png';
+import tv_mini from 'assets/img/veille/tv_mini.jpg';
 export default function VeillePub() {
   const PORT = "https://immar-media.com";
   const { autoriseVeillePresse,
     autoriseVeilleRadio,
     autoriseVeilleTv,
-     client,email } = UseLoginStore((state) => state)
+    client, email } = UseLoginStore((state) => state)
   const history = useHistory()
   const {
     getveilletvData,
-    getveilletvData_encours,
+    getVeilleCount,
     veilletvData,
     getVeilleSearch,
     getVeilleById,
@@ -38,8 +41,10 @@ export default function VeillePub() {
     setShowSearchKey,
   } = UseVeilleStore((state) => state)
   const {
-    media, date1, date2, veille_diffusion, Filtersupports,
-    Filterfamilles, familles, supports,
+    media, date1, date2, veille_diffusion,Filtersupports,
+    Filterfamilles,
+    familles,
+    supports,
     classes,
     Filterclassesids,
     Filtersecteursids,
@@ -73,9 +78,9 @@ export default function VeillePub() {
   const [loadingStep, setLoadingStep] = useState(0.5)
   const [displayVeilleDate, setDisplayVeilleDate] = useState(false)
   const [loadingLineDisplay, setLoadingLineDisplay] = useState(false)
+
   document.title = 'veille publicitaire'
-  console.log("displayveilledata", displayVeilleDate)
-  console.log("display", veilletvData)
+
   useEffect(() => {
     // console.log("media", media)
     setPdata([])
@@ -91,7 +96,7 @@ export default function VeillePub() {
       setMediaUrl("/veille_radio")
     } else if (media == "presse") {
       setDisable(false)
-      setMediaUrl("")
+      setMediaUrl("image_veille")
     }
 
   }, [media, veille_diffusion, date1, date2])
@@ -150,14 +155,14 @@ export default function VeillePub() {
           const searchLower = searchTerm.toLowerCase();
           // Filter items that match the search term in any relevant field
           return (
-            e.Insertion_Product_Name?.toLowerCase().includes(searchLower) ||
-            e.Insertion_Pub_Id?.toString().includes(searchLower) ||
-            e.Insertion_Famille_Name?.toLowerCase().includes(searchLower) ||
-            e.Insertion_Brand_Name?.toLowerCase().includes(searchLower) ||
-            e.Insertion_Secteur_Name?.toLowerCase().includes(searchLower) ||
-            e.Insertion_Classe_Name?.toLowerCase().includes(searchLower) ||
-            e.Insertion_Variete_Name?.toLowerCase().includes(searchLower) ||
-            e.Insertion_Supports?.toLowerCase().includes(searchLower) ||
+            e.Produit_Lib?.toLowerCase().includes(searchLower) ||
+            e.Message_Id?.toString().includes(searchLower) ||
+            e.Famille_Lib?.toLowerCase().includes(searchLower) ||
+            e.Marque_Lib?.toLowerCase().includes(searchLower) ||
+            e.Support_Lib?.toLowerCase().includes(searchLower) ||
+            e.Classe_Lib?.toLowerCase().includes(searchLower) ||
+            e.Variété_Lib?.toLowerCase().includes(searchLower) ||
+            e.Annonceur_Lib?.toLowerCase().includes(searchLower) ||
             e.Insertion_Advertiser_Name?.toLowerCase().includes(searchLower)
           );
         }
@@ -177,7 +182,7 @@ export default function VeillePub() {
   }, [veilletvData, searchTerm, sortOption, page]);
 
   const handlePageChange = (event, value) => {
-    console.log("page value", value)
+    //console.log("page value", value)
     setPage(value);
     setPdata(pdata);
   };
@@ -187,49 +192,16 @@ export default function VeillePub() {
     //setPdata([]);
     const startTime = new Date().getTime();
     setWelcomVeille(true)
-    // getveilletvData && getveilletvData(
-    //   date1,
-    //   date2,
-    //   veille_diffusion,
-    //   media,
-    //   typeVeille,
-    //   Filterfamilles,
-    //   familles,
-    //   Filtersupports, supports,
-    //   classes,
-    //   Filterclassesids,
-    //   Filtersecteursids,
-    //   secteurs,
-    //   Filtervarietiesids,
-    //   varieties,
-    //   Filterannonceursids,
-    //   annonceurs,
-    //   Filtermarquesids,
-    //   marques,
-    //   Filterproduitsids,
-    //   produits,)
-
-    getveilletvData_encours && getveilletvData_encours(
+    getveilletvData && getveilletvData(
       email,
       date1,
       date2,
       media,
-      typeVeille,
+      veille_diffusion,
       Filterfamilles,
-      familles,
-      Filtersupports, supports,
-      classes,
-      Filterclassesids,
-      Filtersecteursids,
-      secteurs,
-      Filtervarietiesids,
-      varieties,
       Filterannonceursids,
-      annonceurs,
       Filtermarquesids,
-      marques,
       Filterproduitsids,
-      produits,
     )
     //it is not working
     setTimeout(() => {
@@ -347,7 +319,7 @@ export default function VeillePub() {
     marques,
     Filterproduitsids,
     produits])
-    const [resStyle, setResStyle] = useState({
+  const [resStyle, setResStyle] = useState({
     wrapDiv: 'nowrap',
     marginTopAll: '4%',
     widthRightbtns: '',
@@ -390,6 +362,17 @@ export default function VeillePub() {
       setDisplayVeilleDate(false)
     }
   }, [veilletvData])
+
+  const HandelgetVeilleCount = () => {
+    getVeilleCount && getVeilleCount(
+      media, date1, date2,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      Filterfamilles,
+    )
+  }
+
   if (!(autoriseVeillePresse || autoriseVeilleRadio || autoriseVeilleTv)) {
     return (
       <Container
@@ -507,52 +490,16 @@ export default function VeillePub() {
               }}>
               Recherche avancée
             </Button>
-           
- <Button
-              onClick={handeOpenSideBar}
-              disabled={!media}
-              sx={{
-                textTransform: "none",
-                width: "100%",
-                textTransform: "none",
-                backgroundColor: '#00a6e0',
-                textTransform: "none",
-                width: "fit-content",
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#00a6e0',
-                }
-              }}>
-              Recherche avancée
-            </Button>
             {/* <AnchorTemporaryDrawer getData={getData} /> */}
           </div>
-
-          <Button
-              onClick={getData}
-              
-              sx={{
-                textTransform: "none",
-                width: "100%",
-                textTransform: "none",
-                backgroundColor: '#00a6e0',
-                textTransform: "none",
-                width: "fit-content",
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#00a6e0',
-                }
-              }}>
-              TEST
-            </Button>
         </div>
         <div onClick={() => handeToggleSideBar()}>
           {welcomVeille ? (
             <div style={{ marginBottom: "10%" }}>
               {showdataloading ? (
-                <div style={{width:"100%"}}>
-                  {loadingLineDisplay && <LoadingLineIndicator 
-                  step={loadingStep} totalDuration={fetchDataTime} />}
+                <div style={{ width: "100%" }}>
+                  {loadingLineDisplay && <LoadingLineIndicator
+                    step={loadingStep} totalDuration={fetchDataTime} />}
                   {(displayVeilleDate && !loadingLineDisplay) && (
                     // <Toolbar sx={{
                     //   background: "#f8f9fa",
@@ -660,57 +607,42 @@ export default function VeillePub() {
                   )}
                   {(displayVeilleDate && !loadingLineDisplay) && (
                     <div className="veilledata tootbal-element"
-                    style={{width:"100%",display:"flex",
-                       justifyContent:"center", 
-                      flexDirection:"column"
-                     
-                    }}
-                     >
-                      {/* {pdata?.map((e) => (<MediaControlCard
-                        key={veilletvData.indexOf(e)}
-                        diffusion_first={e.Insertion_Premiere}
-                        creation={`${PORT}/${e.Insertion_Image}`}
-                        product={e.Insertion_Product_Name}
-                        id_message={e.Insertion_Pub_Id}
-                        message={e.Insertion_Pub_Name}
-                        format={e.Insertion_Format}
-                        version={e.Insertion_Version}
-                        fichier={`${PORT}${mediaUrl}/${e.Insertion_Fichier}`}
-                        famille={e.Insertion_Famille_Name}
-                        classe={e.Insertion_Classe_Name}
-                        secteur={e.Insertion_Secteur_Name}
-                        marque={e.Insertion_Brand_Name}
-                        support={e.Insertion_Supports}
-                        produit={e.Insertion_Product_Name}
-                        variete={e.Insertion_Variete_Name}
-                        annonceur={e.Insertion_Advertiser_Name}
-                        id={media === "presse" ? e.Insertion_Id : e.Insertion_Fichier}
-                      />)) */}
+                      style={{
+                        width: "100%", display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column"
+
+                      }}
+                    >
+            
                       <div className="advertisment_wrap" style={{
                         display: "flex", flexWrap: "wrap",
-                        justifyContent:"space-between" , 
-                        marginTop:"20px"                      
+                        justifyContent: "space-between",
+                        marginTop: "20px"
                       }}>
+                       
                         {pdata?.map((e) => (<AdvertisementCard
                           key={veilletvData.indexOf(e)}
-                          diffusion_first={e.Insertion_Premiere}
-                          creation={`${PORT}/${e.Insertion_Image}`}
-                          product={e.Insertion_Product_Name}
-                          id_message={e.Insertion_Pub_Id}
-                          message={e.Insertion_Pub_Name}
-                          format={e.Insertion_Format}
-                          version={e.Insertion_Version}
-                          fichier={`${PORT}${mediaUrl}/${e.Insertion_Fichier}`}
-                          famille={e.Insertion_Famille_Name}
-                          classe={e.Insertion_Classe_Name}
-                          secteur={e.Insertion_Secteur_Name}
-                          marque={e.Insertion_Brand_Name}
-                          support={e.Insertion_Supports}
-                          produit={e.Insertion_Product_Name}
-                          variete={e.Insertion_Variete_Name}
-                          annonceur={e.Insertion_Advertiser_Name}
-                          id={media === "presse" ? e.Insertion_Id : e.Insertion_Fichier}
-                          
+                          diffusion_first={e.Veille_Date}
+                          Veille_Date_All={e.Veille_Date_All}
+                          //creation={`${PORT}/${mediaUrl}/${e.Veille_Creation}`}
+                          creation = {media === "presse" ? presse_mini : media === "radio" ? radio_mini : tv_mini}
+                          product={e.Produit_Lib}
+                          id_message={e.Message_Id}
+                          message={e.Message_Lib}
+                          format={e.Format}
+                          version={e.Version}
+                          fichier={`${PORT}${mediaUrl}/${e.Veille_Creation}`}
+                          famille={e.Famille_Lib}
+                          classe={e.Classe_Lib}
+                          secteur={e.Secteur_Lib}
+                          marque={e.Marque_Lib}
+                          support={e.Support_Lib}
+                          produit={e.Produit_Lib}
+                          variete={e.Variété_Lib}
+                          annonceur={e.Annonceur_Lib}
+                          id={media === "presse" ? e.Insertion : e.Insertion}
+
 
                         />))
                         }

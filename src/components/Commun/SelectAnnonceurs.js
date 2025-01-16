@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore } from '../../store/dashboardStore/FiltersStore';
 import { Autocomplete } from '@mui/material';
 import { TextField } from '@mui/material';
-
+import "./commun.css"
 
 export default function MultipleSelectAnnonceurs() {
   const { Filterannonceurs, marques, produits, setFilterannonceur, Filterannonceursids ,annonceurs} = UseFiltersStore((state) => state);
@@ -73,6 +73,7 @@ export default function MultipleSelectAnnonceurs() {
         aucun annonceur n'est sélectionné
       </Alert>} */}
       <Autocomplete
+      sx={{height:"40px"}}
         multiple
         freeSolo
         options={filteredElems}

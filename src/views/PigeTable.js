@@ -610,7 +610,7 @@ export default function DataTablePige() {
                 isloading={loadingFilters}
                 isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
                 //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
-                disablebtn={!media && !date1 && !date2}
+                disablebtn={!media}
                 title="Recherche avancée"
               />
 

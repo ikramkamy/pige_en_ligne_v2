@@ -73,6 +73,7 @@ console.log("isAllSelected",selectedItems)
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
 
       <Autocomplete
+      sx={{height:"40px"}}
         multiple
         freeSolo
         options={filteredElems}

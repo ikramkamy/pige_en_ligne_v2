@@ -1,14 +1,9 @@
 *{
-
 font-family: "Figtree", serif !important;
 font-optical-sizing: auto;
 font-weight: 300;
 font-style: normal;
-
 }
-
-
-
 .hide{
     display:hidden;
 }
@@ -102,7 +97,7 @@ font-style: normal;
 }
 
 #pickInput {
-  height: 50px !important;
+  height: 40px !important;
   border-radius: 5px;
   border: 2px solid transparent !important;
 }
@@ -141,7 +136,11 @@ margin-bottom: 3px !important;
   
   margin-bottom: 3px !important;
 }
-
+.css-rsitm6-MuiAutocomplete-root .MuiOutlinedInput-root {
+ 
+  padding: 0px !important;
+  
+}
 @media (max-width: 600px) {
   #pickInput {
     font-size: 14px; /* Adjust font size for smaller screens */

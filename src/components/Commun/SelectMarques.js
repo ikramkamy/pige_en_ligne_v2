@@ -8,7 +8,7 @@ import { UseFiltersStore } from '../../store/dashboardStore/FiltersStore';
 import { Autocomplete } from '@mui/material';
 import { TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
-
+import "./commun.css";
 export default function MultipleSelectMarques() {
   const { Filtermarques, annonceurs, produits,
      setFiltermarque, Filtermarquesids } = UseFiltersStore((state) => state);
@@ -64,6 +64,7 @@ export default function MultipleSelectMarques() {
         aucune marque n'est sélectionnée
       </Alert>} */}
       <Autocomplete
+      sx={{height:"40px"}}
         multiple
         freeSolo
         options={filteredElems}

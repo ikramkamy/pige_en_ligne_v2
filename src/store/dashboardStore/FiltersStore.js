@@ -41,9 +41,6 @@ export const UseFiltersStore = create((set, get) => ({
   // usePrevilegesVarietes:[],
   // usePrevilegesAnnonceurs:[],
   // usePrevilegesMarques:[],
-
-
-
   rang: [],
   base: '',
   rangs: [],
@@ -53,8 +50,8 @@ export const UseFiltersStore = create((set, get) => ({
   date2: "",
 
   SideBarFilterPosition: "-100%",
-  //veille_diffusion:"",
-  veille_diffusion: "premiere",
+ 
+  veille_diffusion: "first",
   pageSize: 50,
   setPageSize: (size) => {
     set({ pageSize: size })
@@ -184,7 +181,7 @@ export const UseFiltersStore = create((set, get) => ({
       //console.log("response filters",response,`${PORT}/${media}/filters`,email,date1,date2)
         set({
           supports: response.data.supports,
-          Filtersupports: response.data.supports,
+          Filtersupports: response.data.supports.map((e)=>e.Support_Id),
           familles: response.data.familles,
           Filterfamilles: response.data.familles.map((e)=>e.Famille_Id),
 

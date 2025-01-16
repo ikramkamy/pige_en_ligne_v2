@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore } from '../../store/dashboardStore/FiltersStore';
 import { Autocomplete } from '@mui/material';
 import { TextField } from '@mui/material';
-
+import "./commun.css"
 export default function MultipleSelectSecteurs() {
   const { secteurs, Filtersecteurs, setFiltersecteur, varieties,
      produits, marques, annonceurs, Filtersecteursids } = UseFiltersStore((state) => state);
@@ -46,7 +46,7 @@ export default function MultipleSelectSecteurs() {
     setInputValue(newInputValue);
   };
   console.log('filteredElems',filteredElems)
-  const isAllSelected = selectedItems.length === filteredElems.length;
+  const isAllSelected = previousSelection.length === filteredElems.length;
 
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
@@ -65,6 +65,7 @@ export default function MultipleSelectSecteurs() {
         </Alert>
       } */}
       <Autocomplete
+      sx={{height:"40px"}}
         multiple
         freeSolo
         options={filteredElems}

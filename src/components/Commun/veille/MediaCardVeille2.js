@@ -6,12 +6,15 @@ import { makeStyles } from '@mui/styles';
 import '../commun.css';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import BaseDialog from './DetailsCard';
-
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+const PORT = "https://immar-media.com";
 const AdvertisementCard = ({
     diffusion_first, creation, product, id_message, details, format, fichier,
     famille, classe, secteur, produit, marque, version, support, variete, annonceur,
     message, id,
-    date
+    date,
+    Veille_Date,
+    Veille_Date_All
 
 }) => {
     const { media } = UseFiltersStore((state) => state)
@@ -60,7 +63,9 @@ const AdvertisementCard = ({
     const handleClose = () => {
         setOpen(false);
     };
-
+    const handleOpenPdf = () => {
+        window.open(`${PORT}/pdf/article/pdf_veille.php?id=${id}`, '_blank');
+      };
     return (
         <>
             <Card className={classes.card}
@@ -100,7 +105,8 @@ const AdvertisementCard = ({
                         </Button>
                         <BaseDialog
                             fichier={fichier}
-                            date={date}
+                            date={diffusion_first}
+                            dateVeille={Veille_Date}
                             famille={famille}
                             classe={classe}
                             secteur={secteur}
@@ -114,18 +120,7 @@ const AdvertisementCard = ({
                             version={version}
                             id={id}
                         />
-                        {/* <Button
-                            variant="outlined"
-                            sx={{
-                                backgroundColor: "lightgrey", color: "black",
-                                border: "none"
-                            }}
 
-                            startIcon={<Info />}
-                            className={classes.button}
-                        >
-                            Détails
-                        </Button> */}
                     </div>
                     <div style={{
                         width: "100%", height: "1px",
@@ -139,7 +134,7 @@ const AdvertisementCard = ({
                         color="textSecondary">1ère dif. : {diffusion_first}</Typography>
                 </CardContent>
             </Card>
-
+        
             <Modal open={open} onClose={handleClose}>
                 <div className={classes.modalContent}>
 

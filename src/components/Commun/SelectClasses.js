@@ -64,6 +64,7 @@ const filteredClasses = Filterclasses.filter((item) =>
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
 
       <Autocomplete
+      sx={{height:"40px"}}
         multiple
         freeSolo
         options={filteredClasses}
