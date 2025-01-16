@@ -45,8 +45,8 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
     const { getDataMedia } = UseMediaDashboardStore((state) => state);
     const { filterVeilledata, veilletvData } = UseVeilleStore((state) => state);
     const [sideShow, setSideShow] = React.useState(false)
-    const {email}=UseLoginStore((state)=>state)
- const {
+    const { email } = UseLoginStore((state) => state)
+    const {
 
         Filtersupports,
         supports,
@@ -71,7 +71,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
         setLoadingshow,
         SideBarFilterPosition,
         ManageSideBarfilterDisplay,
-       
+
 
     } = UseFiltersStore((state) => state);
     //console.log('familles',Filterclassesids,familles)
@@ -88,7 +88,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
     const [disableTimer, setDisableTimer] = React.useState(false)
     const [loadingbtn, setLoadingbtn] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
-   const user_id=window.localStorage.getItem('user_id')
+    const user_id = window.localStorage.getItem('user_id')
     React.useEffect(() => {
         setLoadingbtn(isloading);
         setSuccess(isSucces);
@@ -147,7 +147,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
 
                 case "/admin/veille":
                     console.log('type calling filtering', typeVeille)
-                    
+
                     break;
 
             }
@@ -228,27 +228,27 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
     }
     const [width, setWidth] = React.useState(window.innerWidth < 768 ? '350px' : '550px');
     React.useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth < 768 ? '350px' : '650px');
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-    console.log("produits are readdy",Filterproduitsids.length)
+        const handleResize = () => {
+            setWidth(window.innerWidth < 768 ? '350px' : '650px');
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+    console.log("produits are readdy", Filterproduitsids.length)
     return (
         <div className="Side_Translate_X"
 
             style={{
                 position: 'fixed',
                 borderRadius: "10px",
-             
+
                 zIndex: "1000",
                 top: 0,
                 right: SideBarFilterPosition,
-            
-               width: width,
+
+                width: width,
                 height: '100%',
                 backgroundColor: 'white',
                 transition: 'right 0.3s ease',
@@ -256,40 +256,49 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
             }}
         >
             {!Filterproduitsids && (<div>Recherche des filtres...</div>)}
-            {Filterproduitsids && ( <Box
-
-role="presentation"
->
-
+            {Filterproduitsids && (<Box
+               role="presentation"
+            >
 
 
 
 
-<List style={{overflowX:"hidden"}}>      
-    <Row style={{ justifyContent: "center", padding: "20px" }} >
-        <Col style={{ width: "30%" }}>
-       
-        {showVeilleFilters && (<TypePub />)}
-        {showRang && (<MultipleSelectSupports /> )}
-            <MultipleSelectFamilles />
-            <MultipleSelectClasses />
-            <MultipleSelectSecteurs />
-        </Col>
-        <Col style={{ width: "30%" }}>
-        {showVeilleFilters && (<div style={{visibility:"hidden"}}><TypePub  /></div>)}
-            {/* <MultipleSelectVarietiesWindow/> */}
-            <MultipleSelectVarieties />
-            <MultipleSelectAnnoneurs />
-            <MultipleSelectMarques />
-            <MultipleSelectProducts />
-        </Col>
-    </Row>
-    <Row style={{ justifyContent: "center",
-          width:"50%", paddingLeft:"50px",
-          paddingRight:"50px"}}> 
-        
-    <Col style={{ width: "30%" }}>
-        {/* {showRang && (
+
+                <List style={{ overflowX: "hidden" }}>
+                    <Row style={{ justifyContent: "center", padding: "20px" }}>
+                        <Col style={{ width: "30%" }}>
+                            {showVeilleFilters && (<TypePub />)}
+                        </Col>
+                    </Row>
+                    <Row style={{ justifyContent: "center", padding: "20px" }} >
+
+                        <Col style={{ width: "30%" }}>
+
+
+                            {showRang && (<MultipleSelectSupports />)}
+                            <MultipleSelectFamilles />
+                            <MultipleSelectClasses />
+                            <MultipleSelectSecteurs />
+
+                        </Col>
+                        <Col style={{ width: "30%" }}>
+
+                            {/* {showVeilleFilters && (<div style={{visibility:"hidden"}}><TypePub  /></div>)} */}
+                            {/* <MultipleSelectVarietiesWindow/> */}
+                            <MultipleSelectVarieties />
+                            <MultipleSelectAnnoneurs />
+                            <MultipleSelectMarques />
+                            <MultipleSelectProducts />
+                        </Col>
+                    </Row>
+                    <Row style={{
+                        justifyContent: "center",
+                        width: "50%", paddingLeft: "50px",
+                        paddingRight: "50px"
+                    }}>
+
+                        <Col style={{ width: "30%" }}>
+                            {/* {showRang && (
           
                 // <MultipleSelectRangs />
            )
@@ -298,36 +307,38 @@ role="presentation"
                 //    <MultipleSelectBase />                           
         )
         } */}
-        </Col>
-        
-</Row>
+                        </Col>
 
-    
-    <Row className="">
-        <Col className="col-12 d-flex justify-content-center align-items-center">
-            <LoadingButtonData
-                getData={getData}
-                disabled={!media}
-                isloading={isloading}
-                isSucces={isSucces}
-                disablebtn={!media && !base}
-                title="Afficher"
-            />
-            <Button
-                sx={{ textTransform: "none", width: "fit-content", backgroundColor:"#00a6e0",
-
-                    '&:hover': {
-                backgroundColor: '#00a6e0',}
-                 }}
-                variant="contained"
-                color="primary"
-                onClick={handeCloseSideBar} >
-                Fermer
-            </Button>
+                    </Row>
 
 
+                    <Row className="">
+                        <Col className="col-12 d-flex justify-content-center align-items-center">
+                            <LoadingButtonData
+                                getData={getData}
+                                disabled={!media}
+                                isloading={isloading}
+                                isSucces={isSucces}
+                                disablebtn={!media && !base}
+                                title="Afficher"
+                            />
+                            <Button
+                                sx={{
+                                    textTransform: "none", width: "fit-content", backgroundColor: "#00a6e0",
 
-            {/* <div style={{
+                                    '&:hover': {
+                                        backgroundColor: '#00a6e0',
+                                    }
+                                }}
+                                variant="contained"
+                                color="primary"
+                                onClick={handeCloseSideBar} >
+                                Fermer
+                            </Button>
+
+
+
+                            {/* <div style={{
                 visibility: 'hidden', position: 'absolute',
                 top: 0, left: 0, width: 0, height: 0, display: "none"
             }}>
@@ -340,11 +351,11 @@ role="presentation"
                 </div>
                 <DataTablePress />
             </div> */}
-        </Col>
-    </Row>
-</List>
-                 </Box>)}
-           
+                        </Col>
+                    </Row>
+                </List>
+            </Box>)}
+
         </div>
     );
 }

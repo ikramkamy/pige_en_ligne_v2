@@ -59,6 +59,7 @@ export default function TypePub() {
         <ListItemText primary="type" />
         </InputLabel>
         <Select
+         sx={{height:"40px"}}
           labelId="demo-multiple-checkbox-label"
           value={selectedtypeveille}
           onChange={handleChange}
