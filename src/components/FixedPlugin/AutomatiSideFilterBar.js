@@ -125,21 +125,6 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
 
     }, [media])
 
-    // React.useEffect(() => {
-    //     getFilters && getFilters(
-    //         media,
-    //         user_id,
-    //         usePrevilegesSupport_radio,
-    //         usePrevilegeschainetv,
-    //         usePrevilegesFamilles,
-    //         usePrevilegesClasse,
-    //         usePrevilegesSecteur,
-    //         usePrevilegesVarietes,
-    //         usePrevilegesProduit,
-    //         usePrevilegesAnnonceurs,
-    //         usePrevilegesMarques,)
-    // }, [media, date1, date2])
-
 
     //I do not use it instead I'm passing functions as props
     const getDataLocationDepend = async () => {
@@ -241,7 +226,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
         console.log("closing", SideBarFilterPosition)
         ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("-100%")
     }
-    const [width, setWidth] = React.useState(window.innerWidth < 768 ? '350px' : '650px');
+    const [width, setWidth] = React.useState(window.innerWidth < 768 ? '350px' : '550px');
     React.useEffect(() => {
     const handleResize = () => {
       setWidth(window.innerWidth < 768 ? '350px' : '650px');
@@ -267,7 +252,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
                 height: '100%',
                 backgroundColor: 'white',
                 transition: 'right 0.3s ease',
-                overflowY: "scroll"
+                overflowY: "hidden"
             }}
         >
             {!Filterproduitsids && (<div>Recherche des filtres...</div>)}
@@ -276,32 +261,12 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
 role="presentation"
 >
 
-{/* 
-<Row style={{ justifyContent: "center", padding: "50px" }}>
-    {showRang && (
-        <Col style={{ width: "30%" }}>
-            <MultipleSelectRangs />
-        </Col>)
-    }
-    {showBase && (
-        <Col style={{ width: "30%" }}>
-            <MultipleSelectBase />
-        </Col>
-    )
-    }</Row> */}
 
 
-{/* {showVeilleFilters && (
-    <Row>
-        <Col style={{ width: "30%" }}>
-            <TypePub />
-        </Col>
-    </Row>
-)} */}
 
 
-<List >      
-    <Row style={{ justifyContent: "center", padding: "50px" }} >
+<List style={{overflowX:"hidden"}}>      
+    <Row style={{ justifyContent: "center", padding: "20px" }} >
         <Col style={{ width: "30%" }}>
        
         {showVeilleFilters && (<TypePub />)}
@@ -338,10 +303,9 @@ role="presentation"
 </Row>
 
     
-    <Row className="mt-10">
-        <Col className="col-12 d-flex justify-content-center align-items-center mt-5">
+    <Row className="">
+        <Col className="col-12 d-flex justify-content-center align-items-center">
             <LoadingButtonData
-
                 getData={getData}
                 disabled={!media}
                 isloading={isloading}
@@ -353,8 +317,7 @@ role="presentation"
                 sx={{ textTransform: "none", width: "fit-content", backgroundColor:"#00a6e0",
 
                     '&:hover': {
-          backgroundColor: '#00a6e0',
-        }
+                backgroundColor: '#00a6e0',}
                  }}
                 variant="contained"
                 color="primary"

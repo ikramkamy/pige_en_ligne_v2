@@ -70,16 +70,15 @@ export default function MultipleSelectVarieties() {
 
   return (
     <FormControl sx={{ m: 1, width: "100%", }} >
-      <div 
-      //onClick={handelopenPopup}
-      >
+    
+    
+    
         {/* Custom Select All option */}
-        <div style={{ marginTop: 10}}>
           <MenuItem onClick={handleSelectAll}>
             <Checkbox checked={isAllSelected} />
             <ListItemText primary="variétés" />
           </MenuItem>
-        </div>
+       
         <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
 
 
@@ -111,8 +110,6 @@ export default function MultipleSelectVarieties() {
             renderTags={(value, getTagProps) => null}
             disableCloseOnSelect
           /> 
-
-      </div>
       {showloadingPopup && (<div>Loading...</div>)}
       <SearchPopupVarieties openSeachVarities={openSeachVarities}
         handleCloseSearchVarieties={handleCloseSearchVarieties}

@@ -33,8 +33,8 @@ export default function MultipleSelectProducts() {
    
   }
   useEffect(() => {
-    setPreviousSelection(Filterproduitsids.slice(0,50));
-    console.log("Filterproduitsids.slice(0,50)",Filterproduitsids.slice(0,50))
+    setPreviousSelection(Filterproduitsids);
+    console.log("Filterproduitsids.slice(0,50)",Filterproduitsids)
   }, [Filterproduitsids]);
 
   const handleSelectAll = () => {
@@ -73,7 +73,7 @@ export default function MultipleSelectProducts() {
     return item.Produit_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   }) 
   const isAllSelected = previousSelection.length === Filterproduits.length;
-  
+  console.log("isAllSelected",isAllSelected,previousSelection,Filterproduits)
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
       {/* Custom Select All option */}

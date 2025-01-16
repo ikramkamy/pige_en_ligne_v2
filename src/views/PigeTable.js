@@ -453,13 +453,22 @@ export default function DataTablePige() {
   }, [filteredData2, increment])
 
   const [loadingFilters, setLoadingFilters] = React.useState(false)
+  const[fetchFilter,setFetchFilter]=React.useState(false)
+  React.useEffect(()=>{
+  
+    setFetchFilter(true)
+
+  },[media,date1,date2])
   const HandelSideBarPisition = async () => {
+  if(fetchFilter===true){
+    console.log("calling filters",fetchFilter)
+    getFilters && getFilters(email, media, date1, date2)
+    setFetchFilter(false)
+  }else{
+    //do nothing
+    console.log("dispalay only",fetchFilter)
+  }
     setLoadingFilters(true)
-    try {
-      await getFilters && getFilters(email, media, date1, date2)
-    } catch (error) {
-      alert("Filtres introuvables")
-    }
     console.log('filtres trouvé')
     setPopupDataLageData(false)
     setLoadingFilters(false)
@@ -515,7 +524,7 @@ export default function DataTablePige() {
     };
   }, []);
 
-  console.log('is loadind', !showDataGrid && showDataGridIfNotEmpty)
+  // console.log('is loadind', !showDataGrid && showDataGridIfNotEmpty)
 
   if (!(autorisePigePresse || autorisePigeRadio || autorisePigeTv)) {
     return (

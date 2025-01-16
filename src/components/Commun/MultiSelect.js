@@ -64,7 +64,7 @@ console.log("isAllSelected",selectedItems)
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
       {/* Custom Select All option */}
-      <div style={{ marginTop: 10 }}>
+      <div >
         <MenuItem onClick={(event) => handleSelectAll(event)}>
           <Checkbox checked={isAllSelected}/>
           <ListItemText primary="familles" />
