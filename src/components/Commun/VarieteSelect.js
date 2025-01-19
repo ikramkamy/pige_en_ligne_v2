@@ -96,7 +96,7 @@ export default function MultipleSelectVarieties() {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label={`Variétés (${previousSelection.length})`} 
+                label={`variétés (${previousSelection.length})`} 
                 // Display the count of selected items
                 variant="outlined"
               />

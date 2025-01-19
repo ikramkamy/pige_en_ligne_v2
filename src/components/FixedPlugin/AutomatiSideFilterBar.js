@@ -1,9 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import MultipleSelectFamilles from "../Commun/MultiSelect";
 import MultipleSelectClasses from "../Commun/SelectClasses";
 import MultipleSelectSecteurs from "../Commun/SelectSecteurs";
@@ -12,34 +9,22 @@ import MultipleSelectSupports from "../Commun/SupportSelect";
 import MultipleSelectVarieties from "../Commun/VarieteSelect";
 import MultipleSelectAnnoneurs from "../Commun/SelectAnnonceurs";
 import MultipleSelectMarques from "../Commun/SelectMarques";
-import MultipleSelectRangs from "../Commun/RangSelect";
-import MultipleSelectBase from "../Commun/BaseSelect";
 import Button from "@mui/material/Button";
 import { Row, Col } from "react-bootstrap";
-import GridDemo from 'components/Commun/charts/TOP20Charts';
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
-import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import logoImmar from "assets/images.png";
-import DataTablePress from "../../views/PigeTable";
 import { useLocation } from 'react-router-dom';
 import TypePub from 'components/Commun/TypePub';
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
-import BtnRechercheAvanace from 'components/Commun/BtnRechrcheAvance';
-import { CircularProgress } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import './sidebar.css';
-import MultipleSelectVarietiesWindow from 'components/Commun/WindowSelectVarieties';
-import SearchPopupVarieties from 'components/Commun/SearchPopupVarities';
 const AutomaticSideFilterBar = ({ getData, DashboardData,
     //props for loading button,
     isloading,
     isSucces,
-    disablebtn,
 }) => {
     const exportRef = React.useRef(null);
     const { getDataMedia } = UseMediaDashboardStore((state) => state);
@@ -236,18 +221,15 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    console.log("produits are readdy", Filterproduitsids.length)
+
     return (
         <div className="Side_Translate_X"
-
             style={{
                 position: 'fixed',
                 borderRadius: "10px",
-
                 zIndex: "1000",
                 top: 0,
                 right: SideBarFilterPosition,
-
                 width: width,
                 height: '100%',
                 backgroundColor: 'white',
@@ -257,105 +239,65 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
         >
             {!Filterproduitsids && (<div>Recherche des filtres...</div>)}
             {Filterproduitsids && (<Box
-               role="presentation"
+                role="presentation"
             >
-
-
-
-
-
                 <List style={{ overflowX: "hidden" }}>
-                    <Row style={{ justifyContent: "center", padding: "20px" }}>
-                        <Col style={{ width: "30%" }}>
-                            {showVeilleFilters && (<TypePub />)}
-                        </Col>
-                    </Row>
+
                     <Row style={{ justifyContent: "center", padding: "20px" }} >
-
                         <Col style={{ width: "30%" }}>
-
-
-                            {showRang && (<MultipleSelectSupports />)}
+                            {(showRang && !showVeilleFilters) && (<MultipleSelectSupports />)}
+                            {showVeilleFilters && (<TypePub />)}
                             <MultipleSelectFamilles />
-                            <MultipleSelectClasses />
-                            <MultipleSelectSecteurs />
+                            <MultipleSelectAnnoneurs />
+                            {!showVeilleFilters && <MultipleSelectClasses />}
+                            {!showVeilleFilters && <MultipleSelectSecteurs />}
 
                         </Col>
                         <Col style={{ width: "30%" }}>
-
-                            {/* {showVeilleFilters && (<div style={{visibility:"hidden"}}><TypePub  /></div>)} */}
+                            {/* {showVeilleFilters && (<div style={{visibility:"hidden"}}><TypePub/></div>)} */}
                             {/* <MultipleSelectVarietiesWindow/> */}
-                            <MultipleSelectVarieties />
+                            {!showVeilleFilters && <MultipleSelectVarieties />}
                             <MultipleSelectAnnoneurs />
                             <MultipleSelectMarques />
                             <MultipleSelectProducts />
                         </Col>
                     </Row>
-                    <Row style={{
-                        justifyContent: "center",
-                        width: "50%", paddingLeft: "50px",
-                        paddingRight: "50px"
-                    }}>
-
-                        <Col style={{ width: "30%" }}>
-                            {/* {showRang && (
-          
-                // <MultipleSelectRangs />
-           )
-       }
-        {showBase && (<div></div>
-                //    <MultipleSelectBase />                           
-        )
-        } */}
-                        </Col>
-
-                    </Row>
 
 
-                    <Row className="">
-                        <Col className="col-12 d-flex justify-content-center align-items-center">
-                            <LoadingButtonData
-                                getData={getData}
-                                disabled={!media}
-                                isloading={isloading}
-                                isSucces={isSucces}
-                                disablebtn={!media && !base}
-                                title="Afficher"
-                            />
-                            <Button
-                                sx={{
-                                    textTransform: "none", width: "fit-content", backgroundColor: "#00a6e0",
-
-                                    '&:hover': {
-                                        backgroundColor: '#00a6e0',
-                                    }
-                                }}
-                                variant="contained"
-                                color="primary"
-                                onClick={handeCloseSideBar} >
-                                Fermer
-                            </Button>
+                    {showVeilleFilters && <div style={{ height: "30vh", width: "100%" }}></div>}
+                    <div
+                        style={{
+                            bottom: "0px", width: "100%",
+                            display: "flex", justifyContent: "center", alignItems: "center"
+                        }}>
 
 
 
-                            {/* <div style={{
-                visibility: 'hidden', position: 'absolute',
-                top: 0, left: 0, width: 0, height: 0, display: "none"
-            }}>
+                        <LoadingButtonData
+                            getData={getData}
+                            disabled={!media}
+                            isloading={isloading}
+                            isSucces={isSucces}
+                            disablebtn={!media && !base}
+                            title="Afficher"
+                        />
+                        <Button
+                            sx={{
+                                textTransform: "none", width: "fit-content",
+                                backgroundColor: "#00a6e0",
+                                '&:hover': {
+                                    backgroundColor: '#00a6e0',
+                                }
+                            }}
+                            variant="contained"
+                            color="primary"
+                            onClick={handeCloseSideBar} >
+                            Fermer
+                        </Button>
 
-
-
-
-                <div ref={exportRef}>
-                    <GridDemo />
-                </div>
-                <DataTablePress />
-            </div> */}
-                        </Col>
-                    </Row>
+                    </div>
                 </List>
             </Box>)}
-
         </div>
     );
 }

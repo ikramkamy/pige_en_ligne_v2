@@ -85,7 +85,7 @@ export default function MultipleSelectAnnonceurs() {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`Annonceurs (${previousSelection.length})`}
+            label={`annonceurs (${previousSelection.length})`}
             variant="outlined"
           />
         )}

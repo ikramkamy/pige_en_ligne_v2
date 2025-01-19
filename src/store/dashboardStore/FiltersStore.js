@@ -32,15 +32,6 @@ export const UseFiltersStore = create((set, get) => ({
   Filterproduits: [],
   Filterproduitsids: [],
 
-  // usePrevilegesSupport_radio:[],
-  // usePrevilegeschainetv:[],
-  // usePrevilegesFamilles:[],
-  // usePrevilegesClasse:[],
-  // usePrevilegesSecteur:[],
-  // usePrevilegesProduit:[],
-  // usePrevilegesVarietes:[],
-  // usePrevilegesAnnonceurs:[],
-  // usePrevilegesMarques:[],
   rang: [],
   base: '',
   rangs: [],
@@ -172,13 +163,12 @@ export const UseFiltersStore = create((set, get) => ({
   date2
   ) => {
     try {   
-      
       let response=await axios.post(`${PORT}/${media}/filters`,{
         email:email,
         date_debut:date1,
         date_fin:date2
       })
-      //console.log("response filters",response,`${PORT}/${media}/filters`,email,date1,date2)
+    console.log("response filters",response,`${PORT}/${media}/filters`,email,date1,date2)
         set({
           supports: response.data.supports,
           Filtersupports: response.data.supports.map((e)=>e.Support_Id),

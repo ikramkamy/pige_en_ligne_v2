@@ -329,12 +329,11 @@ export default function DataTablePige() {
     setPopupData(null);
   };
   const handleClosePopupLargeData = () => {
+    console.log("popupOpenEmailexport",popupOpenEmailexport)
     setPopupOpenEmailexport(true)
     setTimeout(() => {
       setPopupOpenEmailexport(false)
     }, 2000);
-
-    console.log("call large")
     setPopupDataLageData(false)
     sendDownloadLink && sendDownloadLink(Filtersupports, Filterannonceursids, Filterproduitsids, date1, date2, media)
 
@@ -461,7 +460,7 @@ export default function DataTablePige() {
   },[media,date1,date2])
   const HandelSideBarPisition = async () => {
   if(fetchFilter===true){
-    console.log("calling filters",fetchFilter)
+    //console.log("calling filters",fetchFilter)
     getFilters && getFilters(email, media, date1, date2)
     setFetchFilter(false)
   }else{
@@ -526,7 +525,7 @@ export default function DataTablePige() {
 
   // console.log('is loadind', !showDataGrid && showDataGridIfNotEmpty)
 
-  if (!(autorisePigePresse || autorisePigeRadio || autorisePigeTv)) {
+  if ( !(autorisePigePresse || autorisePigeRadio || autorisePigeTv) && client) {
     return (
       <Container
         fluid
@@ -558,6 +557,7 @@ export default function DataTablePige() {
         </Row>
       </Container>)
   }
+
   if (!client) {
     history.push('/login')
   }

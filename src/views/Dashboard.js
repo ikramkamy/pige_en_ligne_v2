@@ -719,7 +719,7 @@ function Dashboard() {
   if (!client) {
     history.push('/login')
   }
-  if (!autoriseDash) {
+  if (!autoriseDash  && client) {
     return (
       <Container
         fluid

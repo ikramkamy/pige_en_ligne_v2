@@ -66,9 +66,7 @@ export default function MultipleSelectSupports() {
           <ListItemText primary="supports" />
         </MenuItem>
       </div>
-      <InputLabel id="demo-multiple-checkbox-label" 
-      >
-      </InputLabel>
+      <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
       <Autocomplete 
       sx={{
           height:"40px"

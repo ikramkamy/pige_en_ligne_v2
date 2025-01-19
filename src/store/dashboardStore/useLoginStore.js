@@ -3,6 +3,7 @@ import { create } from 'zustand'
 //const PORT = "https://immar-media.com";
 const PORT = "https://pige-dev.immar-media.com/api/index.php"
 import { jwtDecode } from 'jwt-decode';
+//import jwt from 'jsonwebtoken';
 
 export const UseLoginStore = create((set, get) => ({
   utilisateur_id: "",
@@ -136,7 +137,7 @@ export const UseLoginStore = create((set, get) => ({
 
     }
   },
-  ReinitiolizePassword: async (email) => {
+  SendResePasswordLink: async (email) => {
     console.log('email before', email)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     emailRegex.test(email);
@@ -160,36 +161,10 @@ export const UseLoginStore = create((set, get) => ({
         showAlert4: false,
       })
       try {
-        let response = await axios.post(`${PORT}/login`, {
-          reenitialiserMotDepasse: "Resetpasseword",
+        let response = await axios.post(`${PORT}/forgot`, {        
           email: email,
         });
-
-        if (response && response.data.message == "compte existe") {
-          set({
-            showAlert3: true,
-            showAlert4: false,
-          })
-
-          const encodedEmail = btoa(email);
-          console.log('encoded email', encodedEmail)
-
-          // console.log('decoded email',decodedEmail)
-
-          const linkToReset = `${PORT}/#/login/reinitialiser/${encodedEmail}`
-          let response2 = await axios.post(`${PORT}/reset`, {
-            reenitialiserMotDepasse: "reset",
-            linkToReset: linkToReset,
-            email: email,
-          });
-          console.log("response2", response2)
-        } else if (response.data.message == "compte n'existe pas") {
-          set({ messageAlertResetPasswrod: response.data.message })
-          set({
-            showAlert3: false,
-            showAlert4: true,
-          })
-        }
+        console.log("response",response)
       } catch (error) {
 
       }
@@ -197,20 +172,26 @@ export const UseLoginStore = create((set, get) => ({
   },
   UpdatePasseword: async (pass, emailToken) => {
     console.log("token", emailToken)
-    try {
-      const decodedEmail = atob(emailToken);
-      let response = await axios.post(`${PORT}/login.php`, {
-        updatespassword: "updatepassword",
-        email: decodedEmail,
-        password: pass,
 
+  //   try {
+  //     const verified = jwt.verify(emailToken, secret);
+  //     console.log('Verified JWT:', verified);
+  // } catch (error) {
+  //     console.error('Token verification failed:', error.message);
+  // }
+    try {    
+      var decodedEmail = jwtDecode(emailToken)
+      console.log('decoded email',decodedEmail)
+      let response = await axios.post(`${PORT}/reset`,{
+        email: decodedEmail.user_id,
+        password: pass,
       })
-      console.log("response pass udated", response)
+      //console.log("response pass udated", response)
       set({
         isloading: false,
         // isSucces:true,
       })
-      if (response.data.message == 'Mot de passe changé avec succès') {
+      if (response.data.message == 'Mot de passe réinitialisé avec succès.') {
         set({
           //isloading:false,
           isSucces: true,
@@ -223,7 +204,6 @@ export const UseLoginStore = create((set, get) => ({
       } else {
         window.location.href = '/#/login/motdepasseoublier';
       }
-
     } catch (error) {
       window.location.href = '/#/login/motdepasseoublier';
     }

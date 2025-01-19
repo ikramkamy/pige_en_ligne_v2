@@ -28,7 +28,7 @@ export default function TypePub() {
   const { setTypeVeilleValue,getFilters,ResetAllFilters}=UseFiltersStore((state)=>state)
   const {ResetDataArrays}=UsePigeDashboardStore((state)=>state)
   
-  const [selectedtypeveille, setSelectedtypeveille]=useState('')
+  const [selectedtypeveille, setSelectedtypeveille]=useState('Tous')
   const [mediaList, setMediaList]=useState([
     {label:"Tous",
       value:""
@@ -52,11 +52,16 @@ export default function TypePub() {
     
   };
   return (
-    <div>
+   
       <FormControl sx={{ m: 1,width:"100%"}}>
-      
+      <div style={{ marginTop: 10}}>
+        <MenuItem >
+          <Checkbox defaultChecked/>
+          <ListItemText primary="type" />
+        </MenuItem>
+      </div>
         <InputLabel id="demo-multiple-checkbox-label">
-        <ListItemText primary="type" />
+        {/* <ListItemText primary="type" /> */}
         </InputLabel>
         <Select
          sx={{height:"40px"}}
@@ -76,6 +81,6 @@ export default function TypePub() {
           ))}
         </Select>
       </FormControl>
-    </div>
+
   );
 }

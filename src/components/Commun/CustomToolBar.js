@@ -46,10 +46,6 @@ const CustomToolbar = ({filteredData,filteredData2,columns,columns2,searchTerm,
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState('sm');
   const [notAllowed, setNotAllowed] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -113,8 +109,13 @@ const CustomToolbar = ({filteredData,filteredData2,columns,columns2,searchTerm,
     errorOverlayDefaultLabel: 'Une erreur est survenue.',
   };
   const exportToExcel = () => {
-    if(Filterannonceursids<30){
-      handleClickOpen()
+    console.log('Filterannonceursids',Filterannonceursids)
+    if(Filterannonceursids.length<30){
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      },5000);
+      
       sendDownloadLink && sendDownloadLink(
         email,
         date1,
@@ -131,9 +132,9 @@ const CustomToolbar = ({filteredData,filteredData2,columns,columns2,searchTerm,
         user_id,    
       )
     }else{
+      
       setNotAllowed(true)
-    }
-   
+    }  
   }
 
   const { email } = UseLoginStore((state) => state)
@@ -189,50 +190,24 @@ const CustomToolbar = ({filteredData,filteredData2,columns,columns2,searchTerm,
         {/* <InputSearchKeyWord  setSearchTerm={setSearchTerm} searchTerm={searchTerm} 
      /> */}
         <Dialog
-          // fullWidth={fullWidth}
-          // maxWidth={maxWidth}
           open={open}
           onClose={handleClose}
         >
-          <div style={{ whidth: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            {/* <img src={logoImmar} alt="immar media" width="100px" /> */}
-            
-            </div>
-          {/* <DialogTitle>Pige  {media === "radio"
-            ? "Radio"
-            : media === "presse"
-              ? "Presse"
-              : media === "television"
-                ? "Télévision"
-                : "Unknown media type"}</DialogTitle> */}
+          {/* <div style={{ whidth: "100%", display: "flex", 
+            justifyContent: "center", alignItems: "center" }}>           
+            </div>*/}
           <DialogContent>
-
-
-            <Typography sx={{width:"100%"}}>
-           
-           <Alert severity="success"
-           
+          <Typography sx={{width:"100%"}}>           
+           <Alert severity="success"          
            sx={{
             width:'100%',
-
            }}
-           >Un lien de télèchargement a été envoyé à l'adresse suivante:
-            
-           {email}
-            
-            </Alert>   
-          
-         </Typography>
-          </DialogContent>
-          <DialogActions>
-
-            <Button onClick={handleClose}>Retour</Button>
-          </DialogActions>
+           >Un lien de télèchargement a été envoyé à l'adresse suivante:           
+           {email}           
+            </Alert>            
+          </Typography>
+          </DialogContent> 
         </Dialog>
-
-
-
-
            {/* nombre d'annoncerus dépasse le 30 on envoie pas une requette au backend */}
       <Dialog open={notAllowed} onClose={()=>setNotAllowed(false)}>
         {/* <DialogTitle>Taille de donnée large </DialogTitle> */}
@@ -259,7 +234,6 @@ const CustomToolbar = ({filteredData,filteredData2,columns,columns2,searchTerm,
               <span style={{ textAlign: "center" }}>
                 vous avez atteint votre total max d'annonceurs !
                 Pour une recherche plus ciblée, veuillez cliquer sur 
-
                 <span style={{ color: "#1DC7EA" }}> recherche avancée</span>
               </span>
             </div>
@@ -295,21 +269,12 @@ const CustomToolbar = ({filteredData,filteredData2,columns,columns2,searchTerm,
                 Recherche avancée
               </Button>
             </Col>
-            {/* <AnchorTemporaryDrawer getData={getData}
-
-              isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
-              isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
-              disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
-            /> */}
+            
           </DialogActions>
         </Container>
-
       </Dialog>
-
       </GridToolbarContainer>
-      {/* <GridToolbarExport  csvOptions={csvOptions}/> */}
-
-    </div>
+    // </div>
   );
 };
 

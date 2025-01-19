@@ -76,7 +76,7 @@ export default function MultipleSelectMarques() {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`Marques (${previousSelection.length})`} 
+            label={`marques (${previousSelection.length})`} 
            
             variant="outlined"
           />

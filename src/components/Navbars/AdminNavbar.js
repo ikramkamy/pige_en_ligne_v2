@@ -60,21 +60,19 @@ console.log("call logout function")
       top:'0px',
       zIndex:"10"
     }}>
-
-      <div style={{width:"90%", display:"flex", justifyContent:"space-between",alignItems:"start",paddingTop: '10px'
+      <div style={{width:"90%", display:"flex",
+       justifyContent:"space-between",
+       alignItems:"start",paddingTop: '0px'
       }}>
-      <div style={{paddingTop:"10px"}} >
+      <div style={{paddingTop:"0px"}} >
         <Link to="/admin/home">
-          <img src={logoImmar} alt="immar media" width="150px" />
+          <img src={logoImmar} alt="immar media" className="logo-immar"/>
         </Link>
-
       </div>
       <div style={{
         display: "flex", width: "30%",
-        display: "flex", justifyContent: "flex-end", alignItems: "center",
-        
+        display: "flex", justifyContent: "flex-end", alignItems: "center",       
       }}>
-
         <span className="no-icon" style={{
           display: "flex",
           justifyContent: "center",

@@ -77,7 +77,7 @@ export default function MultipleSelectSecteurs() {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`Secteurs (${previousSelection.length})`} // Display the count of selected items
+            label={`secteurs (${previousSelection.length})`} // Display the count of selected items
             variant="outlined"
           />
         )}

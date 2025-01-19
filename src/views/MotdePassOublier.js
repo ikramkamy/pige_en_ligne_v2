@@ -25,7 +25,7 @@ export default function MotDePasseOublier() {
   const [showPopup , setShowPopup] =React.useState(false)
   const [vide,setVide]=React.useState(true)
   const [email, setEmail] = React.useState('');
-  const { showAlert3, showAlert4, ReinitiolizePassword, messageAlertResetPasswrod } = UseLoginStore((state) => state)
+  const { showAlert3, showAlert4, SendResePasswordLink, messageAlertResetPasswrod } = UseLoginStore((state) => state)
   const handleopenPopup = () => {
     setPopupOpen(showAlert3);
 
@@ -41,7 +41,7 @@ export default function MotDePasseOublier() {
     if(email !==''){
       setPopupOpen(true)
       setShowPopup(true)
-      ReinitiolizePassword && ReinitiolizePassword(email)
+      SendResePasswordLink && SendResePasswordLink(email)
       setVide(true)
     }else{
   

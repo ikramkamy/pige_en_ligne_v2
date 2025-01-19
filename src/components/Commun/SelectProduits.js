@@ -121,7 +121,7 @@ export default function MultipleSelectProducts() {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`Produits (${previousSelection.length})`} 
+            label={`produits (${previousSelection.length})`} 
             variant="outlined"
             InputProps={{
               ...params.InputProps,

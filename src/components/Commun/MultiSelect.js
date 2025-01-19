@@ -64,7 +64,7 @@ console.log("isAllSelected",selectedItems)
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
       {/* Custom Select All option */}
-      <div >
+      <div style={{ marginTop: 10 }}>
         <MenuItem onClick={(event) => handleSelectAll(event)}>
           <Checkbox checked={isAllSelected}/>
           <ListItemText primary="familles" />
@@ -85,7 +85,7 @@ console.log("isAllSelected",selectedItems)
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`Familles (${previousSelection.length})`} // Display the count of selected items
+            label={`familles (${previousSelection.length})`} // Display the count of selected items
             variant="outlined"
             // InputProps={{
             //   ...params.InputProps,

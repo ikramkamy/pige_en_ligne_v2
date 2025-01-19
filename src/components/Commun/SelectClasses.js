@@ -76,7 +76,7 @@ const filteredClasses = Filterclasses.filter((item) =>
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`Classes (${selectedItems.length})`} 
+            label={`classes (${selectedItems.length})`} 
             variant="outlined"
           />
         )}

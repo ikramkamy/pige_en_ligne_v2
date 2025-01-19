@@ -22,9 +22,15 @@
   background-repeat: no-repeat;
 
 }
-
+.logo-immar{
+  width: 150px;
+}
 @media (max-width: 768px) {
     .links {
         flex-direction: column; /* Change to column on small screens */
     }
+    .logo-immar{
+      width: 120px;
+    } 
+ 
 }

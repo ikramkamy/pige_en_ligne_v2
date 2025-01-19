@@ -39,6 +39,7 @@ export default function VeillePub() {
     ResetDataveilleFetched,
     ShowSearchKey,
     setShowSearchKey,
+    
   } = UseVeilleStore((state) => state)
   const {
     media, date1, date2, veille_diffusion,Filtersupports,
@@ -60,7 +61,8 @@ export default function VeillePub() {
     SideBarFilterPosition,
     ManageSideBarfilterDisplay,
     sideBarFilterPosition,
-    typeVeille
+    typeVeille,
+    getFilters
   } = UseFiltersStore((state) => state);
   const [mediaUrl, setMediaUrl] = useState("/veille_radio");
   const { DownloadExlsxFile } = UseVeilleStore((state) => state)
@@ -78,9 +80,7 @@ export default function VeillePub() {
   const [loadingStep, setLoadingStep] = useState(0.5)
   const [displayVeilleDate, setDisplayVeilleDate] = useState(false)
   const [loadingLineDisplay, setLoadingLineDisplay] = useState(false)
-
   document.title = 'veille publicitaire'
-
   useEffect(() => {
     // console.log("media", media)
     setPdata([])
@@ -288,11 +288,25 @@ export default function VeillePub() {
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
   }
+  const [loadingFilters, setLoadingFilters] = React.useState(false)
+  const[fetchFilter,setFetchFilter]=React.useState(false)
+   React.useEffect(()=>{
+    
+      setFetchFilter(true)
+  
+    },[media,date1,date2])
 
-  const handeOpenSideBar = () => {
-    const newPosition = sideBarFilterPosition === '100%' ? '0%' : '0%';
-    console.log("newPosition", newPosition)
-    ManageSideBarfilterDisplay('0%');
+  const HandelSideBarPisition = () => {
+    if(fetchFilter===true){
+      console.log("get veille filters",fetchFilter)
+      getFilters && getFilters(email, media, date1, date2)
+      setFetchFilter(false)
+    }else{
+      //do nothing
+    }
+      setLoadingFilters(true)
+      setLoadingFilters(false)
+      ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
   }
   const handerechercheveille = () => {
     getVeilleSearch && getVeilleSearch(
@@ -302,7 +316,6 @@ export default function VeillePub() {
       media
     )
   }
-
   useEffect(() => {
 
 
@@ -327,7 +340,6 @@ export default function VeillePub() {
     felexDirection: 'row',
     back: window.innerWidth < 768 ? 'yellow' : '',
   });
-
   useEffect(() => {
     const handleResize = () => {
       setResStyle({
@@ -338,7 +350,7 @@ export default function VeillePub() {
         justifyContentRightBtnWrapper: window.innerWidth < 768 ? 'space-between' : 'center',
         marginTopAll: window.innerWidth < 768 ? '14vh' : '4%',
         widthImage: window.innerWidth < 768 ? '250px' : '500px',
-        felexDirection: window.innerWidth < 768 ? 'column' : 'row',
+        felexDirection: window.innerWidth < 1024 ? 'column' : 'row',
         back: window.innerWidth < 768 ? 'yellow' : '',
         MarginRightbtn: window.innerWidth < 768 ? '0px' : '16px',
         textAlineCenter: window.innerWidth < 768 ? 'center' : '',
@@ -373,7 +385,7 @@ export default function VeillePub() {
     )
   }
 
-  if (!(autoriseVeillePresse || autoriseVeilleRadio || autoriseVeilleTv)) {
+  if (!(autoriseVeillePresse || autoriseVeilleRadio || autoriseVeilleTv) && client) {
     return (
       <Container
         fluid
@@ -405,17 +417,13 @@ export default function VeillePub() {
       </Container>)
   }
   if (!client) {
-
     history.push('/login')
-
   }
-
   return (
     <div style={{
       height: "auto", width: "100%", padding: "2%",
       marginTop: resStyle.marginTopAll,
     }}
-
     >
       <Container style={{ maxWidth: "100%" }}>
         <div style={{
@@ -438,8 +446,6 @@ export default function VeillePub() {
             }}>
               <DateRangeTest />
             </div>
-
-
           </div>
           {ShowSearchKey && (<TextField
             label="Chercher..."
@@ -474,7 +480,7 @@ export default function VeillePub() {
             //disablebtn={!media}
             />
             <Button
-              onClick={handeOpenSideBar}
+              onClick={HandelSideBarPisition}
               disabled={!media}
               sx={{
                 textTransform: "none",
