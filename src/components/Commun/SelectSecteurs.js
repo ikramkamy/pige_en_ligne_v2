@@ -45,18 +45,15 @@ export default function MultipleSelectSecteurs() {
   const onInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
-  console.log('filteredElems',filteredElems)
+  // console.log('filteredElems',filteredElems)
   const isAllSelected = previousSelection.length === filteredElems.length;
 
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
-      {/* Custom Select All option */}
-      <div style={{ marginTop: 10 }}>
         <MenuItem onClick={handleSelectAll}>
           <Checkbox checked={isAllSelected} />
           <ListItemText primary="secteurs" />
         </MenuItem>
-      </div>
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
       {/* {Filtersecteursids.length === 0 && 
         <Alert severity="error" width="5px"

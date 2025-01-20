@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 const LoadingLineIndicator = ({progressControled,step,totalDuration}) => {
-  console.log("totalDuration",totalDuration)
+//   console.log("totalDuration",totalDuration)
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const LoadingLineIndicator = ({progressControled,step,totalDuration}) => {
         
         return () => clearInterval(interval);
     }, []);
-    console.log("total duration", totalDuration)
+    // console.log("total duration", totalDuration)
     // useEffect(() => {
     //     const interval = setInterval(() => {
     //         setProgress((prev) => {

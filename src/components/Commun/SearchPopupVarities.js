@@ -20,8 +20,7 @@ const  SearchPopupVarieties=({openSeachVarities,handleCloseSearchVarieties}) =>{
 //   const filteredOptions = options.filter(option => 
 //     option.label.toLowerCase().includes(searchTerm.toLowerCase())
 //   );
-console.log('selectedOptions Filtervarietiesids',Filtervarietiesids)
-console.log('selectedOptions',selectedOptions)
+
 
 //Variete_Lib est devenue  
 

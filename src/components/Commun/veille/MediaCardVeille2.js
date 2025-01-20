@@ -59,13 +59,15 @@ const AdvertisementCard = ({
     const handleVideoClick = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
     const handleOpenPdf = () => {
         window.open(`${PORT}/pdf/article/pdf_veille.php?id=${id}`, '_blank');
       };
+
+      const id_media=creation.split("_")[0]
+      console.log("id_media",creation)
     return (
         <>
             <Card className={classes.card}

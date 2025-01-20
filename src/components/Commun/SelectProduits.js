@@ -24,7 +24,7 @@ export default function MultipleSelectProducts() {
 
   const handelopenPopup = () => {
     setOpenSearchPop(true)
-    console.log("openSearchPop",openSearchPop)
+
     setShowloadingPopup(true)
     setTimeout(() => {
       setShowloadingPopup(false)
@@ -34,7 +34,7 @@ export default function MultipleSelectProducts() {
   }
   useEffect(() => {
     setPreviousSelection(Filterproduitsids);
-    console.log("Filterproduitsids.slice(0,50)",Filterproduitsids)
+   
   }, [Filterproduitsids]);
 
   const handleSelectAll = () => {
@@ -73,41 +73,15 @@ export default function MultipleSelectProducts() {
     return item.Produit_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   }) 
   const isAllSelected = previousSelection.length === Filterproduits.length;
-  console.log("isAllSelected",isAllSelected,previousSelection,Filterproduits)
+
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
-      {/* Custom Select All option */}
-      <div style={{ marginTop: 10, }} onClick={handelopenPopup}>
         <MenuItem onClick={handleSelectAll}>
           <Checkbox checked={isAllSelected} />
           <ListItemText primary="produits" />
         </MenuItem>
-      </div>
-      <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-      {/* <Button
-              sx={{
-                textTransform: 'none',
-                width: '100%',
-                height: "55px",
-                //marginTop: '10px',
-                padding: '10px 12px',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                //backgroundColor: '#fff', 
-
-                '&:hover': {
-                  backgroundColor: '#f4f6f8',
-                },
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-              //disabled={!disablebtn}
-              // startIcon={showloadingPopup ? <CircularProgress size={20} color="red" /> : null}
-            >
-              produits {previousSelection.length}
-            </Button> */}
-          
+  
+      <InputLabel id="demo-multiple-checkbox-label"></InputLabel>      
       <Autocomplete
        sx={{height:"40px"}}
         multiple

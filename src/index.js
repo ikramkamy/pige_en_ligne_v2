@@ -14,13 +14,16 @@ import HomeLayout from "layouts/HomePage.js";
 import DataLayout from "layouts/DataLayout";
 import VeilleLayout from "layouts/VeilleLayout";
 import DashboardLayout from "layouts/DashboardLayout";
-
+import LogsLayout from "layouts/LogsLayout";
+import AccueilLayout from "layouts/AccueilLayout";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <HashRouter>
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />}/>
       <Route path="/login" render={(props) => <HomeLayout {...props} />}/>
+      <Route path="/auth" render={(props) => <LogsLayout  {...props} />}/>
+      <Route path="/main" render={(props) => <AccueilLayout  {...props} />}/>
       <Route path="/pige" render={(props) => <DataLayout {...props} />}/>
       <Route path="/veille" render={(props) => <VeilleLayout  {...props} />}/>
       <Route path="/media" render={(props) => <DashboardLayout  {...props} />}/>

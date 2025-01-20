@@ -55,12 +55,11 @@ const filteredClasses = Filterclasses.filter((item) =>
 
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
-      <div style={{ marginTop: 10 }}>
         <MenuItem onClick={handleSelectAll}>
           <Checkbox checked={isAllSelected} />
           <ListItemText primary="classes" />
         </MenuItem>
-      </div>
+     
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
 
       <Autocomplete

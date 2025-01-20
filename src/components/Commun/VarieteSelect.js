@@ -71,8 +71,6 @@ export default function MultipleSelectVarieties() {
   return (
     <FormControl sx={{ m: 1, width: "100%", }} >
     
-    
-    
         {/* Custom Select All option */}
           <MenuItem onClick={handleSelectAll}>
             <Checkbox checked={isAllSelected} />

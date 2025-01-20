@@ -7,8 +7,6 @@ import {
   Row,
   Col
 } from "react-bootstrap";
-import TabPanel from 'components/Commun/UserProfileInfoCard';
-import VerticalTabs from "components/Commun/UserProfileInfoCard"
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
@@ -75,17 +73,6 @@ function User() {
             </Card>
           </Col>
         </Row>
-
-        {/* <Row className="justify-content-center" style={{marginLeft:"10px"}}>
-          <Col md="6" style={{width:"fit-content"}}>
-            <Card className="text-center" style={{ borderRadius: "15px", 
-              boxShadow: "0 4px 8px rgba(0,0,0,0.2)",  }}>
-       
-        <VerticalTabs/>
-        </Card>
-   </Col>
-   
-        </Row> */}
       </Container>
     </>
   );

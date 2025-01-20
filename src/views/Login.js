@@ -49,7 +49,7 @@ const handleChange = (event) => {
 
   React.useEffect(() => {
     if (email) {
-     history.push("/admin/home")
+     history.push("/main/accueil")
     } else {
       //console.log('notallowed')
     }

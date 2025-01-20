@@ -9,6 +9,8 @@ export const UseLoginStore = create((set, get) => ({
   utilisateur_id: "",
   client: "",
   email: "",
+  date_debut:"",
+  date_fin:"",
   errormessage: "",
   showAlert1: false,
   showAlert2: false,
@@ -81,11 +83,13 @@ export const UseLoginStore = create((set, get) => ({
       console.log("response",response)
       if (response.data.message === "Connexion établie avec succès."){
          var decoded = jwtDecode(response.data.payload);
-         console.log("email",decoded.user_id.email,"client",decoded.user_id.utilisateur)
+    
         set({
           
           client:decoded.user_id.utilisateur,
           email:decoded.user_id.email,
+          date_debut:decoded.user_id.date_debut,
+          date_fin:decoded.user_id.date_fin,
           showAlert1: true,
           showAlert2: false,
           usePrevilegesAnnonceurs:[],
@@ -103,13 +107,13 @@ export const UseLoginStore = create((set, get) => ({
           autoriseDash: decoded.user_id.autorisations.dashboard === 1 ? true : false,
 
         })
-        console.log("redirecting to home succefully",decoded.user_id.utilisateur)
+        console.log("redirecting to home succefully",decoded.user_id)
          //window.localStorage.setItem('user_name', decoded.user_id.utilisateur) 
-       // window.localStorage.setItem('user_email', "email")
-        // window.localStorage.setItem('date_debut', decoded.user_id.date_debut)
-        // window.localStorage.setItem('date_fin', decoded.user_id.date_fin)
-        // //no longer using ""user_id" to be deleted later     
-        // window.localStorage.setItem('user_id', decoded.user_id.utilisateur)
+       window.localStorage.setItem('user_email',"decoded.user_id.utilisateur")
+        window.localStorage.setItem('date_debut', decoded.user_id.date_debut)
+        window.localStorage.setItem('date_fin', decoded.user_id.date_fin)
+        //no longer using ""user_id" to be deleted later     
+        //window.localStorage.setItem('user_id', decoded.user_id.utilisateur)
 
 
         //to avoid refreshing I will use react hook useNavigate

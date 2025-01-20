@@ -21,9 +21,9 @@ export default function MultipleSelectFamilles() {
 
   React.useEffect(()=>{ 
     setSelectedItems(Filterfamilles.map((item) => item.Famille_Id))
-    console.log("famille ms",familles);
-    console.log("famille ms selectedItems",
-    familles.map((item) => item.Famille_Id));
+    // console.log("famille ms",familles);
+    // console.log("famille ms selectedItems",
+    // familles.map((item) => item.Famille_Id));
     
   },[Filterfamilles])
 //Famille est devenu Famille_Lib
@@ -56,22 +56,17 @@ export default function MultipleSelectFamilles() {
   };
 
   const isAllSelected = selectedItems.length === filteredElems.length;
-console.log("isAllSelected",selectedItems)
+// console.log("isAllSelected",selectedItems)
   React.useEffect(() => {
     setPreviousSelection(Filterfamilles);
   }, [Filterfamilles]);
 
   return (
-    <FormControl sx={{ m: 1, width: "100%" }}>
-      {/* Custom Select All option */}
-      <div style={{ marginTop: 10 }}>
+    <FormControl sx={{ m: 1, width: "100%" }}>    
         <MenuItem onClick={(event) => handleSelectAll(event)}>
           <Checkbox checked={isAllSelected}/>
           <ListItemText primary="familles" />
         </MenuItem>
-      </div>
-      <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-
       <Autocomplete
       sx={{height:"40px"}}
         multiple

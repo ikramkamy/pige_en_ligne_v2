@@ -31,7 +31,6 @@ export default function MultipleSelectSupports() {
     setSelectedItems(Filtersupports.map((e)=>e.Support_Id));
     setPreviousSelection(Filtersupports);
   }, [Filtersupports]);
-  console.log("prev supports",previousSelection,Filtersupports)
   const filteredElems = supports.filter((item) => {
     return item.Support_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
@@ -59,14 +58,11 @@ export default function MultipleSelectSupports() {
 
   return (
     <FormControl sx={{ m: 1, width: "100%"}}>
-      {/* Custom Select All option */}
-      <div style={{ marginTop: 10 }}>
         <MenuItem onClick={handleSelectAll}>
           <Checkbox checked={isAllSelected} />
           <ListItemText primary="supports" />
         </MenuItem>
-      </div>
-      <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
+
       <Autocomplete 
       sx={{
           height:"40px"
@@ -84,7 +80,7 @@ export default function MultipleSelectSupports() {
             {...params}
             label={`supports (${previousSelection.length})`} 
             variant="outlined"
-            sx={{top:"-10px"}}
+            // sx={{top:"-10px"}}
           />
         )}
         renderOption={(props, option) => (

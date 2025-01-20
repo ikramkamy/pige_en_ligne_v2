@@ -24,11 +24,13 @@ import { UseLoginStore } from "../store/dashboardStore/useLoginStore";
 import { Container, Row, Col } from "react-bootstrap";
 import TableIlustration from 'assets/tableSearch.gif'
 import LoadingLineIndicator from "components/Commun/LineLoading";
-import {useHistory, useLocation } from "react-router-dom/cjs/react-router-dom";
+import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom";
 import DateRangeTest from "components/Commun/DateRangePickerTest";
 import '../components/Commun/commun.css';
 import MessageLibPopUp from "components/Commun/popups/MessageLibPopup";
-
+import ExportExcelBtn from "components/Commun/ExportExcelBtn";
+import LargeDataPopup from "components/Commun/popups/LargeDataPopup";
+import { UseCountStore } from "store/dashboardStore/UseCounts";
 export default function DataTablePige() {
   document.title = 'pige publicitaire'
   const history = useHistory()
@@ -196,35 +198,37 @@ export default function DataTablePige() {
   const [pageSize, setPageSize] = React.useState(25);
   const { autorisePigePresse,
     autorisePigeRadio,
-  autorisePigeTv, client, email } = UseLoginStore((state) => state)
+    autorisePigeTv, client, email } = UseLoginStore((state) => state)
   const { getDataPresse, sendDownloadLink,
     IsPressdataisFetched, ResePressdataisFetched } =
     UsePigeDashboardStore((state) => state);
+  const { getPigeCount, PigeCount, ResetPigeCount } = UseCountStore((state) => state)
 
   const [pressData, setPressData] = React.useState([])
   const { MediaData, getDataMedia, IsMediadataisFetched,
-  ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
+    ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [popupOpen, setPopupOpen] = React.useState(false);
   const [popupData, setPopupData] = React.useState(null);
   const [popupDataLageData, setPopupDataLageData] = React.useState(false)
   const [showLoadingComponenet, setShowLoadingComponenet] = React.useState(true)
+  const [open, setOpen] = React.useState(false);
   var list = [];
   var list2 = [];
 
   const [filteredData, setFilteredData] = React.useState(list);
   const [filteredData2, setFilteredData2] = React.useState(list2);
   React.useEffect(() => {
-    if(media ==="presse"){
+    if (media === "presse") {
       setPressData(MediaData)
       setFilteredData(MediaData)
-        const lowercasedSearchTerm = searchTerm.toLowerCase();
-        //console.log("MediaData",MediaData)
-        const newFilteredData = MediaData.map((elem) => ({
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      //console.log("MediaData",MediaData)
+      const newFilteredData = MediaData.map((elem) => ({
         id: elem.Id,
         Support_Lib: elem.Support_Lib,
-        Période:elem.Période,
+        Période: elem.Période,
         Date: elem.Date,
         Message_Id: elem.Message_Id,
         Message_Lib: elem.Message_Lib,
@@ -232,9 +236,9 @@ export default function DataTablePige() {
         Classe_Lib: elem.Classe_Lib,
         Format: `${elem.Format} - ${elem.NB_C} - ${elem.Rubrique}`,
         Format: elem.Format,
-        NB_C:elem.NB_C,
-        Rubrique:elem.Rubrique,
-        Page: elem.Page, 
+        NB_C: elem.NB_C,
+        Rubrique: elem.Rubrique,
+        Page: elem.Page,
         Annonceur_Lib: elem.Annonceur_Lib,
         Famille_Lib: elem.Famille_Lib,
         Secteur_Lib: elem.Secteur_Lib,
@@ -251,60 +255,55 @@ export default function DataTablePige() {
         )
       );
       setFilteredData(newFilteredData);
-    }else{
+    } else {
       //do nothing
     }
 
- 
-  },[MediaData,searchTerm]);
- 
+
+  }, [MediaData, searchTerm]);
+
   let i = 0;
   React.useEffect(() => {
-    if(media !=="presse"){ 
-    setFilteredData2(MediaData)   
-    const lowercasedSearchTerm = searchTerm.toLowerCase();
-    const newFilteredData = MediaData.map((elem) => ({
-      id: elem.Id,
-      Support_Lib: elem.Support_Lib,
-      Date: elem.Date,
-      Message_Id: elem.Message_Id,
-      Message_Lib: elem.Message_Lib,
-      Produit_Lib: elem.Produit_Lib,
-      Heure: elem.Heure,
-      Durée: elem.Durée,
-      Durée_Réelle: elem.Durée_Réelle,
-      Rang: elem.Rang,
-      Encombrement: elem.Encombrement,
-      Annonceur_Lib: elem.Annonceur_Lib,
-      Famille_Lib: elem.Famille_Lib,
-      Secteur_Lib: elem.Secteur_Lib,
-      Classe_Lib: elem.Classe_Lib,
-      Marque_Lib: elem.Marque_Lib,
-      Version: elem.Version,
-      Tarif_30: elem.Tarif_30,
-      Tarif: elem.Tarif,
-      Variété_Lib: elem.Variété_Lib,
-      Année: elem.Année,
-      Mois: elem.Mois,
-      Prog_avant: elem.Prog_avant,
-      Prog_après: elem.Prog_après,
-    })).filter((item) =>
-      Object.values(item).some((value) => {
-        if (value !== undefined && value !== null) {
-          return value.toString().toLowerCase().includes(lowercasedSearchTerm);
+    if (media !== "presse") {
+      setFilteredData2(MediaData)
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      const newFilteredData = MediaData.map((elem) => ({
+        id: elem.Id,
+        Support_Lib: elem.Support_Lib,
+        Date: elem.Date,
+        Message_Id: elem.Message_Id,
+        Message_Lib: elem.Message_Lib,
+        Produit_Lib: elem.Produit_Lib,
+        Heure: elem.Heure,
+        Durée: elem.Durée,
+        Durée_Réelle: elem.Durée_Réelle,
+        Rang: elem.Rang,
+        Encombrement: elem.Encombrement,
+        Annonceur_Lib: elem.Annonceur_Lib,
+        Famille_Lib: elem.Famille_Lib,
+        Secteur_Lib: elem.Secteur_Lib,
+        Classe_Lib: elem.Classe_Lib,
+        Marque_Lib: elem.Marque_Lib,
+        Version: elem.Version,
+        Tarif_30: elem.Tarif_30,
+        Tarif: elem.Tarif,
+        Variété_Lib: elem.Variété_Lib,
+        Année: elem.Année,
+        Mois: elem.Mois,
+        Prog_avant: elem.Prog_avant,
+        Prog_après: elem.Prog_après,
+      })).filter((item) =>
+        Object.values(item).some((value) => {
+          if (value !== undefined && value !== null) {
+            return value.toString().toLowerCase().includes(lowercasedSearchTerm);
+          }
+          return false;
         }
-        return false;      
-      }
-      )
-    );
-    setFilteredData2(newFilteredData);
-    if (MediaData.length > 100000) {
-      setPopupDataLageData(true)
+        )
+      );
+      setFilteredData2(newFilteredData);
+      // console.log("newFilteredData2", newFilteredData);
     } else {
-      setPopupDataLageData(false)
-    }
-    // console.log("newFilteredData2", newFilteredData);
-    }else{
       //do nothing
     }
 
@@ -329,17 +328,8 @@ export default function DataTablePige() {
     setPopupData(null);
   };
   const handleClosePopupLargeData = () => {
-    console.log("popupOpenEmailexport",popupOpenEmailexport)
-    setPopupOpenEmailexport(true)
-    setTimeout(() => {
-      setPopupOpenEmailexport(false)
-    }, 2000);
     setPopupDataLageData(false)
-    sendDownloadLink && sendDownloadLink(Filtersupports, Filterannonceursids, Filterproduitsids, date1, date2, media)
-
-
   }
-  //const [dataTableShow, setDataTableShow] = React.useState(false);
   const [fetchDataTime, setFetchDataTime] = React.useState(0)
   const [popupOpenEmailexport, setPopupOpenEmailexport] = React.useState(false)
   React.useEffect(() => {
@@ -364,56 +354,62 @@ export default function DataTablePige() {
   }, [media, date1, date2,
   ]);
   const [increment, setIncrement] = React.useState(0)
-
-  //console.log('presse media', MediaData)
-  
   const getData = () => {
-    //console.log("calling get data")
-    const startTime = new Date().getTime();
-    
-    //console.log("Filtermarquesids to gat data with", Filtermarquesids)
-    if (media === "presse") {
-      setDataTableShow(true)
-      setLoadingshow(true)
-      getDataMedia && getDataMedia(
-        email,
-        media,
-        Filtersupports,
-        Filterfamilles,
-        Filterclassesids,
-        Filtersecteursids,
-        Filtervarietiesids,
-        Filterannonceursids,
-        Filtermarquesids,
-        Filterproduitsids,
-        rangs,
-        date1,
-        date2
-      )
-      setPressData(MediaData)
-    } else {
-      setDataTableShow(false)
-      setLoadingshow(true)
-      getDataMedia && getDataMedia(
-        email,
-        media,
-        Filtersupports,
-        Filterfamilles,
-        Filterclassesids,
-        Filtersecteursids,
-        Filtervarietiesids,
-        Filterannonceursids,
-        Filtermarquesids,
-        Filterproduitsids,
-        rangs,
-        date1,
-        date2
-      )
+    if (PigeCount === 1) {
+      alert('fetchdata')
+      const startTime = new Date().getTime();
+      if (media === "presse") {
+        setDataTableShow(true)
+        setLoadingshow(true)
+        getDataMedia && getDataMedia(
+          email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          rangs,
+          date1,
+          date2
+        )
+        setPressData(MediaData)
+      } else {
+        setDataTableShow(false)
+        setLoadingshow(true)
+        getDataMedia && getDataMedia(
+          email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          rangs,
+          date1,
+          date2
+        )
+      }
+      const endTime = new Date().getTime();
+      setFetchDataTime(endTime - startTime);
+    } else if (PigeCount === 0) {
+      alert('data too large')
+      setPopupDataLageData(true)
+      //Data Too Large
+    } else if (PigeCount === 2) {
+      //no data in this date
+      alert('data too non available')
+      
     }
-    const endTime = new Date().getTime();
-    setFetchDataTime(endTime - startTime);
   }
- 
+
+
   React.useEffect(() => {
     ResePressdataisFetched && ResePressdataisFetched()
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
@@ -435,7 +431,6 @@ export default function DataTablePige() {
     setShowDataGrid && setShowDataGrid(false)
     ReseMediadataisFetched && ReseMediadataisFetched()
     if (filteredData2.length > 0) {
-
       setTimeout(() => {
         setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
         setShowDataGrid && setShowDataGrid(true)
@@ -444,7 +439,6 @@ export default function DataTablePige() {
       setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
       setShowDataGrid && setShowDataGrid(false)
       if (IsMediadataisFetched == true) {
-        console.log("data is really emtpy", IsMediadataisFetched)
         setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(false)
         setShowDataGrid && setShowDataGrid(true)
       }
@@ -452,23 +446,36 @@ export default function DataTablePige() {
   }, [filteredData2, increment])
 
   const [loadingFilters, setLoadingFilters] = React.useState(false)
-  const[fetchFilter,setFetchFilter]=React.useState(false)
-  React.useEffect(()=>{
-  
-    setFetchFilter(true)
+  const [fetchFilter, setFetchFilter] = React.useState(false)
+  React.useEffect(() => {
 
-  },[media,date1,date2])
+    setFetchFilter(true)
+    getPigeCount && getPigeCount(
+      email,
+      media,
+      Filtersupports,
+      Filterfamilles,
+      Filterclassesids,
+      Filtersecteursids,
+      Filtervarietiesids,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      date1,
+      date2
+    )
+  }, [media, date1, date2])
   const HandelSideBarPisition = async () => {
-  if(fetchFilter===true){
-    //console.log("calling filters",fetchFilter)
-    getFilters && getFilters(email, media, date1, date2)
-    setFetchFilter(false)
-  }else{
-    //do nothing
-    console.log("dispalay only",fetchFilter)
-  }
+    if (fetchFilter === true) {
+      //console.log("calling filters",fetchFilter)
+      getFilters && getFilters(email, media, date1, date2)
+      setFetchFilter(false)
+    } else {
+      //do nothing
+
+    }
     setLoadingFilters(true)
-    console.log('filtres trouvé')
+
     setPopupDataLageData(false)
     setLoadingFilters(false)
     ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
@@ -524,8 +531,35 @@ export default function DataTablePige() {
   }, []);
 
   // console.log('is loadind', !showDataGrid && showDataGridIfNotEmpty)
+  const [notAllowed, setNotAllowed] = React.useState(false);
+  const exportToExcel = () => {
+    if (Filterannonceursids.length < 30) {
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 5000);
 
-  if ( !(autorisePigePresse || autorisePigeRadio || autorisePigeTv) && client) {
+      sendDownloadLink && sendDownloadLink(
+        email,
+        date1,
+        date2,
+        media,
+        Filterannonceursids,
+        Filterproduitsids,
+        Filtervarietiesids,
+        Filtermarquesids,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        client,
+        user_id,
+      )
+    } else {
+      setNotAllowed(true)
+    }
+  }
+
+  if (!(autorisePigePresse || autorisePigeRadio || autorisePigeTv) && client) {
     return (
       <Container
         fluid
@@ -606,6 +640,12 @@ export default function DataTablePige() {
               justifyContent: resStyle.justifyContentRightBtnWrapper,
               width: resStyle.widthRightbtns
             }}>
+              <ExportExcelBtn
+                getData={exportToExcel}
+                disablebtn={!media}
+                title="Exporter"
+
+              />
               <LoadingButtonData
                 getData={getData}
                 isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
@@ -624,12 +664,7 @@ export default function DataTablePige() {
               />
 
               <AutomaticSideFilterBar getData={getData} />
-              {/* <Button onClick={handelSendingLink}>download</Button> */}
-              {/* <AnchorTemporaryDrawer getData={getData}
-                isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
-                isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
-                disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
-              /> */}
+
             </div>
           </div>
 
@@ -648,16 +683,16 @@ export default function DataTablePige() {
                   {(showDataGridIfNotEmpty && showDataGrid && filteredData.length) && (
                     <DataGrid
                       className="table_styling"
-                       density="compact"
+                      density="compact"
                       style={{ marginBottom: "0px", width: '100%', backgroundColor: "white" }}
                       rows={filteredData}
                       columns={columns}
                       pagination
-                      pageSize={pageSize}                      
+                      pageSize={pageSize}
                       initialState={{
                         columns: {
                           columnVisibilityModel: {
-                            famille: true, 
+                            famille: true,
                             id: false,
                             annonceur: false,
                             categorie: true,
@@ -672,7 +707,7 @@ export default function DataTablePige() {
                             langue: false,
                             mois: false,
                             supprimer: false,
-                        
+
                           },
                         },
                       }}
@@ -695,39 +730,37 @@ export default function DataTablePige() {
                       localeText={frenchLocaleText}
                     />)}
                   {(!showDataGrid && showDataGridIfNotEmpty) && (<LoadingLineIndicator totalDuration={fetchDataTime} />)}
-                  {(!showDataGridIfNotEmpty && !showDataGridIfNotEmpty) && (<div>  <Container
-                    fluid
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "50vh",
-                      backgroundColor: "#f8f9fa",
-                      textAlign: "center",
-                      borderRadius: "5px"
-                    }}
-                  >
-                    <Row
-                      className="responsive-row"
+                  {(PigeCount === 2) && (<div>
+                    <Container
+                      fluid
                       style={{
-                        padding: "20px",
-                        backgroundColor: "#fff",
-                        borderRadius: "10px",
-                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "50vh",
+                        backgroundColor: "#f8f9fa",
+                        textAlign: "center",
+                        borderRadius: "5px"
                       }}
                     >
-                      <b style={{ color: "#00a6e0" }}>Aucune données {media} n'as été enregistrée. Veuillez changer la date. </b>
+                      <Row
+                        className="responsive-row"
+                        style={{
+                          padding: "20px",
+                          backgroundColor: "#fff",
+                          borderRadius: "10px",
+                          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                        }}
+                      >
+                        <b style={{ color: "#00a6e0" }}>Aucune données {media} n'as été enregistrée. Veuillez changer la date. </b>
 
-                    </Row>
-                  </Container></div>)}
+                      </Row>
+                    </Container></div>)}
                 </Box>
               ) : (<div className="w-100 justify-content-center" style={{ display: "flex" }}>
                 <img src={TableIlustration} alt="immar media"
                   width={resStyle.widthImage} height={resStyle.widthImage} />
-                {/* <CircularProgressWithLabel value={50} /> */}
-                {/* <LinearIndeterminate/> */}
-
               </div>
               )
 
@@ -750,13 +783,13 @@ export default function DataTablePige() {
                         boxShadow: 2,
                         border: 2,
                         borderColor: 'primary.light',
-                        '& .MuiDataGrid-cell:hover': {
-                          color: 'primary.main',
-                        },
-                        '& .MuiDataGrid-footer': {
-                          backgroundColor: '#f5f5f5',  // Custom background color
-                          padding: '10px',
-                        }          // Custom padding
+                        // '& .MuiDataGrid-cell:hover': {
+                        //   color: 'primary.main',
+                        // },
+                        // '& .MuiDataGrid-footer': {
+                        //   backgroundColor: '#f5f5f5', 
+                        //   padding: '10px',
+                        // }         
 
                       }}
 
@@ -816,7 +849,7 @@ export default function DataTablePige() {
 
                   {(!showDataGrid && showDataGridIfNotEmpty) && (<LoadingLineIndicator totalDuration={fetchDataTime} />)}
 
-                  {(!showDataGridIfNotEmpty && !showDataGridIfNotEmpty) && (<div>
+                  {(PigeCount === 2) && (<div>
 
                     <Container
                       fluid
@@ -873,105 +906,21 @@ export default function DataTablePige() {
         </div>
       </div>
       {/* data too large */}
-      <Dialog open={popupDataLageData} onClose={handleClosePopupLargeData}>
-        {/* <DialogTitle>Taille de donnée large </DialogTitle> */}
-
-
-        <Container
-          fluid
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "50vh",
-            padding: "20%"
-          }}
-        >
-          <Row >
-            <div style={{
-              display: 'flex', flexDirection: "column",
-              alignItems: 'center', justifyContent: 'center'
-            }}>
-              <WarningIcon style={{
-                marginRight: '18px',
-                marginBottom: "18px", fontSize: '54px', color: 'eba4a8'
-              }} />
-              <span style={{ textAlign: "center" }}>
-                Cliquez sur <span style={{ color: "#1DC7EA" }}>exporter</span>
-                pour recevoir un lien de téléchargement.
-                Pour une recherche plus ciblée, veuillez cliquer sur
-                <span style={{ color: "#1DC7EA" }}>recherche avancée</span>
-              </span>
-            </div>
-          </Row>
-          <DialogActions sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "20px"
-          }}>
-
-            <Col style={{ display: "flex", justifyContent: "space-between" }}>
-              <Button
-                sx={{
-                  textTransform: "none",
-                  //marginRight: "10px",
-                  width: "150px",
-                  textTransform: "none",
-                  backgroundColor: '#00a6e0',
-                  textTransform: "none",
-                  width: "fit-content",
-                  color: '',
-                  '&:hover': {
-                    backgroundColor: '#00a6e0',
-                  }
-                }}
-                variant="contained"
-
-                onClick={handleClosePopupLargeData} color="primary">
-                Exporter
-              </Button>
-              <Button
-                onClick={HandelSideBarPisition}
-                disabled={!media}
-                sx={{
-                  textTransform: "none",
-                  width: "150px",
-                  textTransform: "none",
-                  margin: "0px",
-                  backgroundColor: '#00a6e0',
-                  textTransform: "none",
-                  width: "fit-content",
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: '#00a6e0',
-                  }
-                }}>
-                Recherche avancée
-              </Button>
-            </Col>
-            {/* <AnchorTemporaryDrawer getData={getData}
-
-              isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
-              isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
-              disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
-            /> */}
-          </DialogActions>
-        </Container>
-
-      </Dialog>
-
+      <LargeDataPopup
+        media={media}
+        popupDataLageData={popupDataLageData}
+        handleClosePopupLargeData={handleClosePopupLargeData}
+        HandelSideBarPisition={HandelSideBarPisition}
+      />
 
       {/* Popup Dialog Message*/}
 
-      <MessageLibPopUp popupOpen={popupOpen} 
-      handleClosePopup={handleClosePopup} 
-      popupData={popupData}
-      media={media}
+      <MessageLibPopUp popupOpen={popupOpen}
+        handleClosePopup={handleClosePopup}
+        popupData={popupData}
+        media={media}
       />
-  
+
       {/* Popup Dialog Email export envoyé */}
       <Dialog open={popupOpenEmailexport}>
         {/* <DialogTitle>Details</DialogTitle> */}
@@ -998,6 +947,25 @@ export default function DataTablePige() {
             Fermer
           </Button>
         </DialogActions> */}
+      </Dialog>
+
+
+
+      {/* Email excel popup */}
+      <Dialog
+        open={open}
+      >
+        <DialogContent>
+          <Typography sx={{ width: "100%" }}>
+            <Alert severity="success"
+              sx={{
+                width: '100%',
+              }}
+            >Un lien de télèchargement a été envoyé à l'adresse suivante:
+              {email}
+            </Alert>
+          </Typography>
+        </DialogContent>
       </Dialog>
     </div>
   );

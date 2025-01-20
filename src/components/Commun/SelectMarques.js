@@ -12,6 +12,7 @@ import "./commun.css";
 export default function MultipleSelectMarques() {
   const { Filtermarques, annonceurs, produits,
      setFiltermarque, Filtermarquesids } = UseFiltersStore((state) => state);
+     console.log("Filtermarques",Filtermarques[3],"Filtermarquesids",Filtermarquesids)
   const [inputValue, setInputValue] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
   const [previousSelection, setPreviousSelection] = useState([]);
@@ -31,15 +32,15 @@ export default function MultipleSelectMarques() {
       setSelectedItems([]);
       setFiltermarque && setFiltermarque([], annonceurs, produits);
     } else {
-      setSelectedItems(filteredElems.map((item) => item.Marque_id));
-      const ids = filteredElems.map((item) => item.Marque_id);
+      setSelectedItems(filteredElems.map((item) => item.Marque_Id));
+      const ids = filteredElems.map((item) => item.Marque_Id);
       setFiltermarque && setFiltermarque(ids, annonceurs, produits);
     }
   };
 
   const handleAutocompleteChange = (event, value) => {
-    setSelectedItems([...value.map((item) => item.Marque_id)]);
-    const ids = value.map((item) => item.Marque_id);
+    setSelectedItems([...value.map((item) => item.Marque_Id)]);
+    const ids = value.map((item) => item.Marque_Id);
     setFiltermarque && setFiltermarque(ids, annonceurs, produits);
   };
 
@@ -47,28 +48,22 @@ export default function MultipleSelectMarques() {
     setInputValue(newInputValue);
   };
 
-  const isAllSelected = previousSelection.length === filteredElems.length;
+  const isAllSelected = previousSelection.length === Filtermarquesids.length;
 
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
-      {/* Custom Select All option */}
-      <div style={{ marginTop: 10 }}>
         <MenuItem onClick={handleSelectAll}>
           <Checkbox checked={isAllSelected} />
           <ListItemText primary="marques" />
         </MenuItem>
-      </div>
+    
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-      {/* {Filtermarquesids.length === 0 && <Alert severity="error" width="5px"
-        sx={{ fontSize: "10px", padding: '0px' }}>
-        aucune marque n'est sélectionnée
-      </Alert>} */}
       <Autocomplete
       sx={{height:"40px"}}
         multiple
         freeSolo
         options={filteredElems}
-        value={Filtermarques.filter((item) => previousSelection.includes(item.Marque_id))}
+        value={Filtermarques.filter((item) => previousSelection.includes(item.Marque_Id))}
         onChange={handleAutocompleteChange}
         getOptionLabel={(option) => option.Marque_Lib}
         inputValue={inputValue}
@@ -82,8 +77,8 @@ export default function MultipleSelectMarques() {
           />
         )}
         renderOption={(props, option) => (
-          <MenuItem {...props} key={option.Marque_id} value={option.Marque_id}>
-            <Checkbox checked={previousSelection.includes(option.Marque_id)} />
+          <MenuItem {...props} key={option.Marque_Id} value={option.Marque_Id}>
+            <Checkbox checked={previousSelection.includes(option.Marque_Id)} />
             <ListItemText primary={option.Marque_Lib} />
           </MenuItem>
         )}

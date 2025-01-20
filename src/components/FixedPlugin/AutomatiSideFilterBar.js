@@ -32,7 +32,6 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
     const [sideShow, setSideShow] = React.useState(false)
     const { email } = UseLoginStore((state) => state)
     const {
-
         Filtersupports,
         supports,
         Filterclassesids,
@@ -79,8 +78,6 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
         setSuccess(isSucces);
         // getFilters && getFilters()
     }, [media, date1, date2])
-
-
     React.useEffect(() => {
         if (location.pathname == "/veille/veille_creations_publicitaires") {
             setShowBase(false)
@@ -109,8 +106,6 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
         }
 
     }, [media])
-
-
     //I do not use it instead I'm passing functions as props
     const getDataLocationDepend = async () => {
         if (media === "presse") {
@@ -248,7 +243,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
                             {(showRang && !showVeilleFilters) && (<MultipleSelectSupports />)}
                             {showVeilleFilters && (<TypePub />)}
                             <MultipleSelectFamilles />
-                            <MultipleSelectAnnoneurs />
+                        
                             {!showVeilleFilters && <MultipleSelectClasses />}
                             {!showVeilleFilters && <MultipleSelectSecteurs />}
 

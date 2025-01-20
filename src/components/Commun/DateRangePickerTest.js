@@ -8,13 +8,14 @@ import { fr } from "date-fns/locale";
 import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
-
+import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 export default function DateRangeTest() {
   const { setDateRang, setShowDataGridIfNotEmpty, setShowDataGrid, setDataTableShow, setLoadingshow } = UseFiltersStore((state) => state);
   const { ResetBasedeCalucule, ResetDataArrays } = UsePigeDashboardStore((state) => state);
   const { RestRadioTvData } = UseMediaDashboardStore((state) => state);
-  const date_debut = window.localStorage.getItem('date_debut');
-  const date_fin = window.localStorage.getItem('date_fin');
+  // const date_debut = window.localStorage.getItem('date_debut');
+  // const date_fin = window.localStorage.getItem('date_fin');
+  const {date_debut,date_fin}=UseLoginStore((state)=>state)
   let today =moment().utc().subtract(1, 'days').startOf("day").toDate();
   const [dateRange, setDateRange] = useState([today, today]);
   const [startDate, endDate] = dateRange;

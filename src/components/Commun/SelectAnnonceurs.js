@@ -14,16 +14,12 @@ export default function MultipleSelectAnnonceurs() {
   const [inputValue, setInputValue] = useState('');
   const [previousSelection, setPreviousSelection] = useState(Filterannonceursids);
   const [selectedItems, setSelectedItems] = useState(Filterannonceursids);
-  console.log('selectedItems source',Filterannonceursids)
+  // console.log('selectedItems source',Filterannonceursids)
   
   useEffect(() => {
-    console.log('selectedItems 1',selectedItems)
+    // console.log('selectedItems 1',selectedItems)
   }, [selectedItems]);
-  // Filter annonceurs based on input value
-  // const filteredElems = inputValue.length > 0 ? Filterannonceurs.filter((item) => {
-  //   return item.Annonceur_Nom.toLowerCase().startsWith(inputValue.toLowerCase());
-  // }) : [];
-  //Annonceur_nom est devenue Annonceur_Lib
+
 
  const filteredElems =Filterannonceurs.filter((item) => {
     return item.Annonceur_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
@@ -54,24 +50,16 @@ export default function MultipleSelectAnnonceurs() {
   const onInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
   };
-  console.log('selectedItems 6',selectedItems)
-  const isAllSelected = selectedItems.length == filteredElems.length;
-
-
+  const isAllSelected = previousSelection.length == filteredElems.length;
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>
-      {/* Custom Select All option */}
-      <div style={{ marginTop: 10 }}>
+      
         <MenuItem onClick={handleSelectAll}>
           <Checkbox checked={isAllSelected} />
           <ListItemText primary="annonceurs" />
         </MenuItem>
-      </div>
+     
       <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-      {/* {Filterannonceursids.length === 0 && <Alert severity="error" width="5px"
-        sx={{ fontSize: "10px", padding: '0px' }}>
-        aucun annonceur n'est sélectionné
-      </Alert>} */}
       <Autocomplete
       sx={{height:"40px"}}
         multiple

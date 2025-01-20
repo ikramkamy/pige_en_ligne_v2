@@ -3,8 +3,12 @@ import { Button, CircularProgress, Box } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
-const LoadingButtonData = ({title,isloading,isSucces,handelUpdatePassword,disablebtn, getData}) => {
-  const { getDataPresse, PressData, sendDownloadLink ,IsPressdataisFetched,ResePressdataisFetched} = UsePigeDashboardStore((state) => state);
+import ExcelIcon from 'assets/img/icons/xls-file.png';
+import { Download } from '@mui/icons-material';
+const ExportExcelBtn = ({title,isloading,isSucces,handelUpdatePassword,disablebtn, getData}) => {
+  const { getDataPresse,
+    PressData, sendDownloadLink,
+    IsPressdataisFetched,ResePressdataisFetched} = UsePigeDashboardStore((state) => state);
   const [loading, setLoading] = useState(false);
   const {media,
     base}=UseFiltersStore((state)=>state)
@@ -18,7 +22,9 @@ const LoadingButtonData = ({title,isloading,isSucces,handelUpdatePassword,disabl
   },[media,isloading,isSucces])
   const handleClick = () => {
     setLoading(isloading);
-    setSuccess(isSucces);   
+    setSuccess(isSucces); 
+console.log('is loading',isloading)    
+  
     getData()
     //GetData()
     //handelUpdatePassword()
@@ -56,15 +62,17 @@ const LoadingButtonData = ({title,isloading,isSucces,handelUpdatePassword,disabl
         //disabled={!disablebtn}
         startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
       >
+        {/* <img src={ExcelIcon} width="25px" style={{backgroundColor:"transparent", marginLeft:"1px"}}/> */}
+        
+        <Download color='green' width="20px"/>
+        
         {loading ? 'Envoi...' : success ? title : title}
          </Button>
-        {success && (
-          <div>
-   
-        </div>
-      )}
+        
+    
+     
     </Box>
   );
 };
 
-export default LoadingButtonData;
+export default ExportExcelBtn;
