@@ -193,10 +193,9 @@ export default function VeillePub() {
   const getData = () => {
     setLoadingLineDisplay(true)
     setSearchTerm('')
-    //setPdata([]);
     const startTime = new Date().getTime();
     setWelcomVeille(true)
-    getveilletvData && getveilletvData(
+    getVeilleCount && getVeilleCount(
       email,
       date1,
       date2,
@@ -207,11 +206,10 @@ export default function VeillePub() {
       Filtermarquesids,
       Filterproduitsids,
     )
-    //it is not working
+   
     setTimeout(() => {
       setShowdataloading(true)
     }, 10000);
-
     const endTime = new Date().getTime();
     setFetchDataTime(endTime - startTime);
     setTimeout(() => {
@@ -223,6 +221,28 @@ export default function VeillePub() {
     }, 5000);
     setDisplayVeilleDate(true)
   }
+  useEffect(()=>{
+console.log("count_v",count_v)
+if(count_v > 0){
+  alert("fetch veille data")
+  getveilletvData && getveilletvData(
+    email,
+    date1,
+    date2,
+    media,
+    veille_diffusion,
+    Filterfamilles,
+    Filterannonceursids,
+    Filtermarquesids,
+    Filterproduitsids,
+  )
+}else{
+//PopUP no data veille available
+alert('data veille unavailable')
+}
+  },[count_v])
+
+
 
   const DownloadFile = () => {
     DownloadExlsxFile && DownloadExlsxFile(veilletvData, media)
@@ -288,7 +308,6 @@ export default function VeillePub() {
     // saveAs(zipBlob, `${media}_web_veille_${date1}_${date2}.zip`);
 
   }
-
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
   }

@@ -341,8 +341,6 @@ export default function DataTablePige() {
       setLoading(false)
       setLoadingshow && setLoadingshow(false)
       setDataTableShow && setDataTableShow(false);
-
-
       setFilteredData([])
       setFilteredData2([])
     } else if (media === "presse") {
@@ -360,8 +358,7 @@ export default function DataTablePige() {
   const [loadingWithCount,setLoadingWithCount]=React.useState(false)
   React.useEffect(() => {
     const startTime = new Date().getTime();
-    setCallGetData(Number(count))
-    
+    setCallGetData(Number(count))  
     if (Number(count) > 0 && Number(count) < 200000) {
       // alert('fetchdata')
    
@@ -397,7 +394,6 @@ export default function DataTablePige() {
       //no data in this date
       // alert('data non available')
       HandelErrorPopup && HandelErrorPopup(true)
-
     } else if (Number(count) === -3) {
       //
     }

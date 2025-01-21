@@ -61,6 +61,13 @@ export const UseCountStore = create((set, get) => ({
       count: -2
     });
   },
+  ResetVeilleCount: () => {
+
+    set({
+      VeilleCount: -2,
+      count_v: -2
+    });
+  },
   getVeilleCount: async (
     email,
     date1,
@@ -70,28 +77,30 @@ export const UseCountStore = create((set, get) => ({
     Filterfamilles,
     Filterannonceursids,
     Filtermarquesids,
-    Filterproduitsids,) => {
+    Filterproduitsids
+  ) => {
     try {
       var media_type = media == "" ? "presse" : media;
-      const response = await axios.post(`${PORT}/${media_type}-${veille}-${veille_diffusion}/count`, {
+      const response = await axios.post(`${PORT}/${media_type}-veille-${veille_diffusion}/count`, {
         email: email,
-        Filterfamilles,
-        Filterannonceursids,
-        Filtermarquesids,
-        Filterproduitsids,
+        familles: Filterfamilles,
+        annonceurs: Filterannonceursids,
+        marques: Filtermarquesids,
+        produits: Filterproduitsids,
         date_debut: date1,
         date_fin: date2,
       });
+    // console.log('count veille',response.data.total)
       var dataLength = Number(response.data.total)
       if (dataLength > Limit_Data_Allowed) {
         set({
           VeilleCount: 0,
-          count_v: response.data.total
+          count_v: Number(response.data.total)
         });
       } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
         set({
           VeilleCount: 1,
-          count_v: response.data.total
+          count_v: Number(response.data.total)
         });
       } else if (dataLength === 0) {
         set({
