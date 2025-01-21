@@ -62,7 +62,12 @@ export const UsePigeDashboardStore= create((set, get)=>({
     PartMarche:[],
     isloading:true,
     errorSendingLink:"",
-    // base:'volume',
+    ExportExcelPending:false,
+    DisplayEmailSent:false,
+    CloseEmailExcel:()=>{
+   set({DisplayEmailSent:false})
+    },
+   
      // Methods
 ResetDataArrays: async()=>{
   // console.log("data reset")
@@ -1681,7 +1686,6 @@ getPicCommunicationLastYear:async(
 
 
 },
-
 sendDownloadLink:async(
   email,
   date1,
@@ -1694,11 +1698,9 @@ sendDownloadLink:async(
   familles,
   classes,
   secteurs,  
-  client,
-  user_id
 )=>{
-
 try {
+  set({ExportExcelPending:true})
   let response=await axios.post(`${PORT}/${media}/excel`,{
      email:email,
      date_debut:date1,
@@ -1712,6 +1714,9 @@ try {
      varietes_ids:varietes
   })
 console.log("response excel",response)
+set({ExportExcelPending:false,
+  DisplayEmailSent:true
+})
 } catch (error) {
   
 }

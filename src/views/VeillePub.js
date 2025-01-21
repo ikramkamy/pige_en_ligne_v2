@@ -22,6 +22,7 @@ import 'components/Commun/commun.css';
 import presse_mini from 'assets/img/veille/presse_mini.jpg';
 import radio_mini from 'assets/img/veille/radio_mini.png';
 import tv_mini from 'assets/img/veille/tv_mini.jpg';
+import { UseCountStore } from "store/dashboardStore/UseCounts";
 export default function VeillePub() {
   const PORT = "https://immar-media.com";
   const { autoriseVeillePresse,
@@ -31,7 +32,6 @@ export default function VeillePub() {
   const history = useHistory()
   const {
     getveilletvData,
-    getVeilleCount,
     veilletvData,
     getVeilleSearch,
     getVeilleById,
@@ -64,6 +64,10 @@ export default function VeillePub() {
     typeVeille,
     getFilters
   } = UseFiltersStore((state) => state);
+
+  const {VeilleCoun,
+    count_v,
+    getVeilleCount,}=UseCountStore((state)=>state)
   const [mediaUrl, setMediaUrl] = useState("/veille_radio");
   const { DownloadExlsxFile } = UseVeilleStore((state) => state)
   const [disable, setDisable] = useState(true);
@@ -476,6 +480,7 @@ export default function VeillePub() {
               isloading={false}
               isSucces={false}
               title="Afficher"
+              mr="10px"
               disablebtn={!media || dataVeilleISFetched}
             //disablebtn={!media}
             />

@@ -9,7 +9,20 @@ import AdminNavbar from 'components/Navbars/AdminNavbar';
 import { Row, Col, Container } from 'react-bootstrap';
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
+import { Profiler } from 'react';
+
 function DataLayout() {
+  const onRenderCallback = (
+    id, // the "id" prop of the Profiler tree that has just committed
+    phase, // can be "mount" or "update"
+    actualDuration, // time spent to render the committed update
+    baseDuration, // estimated time to render the entire subtree without memoization
+    startTime, // when React began rendering this update
+    commitTime, // when React committed this update
+    interactions // the Set of interactions belonging to this update
+  ) => {
+    //console.log({ id, phase, actualDuration, baseDuration, startTime, commitTime, interactions });
+  };
   const {usePrevilegesFamilles}=UseLoginStore((state)=>state);
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
@@ -71,6 +84,7 @@ function DataLayout() {
 
 
   return (
+    <Profiler id="MyComponent" onRender={onRenderCallback}>
     <div style={{
       backgroundImage: `url(${bgimage})`,
       overflowX: "hidden",
@@ -112,6 +126,7 @@ function DataLayout() {
       </div>
       <Footer />
     </div>
+    </Profiler>
   );
 }
 

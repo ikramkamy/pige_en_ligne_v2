@@ -30,6 +30,8 @@ import '../components/Commun/commun.css';
 import MessageLibPopUp from "components/Commun/popups/MessageLibPopup";
 import ExportExcelBtn from "components/Commun/ExportExcelBtn";
 import LargeDataPopup from "components/Commun/popups/LargeDataPopup";
+import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
+import ExcelEmailPopup from "components/Commun/popups/ExcelEmailPopup";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
 export default function DataTablePige() {
   document.title = 'pige publicitaire'
@@ -199,14 +201,15 @@ export default function DataTablePige() {
   const { autorisePigePresse,
     autorisePigeRadio,
     autorisePigeTv, client, email } = UseLoginStore((state) => state)
-  const { getDataPresse, sendDownloadLink,
-    IsPressdataisFetched, ResePressdataisFetched } =
+  const { sendDownloadLink,
+    IsPressdataisFetched, ResePressdataisFetched, ExportExcelPending, DisplayEmailSent, CloseEmailExcel } =
     UsePigeDashboardStore((state) => state);
-  const { getPigeCount, PigeCount, ResetPigeCount } = UseCountStore((state) => state)
+  const { getPigeCount, PigeCount, ResetPigeCount, count } = UseCountStore((state) => state)
 
   const [pressData, setPressData] = React.useState([])
   const { MediaData, getDataMedia, IsMediadataisFetched,
-    ReseMediadataisFetched, FilterDataMediaByrangs } = UseMediaDashboardStore((state) => state);
+    ReseMediadataisFetched, FilterDataMediaByrangs, HandelErrorPopup
+  } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [popupOpen, setPopupOpen] = React.useState(false);
@@ -351,65 +354,79 @@ export default function DataTablePige() {
       //setLoadingshow(true)
 
     }
-  }, [media, date1, date2,
-  ]);
+  }, [media, date1, date2,]);
   const [increment, setIncrement] = React.useState(0)
-  const getData = () => {
-    if (PigeCount === 1) {
-      alert('fetchdata')
-      const startTime = new Date().getTime();
+  const [callGetData, setCallGetData] = React.useState(-3)
+  const [loadingWithCount,setLoadingWithCount]=React.useState(false)
+  React.useEffect(() => {
+    const startTime = new Date().getTime();
+    setCallGetData(Number(count))
+    
+    if (Number(count) > 0 && Number(count) < 200000) {
+      // alert('fetchdata')
+   
+      getDataMedia && getDataMedia(
+        email,
+        media,
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        rangs,
+        date1,
+        date2
+      )
       if (media === "presse") {
         setDataTableShow(true)
         setLoadingshow(true)
-        getDataMedia && getDataMedia(
-          email,
-          media,
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          rangs,
-          date1,
-          date2
-        )
         setPressData(MediaData)
       } else {
         setDataTableShow(false)
         setLoadingshow(true)
-        getDataMedia && getDataMedia(
-          email,
-          media,
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          rangs,
-          date1,
-          date2
-        )
       }
-      const endTime = new Date().getTime();
-      setFetchDataTime(endTime - startTime);
-    } else if (PigeCount === 0) {
-      alert('data too large')
+
+    } else if (Number(count) > 200000) {
+      // alert('data too large')
       setPopupDataLageData(true)
       //Data Too Large
-    } else if (PigeCount === 2) {
+    } else if (Number(count) === 0) {
       //no data in this date
-      alert('data too non available')
-      
+      // alert('data non available')
+      HandelErrorPopup && HandelErrorPopup(true)
+
+    } else if (Number(count) === -3) {
+      //
     }
+    const endTime = new Date().getTime();
+    setFetchDataTime(endTime - startTime);
+    ResetPigeCount && ResetPigeCount()
+    setLoadingWithCount(false)
+  }, [Number(count)])
+console.log(Number(count))
+async function getData() {
+    ResetPigeCount && ResetPigeCount()
+    setLoadingWithCount(true)
+    const pigeCountResult = await getPigeCount(
+      email,
+      media,
+      Filtersupports,
+      Filterfamilles,
+      Filterclassesids,
+      Filtersecteursids,
+      Filtervarietiesids,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      date1,
+      date2
+    );
+    setIncrement(increment + 1)
+    setCallGetData(Number(count))
   }
-
-
   React.useEffect(() => {
     ResePressdataisFetched && ResePressdataisFetched()
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
@@ -448,22 +465,7 @@ export default function DataTablePige() {
   const [loadingFilters, setLoadingFilters] = React.useState(false)
   const [fetchFilter, setFetchFilter] = React.useState(false)
   React.useEffect(() => {
-
     setFetchFilter(true)
-    getPigeCount && getPigeCount(
-      email,
-      media,
-      Filtersupports,
-      Filterfamilles,
-      Filterclassesids,
-      Filtersecteursids,
-      Filtervarietiesids,
-      Filterannonceursids,
-      Filtermarquesids,
-      Filterproduitsids,
-      date1,
-      date2
-    )
   }, [media, date1, date2])
   const HandelSideBarPisition = async () => {
     if (fetchFilter === true) {
@@ -483,7 +485,6 @@ export default function DataTablePige() {
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
   }
-
   React.useEffect(() => {
     if (filteredData2.length !== 0) {
       FilterDataMediaByrangs && FilterDataMediaByrangs(rangs, filteredData2, media)
@@ -552,13 +553,15 @@ export default function DataTablePige() {
         Filterclassesids,
         Filtersecteursids,
         client,
-        user_id,
+
       )
     } else {
       setNotAllowed(true)
     }
   }
-
+  const handleClosePopupExcelEmail = () => {
+    CloseEmailExcel && CloseEmailExcel()
+  }
   if (!(autorisePigePresse || autorisePigeRadio || autorisePigeTv) && client) {
     return (
       <Container
@@ -642,17 +645,21 @@ export default function DataTablePige() {
             }}>
               <ExportExcelBtn
                 getData={exportToExcel}
-                disablebtn={!media}
+                disablebtn={!media || ExportExcelPending}
+                isloading={ExportExcelPending}
+                isSucces={ExportExcelPending}
                 title="Exporter"
 
               />
               <LoadingButtonData
                 getData={getData}
-                isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
+                //isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
+                isloading={loadingWithCount}
                 isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
                 //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                 disablebtn={!media}
                 title="Afficher"
+                mr="10px"
               />
               <LoadingButtonData
                 getData={HandelSideBarPisition}
@@ -667,8 +674,6 @@ export default function DataTablePige() {
 
             </div>
           </div>
-
-
         </div>
 
         <div style={{ width: "100%" }} onClick={() => handeToggleSideBar()}>
@@ -783,14 +788,6 @@ export default function DataTablePige() {
                         boxShadow: 2,
                         border: 2,
                         borderColor: 'primary.light',
-                        // '& .MuiDataGrid-cell:hover': {
-                        //   color: 'primary.main',
-                        // },
-                        // '& .MuiDataGrid-footer': {
-                        //   backgroundColor: '#f5f5f5', 
-                        //   padding: '10px',
-                        // }         
-
                       }}
 
                       rows={filteredData2}
@@ -912,7 +909,6 @@ export default function DataTablePige() {
         handleClosePopupLargeData={handleClosePopupLargeData}
         HandelSideBarPisition={HandelSideBarPisition}
       />
-
       {/* Popup Dialog Message*/}
 
       <MessageLibPopUp popupOpen={popupOpen}
@@ -920,53 +916,16 @@ export default function DataTablePige() {
         popupData={popupData}
         media={media}
       />
-
       {/* Popup Dialog Email export envoyé */}
-      <Dialog open={popupOpenEmailexport}>
-        {/* <DialogTitle>Details</DialogTitle> */}
-        <DialogContent sx={{ width: "100%" }}>
-          <Typography sx={{ width: "100%" }}>
-
-            <Alert severity="success"
-
-              sx={{
-                width: '100%',
-
-              }}
-            >Un email a été envoyé à l'adresse suivante:
-
-              {email}
-
-            </Alert>
-
-          </Typography>
-
-        </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={handleClosePopup} color="primary">
-            Fermer
-          </Button>
-        </DialogActions> */}
-      </Dialog>
-
-
-
-      {/* Email excel popup */}
-      <Dialog
-        open={open}
-      >
-        <DialogContent>
-          <Typography sx={{ width: "100%" }}>
-            <Alert severity="success"
-              sx={{
-                width: '100%',
-              }}
-            >Un lien de télèchargement a été envoyé à l'adresse suivante:
-              {email}
-            </Alert>
-          </Typography>
-        </DialogContent>
-      </Dialog>
+      <ExcelEmailPopup
+        DisplayEmailSent={DisplayEmailSent}
+        handleClosePopupExcelEmail={handleClosePopupExcelEmail}
+        email={email}
+      />
+      {/* Data non disponible */}
+      <DataUnavailablePopup
+        media={media}
+      />
     </div>
   );
 }

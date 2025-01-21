@@ -24,26 +24,18 @@ const ExportExcelBtn = ({title,isloading,isSucces,handelUpdatePassword,disablebt
     setLoading(isloading);
     setSuccess(isSucces); 
 console.log('is loading',isloading)    
-  
     getData()
-    //GetData()
-    //handelUpdatePassword()
-    // Simulate an API call
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   setSuccess(true);
-    // }, 2000); 
   };
 
   return (
-    <Box display="flex" alignItems="center" sx={{backgroundColor:"white", marginRight:"10px",
+    <Box display="flex" alignItems="center" 
+    sx={{backgroundColor:"white", marginRight:"10px",
 
       borderRadius:"5px"
     }}>
       <Button
       sx={{
         textTransform:"none", 
-       
         width:"100%",
         textTransform:"none",
         backgroundColor: '#00a6e0',

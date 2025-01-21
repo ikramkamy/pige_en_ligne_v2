@@ -12,7 +12,7 @@ import "./commun.css";
 export default function MultipleSelectMarques() {
   const { Filtermarques, annonceurs, produits,
      setFiltermarque, Filtermarquesids } = UseFiltersStore((state) => state);
-     console.log("Filtermarques",Filtermarques[3],"Filtermarquesids",Filtermarquesids)
+     //console.log("Filtermarques",Filtermarques[3],"Filtermarquesids",Filtermarquesids)
   const [inputValue, setInputValue] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
   const [previousSelection, setPreviousSelection] = useState([]);
