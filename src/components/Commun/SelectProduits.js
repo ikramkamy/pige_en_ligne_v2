@@ -21,7 +21,6 @@ export default function MultipleSelectProducts() {
     //  setOpenSeachVarities(false)
     setOpenSearchPop(false)
   }
-
   const handelopenPopup = () => {
     setOpenSearchPop(true)
 
@@ -34,7 +33,7 @@ export default function MultipleSelectProducts() {
   }
   useEffect(() => {
     setPreviousSelection(Filterproduitsids);
-   
+  
   }, [Filterproduitsids]);
 
   const handleSelectAll = () => {
@@ -57,18 +56,11 @@ export default function MultipleSelectProducts() {
   const onInputChange = async (event, newInputValue) => {
     setInputValue(newInputValue);
     setLoading(true); // Start loading
-
-    // Simulate a delay for loading (e.g., fetching data)
     await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate a 500ms delay
 
-    setLoading(false); // End loading
+    setLoading(false); 
   };
 
-  // // Filter products based on input value
-  // const filteredElems = inputValue.length > 0 ? Filterproduits.filter((item) => {
-  //   return item.Produit_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
-  // }) : [];
-  // Filter products based on input value
   const filteredElems = Filterproduits.filter((item) => {
     return item.Produit_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   }) 

@@ -10,7 +10,10 @@ import SwapVertIcon from '@mui/icons-material/SwapVert';
 import AdjustIcon from '@mui/icons-material/Adjust';
 import { keyframes } from '@mui/system';
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
-export default function BasicSpeedDial({handelZIPfileDownload,DownloadFile}) {
+export default function BasicSpeedDial({
+  handelZIPfileDownload,
+  DownloadFile,
+  selectSortOption}) {
     const {setShowSearchKey}=UseVeilleStore((state)=>state)
     const pulsate = keyframes`
     0% {
@@ -30,7 +33,7 @@ export default function BasicSpeedDial({handelZIPfileDownload,DownloadFile}) {
         { icon: <FolderZipIcon color='#00a6e0' />, name: 'Zip', todo:handelZIPfileDownload },
         { icon: <SimCardDownloadIcon  color='#00a6e0'/>, name: 'Télécharger',todo:DownloadFile },
         { icon: <Search  color='#00a6e0'/>, name: 'Recherche', todo:setShowSearchKey },
-        { icon: <SwapVertIcon color='#00a6e0'/>, name: 'Trier' },
+        { icon: <SwapVertIcon color='#00a6e0'/>, name: 'Trier', todo: selectSortOption },
       ];
       
   return (

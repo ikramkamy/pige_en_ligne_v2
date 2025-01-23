@@ -206,7 +206,7 @@ margin-bottom: 3px !important;
   .react-datepicker-popper {
    width: 100%;
 }
-@media (max-width:768px) {
+@media (max-width:1145px) {
   .react-datepicker {
     background-color: transparent !important;
     width: 62%  !important;
@@ -214,7 +214,7 @@ margin-bottom: 3px !important;
   }
 }
 .react-datepicker__month-container{
-  transform: translateX(55%) !important;
+  transform: translateX(75%) !important;
 }
 .react-datepicker__navigation--previous {
   left: 140px !important;

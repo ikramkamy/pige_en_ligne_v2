@@ -54,12 +54,12 @@ export default function TypePub() {
   return (
    
       <FormControl sx={{ m: 1,width:"100%"}}>
-      <div style={{ marginTop: 10}}>
+  
         <MenuItem >
           <Checkbox defaultChecked/>
           <ListItemText primary="type" />
         </MenuItem>
-      </div>
+   
         <InputLabel id="demo-multiple-checkbox-label">
         {/* <ListItemText primary="type" /> */}
         </InputLabel>

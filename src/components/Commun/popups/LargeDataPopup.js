@@ -6,14 +6,8 @@ import {
   Dialog,
   DialogActions,
   Button,
-
 } from "@mui/material";
-
 import { Container, Row, Col } from "react-bootstrap";
-
-
-
-
 const LargeDataPopup = ({ 
   media,
   popupDataLageData,

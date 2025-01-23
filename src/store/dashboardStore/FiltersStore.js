@@ -156,28 +156,27 @@ export const UseFiltersStore = create((set, get) => ({
 
 
   },
+  FilterLoading:false,
   getFilters: async (
   email,
   media,
   date1,
   date2
   ) => {
-    try {   
+    try { 
+      set({FilterLoading:true})
       let response=await axios.post(`${PORT}/${media}/filters`,{
         email:email,
         date_debut:date1,
         date_fin:date2
       })
-    console.log("response filters",response,`${PORT}/${media}/filters`,email,date1,date2)
         set({
           supports: response.data.supports,
           Filtersupports: response.data.supports.map((e)=>e.Support_Id),
           familles: response.data.familles,
           Filterfamilles: response.data.familles.map((e)=>e.Famille_Id),
-
           classes: response.data.classes,
-          Filterclasses: response.data.classes,
-  
+          Filterclasses: response.data.classes,  
           secteurs: response.data.secteurs,
           Filtersecteurs: response.data.secteurs,
 
@@ -190,11 +189,12 @@ export const UseFiltersStore = create((set, get) => ({
           Filterannonceursids:response.data.annonceurs.map((e)=>e.Annonceur_Id),
           marques:response.data.marques,
           Filtermarques: response.data.marques,
-
+          Filtermarquesids :response.data.marques.map((e)=>e.Marque_Id) ,
           produits: response.data.produits,
           Filterproduits: response.data.produits,
-  
+          Filterproduitsids:response.data.produits.map((e)=>e.Produit_Id)
         });
+        set({FilterLoading:false})
     } catch (error) {
       console.log(error);
     }
@@ -265,7 +265,7 @@ export const UseFiltersStore = create((set, get) => ({
         //var annonceurIdsinproduits=produitsByFamille.map((elem)=>elem.Annonceur_id)
         var annonceurIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Annonceur_Id))];
         var annonceursByFamille = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
-        console.log("annonceursByFamille", annonceursByFamille)
+       
 
 
         var marquesIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Marque_id))];

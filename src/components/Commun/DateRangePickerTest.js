@@ -47,10 +47,8 @@ export default function DateRangeTest() {
     setDataTableShow && setDataTableShow(false);
     setLoadingshow && setLoadingshow(false);
     ResetBasedeCalucule && ResetBasedeCalucule();
-
     const formattedStart = newStartDate ? moment(newStartDate).format("YYYY-MM-DD") : "";
     const formattedEnd = newEndDate ? moment(newEndDate).format("YYYY-MM-DD") : "";
-
     setDateRang(formattedStart, formattedEnd);
   };
 
@@ -70,8 +68,7 @@ export default function DateRangeTest() {
   }, [dateRange]);
   
   return (
-    <div className="date-picker-container" 
-   >
+    <div className="date-picker-container" style={{backgroundColor:"red", width:"fit-content"}}>
       <DatePicker     
         selectsRange={true}
         startDate={startDate}

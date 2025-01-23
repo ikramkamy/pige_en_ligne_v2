@@ -12,7 +12,7 @@ export const UseVeilleStore = create((set, get) => ({
   ShowSearchKey: false,
 
   setShowSearchKey: () => set((state) => ({ ShowSearchKey: !state.ShowSearchKey })),
-
+  setCloseSearchKey: () => set((state) => ({ ShowSearchKey: false })),
   ResetDataveilleFetched: () => {
     set({ dataVeilleISFetched: false })
   },
@@ -45,7 +45,7 @@ export const UseVeilleStore = create((set, get) => ({
   ) => {
     try {
       let response = await axios.post(`${PORT}/${media}-veille-${veille_diffusion}/table`, {
-        email:email,
+        email: email,
         date_debut: date1,
         date_fin: date2,
         annonceurs: Filterannonceursids,
@@ -53,7 +53,7 @@ export const UseVeilleStore = create((set, get) => ({
         marques: Filtermarquesids,
         produits: Filterproduitsids,
       })
-      console.log('data_veille encours', response)
+      console.log('data_veille', response)
       set({
         veilletvData: response.data,
         dataVeilleISFetched: true
@@ -175,26 +175,26 @@ export const UseVeilleStore = create((set, get) => ({
       console.log(error);
     }
   },
+  ID_message: "",
+  ResetMessageIdInput:()=>{
+    set({ ID_message: ""})
+  },
+  getIDFromInput: async (value) => {
+    set({ ID_message: value })
+  },
   getVeilleById: async (
-    date1,
-    date2,
-    veille_diffusion,
+    email,
     media,
+    id
   ) => {
     try {
 
-      let response = await axios.get(`${PORT2}${media}`,
-        {
-          params: {
-            date1: date1,
-            date2: date2,
-            diffusion: veille_diffusion,
-          }
-        }
-      );
-      console.log("posting to path", `${PORT2}${media}`)
+      let response = await axios.post(`${PORT}/${media}-veille-pub/${id}`, { email: email });
       console.log('veille By ID response', response)
-      //set({veilletvById: response});
+      set({
+        veilletvData: response.data,
+        dataVeilleISFetched: true
+      })
     } catch (error) {
       console.log(error);
     }

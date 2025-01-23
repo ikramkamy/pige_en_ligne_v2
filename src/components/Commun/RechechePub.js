@@ -10,8 +10,8 @@ import Radio from '@mui/material/Radio';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
-
 import { Search } from '@mui/icons-material';
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -22,6 +22,7 @@ const MenuProps = {
     },
   },
 };
+
 export default function RecherchePub() {
   const { setMediaValue,getFilters,ResetAllFilters,setVeilleDiffusion}=UseFiltersStore((state)=>state)
   const {ResetDataArrays}=UsePigeDashboardStore((state)=>state)
@@ -38,7 +39,7 @@ export default function RecherchePub() {
 ])
 const {resetVeilletvdata}=UseVeilleStore((state)=>state)
 const handleChange = (event) => {
-     console.log("event",event)
+     //console.log("event",event)
     setVeilleDiffusion(event.target.value)   
     var PubSelected=mediaList.filter((elem)=>elem.value==event.target.value)
     var IdrangsSeclected=PubSelected.map((elem)=>elem.value)

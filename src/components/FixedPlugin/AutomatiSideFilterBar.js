@@ -21,6 +21,7 @@ import TypePub from 'components/Commun/TypePub';
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import './sidebar.css';
+import SimpleTextInput from 'components/Commun/veille/SeachByIdInput'
 const AutomaticSideFilterBar = ({ getData, DashboardData,
     //props for loading button,
     isloading,
@@ -241,6 +242,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
                     <Row style={{ justifyContent: "center", padding: "20px" }} >
                         <Col style={{ width: "30%" }}>
                             {(showRang && !showVeilleFilters) && (<MultipleSelectSupports />)}
+                            {showVeilleFilters && (<SimpleTextInput/>)}
                             {showVeilleFilters && (<TypePub />)}
                             <MultipleSelectFamilles />
                         
@@ -275,6 +277,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
                             isSucces={isSucces}
                             disablebtn={!media && !base}
                             title="Afficher"
+                            mr="10px"
                         />
                         <Button
                             sx={{

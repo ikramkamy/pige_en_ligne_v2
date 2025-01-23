@@ -80,34 +80,30 @@ export const UseCountStore = create((set, get) => ({
     Filterproduitsids
   ) => {
     try {
+      
       var media_type = media == "" ? "presse" : media;
-      const response = await axios.post(`${PORT}/${media_type}-veille-${veille_diffusion}/count`, {
+      console.log("calling count veille ",`${PORT}/${media_type}-veille-${veille_diffusion}/count`,{
         email: email,
-        familles: Filterfamilles,
         annonceurs: Filterannonceursids,
         marques: Filtermarquesids,
         produits: Filterproduitsids,
+        familles: Filterfamilles,
+        date_debut: date1,
+        date_fin: date2,
+      })
+      const response = await axios.post(`${PORT}/${media_type}-veille-${veille_diffusion}/count`, {
+        email: email,
+        annonceurs: Filterannonceursids,
+        marques: Filtermarquesids,
+        produits: Filterproduitsids,
+        familles: Filterfamilles,
         date_debut: date1,
         date_fin: date2,
       });
-    // console.log('count veille',response.data.total)
-      var dataLength = Number(response.data.total)
-      if (dataLength > Limit_Data_Allowed) {
-        set({
-          VeilleCount: 0,
-          count_v: Number(response.data.total)
-        });
-      } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
-        set({
-          VeilleCount: 1,
-          count_v: Number(response.data.total)
-        });
-      } else if (dataLength === 0) {
-        set({
-          VeilleCount: 2,
-          count_v: 0
-        });
-      }
+      console.log('count veille',response)
+      set({
+        count_v: Number(response.data.total)
+      });
     } catch (error) {
 
       set({

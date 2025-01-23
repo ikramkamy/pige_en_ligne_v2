@@ -64,18 +64,35 @@ const AdvertisementCard = ({
     };
     const handleOpenPdf = () => {
         window.open(`${PORT}/pdf/article/pdf_veille.php?id=${id}`, '_blank');
-      };
+    };
 
-      const id_media=creation.split("_")[0]
-      console.log("id_media",creation)
+    const id_media = creation.split("_")[0]
+    const [resStyle, setResStyle] = React.useState({});
+    React.useEffect(() => {
+        const handleResize = () => {
+            setResStyle({
+                backmarginRight: window.innerWidth < 1145 ? '0px' : '20px',
+            });
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     return (
-        <>
+        <div style={{
+            marginRight: resStyle.marginRight,
+
+        }}>
             <Card className={classes.card}
                 sx={{
                     width: "250px",
                     height: "280px",
 
                     borderRadius: "5px",
+
+
                     '&:hover': {
                         border: "2px solid #ffc600",
                     }
@@ -136,7 +153,7 @@ const AdvertisementCard = ({
                         color="textSecondary">1ère dif. : {diffusion_first}</Typography>
                 </CardContent>
             </Card>
-        
+
             <Modal open={open} onClose={handleClose}>
                 <div className={classes.modalContent}>
 
@@ -210,7 +227,7 @@ const AdvertisementCard = ({
                     </Container>
                 </div>
             </Modal>
-        </>
+        </div>
     );
 };
 

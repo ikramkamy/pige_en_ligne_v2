@@ -208,7 +208,9 @@ export default function DataTablePige() {
 
   const [pressData, setPressData] = React.useState([])
   const { MediaData, getDataMedia, IsMediadataisFetched,
-    ReseMediadataisFetched, FilterDataMediaByrangs, HandelErrorPopup
+    ReseMediadataisFetched, FilterDataMediaByrangs, HandelErrorPopup,
+    ErrorHandel
+
   } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -333,6 +335,9 @@ export default function DataTablePige() {
   const handleClosePopupLargeData = () => {
     setPopupDataLageData(false)
   }
+  const handleClosePopupDataUnavailable = () => {
+    HandelErrorPopup && HandelErrorPopup(false)
+  }
   const [fetchDataTime, setFetchDataTime] = React.useState(0)
   const [popupOpenEmailexport, setPopupOpenEmailexport] = React.useState(false)
   React.useEffect(() => {
@@ -355,13 +360,13 @@ export default function DataTablePige() {
   }, [media, date1, date2,]);
   const [increment, setIncrement] = React.useState(0)
   const [callGetData, setCallGetData] = React.useState(-3)
-  const [loadingWithCount,setLoadingWithCount]=React.useState(false)
+  const [loadingWithCount, setLoadingWithCount] = React.useState(false)
   React.useEffect(() => {
     const startTime = new Date().getTime();
-    setCallGetData(Number(count))  
+    setCallGetData(Number(count))
     if (Number(count) > 0 && Number(count) < 200000) {
       // alert('fetchdata')
-   
+
       getDataMedia && getDataMedia(
         email,
         media,
@@ -392,7 +397,7 @@ export default function DataTablePige() {
       //Data Too Large
     } else if (Number(count) === 0) {
       //no data in this date
-      // alert('data non available')
+       alert('data non available')
       HandelErrorPopup && HandelErrorPopup(true)
     } else if (Number(count) === -3) {
       //
@@ -402,8 +407,8 @@ export default function DataTablePige() {
     ResetPigeCount && ResetPigeCount()
     setLoadingWithCount(false)
   }, [Number(count)])
-console.log(Number(count))
-async function getData() {
+  console.log(Number(count))
+  async function getData() {
     ResetPigeCount && ResetPigeCount()
     setLoadingWithCount(true)
     const pigeCountResult = await getPigeCount(
@@ -506,18 +511,20 @@ async function getData() {
   React.useEffect(() => {
     const handleResize = () => {
       setResStyle({
-        FlexDirection: window.innerWidth < 768 ? 'column' : 'row',
+        FlexDirection: window.innerWidth < 1154 ? 'column' : 'row',
         back: window.innerWidth < 768 ? 'red' : 'yellow',
-        width: window.innerWidth < 768 ? '100%' : '50%',
-        widthRightbtns: window.innerWidth < 768 ? '100%' : 'fit-content',
-        flexWrap: window.innerWidth < 768 ? 'wrap' : 'nowrap',
-        paddingLeftBtn: window.innerWidth < 768 ? '10px' : '0px',
-        widthLefbtnWrapper: window.innerWidth < 768 ? '100%' : '',
-        justifyContentRightBtnWrapper: window.innerWidth < 768 ? 'space-between' : 'center',
-        marginTopAll: window.innerWidth < 768 ? '14vh' : '4%',
-        marginBtm: window.innerWidth < 768 ? '10px' : '0px',
-        widthImage: window.innerWidth < 768 ? '250px' : '250px',
-        jCToolbar: window.innerWidth < 768 ? 'center' : 'space-between'
+        width: window.innerWidth < 1154 ? '100%' : '50%',
+        widthRightbtns: window.innerWidth < 1154 ? '100%' : 'fit-content',
+        flexWrap: window.innerWidth < 1154 ? 'wrap' : 'nowrap',
+        paddingLeftBtn: window.innerWidth < 1154 ? '10px' : '0px',
+        MarginLoadingbtn: window.innerWidth < 1154 ? '0px' : '10px',
+        widthLefbtnWrapper: window.innerWidth < 1154 ? '100%' : '',
+        justifyContentRightBtnWrapper: window.innerWidth < 1154 ? 'space-between' : 'center',
+        marginTopAll: window.innerWidth < 1154 ? '14vh' : '4%',
+        marginBtm: window.innerWidth < 1154 ? '10px' : '0px',
+        widthImage: window.innerWidth < 1154 ? '250px' : '250px',
+        jCToolbar: window.innerWidth < 1154 ? 'center' : 'space-between',
+        DisplayRechecheAvance: window.innerWidth < 1154 ? true : false,
       });
     };
     handleResize();
@@ -622,7 +629,18 @@ async function getData() {
             <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
               <MultipleSelectMedia />
               {mediaResponsive && (<div><MultipleSelectMedia /></div>)}
+              {resStyle.DisplayRechecheAvance && (
+                <LoadingButtonData
+                  getData={HandelSideBarPisition}
+                  isloading={loadingFilters}
+                  isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                  //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
+                  disablebtn={!media}
+                  title="Recherche avancée"
+                />
+              )}
             </div>
+           
             <div style={{ width: "100%", height: "auto", marginTop: resStyle.paddingLeftBtn }}>
               <DateRangeTest />
             </div>
@@ -647,6 +665,7 @@ async function getData() {
                 title="Exporter"
 
               />
+
               <LoadingButtonData
                 getData={getData}
                 //isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
@@ -655,17 +674,19 @@ async function getData() {
                 //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                 disablebtn={!media}
                 title="Afficher"
-                mr="10px"
-              />
-              <LoadingButtonData
-                getData={HandelSideBarPisition}
-                isloading={loadingFilters}
-                isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
-                //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
-                disablebtn={!media}
-                title="Recherche avancée"
+                mr={resStyle.MarginLoadingbtn}
               />
 
+              {!resStyle.DisplayRechecheAvance && (
+                <LoadingButtonData
+                  getData={HandelSideBarPisition}
+                  isloading={loadingFilters}
+                  isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                  //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
+                  disablebtn={!media}
+                  title="Recherche avancée"
+                />
+              )}
               <AutomaticSideFilterBar getData={getData} />
 
             </div>
@@ -731,7 +752,7 @@ async function getData() {
                       localeText={frenchLocaleText}
                     />)}
                   {(!showDataGrid && showDataGridIfNotEmpty) && (<LoadingLineIndicator totalDuration={fetchDataTime} />)}
-                  {(PigeCount === 2) && (<div>
+                  {(Number(count) === 0) && (<div>
                     <Container
                       fluid
                       style={{
@@ -842,7 +863,7 @@ async function getData() {
 
                   {(!showDataGrid && showDataGridIfNotEmpty) && (<LoadingLineIndicator totalDuration={fetchDataTime} />)}
 
-                  {(PigeCount === 2) && (<div>
+                  {(Number(count) === 0) && (<div>
 
                     <Container
                       fluid
@@ -881,8 +902,6 @@ async function getData() {
 
                   <img
                     src={TableIlustration}
-
-
                     alt="immar media"
                     width={resStyle.widthImage} height={resStyle.widthImage} />
                   {/* <CircularProgressWithLabel value={50} /> */}
@@ -892,10 +911,6 @@ async function getData() {
               }
             </div>
           )}
-
-
-
-
         </div>
       </div>
       {/* data too large */}
@@ -920,7 +935,10 @@ async function getData() {
       />
       {/* Data non disponible */}
       <DataUnavailablePopup
+        HandelErrorPopup={HandelErrorPopup}
+        ErrorHandel={ErrorHandel}
         media={media}
+        handleClosePopup={handleClosePopupDataUnavailable}
       />
     </div>
   );

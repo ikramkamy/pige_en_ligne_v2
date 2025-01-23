@@ -23,6 +23,7 @@ import presse_mini from 'assets/img/veille/presse_mini.jpg';
 import radio_mini from 'assets/img/veille/radio_mini.png';
 import tv_mini from 'assets/img/veille/tv_mini.jpg';
 import { UseCountStore } from "store/dashboardStore/UseCounts";
+import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 export default function VeillePub() {
   const PORT = "https://immar-media.com";
   const { autoriseVeillePresse,
@@ -39,10 +40,12 @@ export default function VeillePub() {
     ResetDataveilleFetched,
     ShowSearchKey,
     setShowSearchKey,
-    
+    setCloseSearchKey,
+    ID_message,
+    ResetMessageIdInput
   } = UseVeilleStore((state) => state)
   const {
-    media, date1, date2, veille_diffusion,Filtersupports,
+    media, date1, date2, veille_diffusion, Filtersupports,
     Filterfamilles,
     familles,
     supports,
@@ -62,12 +65,14 @@ export default function VeillePub() {
     ManageSideBarfilterDisplay,
     sideBarFilterPosition,
     typeVeille,
-    getFilters
+    getFilters,
+    FilterLoading
   } = UseFiltersStore((state) => state);
 
-  const {VeilleCoun,
+  const { VeilleCoun,
     count_v,
-    getVeilleCount,}=UseCountStore((state)=>state)
+    getVeilleCount,
+    ResetVeilleCount } = UseCountStore((state) => state)
   const [mediaUrl, setMediaUrl] = useState("/veille_radio");
   const { DownloadExlsxFile } = UseVeilleStore((state) => state)
   const [disable, setDisable] = useState(true);
@@ -84,11 +89,13 @@ export default function VeillePub() {
   const [loadingStep, setLoadingStep] = useState(0.5)
   const [displayVeilleDate, setDisplayVeilleDate] = useState(false)
   const [loadingLineDisplay, setLoadingLineDisplay] = useState(false)
+  const [loadingWithCount, setLoadingWithCount] = React.useState(false)
   document.title = 'veille publicitaire'
   useEffect(() => {
     // console.log("media", media)
     setPdata([])
     ResetDataveilleFetched && ResetDataveilleFetched()
+    ResetMessageIdInput && ResetMessageIdInput()
     setWelcomVeille(false)
     if (media == "") {
       setDisable(true)
@@ -139,18 +146,18 @@ export default function VeillePub() {
       }).sort((a, b) => {
         // Sort based on the selected option
         if (sortOption === 'dateAsc') {
-          return new Date(a.Insertion_Premiere) - new Date(b.Insertion_Premiere);
+          return new Date(a.Veille_Date) - new Date(b.Veille_Date);
         } else if (sortOption === 'dateDesc') {
-          return new Date(b.Insertion_Premiere) - new Date(a.Insertion_Premiere);
+          return new Date(b.Veille_Date) - new Date(a.Veille_Date);
         } else if (sortOption === 'message') {
-          return a.Insertion_Pub_Name.localeCompare(b.Insertion_Pub_Name);
+          return a.Message_Lib.localeCompare(b.Message_Lib);
         } else if (sortOption === 'product') {
-          return a.Insertion_Product_Name.localeCompare(b.Insertion_Product_Name);
+          return a.Produit_Lib.localeCompare(b.Produit_Lib);
         }
         return 0;
       });
 
-      console.log("sortedData", sortedData);
+      //console.log("sortedData", sortedData);
       setSdata(sortedData);
 
       // Filter based on search term
@@ -173,11 +180,11 @@ export default function VeillePub() {
         return false;
       });
 
-      console.log("filteredData", filteredData);
+      //console.log("filteredData", filteredData);
 
       // Apply pagination
       const paginatedData = filteredData.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-      console.log("paginatedData", paginatedData);
+      //console.log("paginatedData", paginatedData);
       setPdata(paginatedData);
     } else {
       // If no data, set empty or default data
@@ -185,28 +192,95 @@ export default function VeillePub() {
     }
   }, [veilletvData, searchTerm, sortOption, page]);
 
+  const [increment, setIncrement] = React.useState(0)
+  const selectSortOption = () => {
+    var option = ["dateAsc", "dateDesc", "message", "product"]
+
+    if (increment > option.length - 1) {
+
+      setIncrement(0)
+      setSortOption(option[0]);
+    } else {
+      setIncrement(increment + 1)
+      setSortOption(option[increment]);
+    }
+    //console.log(sortOption, increment)
+  }
+
   const handlePageChange = (event, value) => {
     //console.log("page value", value)
     setPage(value);
     setPdata(pdata);
   };
   const getData = () => {
-    setLoadingLineDisplay(true)
+    ResetVeilleCount && ResetVeilleCount()
+    setLoadingWithCount(true)
+    if (ID_message) {
+      //alert("get By ID")
+      setSearchTerm('')
+      const startTime = new Date().getTime();
+      setWelcomVeille(true)
+      setLoadingLineDisplay(true)
+      getVeilleById && getVeilleById(email, media, ID_message)
+      setLoadingWithCount(false)
+      setTimeout(() => {
+        setShowdataloading(true)
+      }, 10000);
+      const endTime = new Date().getTime();
+      setFetchDataTime(endTime - startTime);
+      setTimeout(() => {
+        setLoadingStep(fetchDataTime / 100)
+
+      }, fetchDataTime);
+      setTimeout(() => {
+        setLoadingLineDisplay(false)
+      }, 5000);
+      setDisplayVeilleDate(true)
+
+    } else {
+      //alert("get All data ID")
+      getVeilleCount && getVeilleCount(
+        email,
+        date1,
+        date2,
+        media,
+        veille_diffusion,
+        Filterfamilles,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+      )
+    }
+
+  }
+  useEffect(() => {
+
     setSearchTerm('')
     const startTime = new Date().getTime();
     setWelcomVeille(true)
-    getVeilleCount && getVeilleCount(
-      email,
-      date1,
-      date2,
-      media,
-      veille_diffusion,
-      Filterfamilles,
-      Filterannonceursids,
-      Filtermarquesids,
-      Filterproduitsids,
-    )
-   
+
+    if (count_v > 0) {
+      setLoadingLineDisplay(true)
+      //alert("fetch veille data")
+      getveilletvData && getveilletvData(
+        email,
+        date1,
+        date2,
+        media,
+        veille_diffusion,
+        Filterfamilles,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+      )
+
+    } else if (count_v === 0) {
+      //PopUP no data veille available
+      //alert('data veille unavailable')
+    } else {
+      //do nothing
+    }
+    setLoadingWithCount(false)
     setTimeout(() => {
       setShowdataloading(true)
     }, 10000);
@@ -220,29 +294,7 @@ export default function VeillePub() {
       setLoadingLineDisplay(false)
     }, 5000);
     setDisplayVeilleDate(true)
-  }
-  useEffect(()=>{
-console.log("count_v",count_v)
-if(count_v > 0){
-  alert("fetch veille data")
-  getveilletvData && getveilletvData(
-    email,
-    date1,
-    date2,
-    media,
-    veille_diffusion,
-    Filterfamilles,
-    Filterannonceursids,
-    Filtermarquesids,
-    Filterproduitsids,
-  )
-}else{
-//PopUP no data veille available
-alert('data veille unavailable')
-}
-  },[count_v])
-
-
+  }, [count_v])
 
   const DownloadFile = () => {
     DownloadExlsxFile && DownloadExlsxFile(veilletvData, media)
@@ -311,25 +363,26 @@ alert('data veille unavailable')
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
   }
-  const [loadingFilters, setLoadingFilters] = React.useState(false)
-  const[fetchFilter,setFetchFilter]=React.useState(false)
-   React.useEffect(()=>{
-    
-      setFetchFilter(true)
-  
-    },[media,date1,date2])
+  const [fetchFilter, setFetchFilter] = React.useState(false)
+  React.useEffect(() => {
+    setCloseSearchKey && setCloseSearchKey()
+    setFetchFilter(true)
 
-  const HandelSideBarPisition = () => {
-    if(fetchFilter===true){
-      console.log("get veille filters",fetchFilter)
-      getFilters && getFilters(email, media, date1, date2)
+  }, [media, date1, date2])
+
+  const HandelSideBarPisition = async () => {
+    if (fetchFilter === true) {
+      await getFilters && getFilters(email, media, date1, date2)
       setFetchFilter(false)
-    }else{
+
+      setTimeout(() => {
+        ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+      }, 8000);
+         
+    } else {
       //do nothing
-    }
-      setLoadingFilters(true)
-      setLoadingFilters(false)
       ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+    }
   }
   const handerechercheveille = () => {
     getVeilleSearch && getVeilleSearch(
@@ -339,6 +392,7 @@ alert('data veille unavailable')
       media
     )
   }
+  //console.log("filterloading",FilterLoading)
   useEffect(() => {
 
 
@@ -373,12 +427,14 @@ alert('data veille unavailable')
         justifyContentRightBtnWrapper: window.innerWidth < 768 ? 'space-between' : 'center',
         marginTopAll: window.innerWidth < 768 ? '14vh' : '4%',
         widthImage: window.innerWidth < 768 ? '250px' : '500px',
-        felexDirection: window.innerWidth < 1024 ? 'column' : 'row',
+        felexDirection: window.innerWidth < 1150 ? 'column' : 'row',
         back: window.innerWidth < 768 ? 'yellow' : '',
-        MarginRightbtn: window.innerWidth < 768 ? '0px' : '16px',
+        MarginRightbtn: window.innerWidth < 1150 ? '0px' : '16px',
         textAlineCenter: window.innerWidth < 768 ? 'center' : '',
         displayFlex: window.innerWidth < 768 ? 'flex' : '',
-
+        WidthToolBarWrap:window.innerWidth < 1150 ? '100%':'',
+        back:window.innerWidth < 1150 ? 'red':'yellow',
+        marginWraper:window.innerWidth < 1150 ? '10px' : '0',
       });
     };
     handleResize();
@@ -407,7 +463,9 @@ alert('data veille unavailable')
       Filterfamilles,
     )
   }
-
+  const handleClosePopupDataUnavailable = () => {
+    ResetVeilleCount && ResetVeilleCount(false)
+  }
   if (!(autoriseVeillePresse || autoriseVeilleRadio || autoriseVeilleTv) && client) {
     return (
       <Container
@@ -453,87 +511,83 @@ alert('data veille unavailable')
           display: "flex", alignItems: "center",
           justifyContent: 'space-between',
           flexWrap: resStyle.wrapDiv,
+          flexDirection:resStyle.felexDirection
         }}>
           <div style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            flexWrap: resStyle.wrapDiv
+            flexWrap: resStyle.wrapDiv,         
+            width:resStyle.WidthToolBarWrap
           }}>
+            {ShowSearchKey && (<TextField
+              label="Chercher..."
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setPage(1);
+              }}
+              style={{
+                marginRight: resStyle.MarginRightbtn,
+                marginTop: resStyle.paddingLeftBtn,
+                backgroundColor: "white",
+                borderRadius: "5px",
+                height: "40px",
+                border: "none"
+              }}
+            />)}
             <MultipleSelectMedia />
             <RecherchePub />
             <div style={{
-              width: "100%", height: "auto",
+              width: "auto", height: "auto",
               marginTop: resStyle.paddingLeftBtn,
               marginLeft: resStyle.MarginRightbtn,
             }}>
               <DateRangeTest />
             </div>
           </div>
-          {ShowSearchKey && (<TextField
-            label="Chercher..."
-            variant="outlined"
-            size="small"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setPage(1);
-            }}
-            style={{
-              marginRight: resStyle.MarginRightbtn,
-              marginTop: resStyle.paddingLeftBtn,
-              backgroundColor: "white",
-              borderRadius: "5px",
-              height: "50px",
-              border: "none"
-            }}
-          />)}
           <div style={{
             display: "flex",
-            justifyContent: "space-between", alignItems: "center",
+            justifyContent: "space-between", 
+            alignItems: "center",
             width: resStyle.widthRightbtns,
-            paddingTop: resStyle.paddingLeftBtn
+            paddingTop: resStyle.paddingLeftBtn,            
+            width:resStyle.WidthToolBarWrap,
+            marginTop:resStyle.marginWraper,
+            
           }}>
             <LoadingButtonData
               getData={getData}
-              isloading={false}
+              isloading={loadingWithCount}
               isSucces={false}
               title="Afficher"
               mr="10px"
-              disablebtn={!media || dataVeilleISFetched}
-            //disablebtn={!media}
+              disablebtn={!media}
             />
-            <Button
-              onClick={HandelSideBarPisition}
-              disabled={!media}
-              sx={{
-                textTransform: "none",
-                width: "100%",
-                textTransform: "none",
-                backgroundColor: '#00a6e0',
-                textTransform: "none",
-                width: "fit-content",
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#00a6e0',
-                }
-              }}>
-              Recherche avancée
-            </Button>
-            {/* <AnchorTemporaryDrawer getData={getData} /> */}
+
+            <LoadingButtonData
+              getData={HandelSideBarPisition}
+              isloading={FilterLoading}
+              isSucces={false}
+              title="Recherche avancée"
+              disablebtn={!media}
+            />
           </div>
         </div>
         <div onClick={() => handeToggleSideBar()}>
           {welcomVeille ? (
-            <div style={{ marginBottom: "10%" }}>
+            <div style={{marginBottom: "10%",}}>
               {showdataloading ? (
                 <div style={{ width: "100%" }}>
                   {loadingLineDisplay && <LoadingLineIndicator
                     step={loadingStep} totalDuration={fetchDataTime} />}
-                  {(displayVeilleDate && !loadingLineDisplay) && (
+                  {(displayVeilleDate && !loadingLineDisplay && pdata.length >0) && (
                     <BasicSpeedDial DownloadFile={DownloadFile}
-                      handelZIPfileDownload={handelZIPfileDownload} />
-
+                      handelZIPfileDownload={handelZIPfileDownload}
+                      selectSortOption={selectSortOption}
+                    />
                   )}
                   {(displayVeilleDate && !loadingLineDisplay) && (
                     <div className="veilledata tootbal-element"
@@ -544,19 +598,19 @@ alert('data veille unavailable')
 
                       }}
                     >
-            
                       <div className="advertisment_wrap" style={{
                         display: "flex", flexWrap: "wrap",
-                        justifyContent: "space-between",
-                        marginTop: "20px"
+                        justifyContent: "space-arround",
+                        marginTop: "20px",
+                        backgroundColor:"red"
                       }}>
-                       
+
                         {pdata?.map((e) => (<AdvertisementCard
                           key={veilletvData.indexOf(e)}
                           diffusion_first={e.Veille_Date}
                           Veille_Date_All={e.Veille_Date_All}
                           //creation={`${PORT}/${mediaUrl}/${e.Veille_Creation}`}
-                          creation = {media === "presse" ? presse_mini : media === "radio" ? radio_mini : tv_mini}
+                          creation={media === "presse" ? presse_mini : media === "radio" ? radio_mini : tv_mini}
                           product={e.Produit_Lib}
                           id_message={e.Message_Id}
                           message={e.Message_Lib}
@@ -606,7 +660,8 @@ alert('data veille unavailable')
                         height: "50vh",
                         backgroundColor: "#f8f9fa",
                         textAlign: "center",
-                        borderRadius: "5px"
+                        borderRadius: "5px",
+                        backgroundColor:'transparent'
                       }}
                     >
                       <Row
@@ -618,7 +673,8 @@ alert('data veille unavailable')
                           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                         }}
                       >
-                        <b style={{ color: "#00a6e0" }}>Aucune données {media} n'as été enregistrée. Veuillez changer la date. </b>
+                        <b style={{ color: "#00a6e0" }}>Aucune données {media} n'as été 
+                          enregistrée. </b>
 
                       </Row>
                     </Container>
@@ -640,7 +696,16 @@ alert('data veille unavailable')
 
           )}
         </div>
+
         <AutomaticSideFilterBar getData={getData} />
+
+        <DataUnavailablePopup
+          media={media}
+          ErrorHandel={count_v === 0}
+          handleClosePopup={handleClosePopupDataUnavailable}
+
+        />
+
       </Container>
     </div>
   );
