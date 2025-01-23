@@ -397,7 +397,7 @@ export default function DataTablePige() {
       //Data Too Large
     } else if (Number(count) === 0) {
       //no data in this date
-       alert('data non available')
+       //alert('data non available')
       HandelErrorPopup && HandelErrorPopup(true)
     } else if (Number(count) === -3) {
       //
@@ -428,6 +428,7 @@ export default function DataTablePige() {
     setIncrement(increment + 1)
     setCallGetData(Number(count))
   }
+  console.log('isloading in autmatic filters', loadingWithCount)
   React.useEffect(() => {
     ResePressdataisFetched && ResePressdataisFetched()
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)

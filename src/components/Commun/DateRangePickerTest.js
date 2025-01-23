@@ -68,7 +68,7 @@ export default function DateRangeTest() {
   }, [dateRange]);
   
   return (
-    <div className="date-picker-container" style={{backgroundColor:"red", width:"fit-content"}}>
+    <div className="date-picker-container" style={{width:"100%"}}>
       <DatePicker     
         selectsRange={true}
         startDate={startDate}

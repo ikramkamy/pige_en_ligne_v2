@@ -24,10 +24,12 @@ export default function SimpleTextInput({ value }) {
         onChange={(e) => handelchange(e)}
         sx={{
           height: "30px", padding: "-10px",
-
           '& css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input': {
             padding: "7.5px 14px"
-          }
+          },
+          "& .MuiInputBase-input": { 
+        padding: "7.5px 14px",
+      },
         }}
         label="Message ID"
       />

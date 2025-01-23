@@ -27,7 +27,7 @@ export default function RecherchePub() {
   const { setMediaValue,getFilters,ResetAllFilters,setVeilleDiffusion}=UseFiltersStore((state)=>state)
   const {ResetDataArrays}=UsePigeDashboardStore((state)=>state)
   
-  const [selectedMediaPub, setSelectedMediaPub]=useState('')
+  const [selectedMediaPub, setSelectedMediaPub]=useState('1 ère Diffusion')
   const [mediaList, setMediaList]=useState([
     {label:"Diffusion en cours",
       value:"progress"
@@ -62,19 +62,20 @@ const handleChange = (event) => {
         xs: '0px', 
         lg: '16px'
     },
-    margin: "0px", // This will apply to all screens, but marginRight will override it on large screens
+    margin: "0px", 
 }}>
       
         <InputLabel id="demo-multiple-checkbox-label"
          sx={{ 
           top:"-10px",
           color: "black",
+          display:'none',
           '&.Mui-focused': {
             color: 'transparent',
             display:'none'
           },
           }}>
-        1 ére diffusion
+        {/* 1 ére diffusion */}
         </InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"

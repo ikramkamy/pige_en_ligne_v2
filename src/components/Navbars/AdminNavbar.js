@@ -62,7 +62,8 @@ console.log("call logout function")
     }}>
       <div style={{width:"90%", display:"flex",
        justifyContent:"space-between",
-       alignItems:"start",paddingTop: '0px'
+       alignItems:"start",paddingTop: '0px', 
+       
       }}>
       <div style={{paddingTop:"0px"}} >
         <Link to="/admin/home">
@@ -70,7 +71,7 @@ console.log("call logout function")
         </Link>
       </div>
       <div style={{
-        display: "flex", width: "30%",
+        display: "flex", width: "100%",
         display: "flex", justifyContent: "flex-end", alignItems: "center",       
       }}>
         <span className="no-icon" style={{
@@ -78,8 +79,7 @@ console.log("call logout function")
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
-          height: "80px",
-          marginRight: '15px',
+          height: "80px",         
           color: "white"
         }}>
           <Link
@@ -91,8 +91,8 @@ console.log("call logout function")
               justifyContent: "center"
             }}
           >
-            <SearchCircleIcon style={{
-              width: "35px",
+            <SearchCircleIcon className="icon_nav" style={{
+              // width: "35px",
 
               color: "white",
               // "&:hover": {
@@ -112,7 +112,7 @@ console.log("call logout function")
           alignItems: "center",
           flexDirection: "column",
           height: "80px",
-          marginRight: '15px'
+         
         }}>
           <Link
             to="/veille/veille_creations_publicitaires"
@@ -123,8 +123,8 @@ console.log("call logout function")
               justifyContent: "center"
             }}
           >
-            <SpeakerphoneIcon
-              style={{ width: "35px",color: "white", }}
+            <SpeakerphoneIcon className="icon_nav"
+              style={{color: "white", }}
             />
 
           </Link>
@@ -139,11 +139,12 @@ console.log("call logout function")
           alignItems: "center",
           flexDirection: "column",
           height: "80px",
-          marginRight: '15px'
+         
         }} >
           <Link to="/media/tableau_de_bord" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <ChartBarIcon
-              style={{ width: "35px",color: "white", }}
+             className="icon_nav"
+              style={{color: "white", }}
             />
           </Link>
           <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
@@ -156,8 +157,7 @@ console.log("call logout function")
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
-          height: "80px",
-          //marginRight:'15px'
+          height: "80px",        
         }}>
           <Link to="/login"
             style={{
@@ -165,7 +165,8 @@ console.log("call logout function")
               alignItems: "center", justifyContent: "center"
             }}>
             <LogoutIcon onClick={handelLogout}
-              style={{ width: "35px" ,color: "white",}}
+             className="icon_nav"
+              style={{color: "white"}}
             />
           </Link>
           <p style={{ textTransform: "", fontSize: "10px" }}>déconnexion</p>

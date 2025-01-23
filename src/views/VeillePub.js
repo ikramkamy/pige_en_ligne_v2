@@ -212,9 +212,11 @@ export default function VeillePub() {
     setPage(value);
     setPdata(pdata);
   };
-  const getData = () => {
+  const getData = async() => {
     ResetVeilleCount && ResetVeilleCount()
     setLoadingWithCount(true)
+
+   
     if (ID_message) {
       //alert("get By ID")
       setSearchTerm('')
@@ -239,7 +241,7 @@ export default function VeillePub() {
 
     } else {
       //alert("get All data ID")
-      getVeilleCount && getVeilleCount(
+      const pigeCountResult = await  getVeilleCount && getVeilleCount(
         email,
         date1,
         date2,
@@ -254,7 +256,6 @@ export default function VeillePub() {
 
   }
   useEffect(() => {
-
     setSearchTerm('')
     const startTime = new Date().getTime();
     setWelcomVeille(true)
@@ -267,6 +268,7 @@ export default function VeillePub() {
         date1,
         date2,
         media,
+        typeVeille,
         veille_diffusion,
         Filterfamilles,
         Filterannonceursids,
@@ -280,7 +282,14 @@ export default function VeillePub() {
     } else {
       //do nothing
     }
-    setLoadingWithCount(false)
+    setTimeout(() => {
+      setLoadingWithCount(false)
+    }, 2000);
+
+
+
+
+   
     setTimeout(() => {
       setShowdataloading(true)
     }, 10000);
@@ -435,6 +444,7 @@ export default function VeillePub() {
         WidthToolBarWrap:window.innerWidth < 1150 ? '100%':'',
         back:window.innerWidth < 1150 ? 'red':'yellow',
         marginWraper:window.innerWidth < 1150 ? '10px' : '0',
+        justifyContentWraper:window.innerWidth < 1150 ? 'space-around' : 'space-between',
       });
     };
     handleResize();
@@ -589,7 +599,7 @@ export default function VeillePub() {
                       selectSortOption={selectSortOption}
                     />
                   )}
-                  {(displayVeilleDate && !loadingLineDisplay) && (
+                  {(displayVeilleDate && !loadingLineDisplay  && count_v >0) && (
                     <div className="veilledata tootbal-element"
                       style={{
                         width: "100%", display: "flex",
@@ -600,9 +610,9 @@ export default function VeillePub() {
                     >
                       <div className="advertisment_wrap" style={{
                         display: "flex", flexWrap: "wrap",
-                        justifyContent: "space-arround",
+                        justifyContent: resStyle.justifyContentWraper,
                         marginTop: "20px",
-                        backgroundColor:"red"
+                        
                       }}>
 
                         {pdata?.map((e) => (<AdvertisementCard
@@ -697,7 +707,12 @@ export default function VeillePub() {
           )}
         </div>
 
-        <AutomaticSideFilterBar getData={getData} />
+        <AutomaticSideFilterBar 
+        getData={getData} 
+         isloading={loadingWithCount}
+         isSucces={false}
+        
+        />
 
         <DataUnavailablePopup
           media={media}

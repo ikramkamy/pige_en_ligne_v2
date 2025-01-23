@@ -171,8 +171,8 @@ export const UseFiltersStore = create((set, get) => ({
         date_fin:date2
       })
         set({
-          supports: response.data.supports,
-          Filtersupports: response.data.supports.map((e)=>e.Support_Id),
+          supports: response.data?.supports,
+          Filtersupports: response.data.supports?.map((e)=>e.Support_Id),
           familles: response.data.familles,
           Filterfamilles: response.data.familles.map((e)=>e.Famille_Id),
           classes: response.data.classes,

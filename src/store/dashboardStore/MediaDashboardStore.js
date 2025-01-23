@@ -4,7 +4,7 @@ const PORT = "https://pige-dev.immar-media.com/api/index.php"
 export const UseMediaDashboardStore = create((set, get) => ({
   MediaData: [],
   IsMediadataisFetched: false,
-  ErrorHandel: true,
+  ErrorHandel: false,
   HandelErrorPopup: (show) => {
     set({ErrorHandel: show})
   },

@@ -21,7 +21,8 @@ import TypePub from 'components/Commun/TypePub';
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import './sidebar.css';
-import SimpleTextInput from 'components/Commun/veille/SeachByIdInput'
+import SimpleTextInput from 'components/Commun/veille/SeachByIdInput';
+
 const AutomaticSideFilterBar = ({ getData, DashboardData,
     //props for loading button,
     isloading,
@@ -217,7 +218,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
+    console.log('isloading in autmatic filters', isloading)
     return (
         <div className="Side_Translate_X"
             style={{
@@ -242,10 +243,10 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
                     <Row style={{ justifyContent: "center", padding: "20px" }} >
                         <Col style={{ width: "30%" }}>
                             {(showRang && !showVeilleFilters) && (<MultipleSelectSupports />)}
-                            {showVeilleFilters && (<SimpleTextInput/>)}
+                            {showVeilleFilters && (<SimpleTextInput />)}
                             {showVeilleFilters && (<TypePub />)}
                             <MultipleSelectFamilles />
-                        
+
                             {!showVeilleFilters && <MultipleSelectClasses />}
                             {!showVeilleFilters && <MultipleSelectSecteurs />}
 
@@ -259,23 +260,17 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
                             <MultipleSelectProducts />
                         </Col>
                     </Row>
-
-
                     {showVeilleFilters && <div style={{ height: "30vh", width: "100%" }}></div>}
                     <div
                         style={{
                             bottom: "0px", width: "100%",
                             display: "flex", justifyContent: "center", alignItems: "center"
                         }}>
-
-
-
                         <LoadingButtonData
                             getData={getData}
-                            disabled={!media}
                             isloading={isloading}
                             isSucces={isSucces}
-                            disablebtn={!media && !base}
+                            disablebtn={!media}
                             title="Afficher"
                             mr="10px"
                         />

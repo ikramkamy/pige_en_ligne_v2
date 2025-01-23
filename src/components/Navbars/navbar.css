@@ -4,9 +4,8 @@
   
   .no-icon p {
       opacity: 0;
-      color: white;
+      color: white;  
   }
-  
   .no-icon:hover p{
     display: block; 
     opacity: 1;
@@ -16,14 +15,20 @@
     flex-direction: row; /* Default direction */
 }
 .navbar_back{
-  
   background-image: url('assets/navbar.png');
   background-size: cover;
   background-repeat: no-repeat;
-
 }
 .logo-immar{
   width: 150px;
+}
+.icon_nav{
+  color: red;
+  width: 35px;
+}
+.no-icon{
+  margin-right: 15px;
+ 
 }
 @media (max-width: 768px) {
     .links {
@@ -32,5 +37,17 @@
     .logo-immar{
       width: 120px;
     } 
+    .no-icon{
+      margin-right: 5px;
+    }
  
+}
+@media (max-width: 375px) {
+  .logo-immar{
+    width: 100px;
+  } 
+  .icon_nav{
+    color: red;
+    width: 30px;
+  }
 }

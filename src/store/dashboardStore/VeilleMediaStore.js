@@ -37,6 +37,7 @@ export const UseVeilleStore = create((set, get) => ({
     date1,
     date2,
     media,
+    typeVeille,
     veille_diffusion,
     Filterfamilles,
     Filterannonceursids,
@@ -53,26 +54,33 @@ export const UseVeilleStore = create((set, get) => ({
         marques: Filtermarquesids,
         produits: Filterproduitsids,
       })
-      console.log('data_veille', response)
+      //console.log('data_veille', response)
       set({
         veilletvData: response.data,
         dataVeilleISFetched: true
       })
-      // switch (typeVeille) {
-      //   case "BIL":
-      //     console.log("BIL")
-      //     dataFiltred.filter((item) => item.Insertion_Type == "BIL")
-      //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type === "BIL") })
-      //     break;
-      //   case "autre":
-      //     console.log("autre")
-      //     // filterddata.filter((item)=>item.Insertion_Type !=="BIL")
-      //     set({ veilletvData: dataFiltred.filter((item) => item.Insertion_Type !== "BIL") })
-      //     break;
-      //   case "":
-      //     set({ veilletvData: dataFiltred })
-      //     break;
-      // }
+      //console.log("type veille",typeVeille)
+
+      switch (typeVeille) {
+        case "BIL":
+          //console.log("BIL")
+          set({ veilletvData: response.data.filter((item) => item.Insertion_Type === "BIL") })
+          // console.log("filtering veille  BIL",
+          //   response.data.filter((item) => item.Insertion_Type === "BIL"))
+          break;
+        case "autre":
+          //console.log("autre")
+          // filterddata.filter((item)=>item.Insertion_Type !=="BIL")
+          set({ veilletvData: response.data.filter((item) => item.Insertion_Type !== "BIL")})
+            // console.log("filtering veille   autre",
+            //   response.data.filter((item) => item.Insertion_Type !== "BIL"))
+          break;
+        case "":
+          set({ veilletvData: response.data })
+          // console.log("filtering veille  autre",
+          //   response.data.filter((item) => item.Insertion_Type !== "BIL"))
+          break;
+      }
     } catch (error) {
       console.log(error);
       set({ veilletvData: [] })

@@ -48,7 +48,8 @@ const AdvertisementCard = ({
             height: "100vh",
             display: 'flex',
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
+
         },
     }));
 
@@ -63,7 +64,7 @@ const AdvertisementCard = ({
         setOpen(false);
     };
     const handleOpenPdf = () => {
-        window.open(`${PORT}/pdf/article/pdf_veille.php?id=${id}`, '_blank');
+        //window.open(`${PORT}/pdf/article/pdf_veille.php?id=${id}`, '_blank');
     };
 
     const id_media = creation.split("_")[0]
@@ -72,6 +73,7 @@ const AdvertisementCard = ({
         const handleResize = () => {
             setResStyle({
                 backmarginRight: window.innerWidth < 1145 ? '0px' : '20px',
+                widthVideoContainer: window.innerWidth < 1145 ? '80vw' : '40vw',
             });
         };
         handleResize();
@@ -155,27 +157,25 @@ const AdvertisementCard = ({
             </Card>
 
             <Modal open={open} onClose={handleClose}>
-                <div className={classes.modalContent}>
+                <div className={classes.modalContent}
+
+                >
 
                     <Container
                         fluid
                         style={{
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "space-between",
+                            // justifyContent: "",
                             alignItems: "center",
                             height: "auto",
                             //padding: "20%",
-                            width: '40vw',
-                            height: "50vh",
+                            width: resStyle.widthVideoContainer,
+                            // height: "50vh",
+                            backgroundColor: "white",
+                            paddingTop:'20px'
                         }}
                     >
-                        {/* <Row style={{ height: "80%" }}> */}
-                        {/* <div style={{
-              display: 'flex', flexDirection: "column",
-              alignItems: 'center', justifyContent: 'center',
-              width: "auto"
-            }}> */}
                         {media === "presse" && (
                             //<div style={{ position: 'relative', display: 'inline-block', cursor: 'pointer',width:"300px" }}>
                             <PictureAsPdfIcon onClick={handleOpenPdf} color="#00a6e0" width="80%"
@@ -184,7 +184,8 @@ const AdvertisementCard = ({
                             //</div>
                         )}
                         {media === "radio" && (
-                            //<div style={{ marginTop: "5px", padding: "10px", backgroundColor: "#e0f7fa", borderRadius: "8px",width:"300px" }}>
+                            //<div style={{ marginTop: "5px", padding: "10px", 
+                            // backgroundColor: "#e0f7fa", borderRadius: "8px",width:"300px" }}>
                             <audio src={`${fichier}`} controls width="800px"
                                 style={{
                                     borderRadius: "8px", marginTop: "5px"
@@ -194,22 +195,17 @@ const AdvertisementCard = ({
                             //</div>
                         )}
                         {media === "television" && (
-                            <video src={`${fichier}`} controls={true} width="80%"
+                            <video src={`${fichier}`} controls={true} width="100%"
                                 style={{ marginTop: "5px", borderRadius: "20px" }} />
 
                         )}
-
-                        {/* </div> */}
-                        {/* </Row> */}
-
-
                         <DialogActions sx={{
                             width: "100%",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
                             marginTop: "20px",
-
+                            backgroundColor: "white"
                         }}>
 
                             <Button color="primary" sx={{
@@ -218,11 +214,17 @@ const AdvertisementCard = ({
                                 marginBottom: "10px",
                                 backgroundColor: "#00a6e0",
                                 width: "50%",
-                                color: "white",
+                                color:"white",
+                                '&:hover': {
+                                    backgroundColor:"#00a6e0"
+                                },
 
                             }}
                                 onClick={() => setOpen(false)}
-                            >Fermer</Button>
+                            >Fermer
+                            
+                            
+                            </Button>
                         </DialogActions>
                     </Container>
                 </div>
