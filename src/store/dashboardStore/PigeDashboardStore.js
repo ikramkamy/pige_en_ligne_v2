@@ -2,6 +2,7 @@ import { create  } from "zustand";
 import axios  from "axios";
 import dayjs from "dayjs";
 const PORT="https://pige-dev.immar-media.com/api/index.php";
+const PORT2="https://immar-media.com/"
 export const UsePigeDashboardStore= create((set, get)=>({
     PressData:[],
     VolumePresse :0,
@@ -132,19 +133,19 @@ let isfetched=false;
     date2:date2,
   })
   .then(response => {
-    console.log("presse response",{
-      supports: supports,
-      familles: familles,
-      classes: classes,
-      secteurs: secteurs,
-      varieties: varieties,
-      annonceurs: annonceurs,
-      marques: marques,
-      produits: produits,
-      date1: date1,
-      date2: date2,
-  });
-    console.log("presse response", response)
+  //   console.log("presse response",{
+  //     supports: supports,
+  //     familles: familles,
+  //     classes: classes,
+  //     secteurs: secteurs,
+  //     varieties: varieties,
+  //     annonceurs: annonceurs,
+  //     marques: marques,
+  //     produits: produits,
+  //     date1: date1,
+  //     date2: date2,
+  // });
+    // console.log("presse response", response)
     set({
       PressData:response.data.data
     })
@@ -174,7 +175,7 @@ getVolumePresse: async (
 
     try {
       
-      let response = await axios.post(`${PORT}/getfilters2.php`,{
+      let response = await axios.post(`${PORT2}/getfilters2.php`,{
         supports:supports,
         familles:familles,
         classes:classes,
@@ -214,7 +215,7 @@ getVolumePresseLastYear: async (
 
     try {
       
-      let response = await axios.post(`${PORT}/getfilters2.php`,{
+      let response = await axios.post(`${PORT2}/getfilters2.php`,{
         supports:supports,
         familles:familles,
         classes:classes,
@@ -260,7 +261,7 @@ getAnnonceursActifPresse: async (
   
       try {
         
-        let response = await axios.post(`${PORT}/getfilters2.php`,{
+        let response = await axios.post(`${PORT2}/getfilters2.php`,{
           supports:supports,
         familles:familles,
         classes:classes,
@@ -295,7 +296,7 @@ getAnnonceursActifPresseLastYear: async (
 
   try {
     
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
     familles:familles,
     classes:classes,
@@ -330,7 +331,7 @@ getCreationUniquesPresse: async (
       
           try {
             
-            let response = await axios.post(`${PORT}/getfilters2.php`,{
+            let response = await axios.post(`${PORT2}/getfilters2.php`,{
               supports:supports,
               familles:familles,
               classes:classes,
@@ -366,7 +367,7 @@ getCreationUniquesPresseLastYear: async (
 
   try {
     
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -404,7 +405,7 @@ getBudgetBrutPresse: async (
           
               try {
                 
-                let response = await axios.post(`${PORT}/getfilters2.php`,{
+                let response = await axios.post(`${PORT2}/getfilters2.php`,{
                   supports:supports,
                   familles:familles,
                   classes:classes,
@@ -420,7 +421,7 @@ getBudgetBrutPresse: async (
                   budgettotal:"budgettotal",
           
                 });
-               console.log('response',response)
+              //  console.log('response',response)
                 set({BudgetBrutPresse: Number(response.data.data[0].total).toFixed(2)});
                 
               } catch (error) {
@@ -443,7 +444,7 @@ getBudgetBrutPresseLastYear: async (
 
    try {
      
-     let response = await axios.post(`${PORT}/getfilters2.php`,{
+     let response = await axios.post(`${PORT2}/getfilters2.php`,{
        supports:supports,
        familles:familles,
        classes:classes,
@@ -459,7 +460,7 @@ getBudgetBrutPresseLastYear: async (
        budgettotal:"budgettotal",
 
      });
-    console.log('response',response)
+    // console.log('response',response)
      set({BudgetBrutPresseLastYear: Number(response.data.data[0].total).toFixed(2)});
      
    } catch (error) {
@@ -480,7 +481,7 @@ getSupportDiffusionPresse: async (
               
                   try {
                     
-                    let response = await axios.post(`${PORT}/getfilters2.php`,{
+                    let response = await axios.post(`${PORT2}/getfilters2.php`,{
                       supports:supports,
                       familles:familles,
                       classes:classes,
@@ -517,7 +518,7 @@ getSupportDiffusionPresseLastYear: async (
 
    try {
      
-     let response = await axios.post(`${PORT}/getfilters2.php`,{
+     let response = await axios.post(`${PORT2}/getfilters2.php`,{
        supports:supports,
        familles:familles,
        classes:classes,
@@ -545,7 +546,7 @@ getCouleur: async (supports,familles,classes,secteurs,varieties,annonceurs,marqu
                   
                       try {
                         
-                        let response = await axios.post(`${PORT}/getfilters2.php`,{
+                        let response = await axios.post(`${PORT2}/getfilters2.php`,{
                           supports:supports,
                           familles:familles,
                           classes:classes,
@@ -586,10 +587,10 @@ getVolume: async (
   date2,
 
 ) => {
-console.log("link to volume calculation",`${PORT}/getfilters2.php`)
+//console.log("link to volume calculation",`${PORT2}/getfilters2.php`)
   try {
     
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -635,7 +636,7 @@ getVolumelastyear: async (
   // console.log("date1",dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'))
   // console.log("link to volume calculation",`${PORT}/getfilters2.php`)
   try {
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -678,7 +679,7 @@ getAnnonceursActif: async (
 
   try {
     
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
      familles:familles,
      classes:classes,
@@ -693,7 +694,7 @@ getAnnonceursActif: async (
       annonceursactifs:"annonceursactifs",
 
     });
-    console.log('response', response)
+    //console.log('response', response)
     set({AnnonceursActifMedia: Number(response.data.data[0].count)});
   } catch (error) {
     console.log(error);
@@ -717,7 +718,7 @@ getAnnonceursActifLastYear: async (
 
   try {
     
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
      familles:familles,
      classes:classes,
@@ -732,7 +733,7 @@ getAnnonceursActifLastYear: async (
       annonceursactifs:"annonceursactifs",
 
     });
-    console.log('response', response)
+    //console.log('response', response)
     set({AnnonceursActifMediaLastYear: Number(response.data.data[0].count)});
   } catch (error) {
     console.log(error);
@@ -757,7 +758,7 @@ getTop20famillesSectorielles: async (
   
       try {
         set({isloading:true})
-        let response = await axios.post(`${PORT}/getfilters2.php`,{
+        let response = await axios.post(`${PORT2}/getfilters2.php`,{
           media:media,
           dashboard:"dashboard",
           base:base,
@@ -779,7 +780,7 @@ getTop20famillesSectorielles: async (
       
         set({Top20famillesSectorielles: response.data.data});
         set({isloading:false})
-       console.table("response top 20 famille", response)
+       //console.table("response top 20 famille", response)
         
       } catch (error) {
         console.log(error);
@@ -804,7 +805,7 @@ getTop20Annonceurs: async (
 
    try {
      set({isloading:true})
-     let response = await axios.post(`${PORT}/getfilters2.php`,{
+     let response = await axios.post(`${PORT2}/getfilters2.php`,{
        media:media,
        dashboard:"dashboard",
        base:base,
@@ -823,10 +824,10 @@ getTop20Annonceurs: async (
        rangs:rangs,
      });
      
-     console.log('rangs',rangs)
-     console.log('media',media)
-     console.log('base',base)
-     console.log('response',response)
+    //  console.log('rangs',rangs)
+    //  console.log('media',media)
+    //  console.log('base',base)
+    //  console.log('response',response)
      set({Top20Annonceurs: response.data.data});
      set({isloading:false})
     
@@ -856,7 +857,7 @@ getPrtMarchet:async(
 
   try {
      
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -875,7 +876,7 @@ getPrtMarchet:async(
 
     });
 
-  console.log('part marche',response)
+  // console.log('part marche',response)
     set({PartMarche: response.data.data});
     
   } catch (error) {
@@ -908,7 +909,7 @@ getTop20Marques:async(
 
   try {
     set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       media:media,
       dashboard:"dashboard",
       base:base,
@@ -930,10 +931,10 @@ getTop20Marques:async(
 
     });
     
-    console.log('rangs',rangs)
-    console.log('media',media)
-    console.log('base',base)
-    console.log('response',response)
+    // console.log('rangs',rangs)
+    // console.log('media',media)
+    // console.log('base',base)
+    // console.log('response',response)
     set({Top20marques: response.data.data});
     set({isloading:false})
    
@@ -960,7 +961,7 @@ getTop20Produits:async(
 
   try {
     set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       media:media,
       dashboard:"dashboard",
       base:base,
@@ -981,10 +982,10 @@ getTop20Produits:async(
 
     });
     
-    console.log('rangs',rangs)
-    console.log('media',media)
-    console.log('base',base)
-    console.log('response produit',response)
+    // console.log('rangs',rangs)
+    // console.log('media',media)
+    // console.log('base',base)
+    // console.log('response produit',response)
     set({Top20produits: response.data.data});
     set({isloading:false})
    
@@ -1011,7 +1012,7 @@ getRepartitionFormat:async(
 
   try {
     set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       media:media,
       dashboard:"dashboard",
       base:base,
@@ -1032,10 +1033,10 @@ getRepartitionFormat:async(
 
     });
     
-    console.log('rangs',rangs)
-    console.log('media',media)
-    console.log('base',base)
-    console.log('response repartition',response)
+    // console.log('rangs',rangs)
+    // console.log('media',media)
+    // console.log('base',base)
+    // console.log('response repartition',response)
     set({FormatRepartition: response.data.data});
     set({isloading:false})
    
@@ -1062,7 +1063,7 @@ getAnnonceursParSupport:async(
 
   try {
     set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       media:media,
       dashboard:"dashboard",
       base:base,
@@ -1083,10 +1084,10 @@ getAnnonceursParSupport:async(
 
     });
     
-    console.log('rangs',rangs)
-    console.log('media',media)
-    console.log('base',base)
-    console.log('response a a par support',response)
+    // console.log('rangs',rangs)
+    // console.log('media',media)
+    // console.log('base',base)
+    // console.log('response a a par support',response)
     set({AnnonceurParSupport: response.data.data});
     set({isloading:false})
    
@@ -1114,7 +1115,7 @@ getCreationParAnnonceur:async(
 
   try {
     set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       media:media,
       dashboard:"dashboard",
       base:base,
@@ -1135,10 +1136,10 @@ getCreationParAnnonceur:async(
 
     });
     
-    console.log('rangs',rangs)
-    console.log('media',media)
-    console.log('base',base)
-    console.log('response creation par annonceur',response)
+    // console.log('rangs',rangs)
+    // console.log('media',media)
+    // console.log('base',base)
+    // console.log('response creation par annonceur',response)
     set({CreationParAnnonceur: response.data.data});
     set({isloading:false})
    
@@ -1167,7 +1168,7 @@ getCreationUniques: async (
 
   try {
     set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1184,7 +1185,7 @@ getCreationUniques: async (
       creationsunique:"creationsunique",
 
     });
-    console.log("creation unique",response)
+    // console.log("creation unique",response)
     set({CreationUniquesMedia: Number(response.data.data[0].count)});
     set({isloading:false})
   } catch (error) {
@@ -1209,7 +1210,7 @@ getCreationUniquesLastYear: async (
 
   try {
     set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1226,7 +1227,7 @@ getCreationUniquesLastYear: async (
       creationsunique:"creationsunique",
 
     });
-    console.log("creation unique",response)
+    // console.log("creation unique",response)
     set({CreationUniquesMediaLastYear: Number(response.data.data[0].count)});
     set({isloading:false})
   } catch (error) {
@@ -1251,7 +1252,7 @@ getBudgetBrut: async (
 
    try {
     set({isloading:true})
-     let response = await axios.post(`${PORT}/getfilters2.php`,{
+     let response = await axios.post(`${PORT2}/getfilters2.php`,{
       media:media,
       dashboard:"dashboard",
       budgettotal:"budgettotal",
@@ -1300,7 +1301,7 @@ getBudgetBrutLastYear: async (
 
   try {
    set({isloading:true})
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
      media:media,
      dashboard:"dashboard",
      budgettotal:"budgettotal",
@@ -1350,7 +1351,7 @@ getSupportDiffusion: async (
 
    try {
      
-     let response = await axios.post(`${PORT}/getfilters2.php`,{
+     let response = await axios.post(`${PORT2}/getfilters2.php`,{
        supports:supports,
        familles:familles,
        classes:classes,
@@ -1367,7 +1368,7 @@ getSupportDiffusion: async (
        supportdiffusion:"supportdiffusion",
 
      });
-   console.log("support de diffusion",response)
+  //  console.log("support de diffusion",response)
      set({SupportDiffusionMedia: Number(response.data.data[0].count)});
      
    } catch (error) {
@@ -1392,7 +1393,7 @@ getSupportDiffusionLastYear: async (
 
   try {
     
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1409,7 +1410,7 @@ getSupportDiffusionLastYear: async (
       supportdiffusion:"supportdiffusion",
 
     });
-  console.log("support de diffusion",response)
+  // console.log("support de diffusion",response)
     set({SupportDiffusionMediaLastYear: Number(response.data.data[0].count)});
     
   } catch (error) {
@@ -1434,7 +1435,7 @@ getDureeTotalDiffusion:async (
 )=>{
   try {
      
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1451,7 +1452,7 @@ getDureeTotalDiffusion:async (
       dureetotal:"dureetotal",
 
     });
-  console.log('response duree',response)
+  // console.log('response duree',response)
   if( Number(response.data.data[0].count)>3600){
     set({DureeTotal: (Number(response.data.data[0].count)/3600).toFixed(2) +"H"});
   }else{
@@ -1481,7 +1482,7 @@ getDureeTotalDiffusionLastYear:async (
 )=>{
   try {
      
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1498,7 +1499,7 @@ getDureeTotalDiffusionLastYear:async (
       dureetotal:"dureetotal",
 
     });
-  console.log('response duree',response)
+  // console.log('response duree',response)
   if( Number(response.data.data[0].count)>3600){
     set({DureeTotalLastYear: (Number(response.data.data[0].count)/3600).toFixed(2) +"H"});
   }else{
@@ -1529,7 +1530,7 @@ getDureeTotalMoyenne:async (
 )=>{
   try {
      
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1546,7 +1547,7 @@ getDureeTotalMoyenne:async (
       dureemoyenne:"dureemoyenne",
 
     });
-  console.log('duree moyenne', response)
+  // console.log('duree moyenne', response)
     set({DureeMoyenne: Number(response.data.data[0].proportion)});
     
   } catch (error) {
@@ -1570,7 +1571,7 @@ getDureeTotalMoyenneLastYear:async (
 )=>{
   try {
      
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1587,7 +1588,7 @@ getDureeTotalMoyenneLastYear:async (
       dureemoyenne:"dureemoyenne",
 
     });
-  console.log('duree moyenne', response)
+  // console.log('duree moyenne', response)
     set({DureeMoyenneLastYear: Number(response.data.data[0].proportion)});
     
   } catch (error) {
@@ -1613,7 +1614,7 @@ getPicCommunication:async(
 
   try {
      
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1630,7 +1631,7 @@ getPicCommunication:async(
       piccommunication:"piccommunication",
 
     });
-  console.log("pic",response)
+  // console.log("pic",response)
     set({PicCommunication: response.data.data[0]});
     
   } catch (error) {
@@ -1658,7 +1659,7 @@ getPicCommunicationLastYear:async(
 
   try {
      
-    let response = await axios.post(`${PORT}/getfilters2.php`,{
+    let response = await axios.post(`${PORT2}/getfilters2.php`,{
       supports:supports,
       familles:familles,
       classes:classes,
@@ -1675,7 +1676,7 @@ getPicCommunicationLastYear:async(
       piccommunication:"piccommunication",
 
     });
-  console.log("pic",response)
+  // console.log("pic",response)
     set({PicCommunicationLastYear:response.data.data[0]});
     
   } catch (error) {
@@ -1713,7 +1714,7 @@ try {
      secteurs_ids:secteurs,
      varietes_ids:varietes
   })
-console.log("response excel",response)
+// console.log("response excel",response)
 set({ExportExcelPending:false,
   DisplayEmailSent:true
 })

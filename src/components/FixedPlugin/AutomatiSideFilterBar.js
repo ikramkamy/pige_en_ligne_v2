@@ -113,12 +113,12 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
         if (media === "presse") {
             switch (location.pathname) {
                 case "/admin/table":
-                    console.log("calling press data fetching")
-                    setLoading(false)
+                    //console.log("calling press data fetching")
+                    //setLoading(false)
                     // setFilteredData([])
                     setLoadingshow(false)
                     getData()
-                    setLoading(true)
+                    //setLoading(true)
                     setLoadingshow(true)
                     break;
 
@@ -128,7 +128,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
 
 
                 case "/admin/veille":
-                    console.log('type calling filtering', typeVeille)
+                    //console.log('type calling filtering', typeVeille)
 
                     break;
 
@@ -167,7 +167,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
                     }
                     break;
                 case '/admin/veille':
-                    console.log('calling filtering')
+                    //console.log('calling filtering')
                     filterVeilledata && filterVeilledata(veilletvData, Filterfamilles, Filterannonceursids,
                         Filtersupports, supports, Filtervarietiesids, Filterclassesids, Filtermarquesids, Filterclassesids, Filterproduitsids, media, veille_diffusion, date1, date2, typeVeille)
                     break;
@@ -205,7 +205,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
     };
 
     const handeCloseSideBar = () => {
-        console.log("closing", SideBarFilterPosition)
+        ///console.log("closing", SideBarFilterPosition)
         ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("-100%")
     }
     const [width, setWidth] = React.useState(window.innerWidth < 768 ? '350px' : '550px');
@@ -218,7 +218,7 @@ const AutomaticSideFilterBar = ({ getData, DashboardData,
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    console.log('isloading in autmatic filters', isloading)
+    //console.log('isloading in autmatic filters', isloading)
     return (
         <div className="Side_Translate_X"
             style={{

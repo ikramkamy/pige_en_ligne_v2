@@ -7,10 +7,9 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore } from '../../store/dashboardStore/FiltersStore';
 import { Autocomplete } from '@mui/material';
 import { TextField } from '@mui/material';
-import Alert from '@mui/material/Alert';
 import "./commun.css";
 export default function MultipleSelectMarques() {
-  const { Filtermarques, annonceurs, produits,
+  const { Filtermarques, annonceurs, produits,marques,
      setFiltermarque, Filtermarquesids } = UseFiltersStore((state) => state);
      //console.log("Filtermarques",Filtermarques[3],"Filtermarquesids",Filtermarquesids)
   const [inputValue, setInputValue] = useState('');
@@ -24,7 +23,7 @@ export default function MultipleSelectMarques() {
 
   useEffect(() => {
     setPreviousSelection(Filtermarquesids);
-    setSelectedItems(Filtermarquesids)
+    // setSelectedItems(Filtermarquesids)
   }, [Filtermarquesids]);
 
   const handleSelectAll = () => {
@@ -48,7 +47,7 @@ export default function MultipleSelectMarques() {
     setInputValue(newInputValue);
   };
 
-  const isAllSelected = previousSelection.length === Filtermarquesids.length;
+  const isAllSelected = marques.length === selectedItems.length;
 
   return (
     <FormControl sx={{ m: 1, width: "100%" }}>

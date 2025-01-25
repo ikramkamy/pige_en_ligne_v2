@@ -6,6 +6,7 @@ export const UseMediaDashboardStore = create((set, get) => ({
   IsMediadataisFetched: false,
   ErrorHandel: false,
   HandelErrorPopup: (show) => {
+    console.log("calling from dashboard",show)
     set({ErrorHandel: show})
   },
   ReseMediadataisFetched: () => {

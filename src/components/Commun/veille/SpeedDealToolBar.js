@@ -35,11 +35,25 @@ export default function BasicSpeedDial({
         { icon: <Search  color='#00a6e0'/>, name: 'Recherche', todo:setShowSearchKey },
         { icon: <SwapVertIcon color='#00a6e0'/>, name: 'Trier', todo: selectSortOption },
       ];
-      
+      const [resStyle,setResStyle]=React.useState({})
+      React.useEffect(() => {
+          const handleResize = () => {
+            setResStyle({
+              PositionSpeedDeal:window.innerWidth < 768 ? 
+              '10%' :window.innerWidth < 400 ? "20%" : '0%',
+          
+            });
+          };
+          handleResize();
+          window.addEventListener('resize', handleResize);
+          return () => {
+            window.removeEventListener('resize', handleResize);
+          };
+        }, []);
   return (
     <Box sx={{ height: 50, transform: 'translateZ(0px)',
      flexGrow: 1,
-      position:"fixed",top:"70%"}}>
+      position:"fixed",top:"70%", left:resStyle.PositionSpeedDeal }}>
       <SpeedDial
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'absolute', bottom: 16, right: 16}}

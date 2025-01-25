@@ -2,9 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { UsePigeDashboardStore } from '../store/dashboardStore/PigeDashboardStore';
 import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
 import MultipleSelectMedia from '../components/Commun/MediaSelect';
-import ResponsiveDateRangePickers from '../components/Commun/DatePicker';
 import GridDemo from '../components/Commun/charts/TOP20Charts';
-import Animated from 'assets/img/loading1.gif';
 import dash from 'assets/tableSearch.gif';
 import iconVolume from 'assets/img/icons/graph-bar.png';
 import iconAnnonceur from 'assets/img/icons/advertisement.png';
@@ -18,11 +16,8 @@ import MultipleSelectBase from 'components/Commun/BaseSelect';
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 import iconPresse from 'assets/img/icons/press-release.png';
 import LoadingIndicator from "components/Commun/LoadingIndcator";
-import AnchorTemporaryDrawer from 'components/FixedPlugin/SideDrawer';
 import LoadingButtonData from "components/Commun/LoadingBtnData";
 import AutomaticSideFilterBar from 'components/FixedPlugin/AutomatiSideFilterBar';
-import LoadingBaseChangeBtn from 'components/Commun/LoadingBaseChangeBtn';
-import ExportPPT from './PptFile'
 import {
   Card,
   Container,
@@ -42,20 +37,8 @@ import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
 import { PieChartVelson, PieChartRepartitionFormat } from '../components/Commun/charts/PieChart';
 import { CircularProgress } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
-import CIcon from '@coreui/icons-react'
-import { cilArrowTop, cilOptions } from '@coreui/icons'
-import { CChartBar, CChartLine } from '@coreui/react-chartjs';
-import {
-  CCol,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-  CRow,
-  CWidgetStatsA,
-} from '@coreui/react'
+import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 function Dashboard() {
   const slides = [
     <CustomDataLabelFamilles />,
@@ -178,7 +161,7 @@ function Dashboard() {
     sideBarFilterPosition,
 
   } = UseFiltersStore((state) => state)
-  const { getDataMedia } = UseMediaDashboardStore((state) => state)
+  const { getDataMedia,HandelErrorPopup ,ErrorHandel} = UseMediaDashboardStore((state) => state)
   const [show, setShow] = useState(false)
   const [dashDisplay, setDashDisplay] = useState(false)
   const [isCalculating, setIsCalculating] = useState(false)
@@ -751,6 +734,12 @@ function Dashboard() {
         </Row>
       </Container>)
   }
+  const handleClosePopupDataUnavailable = () => {
+    HandelErrorPopup && HandelErrorPopup(false)
+  }
+  // if(media && VolumeMedia===0 ||VolumePresse===0){
+  //   HandelErrorPopup && HandelErrorPopup(true)
+  // }
   return (
     <div style={{
       height: "auto", width: "100%", padding: "2%",
@@ -806,10 +795,11 @@ function Dashboard() {
                 <LoadingButtonData
                   getData={ShowDashboardData}
                   isloading={isCalculating}
-                  isSucces={Top20produits?.length !== 0}
+                  isSucces={false}
                   title="Afficher"
+                  mr="10px"
                   //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
-                  disablebtn={!(media !== "" && base !== "")}
+                  disablebtn={!(media !== "" || base !== "")}
                 />
                 <Button
                   onClick={handeOpenSideBar}
@@ -853,7 +843,7 @@ function Dashboard() {
             {(dashDisplay && !isCalculating &&
               !(Top20produits?.length === 0)) && (<div style={{ width: '100%' }}>
                 <div >
-                <h1 style={{color:"white"}}>hello</h1>
+                
                   <Row className="mt-3" style={{ marginTop: 20 }} id="dashboard" >
 
 
@@ -885,7 +875,7 @@ function Dashboard() {
                         </Card.Footer>
                       </Card>
                     </Col>
-                    <CCol sm={6}>
+                    {/* <CCol sm={6}>
                       <CWidgetStatsA
                         className="mb-4"
                         color="primary"
@@ -973,7 +963,7 @@ function Dashboard() {
                           />
                         }
                       />
-                    </CCol>
+                    </CCol> */}
                     <Col lg="3" sm="6">
                       <Card className="card-stats">
                         <Card.Body>
@@ -1309,6 +1299,13 @@ function Dashboard() {
 
       </Container>
       <AutomaticSideFilterBar getData={ShowDashboardData} />
+
+
+      <DataUnavailablePopup
+      ErrorHandel={ErrorHandel}
+       media={media}
+       handleClosePopup={handleClosePopupDataUnavailable}
+      />
     </div>
   );
 }

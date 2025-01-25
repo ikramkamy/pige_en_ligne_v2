@@ -283,13 +283,9 @@ export default function VeillePub() {
       //do nothing
     }
     setTimeout(() => {
-      setLoadingWithCount(false)
-    }, 2000);
+      //setLoadingWithCount(false)
+    }, 5000);
 
-
-
-
-   
     setTimeout(() => {
       setShowdataloading(true)
     }, 10000);
@@ -301,6 +297,7 @@ export default function VeillePub() {
     }, fetchDataTime);
     setTimeout(() => {
       setLoadingLineDisplay(false)
+      setLoadingWithCount(false)
     }, 5000);
     setDisplayVeilleDate(true)
   }, [count_v])
@@ -611,10 +608,8 @@ export default function VeillePub() {
                       <div className="advertisment_wrap" style={{
                         display: "flex", flexWrap: "wrap",
                         justifyContent: resStyle.justifyContentWraper,
-                        marginTop: "20px",
-                        
+                        marginTop: "20px",                        
                       }}>
-
                         {pdata?.map((e) => (<AdvertisementCard
                           key={veilletvData.indexOf(e)}
                           diffusion_first={e.Veille_Date}

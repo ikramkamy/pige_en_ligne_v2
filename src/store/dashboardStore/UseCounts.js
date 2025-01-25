@@ -79,8 +79,7 @@ export const UseCountStore = create((set, get) => ({
     Filtermarquesids,
     Filterproduitsids
   ) => {
-    try {
-      
+    try {    
       var media_type = media == "" ? "presse" : media;
       console.log("calling count veille ",`${PORT}/${media_type}-veille-${veille_diffusion}/count`,{
         email: email,

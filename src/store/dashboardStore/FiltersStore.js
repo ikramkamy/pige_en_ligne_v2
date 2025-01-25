@@ -195,6 +195,7 @@ export const UseFiltersStore = create((set, get) => ({
           Filterproduitsids:response.data.produits.map((e)=>e.Produit_Id)
         });
         set({FilterLoading:false})
+        //console.log('response filter', Filtermarquesids,)
     } catch (error) {
       console.log(error);
     }
@@ -268,8 +269,8 @@ export const UseFiltersStore = create((set, get) => ({
        
 
 
-        var marquesIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Marque_id))];
-        var marquesByFamille = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_id))
+        var marquesIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Marque_Id))];
+        var marquesByFamille = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_Id))
 
       }
 

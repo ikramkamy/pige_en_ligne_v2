@@ -12,7 +12,7 @@ import DropDownBaseRepartitionFormat from 'components/Commun/DropDownComponents/
 import WatingChart from 'assets/img/loading3.gif';
 
 export function PieActiveArc() {
-  const { PartMarche } = UsePresseDashboardStore((state) => state)
+  const { PartMarche } = UsePigeDashboardStore((state) => state)
   const array = [];
   const dataset = PartMarche.forEach((elem) => {
     const item = {
@@ -64,7 +64,7 @@ export const PieChartVelson = () => {
     "#00171a",
     "#001415"
   ];
-  const { PartMarche, getPrtMarchet } = UsePresseDashboardStore((state) => state);
+  const { PartMarche, getPrtMarchet } = UsePigeDashboardStore((state) => state);
 
   const { base, media, baseGraphe, Filtersupports, Filterfamilles, 
     Filterclassesids, Filtersecteursids, Filtervarietiesids, 
@@ -398,7 +398,7 @@ export const PieChartRepartitionFormat = () => {
     "#001415"
 
   ];
-  const { FormatRepartition, getRepartitionFormat } = UsePresseDashboardStore((state) => state);
+  const { FormatRepartition, getRepartitionFormat } = UsePigeDashboardStore((state) => state);
 
   const { base, media, baseGraphe, Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
   const [average, setAverage] = useState(0);

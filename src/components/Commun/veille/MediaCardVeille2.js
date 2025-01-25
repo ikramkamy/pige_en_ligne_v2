@@ -72,7 +72,7 @@ const AdvertisementCard = ({
     React.useEffect(() => {
         const handleResize = () => {
             setResStyle({
-                backmarginRight: window.innerWidth < 1145 ? '0px' : '20px',
+                backmarginRight: window.innerWidth < 1145 ? '0px' : '10px',
                 widthVideoContainer: window.innerWidth < 1145 ? '80vw' : '40vw',
             });
         };

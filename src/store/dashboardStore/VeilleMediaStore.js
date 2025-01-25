@@ -16,22 +16,22 @@ export const UseVeilleStore = create((set, get) => ({
   ResetDataveilleFetched: () => {
     set({ dataVeilleISFetched: false })
   },
-  getVeilleCount: async (
-    media,
-    date1,
-    date2,
-    annonceurs_ids,
-    marques_ids,
-    produits_ids,
-    familles_ids,
-  ) => {
-    try {
-      let response = await axios.post(`${PORT}/${media}-veille-first/count`)
-      console.log("response get data presse", response)
-    } catch (error) {
+  // getVeilleCount: async (
+  //   media,
+  //   date1,
+  //   date2,
+  //   annonceurs_ids,
+  //   marques_ids,
+  //   produits_ids,
+  //   familles_ids,
+  // ) => {
+  //   try {
+  //     let response = await axios.post(`${PORT}/${media}-veille-first/count`)
+  //     console.log("response get data presse", response)
+  //   } catch (error) {
 
-    }
-  },
+  //   }
+  // },
   getveilletvData: async (
     email,
     date1,
