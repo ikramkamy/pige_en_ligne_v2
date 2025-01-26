@@ -97,9 +97,6 @@ export const UseMediaDashboardStore = create((set, get) => ({
       throw error;
     }
   },
-
-
-
   FilterDataMediaByrangs: async (rangs, data, media) => {
     console.log(rangs)
 

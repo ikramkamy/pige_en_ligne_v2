@@ -83,8 +83,8 @@ set({
     NombreAnnonceursActifParSupportPresse:[],
     NombreCreationUniqueParAnnonceurPresse:[],
     PartMarche:[],
-    VolumePresse :0,
-    VolumeMedia:0,
+    //VolumePresse:0,
+    //VolumeMedia:0,
     AnnonceursActifPresse:0,
     AnnonceursActifMedia:0,
     CreationUniquesPresse:0,
@@ -784,8 +784,7 @@ getTop20famillesSectorielles: async (
         
       } catch (error) {
         console.log(error);
-      }
-      
+      }   
 },
 getTop20Annonceurs: async (
   supports,

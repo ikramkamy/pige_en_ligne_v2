@@ -4,11 +4,9 @@ import {
   Container,
   Row,
 } from "react-bootstrap";
-
+import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 function Privacy() {  
-const client =window.localStorage.getItem('user_name')
-console.log('client in')
-const email =window.localStorage.getItem('user_email')
+const { client, email } = UseLoginStore((state) => state)
 const history=useHistory()
  if (!client) {
    history.push('/login')

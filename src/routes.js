@@ -45,13 +45,6 @@ const dashboardRoutes = [
     component: Dashboard,
     layout: "/media"
   },
-  // {
-  //   path: "/user",
-  //   name: "User Profile",
-  //   icon: "nc-icon nc-circle-09",
-  //   component: UserProfile,
-  //   layout: "/admin"
-  // },
   {
     path: "/user",
     name: "User Profile",
@@ -64,14 +57,14 @@ const dashboardRoutes = [
     name: "politique de condifentialité",
     icon: "nc-icon nc-circle-09",
     component: Privacy,
-    layout: "/admin"
+    layout: "/main"
   },
   {
     path: "/termes",
     name: "Conditions générales de vente",
     icon: "nc-icon nc-circle-09",
     component: CGV,
-    layout: "/admin"
+    layout: "/main"
   },
   {
     path: "/ppt",

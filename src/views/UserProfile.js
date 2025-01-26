@@ -9,18 +9,16 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
-
+import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 
 function User() {
   document.title = 'User  Profile';
-
+const {client,email,date_debut,date_fin}=UseLoginStore((state)=>state)
   const history=useHistory()
-  const client = window.localStorage.getItem('user_name');
-  const email = window.localStorage.getItem('user_email');
-  const date_debut = window.localStorage.getItem('date_debut');
-  const date_fin = window.localStorage.getItem('date_fin');
-
-
+  // const client = window.localStorage.getItem('user_name');
+  // const email = window.localStorage.getItem('user_email');
+  // const date_debut = window.localStorage.getItem('date_debut');
+  // const date_fin = window.localStorage.getItem('date_fin');
   if (!client) {
     history.push('/login')
     }

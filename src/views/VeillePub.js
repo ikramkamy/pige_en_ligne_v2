@@ -383,7 +383,7 @@ export default function VeillePub() {
 
       setTimeout(() => {
         ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
-      }, 8000);
+      }, 5000);
          
     } else {
       //do nothing

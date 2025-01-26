@@ -106,7 +106,7 @@ const CustomDataLabelFamilles = () => {
                         var list = Top20famillesSectorielles.map((elem) => Number(elem.famille_tarif).toFixed(2))
 
                         setData(list)
-                        console.log('list,familletv', names)
+                        ////console.log('list,familletv', names)
                         setAverage(Number(Top20famillesSectorielles[0].average_tarif_per_famille).toFixed(2))
                         break;
 
@@ -127,14 +127,14 @@ const CustomDataLabelFamilles = () => {
                         setNames(Top20famillesSectorielles.map((elem) => elem.Famille + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20famillesSectorielles.map((elem) => elem.famille_count)
                         setData(list)
-                        console.log("list familles volum radio", list)
+                        ////console.log("list familles volum radio", list)
                         setAverage(Number(Top20famillesSectorielles[0].average_diffusion_per_famille).toFixed(2))
                         break;
                     case 'television':
                         setNames(Top20famillesSectorielles.map((elem) => elem.Famille + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20famillesSectorielles.map((elem) => elem.famille_count)
                         setData(list)
-                        console.log("list familles volum television", list)
+                        ////console.log("list familles volum television", list)
                         setAverage(Number(Top20famillesSectorielles[0].average_diffusion_per_famille).toFixed(2))
                         break;
                 }
@@ -146,7 +146,7 @@ const CustomDataLabelFamilles = () => {
                         setNames(Top20famillesSectorielles.map((elem) => elem.Famille + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20famillesSectorielles.map((elem) => elem.total_duree)
                         setData(list)
-                        console.log("list familles volum radio", list)
+                        ////console.log("list familles volum radio", list)
                         setAverage(Number(Top20famillesSectorielles[0].average_duree_per_famille).toFixed(2))
                         break;
                     case 'television':
@@ -154,7 +154,7 @@ const CustomDataLabelFamilles = () => {
                         setNames(Top20famillesSectorielles.map((elem) => elem.Famille + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20famillesSectorielles.map((elem) => elem.total_duree)
                         setData(list)
-                        console.log("list familles volum radio", list)
+                        ////console.log("list familles volum radio", list)
                         setAverage(Number(Top20famillesSectorielles[0].average_duree_per_famille).toFixed(2))
                         break;
                 }
@@ -435,11 +435,11 @@ const CustomDataLabelAnnonceurs = () => {
                         setNames(Top20Annonceurs.map((elem) => elem.Annonceur_Nom + " " + " " + " " + "( " + Number(elem.percentage).toFixed(2) + "%" + ")"))
                         var list = Top20Annonceurs.map((elem) => Number(elem.total_tarif).toFixed(2))
                         setData(list)
-                        console.log("list bdget", list)
+                        ////console.log("list bdget", list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-                        console.log("sum budget", sum)
+                        ////console.log("sum budget", sum)
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        ////console.log("average 20", average20)
                         setAverage(Number(average20).toFixed(2))
 
 
@@ -451,17 +451,17 @@ const CustomDataLabelAnnonceurs = () => {
                         setData(list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        ////console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                     case 'television':
                         setNames(Top20Annonceurs.map((elem) => elem.annonceur + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20Annonceurs.map((elem) => Number(elem.annonceur_tarif).toFixed(2))
                         setData(list)
-                        console.log('an', Top20Annonceurs)
+                        //console.log('an', Top20Annonceurs)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                 }
@@ -475,10 +475,10 @@ const CustomDataLabelAnnonceurs = () => {
                         setNames(Top20Annonceurs.map((elem) => elem.Annonceur_Nom + " " + " " + "( " + Number(elem.percentage).toFixed(2) + "%" + ")"))
                         var list = Top20Annonceurs.map((elem) => Number(elem.appearance_count))
                         setData(list)
-                        console.log("list vol", list)
+                        //console.log("list vol", list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
                         break;
@@ -490,7 +490,7 @@ const CustomDataLabelAnnonceurs = () => {
                         //setAverage(Number(Top20Annonceurs[0].average_diffusion_per_annonceur).toFixed(2))
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -504,7 +504,7 @@ const CustomDataLabelAnnonceurs = () => {
                         //setAverage(Number(Top20Annonceurs[0].average_diffusion_per_annonceur).toFixed(2))
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -520,12 +520,12 @@ const CustomDataLabelAnnonceurs = () => {
                         setNames(Top20Annonceurs.map((elem) => elem.Annonceur_Nom + " " + " " + "(" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20Annonceurs.map((elem) => Number(elem.total_duree))
                         setData(list)
-                        console.log("list volume annonceur", list)
+                        //console.log("list volume annonceur", list)
                         //the average value from back-end take in consideration all not only top 20
                         //setAverage(Number(Top20Annonceurs[0].average_duree_per_annonceur).toFixed(2))
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                     case 'television':
@@ -533,12 +533,12 @@ const CustomDataLabelAnnonceurs = () => {
                         setNames(Top20Annonceurs.map((elem) => elem.Annonceur_Nom + " " + " " + "(" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20Annonceurs.map((elem) => Number(elem.total_duree))
                         setData(list)
-                        console.log("list volume annonceur", list)
+                        //console.log("list volume annonceur", list)
                         //the average value from back-end take in consideration all not only top 20
                         //setAverage(Number(Top20Annonceurs[0].average_duree_per_annonceur).toFixed(2))
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                 }
@@ -749,7 +749,7 @@ const CustomDataLabelMarques = () => {
 
     useEffect(() => {
         if (Top20marques && Top20marques.length > 0) {
-            console.log("list names television marques", Top20marques)
+            //console.log("list names television marques", Top20marques)
             if (base === 'budget') {
 
                 switch (media) {
@@ -759,7 +759,7 @@ const CustomDataLabelMarques = () => {
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -771,7 +771,7 @@ const CustomDataLabelMarques = () => {
                         setData(list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                     case 'television':
@@ -781,7 +781,7 @@ const CustomDataLabelMarques = () => {
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
 
@@ -798,7 +798,7 @@ const CustomDataLabelMarques = () => {
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -808,12 +808,12 @@ const CustomDataLabelMarques = () => {
                         setNames(Top20marques.map((elem) => elem.Marque_Lib + " " + " " + "(" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20marques.map((elem) => Number(elem.marque_count))
                         setData(list)
-                        console.log("list volume annonceur", list)
+                        //console.log("list volume annonceur", list)
                         //setAverage(Number(Top20marques[0].average_diffusion_per_marque).toFixed(2))
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -823,12 +823,12 @@ const CustomDataLabelMarques = () => {
                         setNames(Top20marques.map((elem) => elem.Marque_Lib + " " + " " + "(" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20marques.map((elem) => Number(elem.marque_count))
                         setData(list)
-                        console.log("list ", list)
+                        //console.log("list ", list)
                         //setAverage(Number(Top20marques[0].average_diffusion_per_marque).toFixed(2))
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -846,7 +846,7 @@ const CustomDataLabelMarques = () => {
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                     case 'television':
@@ -857,7 +857,7 @@ const CustomDataLabelMarques = () => {
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
                         break;
@@ -948,7 +948,7 @@ const CustomDataLabelMarques = () => {
                 const categoryLabel = opt.config.xaxis.categories_labels[opt.dataPointIndex];
                 const startIndex = categoryLabel.indexOf('(');
                 const substring = categoryLabel.substring(startIndex, categoryLabel.length);
-                // console.log('we are in data formatter',opt.config.xaxis.categories)
+                // //console.log('we are in data formatter',opt.config.xaxis.categories)
                 return substring + val;
             },
             offsetX: 0,
@@ -1082,7 +1082,7 @@ const CustomDataLabelProduits = () => {
                         setData(list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                     case 'radio':
@@ -1091,7 +1091,7 @@ const CustomDataLabelProduits = () => {
                         setData(list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                     case 'television':
@@ -1100,7 +1100,7 @@ const CustomDataLabelProduits = () => {
                         setData(list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
 
@@ -1117,7 +1117,7 @@ const CustomDataLabelProduits = () => {
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
                         break;
                     case 'radio':
@@ -1128,7 +1128,7 @@ const CustomDataLabelProduits = () => {
                         //setAverage(Number(Top20produits[0].average_diffusion_per_produit).toFixed(2))
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -1139,12 +1139,12 @@ const CustomDataLabelProduits = () => {
                         setNames(Top20produits.map((elem) => elem.Produit_Lib + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20produits.map((elem) => Number(elem.produit_count))
                         setData(list)
-                        console.log("list volume annonceur", list)
+                        //console.log("list volume annonceur", list)
                         //setAverage(Number(Top20produits[0].average_diffusion_per_produit).toFixed(2))
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -1160,11 +1160,11 @@ const CustomDataLabelProduits = () => {
                         var list = Top20produits.map((elem) => Number(elem.total_duree))
                         setData(list)
 
-                        console.log("list volume marques", list)
+                        //console.log("list volume marques", list)
                         //setAverage(Number(Top20produits[0].average_duree_per_produit).toFixed(2))
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
                         break;
@@ -1175,12 +1175,12 @@ const CustomDataLabelProduits = () => {
                         var list = Top20produits.map((elem) => Number(elem.total_duree))
                         setData(list)
 
-                        console.log("list ", list)
+                        //console.log("list ", list)
                         //setAverage(Number(Top20produits[0].average_duree_per_produit).toFixed(2))
 
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                         var average20 = sum / list.length;
-                        console.log("average 20", average20)
+                        //console.log("average 20", average20)
                         setAverage(average20.toFixed(2))
 
 
@@ -1405,10 +1405,10 @@ const CustomDataLabelAnnonceurParSupport = () => {
                     setNames(AnnonceurParSupport.map((elem) => elem.Titre_Lib + " " + "( " + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = AnnonceurParSupport.map((elem) => Number(elem.annonceur_count))
                     setData(list)
-                    console.log("list volume annonceur", list)
+                    //console.log("list volume annonceur", list)
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     var average20 = sum / list.length;
-                    console.log("average 20", average20)
+                    //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
                     break;
                 case 'radio':
@@ -1416,11 +1416,11 @@ const CustomDataLabelAnnonceurParSupport = () => {
                     setNames(AnnonceurParSupport.map((elem) => elem.Chaine_Lib + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = AnnonceurParSupport.map((elem) => Number(elem.annonceur_count))
                     setData(list)
-                    console.log("list volume annonceur", list)
+                    //console.log("list volume annonceur", list)
                     //setAverage(Number(AnnonceurParSupport[0].average_annonceur_count).toFixed(2))
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     var average20 = sum / list.length;
-                    console.log("average 20", average20)
+                    //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
 
                     break;
@@ -1429,11 +1429,11 @@ const CustomDataLabelAnnonceurParSupport = () => {
                     setNames(AnnonceurParSupport.map((elem) => elem.Chaine_Lib + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = AnnonceurParSupport.map((elem) => Number(elem.annonceur_count))
                     setData(list)
-                    console.log("list volume annonceur", list)
+                    //console.log("list volume annonceur", list)
                     //setAverage(Number(AnnonceurParSupport[0].average_annonceur_count).toFixed(2))
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     var average20 = sum / list.length;
-                    console.log("average 20", average20)
+                    //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
 
 
@@ -1519,7 +1519,7 @@ const CustomDataLabelAnnonceurParSupport = () => {
                 const categoryLabel = opt.config.xaxis.categories_labels[opt.dataPointIndex];
                 const startIndex = categoryLabel.indexOf('(');
                 const substring = categoryLabel.substring(startIndex, categoryLabel.length);
-                //console.log('we are in data formatter',opt.config.xaxis.categories)
+                ////console.log('we are in data formatter',opt.config.xaxis.categories)
                 return substring + val;
             },
             offsetX: 0,
@@ -1629,7 +1629,7 @@ const CustomDataLabelCreationParAnnonceur = () => {
 
     useEffect(() => {
         if (CreationParAnnonceur && CreationParAnnonceur.length > 0) {
-            console.log('media')
+            //console.log('media')
             switch (media) {
                 case 'presse':
                     setNames(CreationParAnnonceur.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
@@ -1638,19 +1638,19 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     //setAverage(Number(CreationParAnnonceur[0].average_ratio).toFixed(2))
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     var average20 = sum / list.length;
-                    console.log("average 20", average20)
+                    //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
-                    // console.log("CreationParAnnonceur ici", data)
+                    // //console.log("CreationParAnnonceur ici", data)
                     break;
                 case 'radio':
                     setNames(CreationParAnnonceur.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = CreationParAnnonceur.map((elem) => Number(elem.radiopub_count).toFixed(2))
                     setData(list)
-                    console.log("list names", names)
+                    //console.log("list names", names)
                     //setAverage(Number(CreationParAnnonceur[0].average_radiopub_count_per_annonceur).toFixed(2))
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     var average20 = sum / list.length;
-                    console.log("average 20", average20)
+                    //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
 
                     break;
@@ -1658,11 +1658,11 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     setNames(CreationParAnnonceur.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = CreationParAnnonceur.map((elem) => Number(elem.radiopub_count).toFixed(2))
                     setData(list)
-                    console.log("list names", names)
+                    //console.log("list names", names)
                     //setAverage(Number(CreationParAnnonceur[0].average_radiopub_count_per_annonceur).toFixed(2))
                     var sum = list.reduce((accumulator, currentValue) => Number(accumulator) + parseFloat(currentValue), 0);
                     var average20 = sum / list.length;
-                    console.log("average 20", list)
+                    //console.log("average 20", list)
                     setAverage(average20.toFixed(2))
 
                     break;

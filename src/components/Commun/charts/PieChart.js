@@ -75,7 +75,7 @@ export const PieChartVelson = () => {
   useEffect(() => {
 
     if (PartMarche && PartMarche.length !== 0) {
-      console.log('PartMarche', PartMarche)
+      //console.log('PartMarche', PartMarche)
       //2797
       if (base === "volume" || baseGraphe === 'volume') {
         switch (media) {
@@ -95,7 +95,7 @@ export const PieChartVelson = () => {
             // setAverage(Number(PartMarche[0].average_ratio).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break
           case 'radio':
@@ -118,7 +118,7 @@ export const PieChartVelson = () => {
 
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list2.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
 
             break;
@@ -139,13 +139,13 @@ export const PieChartVelson = () => {
             setArray(list)
             var list2 = list.map((e) => e.value)
             // if(PartMarche && PartMarche.length!==0){
-            //     console.log(Number(PartMarche[0].average_diffusion_per_chaine).toFixed(2))
+            //     //console.log(Number(PartMarche[0].average_diffusion_per_chaine).toFixed(2))
             //     setAverage(Number(PartMarche[0].average_diffusion_per_chaine).toFixed(2));
             // }
-            console.log("liste2",list2)
+            //console.log("liste2",list2)
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
 
             break;
@@ -170,7 +170,7 @@ export const PieChartVelson = () => {
             // setAverage(Number(PartMarche[0].average_tarif_per_titre).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list2.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
           case 'radio':
@@ -189,11 +189,11 @@ export const PieChartVelson = () => {
             })
             setArray(list);
             var list2 = list.map((e) => e.value)
-            console.log('liste2', list2)
+            //console.log('liste2', list2)
             // setAverage(Number(PartMarche[0].average_tarif_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list2.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
           case 'television':
@@ -215,7 +215,7 @@ export const PieChartVelson = () => {
 
             var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list2.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
         }
@@ -237,7 +237,7 @@ export const PieChartVelson = () => {
             // setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
           case 'television':
@@ -260,7 +260,7 @@ export const PieChartVelson = () => {
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
 
@@ -406,7 +406,7 @@ export const PieChartRepartitionFormat = () => {
 
   useEffect(() => {
     if (FormatRepartition && FormatRepartition.length !== 0) {
-      console.log("FormatRepartition", FormatRepartition)
+      //console.log("FormatRepartition", FormatRepartition)
       if (base === "volume" || baseGraphe === 'volume') {
         switch (media) {
           case 'presse':
@@ -420,13 +420,13 @@ export const PieChartRepartitionFormat = () => {
               //array.push(item)
               return array;
             })
-            console.log('array presse volume', array)
+            //console.log('array presse volume', array)
             setArray(list)
             var list2 = list.map((e) => e.value)
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             //setAverage(Number(FormatRepartition[0].average_ratio).toFixed(2));
             break
@@ -453,7 +453,7 @@ export const PieChartRepartitionFormat = () => {
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
 
             break;
@@ -480,7 +480,7 @@ export const PieChartRepartitionFormat = () => {
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
 
 
@@ -507,7 +507,7 @@ export const PieChartRepartitionFormat = () => {
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
           case 'radio':
@@ -530,7 +530,7 @@ export const PieChartRepartitionFormat = () => {
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
           case 'television':
@@ -553,7 +553,7 @@ export const PieChartRepartitionFormat = () => {
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            console.log("average 20", average20)
+            //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
         }

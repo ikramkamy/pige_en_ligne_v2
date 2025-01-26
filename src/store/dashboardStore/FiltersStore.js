@@ -195,7 +195,7 @@ export const UseFiltersStore = create((set, get) => ({
           Filterproduitsids:response.data.produits.map((e)=>e.Produit_Id)
         });
         set({FilterLoading:false})
-        //console.log('response filter', Filtermarquesids,)
+        
     } catch (error) {
       console.log(error);
     }

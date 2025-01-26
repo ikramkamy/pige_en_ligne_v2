@@ -57,7 +57,8 @@ export default function DataTablePige() {
     dataTableShow, setDataTableShow,
     ManageSideBarfilterDisplay,
     SideBarFilterPosition,
-    getFilters
+    getFilters,
+    FilterLoading
   } = UseFiltersStore((state) => state);
   const widthSmallData = 200
   const widthXsmallData = 70
@@ -407,7 +408,6 @@ export default function DataTablePige() {
     ResetPigeCount && ResetPigeCount()
     setLoadingWithCount(false)
   }, [Number(count)])
-  console.log(Number(count))
   async function getData() {
     ResetPigeCount && ResetPigeCount()
     setLoadingWithCount(true)
@@ -428,7 +428,7 @@ export default function DataTablePige() {
     setIncrement(increment + 1)
     setCallGetData(Number(count))
   }
-  console.log('isloading in autmatic filters', loadingWithCount)
+  //console.log('isloading in autmatic filters', loadingWithCount)
   React.useEffect(() => {
     ResePressdataisFetched && ResePressdataisFetched()
     setShowDataGridIfNotEmpty && setShowDataGridIfNotEmpty(true)
@@ -473,16 +473,17 @@ export default function DataTablePige() {
     if (fetchFilter === true) {
       //console.log("calling filters",fetchFilter)
       getFilters && getFilters(email, media, date1, date2)
+      setTimeout(() => {
+        ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+      }, 5000);
       setFetchFilter(false)
     } else {
       //do nothing
-
+      setLoadingFilters(false)
+      ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
     }
-    setLoadingFilters(true)
-
-    setPopupDataLageData(false)
-    setLoadingFilters(false)
-    ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+    //setLoadingFilters(true)
+    setPopupDataLageData(false) 
   }
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
@@ -633,7 +634,7 @@ export default function DataTablePige() {
               {resStyle.DisplayRechecheAvance && (
                 <LoadingButtonData
                   getData={HandelSideBarPisition}
-                  isloading={loadingFilters}
+                  isloading={FilterLoading}
                   isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
                   //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                   disablebtn={!media}
@@ -681,7 +682,7 @@ export default function DataTablePige() {
               {!resStyle.DisplayRechecheAvance && (
                 <LoadingButtonData
                   getData={HandelSideBarPisition}
-                  isloading={loadingFilters}
+                  isloading={FilterLoading}
                   isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
                   //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                   disablebtn={!media}

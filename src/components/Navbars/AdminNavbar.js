@@ -66,7 +66,7 @@ console.log("call logout function")
        
       }}>
       <div style={{paddingTop:"0px"}} >
-        <Link to="/admin/home">
+        <Link to="/main/accueil">
           <img src={logoImmar} alt="immar media" className="logo-immar"/>
         </Link>
       </div>

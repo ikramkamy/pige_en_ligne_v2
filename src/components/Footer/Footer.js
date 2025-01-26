@@ -27,17 +27,17 @@ function Footer () {
 
             <div style={{display:"flex", justifyContent:"space-between", width:"100%"}}>
        <div className="links">  
-       <Link to="/admin/user"  
+       <Link to="/main/user"  
        style={{color:"white", 
         textDecoration:"none",
          marginRight:"15px"
         }}>profile</Link>             
             
-              <Link to="/admin/privacy" style={{color:"white", textDecoration:"none",
+              <Link to="/main/privacy" style={{color:"white", textDecoration:"none",
                 marginRight:"5px"
               }}>politique de confidentialité</Link>             
             
-                <Link to="/admin/termes" style={{color:"white", textDecoration:"none", marginRight:"5px"}}>CGV</Link>   
+                <Link to="/main/termes" style={{color:"white", textDecoration:"none", marginRight:"5px"}}>CGV</Link>   
                 </div> 
             <div className="year" style={{width:"fitContent"}}>
             <Link style={{color:"white", textDecoration:"none",}} >© {new Date().getFullYear()}{" "}IMMAR</Link> 
