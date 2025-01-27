@@ -9,8 +9,6 @@ const LoadingButtonData = ({mr,title,isloading,isSucces,handelUpdatePassword,dis
   const {media,
     base}=UseFiltersStore((state)=>state)
   const [success, setSuccess] = useState(false);
-  const [disableDataBtn,setDisableDataBtn]=useState(false)
-
   useEffect(()=>{
     setLoading(isloading);
     setSuccess(isSucces)
@@ -20,13 +18,6 @@ const LoadingButtonData = ({mr,title,isloading,isSucces,handelUpdatePassword,dis
     setLoading(isloading);
     setSuccess(isSucces);   
     getData()
-    //GetData()
-    //handelUpdatePassword()
-    // Simulate an API call
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   setSuccess(true);
-    // }, 2000); 
   };
 
   return (
@@ -51,19 +42,13 @@ const LoadingButtonData = ({mr,title,isloading,isSucces,handelUpdatePassword,dis
       }}
         variant="contained"
         color="primary"
-        onClick={handleClick}
-       
-        disabled={loading || success || disablebtn}
+        onClick={handleClick}       
+        disabled={loading || disablebtn}
         //disabled={!disablebtn}
         startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
       >
         {loading ? 'Envoi...' : success ? title : title}
          </Button>
-        {success && (
-          <div>
-   
-        </div>
-      )}
     </Box>
   );
 };

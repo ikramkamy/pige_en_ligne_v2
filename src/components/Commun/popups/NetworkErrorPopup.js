@@ -11,20 +11,12 @@ import {
 
 import { Container, Row} from "react-bootstrap";
 
-const DataUnavailablePopup = ({ 
-  media,
-  ErrorHandel,
-  HandelErrorPopup,
-  handleClosePopup
+const NetworkErrorPopup = ({ 
+  OpenNetworkPopup,
+  handleCloseNetworkPopup
    }) => {
-  // const {ErrorHandel,HandelErrorPopup}=UseMediaDashboardStore((state)=>state)
-  // const handleClosePopup=()=>{
-  //   HandelErrorPopup && HandelErrorPopup(false)
-  // }
-  const media_type = media === "television" ? "Télévision" :
-  media === "presse" ? "Presse" :
-  media === "radio" ? "Radio" :""
-  return (<Dialog open={ErrorHandel} onClose={handleClosePopup}>    
+
+  return (<Dialog open={OpenNetworkPopup} onClose={handleCloseNetworkPopup}>    
     <Container
       fluid
       style={{
@@ -45,8 +37,8 @@ const DataUnavailablePopup = ({
             marginRight: '18px',
             marginBottom: "18px", fontSize: '54px', color: 'eba4a8'
           }} />
-          <span style={{ textAlign: "center" ,width:"500px"}}>
-          Aucune données {media_type} n'as été enregistrée. 
+          <span style={{ textAlign: "center",width:"500px" }}>
+         Vérifiez votre connexion internet 
             
           </span>
         </div>
@@ -59,7 +51,7 @@ const DataUnavailablePopup = ({
         marginTop: "20px",
       }}>
            <Button
-                 onClick={handleClosePopup}
+                 onClick={handleCloseNetworkPopup}
                  sx={{
                    textTransform: "none",
                    width: "150px",
@@ -81,4 +73,4 @@ const DataUnavailablePopup = ({
   </Dialog>
   )
 }
-export default DataUnavailablePopup;
+export default NetworkErrorPopup;

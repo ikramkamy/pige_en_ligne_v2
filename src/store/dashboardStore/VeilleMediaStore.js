@@ -83,7 +83,9 @@ export const UseVeilleStore = create((set, get) => ({
       }
     } catch (error) {
       console.log(error);
-      set({ veilletvData: [] })
+      set({ veilletvData: [] ,
+        OpenNetworkPopupVeille: true
+      })
 
     }
   },
@@ -205,6 +207,7 @@ export const UseVeilleStore = create((set, get) => ({
       })
     } catch (error) {
       console.log(error);
+      set({OpenNetworkPopupVeille: true})
     }
 
 
@@ -248,6 +251,10 @@ export const UseVeilleStore = create((set, get) => ({
     XLSX.utils.book_append_sheet(workbook, worksheet, 'media_veille');
     // Write the workbook to file
     XLSX.writeFile(workbook, `veille_${media}.xlsx`);
+  },
+  OpenNetworkPopupVeille: false,
+  handleCloseNetworkPopupVeille: () => {
+    set({OpenNetworkPopupVeille: false})
   }
 }))
 

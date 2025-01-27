@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Card, Container, Row, Col } from "react-bootstrap";
-import ResponsiveDateRangePickers from '../components/Commun/DatePicker';
+import { Container, Row } from "react-bootstrap";
+
 import MultipleSelectMedia from '../components/Commun/MediaSelect';
 import { UseVeilleStore } from "store/dashboardStore/VeilleMediaStore";
 import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
-import { Button } from "@mui/material";
 import RecherchePub from "components/Commun/RechechePub";
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { Toolbar, Typography, Select, MenuItem, FormControl, InputLabel, Pagination, TextField } from '@mui/material';
+import { Pagination, TextField } from '@mui/material';
 import LoadingLineIndicator from "components/Commun/LineLoading";
 import DateRangeTest from 'components/Commun/DateRangePickerTest';
 import TableIlustration from 'assets/tableSearch.gif';
@@ -24,6 +23,7 @@ import radio_mini from 'assets/img/veille/radio_mini.png';
 import tv_mini from 'assets/img/veille/tv_mini.jpg';
 import { UseCountStore } from "store/dashboardStore/UseCounts";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
+import { NetworkErrorPopup } from "components/Commun/popups";
 export default function VeillePub() {
   const PORT = "https://immar-media.com";
   const { autoriseVeillePresse,
@@ -42,7 +42,9 @@ export default function VeillePub() {
     setShowSearchKey,
     setCloseSearchKey,
     ID_message,
-    ResetMessageIdInput
+    ResetMessageIdInput,
+    OpenNetworkPopupVeille,
+    handleCloseNetworkPopupVeille,
   } = UseVeilleStore((state) => state)
   const {
     media, date1, date2, veille_diffusion, Filtersupports,
@@ -72,7 +74,9 @@ export default function VeillePub() {
   const { VeilleCoun,
     count_v,
     getVeilleCount,
-    ResetVeilleCount } = UseCountStore((state) => state)
+    ResetVeilleCount ,
+    OpenNetworkPopupCount,
+    handleCloseNetworkPopupCount} = UseCountStore((state) => state)
   const [mediaUrl, setMediaUrl] = useState("/veille_radio");
   const { DownloadExlsxFile } = UseVeilleStore((state) => state)
   const [disable, setDisable] = useState(true);
@@ -212,11 +216,11 @@ export default function VeillePub() {
     setPage(value);
     setPdata(pdata);
   };
-  const getData = async() => {
+  const getData = async () => {
     ResetVeilleCount && ResetVeilleCount()
     setLoadingWithCount(true)
 
-   
+
     if (ID_message) {
       //alert("get By ID")
       setSearchTerm('')
@@ -241,7 +245,7 @@ export default function VeillePub() {
 
     } else {
       //alert("get All data ID")
-      const pigeCountResult = await  getVeilleCount && getVeilleCount(
+      const pigeCountResult = await getVeilleCount && getVeilleCount(
         email,
         date1,
         date2,
@@ -384,7 +388,7 @@ export default function VeillePub() {
       setTimeout(() => {
         ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
       }, 5000);
-         
+
     } else {
       //do nothing
       ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
@@ -438,10 +442,10 @@ export default function VeillePub() {
         MarginRightbtn: window.innerWidth < 1150 ? '0px' : '16px',
         textAlineCenter: window.innerWidth < 768 ? 'center' : '',
         displayFlex: window.innerWidth < 768 ? 'flex' : '',
-        WidthToolBarWrap:window.innerWidth < 1150 ? '100%':'',
-        back:window.innerWidth < 1150 ? 'red':'yellow',
-        marginWraper:window.innerWidth < 1150 ? '10px' : '0',
-        justifyContentWraper:window.innerWidth < 1150 ? 'space-around' : 'space-between',
+        WidthToolBarWrap: window.innerWidth < 1150 ? '100%' : '',
+        back: window.innerWidth < 1150 ? 'red' : 'yellow',
+        marginWraper: window.innerWidth < 1150 ? '10px' : '0',
+        justifyContentWraper: window.innerWidth < 1150 ? 'space-around' : 'space-between',
       });
     };
     handleResize();
@@ -473,6 +477,7 @@ export default function VeillePub() {
   const handleClosePopupDataUnavailable = () => {
     ResetVeilleCount && ResetVeilleCount(false)
   }
+
   if (!(autoriseVeillePresse || autoriseVeilleRadio || autoriseVeilleTv) && client) {
     return (
       <Container
@@ -518,14 +523,14 @@ export default function VeillePub() {
           display: "flex", alignItems: "center",
           justifyContent: 'space-between',
           flexWrap: resStyle.wrapDiv,
-          flexDirection:resStyle.felexDirection
+          flexDirection: resStyle.felexDirection
         }}>
           <div style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            flexWrap: resStyle.wrapDiv,         
-            width:resStyle.WidthToolBarWrap
+            flexWrap: resStyle.wrapDiv,
+            width: resStyle.WidthToolBarWrap
           }}>
             {ShowSearchKey && (<TextField
               label="Chercher..."
@@ -557,13 +562,13 @@ export default function VeillePub() {
           </div>
           <div style={{
             display: "flex",
-            justifyContent: "space-between", 
+            justifyContent: "space-between",
             alignItems: "center",
             width: resStyle.widthRightbtns,
-            paddingTop: resStyle.paddingLeftBtn,            
-            width:resStyle.WidthToolBarWrap,
-            marginTop:resStyle.marginWraper,
-            
+            paddingTop: resStyle.paddingLeftBtn,
+            width: resStyle.WidthToolBarWrap,
+            marginTop: resStyle.marginWraper,
+
           }}>
             <LoadingButtonData
               getData={getData}
@@ -585,18 +590,18 @@ export default function VeillePub() {
         </div>
         <div onClick={() => handeToggleSideBar()}>
           {welcomVeille ? (
-            <div style={{marginBottom: "10%",}}>
+            <div style={{ marginBottom: "10%", }}>
               {showdataloading ? (
                 <div style={{ width: "100%" }}>
                   {loadingLineDisplay && <LoadingLineIndicator
                     step={loadingStep} totalDuration={fetchDataTime} />}
-                  {(displayVeilleDate && !loadingLineDisplay && pdata.length >0) && (
+                  {(displayVeilleDate && !loadingLineDisplay && pdata.length > 0) && (
                     <BasicSpeedDial DownloadFile={DownloadFile}
                       handelZIPfileDownload={handelZIPfileDownload}
                       selectSortOption={selectSortOption}
                     />
                   )}
-                  {(displayVeilleDate && !loadingLineDisplay  && count_v >0) && (
+                  {(displayVeilleDate && !loadingLineDisplay && count_v > 0) && (
                     <div className="veilledata tootbal-element"
                       style={{
                         width: "100%", display: "flex",
@@ -608,7 +613,7 @@ export default function VeillePub() {
                       <div className="advertisment_wrap" style={{
                         display: "flex", flexWrap: "wrap",
                         justifyContent: resStyle.justifyContentWraper,
-                        marginTop: "20px",                        
+                        marginTop: "20px",
                       }}>
                         {pdata?.map((e) => (<AdvertisementCard
                           key={veilletvData.indexOf(e)}
@@ -666,7 +671,7 @@ export default function VeillePub() {
                         backgroundColor: "#f8f9fa",
                         textAlign: "center",
                         borderRadius: "5px",
-                        backgroundColor:'transparent'
+                        backgroundColor: 'transparent'
                       }}
                     >
                       <Row
@@ -678,7 +683,7 @@ export default function VeillePub() {
                           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                         }}
                       >
-                        <b style={{ color: "#00a6e0" }}>Aucune données {media} n'as été 
+                        <b style={{ color: "#00a6e0" }}>Aucune données {media} n'as été
                           enregistrée. </b>
 
                       </Row>
@@ -702,11 +707,11 @@ export default function VeillePub() {
           )}
         </div>
 
-        <AutomaticSideFilterBar 
-        getData={getData} 
-         isloading={loadingWithCount}
-         isSucces={false}
-        
+        <AutomaticSideFilterBar
+          getData={getData}
+          isloading={loadingWithCount}
+          isSucces={false}
+
         />
 
         <DataUnavailablePopup
@@ -717,6 +722,12 @@ export default function VeillePub() {
         />
 
       </Container>
+
+      <NetworkErrorPopup
+        OpenNetworkPopup={OpenNetworkPopupVeille || OpenNetworkPopupCount}
+        handleCloseNetworkPopup={handleCloseNetworkPopupCount}
+
+      />
     </div>
   );
 }

@@ -3,20 +3,9 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
-import Alert from '@mui/material/Alert';
 import CustomToolbar from 'components/Commun/CustomToolBar'
-import WarningIcon from '@mui/icons-material/Warning';
 import AutomaticSideFilterBar from "components/FixedPlugin/AutomatiSideFilterBar";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-  Box,
-  Grid
-} from "@mui/material";
+import {Box} from "@mui/material";
 import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
 import MultipleSelectMedia from "../components/Commun/MediaSelect";
 import { useDemoData } from '@mui/x-data-grid-generator';
@@ -33,6 +22,7 @@ import LargeDataPopup from "components/Commun/popups/LargeDataPopup";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 import ExcelEmailPopup from "components/Commun/popups/ExcelEmailPopup";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
+import { NetworkErrorPopup } from "components/Commun/popups";
 export default function DataTablePige() {
   document.title = 'pige publicitaire'
   const history = useHistory()
@@ -147,7 +137,6 @@ export default function DataTablePige() {
     { field: "Prog_après", headerName: "Prog après", width: widthLargeData, sortable: true },
 
   ];
-
   const frenchLocaleText = {
     // Toolbar
     toolbarDensity: 'Densité',
@@ -202,16 +191,24 @@ export default function DataTablePige() {
   const { autorisePigePresse,
     autorisePigeRadio,
     autorisePigeTv, client, email } = UseLoginStore((state) => state)
-  const { sendDownloadLink,
-    IsPressdataisFetched, ResePressdataisFetched, ExportExcelPending, DisplayEmailSent, CloseEmailExcel } =
+  const {sendDownloadLink,
+    IsPressdataisFetched, ResePressdataisFetched,
+    ExportExcelPending, DisplayEmailSent,
+    CloseEmailExcel } =
     UsePigeDashboardStore((state) => state);
-  const { getPigeCount, PigeCount, ResetPigeCount, count } = UseCountStore((state) => state)
+  const { getPigeCount, PigeCount, ResetPigeCount, count, IsCounting,
+ OpenNetworkPopupCount,
+ handleCloseNetworkPopupCount,
+   } = UseCountStore((state) => state)
 
   const [pressData, setPressData] = React.useState([])
   const { MediaData, getDataMedia, IsMediadataisFetched,
     ReseMediadataisFetched, FilterDataMediaByrangs, HandelErrorPopup,
-    ErrorHandel
-
+    ErrorHandel,
+    IsDataPigeLoading,
+    OpenNetworkPopup,
+    handleCloseNetworkPopup,
+    RestPigeData
   } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -362,12 +359,12 @@ export default function DataTablePige() {
   const [increment, setIncrement] = React.useState(0)
   const [callGetData, setCallGetData] = React.useState(-3)
   const [loadingWithCount, setLoadingWithCount] = React.useState(false)
+
   React.useEffect(() => {
     const startTime = new Date().getTime();
     setCallGetData(Number(count))
     if (Number(count) > 0 && Number(count) < 200000) {
       // alert('fetchdata')
-
       getDataMedia && getDataMedia(
         email,
         media,
@@ -379,7 +376,6 @@ export default function DataTablePige() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        rangs,
         date1,
         date2
       )
@@ -398,17 +394,25 @@ export default function DataTablePige() {
       //Data Too Large
     } else if (Number(count) === 0) {
       //no data in this date
-       //alert('data non available')
+      //alert('data non available')
       HandelErrorPopup && HandelErrorPopup(true)
     } else if (Number(count) === -3) {
       //
     }
     const endTime = new Date().getTime();
     setFetchDataTime(endTime - startTime);
+
     ResetPigeCount && ResetPigeCount()
-    setLoadingWithCount(false)
+
+    setTimeout(() => {
+      setLoadingWithCount(false)
+    }, 5000);
+
+
   }, [Number(count)])
+
   async function getData() {
+    RestPigeData && RestPigeData()
     ResetPigeCount && ResetPigeCount()
     setLoadingWithCount(true)
     const pigeCountResult = await getPigeCount(
@@ -483,7 +487,7 @@ export default function DataTablePige() {
       ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
     }
     //setLoadingFilters(true)
-    setPopupDataLageData(false) 
+    setPopupDataLageData(false)
   }
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
@@ -635,14 +639,15 @@ export default function DataTablePige() {
                 <LoadingButtonData
                   getData={HandelSideBarPisition}
                   isloading={FilterLoading}
-                  isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                  //isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                  isSucces={false}
                   //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                   disablebtn={!media}
                   title="Recherche avancée"
                 />
               )}
             </div>
-           
+
             <div style={{ width: "100%", height: "auto", marginTop: resStyle.paddingLeftBtn }}>
               <DateRangeTest />
             </div>
@@ -665,14 +670,13 @@ export default function DataTablePige() {
                 isloading={ExportExcelPending}
                 isSucces={ExportExcelPending}
                 title="Exporter"
-
               />
-
               <LoadingButtonData
                 getData={getData}
                 //isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
-                isloading={loadingWithCount}
-                isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                isloading={IsCounting || IsDataPigeLoading}
+                //isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                isSucces={false}
                 //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                 disablebtn={!media}
                 title="Afficher"
@@ -683,14 +687,17 @@ export default function DataTablePige() {
                 <LoadingButtonData
                   getData={HandelSideBarPisition}
                   isloading={FilterLoading}
-                  isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                  //isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
+                  isSucces={false}
                   //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 
                   disablebtn={!media}
                   title="Recherche avancée"
                 />
               )}
-              <AutomaticSideFilterBar getData={getData} />
-
+              <AutomaticSideFilterBar getData={getData}
+                isloading={loadingWithCount}
+                isSucces={false}
+              />
             </div>
           </div>
         </div>
@@ -942,6 +949,17 @@ export default function DataTablePige() {
         media={media}
         handleClosePopup={handleClosePopupDataUnavailable}
       />
+      {/* network issue Popup */}
+      <NetworkErrorPopup
+        OpenNetworkPopup={OpenNetworkPopup}
+        handleCloseNetworkPopup={handleCloseNetworkPopup}
+      />
+        {/* network issue Popup */}
+        <NetworkErrorPopup
+        OpenNetworkPopup={OpenNetworkPopupCount}
+        handleCloseNetworkPopup={handleCloseNetworkPopupCount}
+      />
+
     </div>
   );
 }

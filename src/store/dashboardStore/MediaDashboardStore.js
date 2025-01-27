@@ -5,14 +5,15 @@ export const UseMediaDashboardStore = create((set, get) => ({
   MediaData: [],
   IsMediadataisFetched: false,
   ErrorHandel: false,
+  IsDataPigeLoading: false,
   HandelErrorPopup: (show) => {
-    console.log("calling from dashboard",show)
-    set({ErrorHandel: show})
+
+    set({ ErrorHandel: show })
   },
   ReseMediadataisFetched: () => {
     set({ IsMediadataisFetched: false })
   },
-  RestRadioTvData: async () => {
+  RestPigeData: async () => {
     set({ MediaData: [] })
   },
   //   getDataMedia: async(media, supports,familles,
@@ -55,10 +56,11 @@ export const UseMediaDashboardStore = create((set, get) => ({
 
   //       },
   getDataMedia: async (email, media, supports, familles, classes,
-    secteurs, varieties, annonceurs, marques, produits, rangs, date1, date2) => {
+    secteurs, varieties, annonceurs, marques, produits,date1, date2) => {
     let isDataFetched = false;
 
     try {
+      set({ IsDataPigeLoading: true, })
       const response = await axios.post(`${PORT}/${media}/table`, {
         email: email,
         supports: supports,
@@ -73,17 +75,18 @@ export const UseMediaDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log("data pige", response.data);
+      // console.log("data is ready",)
       //Assuming you want to set the MediaData in your state management
       set({
-        MediaData: response.data
+        MediaData: response.data,
+        IsDataPigeLoading: false,
       });
       isDataFetched = true;
       set({ IsMediadataisFetched: true })
-      if(response.data.length === 0){  
-        console.log("data empty")
-        set({ ErrorHandel: true})
-      }else{
+      if (response.data.length === 0) {
+        // console.log("data empty")
+        set({ ErrorHandel: true })
+      } else {
         //do nothing
       }
       // Return the data for further use
@@ -92,7 +95,8 @@ export const UseMediaDashboardStore = create((set, get) => ({
       console.error("Error fetching data:", error);
       set({
         MediaData: [],
-        ErrorHandel: true
+        ErrorHandel: true,
+        OpenNetworkPopup: true,
       });
       throw error;
     }
@@ -136,6 +140,9 @@ export const UseMediaDashboardStore = create((set, get) => ({
 
 
     }
+  },
+  OpenNetworkPopup: false,
+  handleCloseNetworkPopup: () => {
+    set({ OpenNetworkPopup: false, })
   }
-
 }))

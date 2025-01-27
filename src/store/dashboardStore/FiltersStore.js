@@ -63,13 +63,8 @@ export const UseFiltersStore = create((set, get) => ({
     set({ showDataGrid: e })
   },
   setVeilleDiffusion: async (i) => {
-
-    try {
-      set({ veille_diffusion: i[0] })
-
-    } catch (error) {
-      console.log(error);
-    }
+  console.log("out of range value",i)
+  set({ veille_diffusion: i[0] })
   },
   loadingshow: false,
   setDateRang: async (e, v) => {
