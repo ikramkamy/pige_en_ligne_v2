@@ -68,15 +68,18 @@ export default function VeillePub() {
     sideBarFilterPosition,
     typeVeille,
     getFilters,
-    FilterLoading
+    FilterLoading,
+    ErrorFetchFilter,
+    messageFilterError,
+    HandeErrorFetchFiletrs
   } = UseFiltersStore((state) => state);
 
   const { VeilleCoun,
     count_v,
     getVeilleCount,
-    ResetVeilleCount ,
+    ResetVeilleCount,
     OpenNetworkPopupCount,
-    handleCloseNetworkPopupCount} = UseCountStore((state) => state)
+    handleCloseNetworkPopupCount } = UseCountStore((state) => state)
   const [mediaUrl, setMediaUrl] = useState("/veille_radio");
   const { DownloadExlsxFile } = UseVeilleStore((state) => state)
   const [disable, setDisable] = useState(true);
@@ -723,10 +726,17 @@ export default function VeillePub() {
 
       </Container>
 
+
       <NetworkErrorPopup
         OpenNetworkPopup={OpenNetworkPopupVeille || OpenNetworkPopupCount}
         handleCloseNetworkPopup={handleCloseNetworkPopupCount}
 
+      />
+      {/* error Popup filter pige*/}
+      <NetworkErrorPopup
+        OpenNetworkPopup={ErrorFetchFilter}
+        handleCloseNetworkPopup={HandeErrorFetchFiletrs}
+        message={messageFilterError}
       />
     </div>
   );

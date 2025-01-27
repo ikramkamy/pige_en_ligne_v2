@@ -78,9 +78,7 @@ export default function MultipleSelectBase() {
 
   };
   useEffect(() => {
-
     const prevSelection = bases.filter((elem) => elem.value == base)
-    console.log("base in base", prevSelection)
     setPreviousSelection(prevSelection);
   }, [base]);
   return (

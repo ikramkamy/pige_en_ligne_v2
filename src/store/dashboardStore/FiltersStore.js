@@ -2,6 +2,11 @@ import { create } from 'zustand'
 import axios from 'axios';
 const PORT = "https://pige-dev.immar-media.com/api/index.php"
 export const UseFiltersStore = create((set, get) => ({
+  ErrorFetchFilter: false,
+  messageFilterError: "",
+  HandeErrorFetchFiletrs: () => {
+    set({ ErrorFetchFilter: false, })
+  },
   supports: [],
   familles: [],
   classes: [],
@@ -41,7 +46,7 @@ export const UseFiltersStore = create((set, get) => ({
   date2: "",
 
   SideBarFilterPosition: "-100%",
- 
+
   veille_diffusion: "first",
   pageSize: 50,
   setPageSize: (size) => {
@@ -63,8 +68,7 @@ export const UseFiltersStore = create((set, get) => ({
     set({ showDataGrid: e })
   },
   setVeilleDiffusion: async (i) => {
-  console.log("out of range value",i)
-  set({ veille_diffusion: i[0] })
+    set({ veille_diffusion: i[0] })
   },
   loadingshow: false,
   setDateRang: async (e, v) => {
@@ -76,34 +80,34 @@ export const UseFiltersStore = create((set, get) => ({
   ResetAllFilters: () => {
     set({
       supports: [],
-  familles: [],
-  classes: [],
-  secteurs: [],
-  varieties: [],
-  annonceurs: [],
-  marques: [],
-  produits: [],
+      familles: [],
+      classes: [],
+      secteurs: [],
+      varieties: [],
+      annonceurs: [],
+      marques: [],
+      produits: [],
 
-  Filtersupports: [],
-  Filterclassesids: [],
-  Filterfamilles: [],
-  Filterclasses: [],
+      Filtersupports: [],
+      Filterclassesids: [],
+      Filterfamilles: [],
+      Filterclasses: [],
 
-  Filtersecteurs: [],
-  Filtersecteursids: [],
+      Filtersecteurs: [],
+      Filtersecteursids: [],
 
-  Filtervarieties: [],
-  Filtervarietiesids: [],
+      Filtervarieties: [],
+      Filtervarietiesids: [],
 
 
-  Filterannonceurs: [],
-  Filterannonceursids: [],
+      Filterannonceurs: [],
+      Filterannonceursids: [],
 
-  Filtermarques: [],
-  Filtermarquesids: [],
+      Filtermarques: [],
+      Filtermarquesids: [],
 
-  Filterproduits: [],
-  Filterproduitsids: [],
+      Filterproduits: [],
+      Filterproduitsids: [],
       rangs: [],
 
     })
@@ -151,27 +155,29 @@ export const UseFiltersStore = create((set, get) => ({
 
 
   },
-  FilterLoading:false,
+  FilterLoading: false,
   getFilters: async (
-  email,
-  media,
-  date1,
-  date2
+    email,
+    media,
+    date1,
+    date2
   ) => {
-    try { 
-      set({FilterLoading:true})
-      let response=await axios.post(`${PORT}/${media}/filters`,{
-        email:email,
-        date_debut:date1,
-        date_fin:date2
+    try {
+      set({ FilterLoading: true })
+      let response = await axios.post(`${PORT}/${media}/filters`, {
+        email: email,
+        date_debut: date1,
+        date_fin: date2
       })
+
+      if (response.data) {
         set({
           supports: response.data?.supports,
-          Filtersupports: response.data.supports?.map((e)=>e.Support_Id),
+          Filtersupports: response.data.supports?.map((e) => e.Support_Id),
           familles: response.data.familles,
-          Filterfamilles: response.data.familles.map((e)=>e.Famille_Id),
+          Filterfamilles: response.data.familles.map((e) => e.Famille_Id),
           classes: response.data.classes,
-          Filterclasses: response.data.classes,  
+          Filterclasses: response.data.classes,
           secteurs: response.data.secteurs,
           Filtersecteurs: response.data.secteurs,
 
@@ -181,18 +187,30 @@ export const UseFiltersStore = create((set, get) => ({
           annonceurs: response.data.annonceurs,
           Filterannonceurs: response.data.annonceurs,
 
-          Filterannonceursids:response.data.annonceurs.map((e)=>e.Annonceur_Id),
-          marques:response.data.marques,
+          Filterannonceursids: response.data.annonceurs.map((e) => e.Annonceur_Id),
+          marques: response.data.marques,
           Filtermarques: response.data.marques,
-          Filtermarquesids :response.data.marques.map((e)=>e.Marque_Id) ,
+          Filtermarquesids: response.data.marques.map((e) => e.Marque_Id),
           produits: response.data.produits,
           Filterproduits: response.data.produits,
-          Filterproduitsids:response.data.produits.map((e)=>e.Produit_Id)
+          Filterproduitsids: response.data.produits.map((e) => e.Produit_Id)
         });
-        set({FilterLoading:false})
-        
+        set({
+          FilterLoading: false,       
+        })
+      } else {
+        set({
+          ErrorFetchFilter: true,
+          messageFilterError: response.message,
+        })
+      }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
+      // les erreurs de connexion 
+      set({ ErrorFetchFilter: true, 
+        FilterLoading: false,
+        messageFilterError: "Vérifiez votre connexion internet",
+      })
     }
   },
   //no longer using this function
@@ -232,7 +250,7 @@ export const UseFiltersStore = create((set, get) => ({
   },
 
   setFilterfamilles: async (ids, classes, secteurs, varieties, produits, annonceurs, marques) => {
-   
+
     try {
       if (ids == []) {
 
@@ -261,7 +279,7 @@ export const UseFiltersStore = create((set, get) => ({
         //var annonceurIdsinproduits=produitsByFamille.map((elem)=>elem.Annonceur_id)
         var annonceurIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Annonceur_Id))];
         var annonceursByFamille = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
-       
+
 
 
         var marquesIdsinproduits = [...new Set(produitsByFamille.map((elem) => elem.Marque_Id))];
@@ -388,7 +406,7 @@ export const UseFiltersStore = create((set, get) => ({
         var annonceurIdsinproduits = [...new Set(produitsBySecteur.map((elem) => elem.Annonceur_Id))]
         var annonceursBySecteur = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
 
-          //console.log('annonceursBySecteur',annonceursBySecteur)
+        //console.log('annonceursBySecteur',annonceursBySecteur)
         var marquesIdsinproduits = [...new Set(produitsBySecteur.map((elem) => elem.Marque_Id))]
         var marquesBySecteur = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_Id))
       }
@@ -427,7 +445,7 @@ export const UseFiltersStore = create((set, get) => ({
         var produitsByVariete = produits.filter((elem) => ids.includes(elem.Variété_Id));
         var produitsids = produitsByVariete.map((elem) => elem.Produit_Id);
         var annonceurIdsinproduits = [...new Set(produitsByVariete.map((elem) => elem.Annonceur_Id))];
-        var annonceursByVariete = annonceurs.filter((elem) =>annonceurIdsinproduits.includes(elem.Annonceur_Id));
+        var annonceursByVariete = annonceurs.filter((elem) => annonceurIdsinproduits.includes(elem.Annonceur_Id));
         //console.log("annonceursByVariete",annonceursByVariete)
         var marquesIdsinproduits = [...new Set(produitsByVariete.map((elem) => elem.Marque_Id))]
         var marquesByVariete = marques.filter((elem) => marquesIdsinproduits.includes(elem.Marque_Id))

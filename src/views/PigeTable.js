@@ -5,7 +5,7 @@ import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore
 import LoadingButtonData from 'components/Commun/LoadingBtnData';
 import CustomToolbar from 'components/Commun/CustomToolBar'
 import AutomaticSideFilterBar from "components/FixedPlugin/AutomatiSideFilterBar";
-import {Box} from "@mui/material";
+import { Box } from "@mui/material";
 import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
 import MultipleSelectMedia from "../components/Commun/MediaSelect";
 import { useDemoData } from '@mui/x-data-grid-generator';
@@ -48,7 +48,10 @@ export default function DataTablePige() {
     ManageSideBarfilterDisplay,
     SideBarFilterPosition,
     getFilters,
-    FilterLoading
+    FilterLoading,
+    ErrorFetchFilter,
+    messageFilterError,
+    HandeErrorFetchFiletrs
   } = UseFiltersStore((state) => state);
   const widthSmallData = 200
   const widthXsmallData = 70
@@ -191,16 +194,15 @@ export default function DataTablePige() {
   const { autorisePigePresse,
     autorisePigeRadio,
     autorisePigeTv, client, email } = UseLoginStore((state) => state)
-  const {sendDownloadLink,
+  const { sendDownloadLink,
     IsPressdataisFetched, ResePressdataisFetched,
     ExportExcelPending, DisplayEmailSent,
     CloseEmailExcel } =
     UsePigeDashboardStore((state) => state);
   const { getPigeCount, PigeCount, ResetPigeCount, count, IsCounting,
- OpenNetworkPopupCount,
- handleCloseNetworkPopupCount,
-   } = UseCountStore((state) => state)
-
+    OpenNetworkPopupCount,
+    handleCloseNetworkPopupCount,
+  } = UseCountStore((state) => state)
   const [pressData, setPressData] = React.useState([])
   const { MediaData, getDataMedia, IsMediadataisFetched,
     ReseMediadataisFetched, FilterDataMediaByrangs, HandelErrorPopup,
@@ -208,7 +210,10 @@ export default function DataTablePige() {
     IsDataPigeLoading,
     OpenNetworkPopup,
     handleCloseNetworkPopup,
-    RestPigeData
+    RestPigeData,
+    ServerErrorOpen,
+    HandelServerErrorPopup,
+    messageServer,
   } = UseMediaDashboardStore((state) => state);
   const [loading, setLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -607,6 +612,7 @@ export default function DataTablePige() {
   if (!client) {
     history.push('/login')
   }
+  console.log('ErrorFetchFilter', ErrorFetchFilter)
   return (
     <div style={{
       height: "auto", width: "100%", padding: "2%",
@@ -953,13 +959,27 @@ export default function DataTablePige() {
       <NetworkErrorPopup
         OpenNetworkPopup={OpenNetworkPopup}
         handleCloseNetworkPopup={handleCloseNetworkPopup}
+        message="Vérifiez votre connexion internet"
       />
-        {/* network issue Popup */}
-        <NetworkErrorPopup
+      {/* network issue Popup get count*/}
+      <NetworkErrorPopup
         OpenNetworkPopup={OpenNetworkPopupCount}
         handleCloseNetworkPopup={handleCloseNetworkPopupCount}
+        message="Vérifiez votre connexion internet"
       />
+      {/* server issue Popup fetch data pige*/}
+      <NetworkErrorPopup
+        OpenNetworkPopup={ServerErrorOpen}
+        handleCloseNetworkPopup={HandelServerErrorPopup}
+        message={messageServer}
 
+      />
+      {/* error Popup filter pige*/}
+      <NetworkErrorPopup
+        OpenNetworkPopup={ErrorFetchFilter}
+        handleCloseNetworkPopup={HandeErrorFetchFiletrs}
+        message={messageFilterError}
+      />
     </div>
   );
 }

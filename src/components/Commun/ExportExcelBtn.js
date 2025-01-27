@@ -6,7 +6,7 @@ import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import ExcelIcon from 'assets/img/icons/xls-file.png';
 import { Download } from '@mui/icons-material';
 const ExportExcelBtn = ({title,isloading,isSucces,handelUpdatePassword,disablebtn, getData}) => {
-  const { getDataPresse,
+  const {
     PressData, sendDownloadLink,
     IsPressdataisFetched,ResePressdataisFetched} = UsePigeDashboardStore((state) => state);
   const [loading, setLoading] = useState(false);

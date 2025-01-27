@@ -13,7 +13,8 @@ import { Container, Row} from "react-bootstrap";
 
 const NetworkErrorPopup = ({ 
   OpenNetworkPopup,
-  handleCloseNetworkPopup
+  handleCloseNetworkPopup,
+  message
    }) => {
 
   return (<Dialog open={OpenNetworkPopup} onClose={handleCloseNetworkPopup}>    
@@ -38,7 +39,8 @@ const NetworkErrorPopup = ({
             marginBottom: "18px", fontSize: '54px', color: 'eba4a8'
           }} />
           <span style={{ textAlign: "center",width:"500px" }}>
-         Vérifiez votre connexion internet 
+         {/* Vérifiez votre connexion internet  */}
+         {message}
             
           </span>
         </div>

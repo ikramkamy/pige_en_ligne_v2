@@ -39,6 +39,8 @@ import { PieChartVelson, PieChartRepartitionFormat } from '../components/Commun/
 import { CircularProgress } from '@mui/material';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
+import { NetworkErrorPopup } from "components/Commun/popups";
+import { UseCountStore } from "store/dashboardStore/UseCounts";
 function Dashboard() {
   const slides = [
     <CustomDataLabelFamilles />,
@@ -51,6 +53,7 @@ function Dashboard() {
     <CustomDataLabelCreationParAnnonceur />,
 
   ];
+
   //document.title='Tableau de bord'
   const history = useHistory()
   const {
@@ -133,6 +136,9 @@ function Dashboard() {
     getCreationParAnnonceur,
 
   } = UsePigeDashboardStore((state) => state)
+
+  const { countLastYear, count, getPigeCount,
+    getPigeCountLastYear } = UseCountStore((state) => state)
   const { autoriseDash, client, email } = UseLoginStore((state) => state)
   const {
     Filtersupports,
@@ -159,7 +165,10 @@ function Dashboard() {
     ManageSideBarfilterDisplay,
     SideBarFilterPosition,
     sideBarFilterPosition,
-
+    ErrorFetchFilter,
+    messageFilterError,
+    HandeErrorFetchFiletrs,
+    FilterLoading
   } = UseFiltersStore((state) => state)
   const { getDataMedia, HandelErrorPopup, ErrorHandel } = UseMediaDashboardStore((state) => state)
   const [show, setShow] = useState(false)
@@ -194,10 +203,10 @@ function Dashboard() {
 
     const startTime = new Date().getTime();
     if (media === 'presse' && !isCalculating) {
-      getVolumePresse && getVolumePresse(Filtersupports, Filterfamilles,
-        Filterclassesids, Filtersecteursids, Filtervarietiesids,
-        Filterannonceursids, Filtermarquesids,
-        Filterproduitsids, date1, date2)
+      // getVolumePresse && getVolumePresse(Filtersupports, Filterfamilles,
+      //   Filterclassesids, Filtersecteursids, Filtervarietiesids,
+      //   Filterannonceursids, Filtermarquesids,
+      //   Filterproduitsids, date1, date2)
 
       await Promise.all([
         getCreationUniquesPresse && getCreationUniquesPresse(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
@@ -213,6 +222,30 @@ function Dashboard() {
       ])
       //pour tou types de media
       await Promise.all([
+        getPigeCount && getPigeCount(email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2),
+        getPigeCountLastYear && getPigeCountLastYear(email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2),
         getTop20famillesSectorielles && getTop20famillesSectorielles(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
         getTop20Annonceurs && getTop20Annonceurs(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
         getAnnonceursActif && getAnnonceursActif(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
@@ -252,6 +285,30 @@ function Dashboard() {
       ])
       //pour tou types de media
       await Promise.all([
+        getPigeCount && getPigeCount(email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2),
+        getPigeCountLastYear && getPigeCountLastYear(email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2),
         getTop20famillesSectorielles && getTop20famillesSectorielles(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
         getTop20Annonceurs && getTop20Annonceurs(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
         getAnnonceursActif && getAnnonceursActif(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
@@ -292,33 +349,42 @@ function Dashboard() {
       setLoadingStep(fetchDataTime / 100)
     }, fetchDataTime);
   }
+  
   useEffect(() => {
-    if (VolumePresse === 0 && VolumeMedia === 0 && dashDisplay && !isCalculating) {
+    if (Number(count)===0) {
       HandelErrorPopup && HandelErrorPopup(true)
     } else {
       //do nothing 
     }
-  }, [VolumeMedia, VolumePresse])
-
-  const disableButton = (!(media && base))
-  const HandelSideBarPisition = () => {
-    ManageSideBarfilterDisplay && ManageSideBarfilterDisplay('0%')
-  }
+  }, [Number(count)])
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
   }
+  const [fetchFilter, setFetchFilter] = useState(false)
   const handeOpenSideBar = () => {
-    const newPosition = sideBarFilterPosition === '100%' ? '0%' : '0%';
-    console.log("newPosition", newPosition)
-    ManageSideBarfilterDisplay('0%');
+    if (fetchFilter === true) {
+      //console.log("calling filters",fetchFilter)
+      getFilters && getFilters(email, media, date1, date2)
+      setTimeout(() => {
+        ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+      }, 5000);
+      setFetchFilter(false)
+    } else {
+      //do nothing
+      ManageSideBarfilterDisplay && ManageSideBarfilterDisplay("0%")
+    }
+    //setLoadingFilters(true)
+
   }
   useEffect(() => {
+    setFetchFilter(true)
     setDashboardIllustration(true)
     setPdfIsCreated(false)
     setIsCalculating(false)
     setShow(false)
     setDataExist(true)
   }, [media, date1, date2])
+  
   const [resStyle, setResStyle] = useState({
     FlexDirection: 'row',
     back: '',
@@ -769,7 +835,6 @@ function Dashboard() {
       height: "auto", width: "100%", padding: "2%",
       marginTop: resStyle.marginTopAll,
       marginBottom: resStyle.marginTopAll
-
     }}
     >
       <Container fluid style={{ display: "flex", flexDirection: "column" }} >
@@ -822,25 +887,17 @@ function Dashboard() {
                   mr="10px"
                   disablebtn={(media == "" || base == "")}
                 />
-                <Button
-                  onClick={handeOpenSideBar}
-                  disabled={!media}
-                  sx={{
-                    textTransform: "none",
-                    width: "100%",
-                    textTransform: "none",
-                    backgroundColor: '#00a6e0',
-                    textTransform: "none",
-                    width: "fit-content",
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#00a6e0',
-                    }
-                  }}>
-                  Recherche avancée
-                </Button>
+                <LoadingButtonData
+                  getData={handeOpenSideBar}
+                  isloading={FilterLoading}
+                  isSucces={false}
+                  title="Recherche avancée"
+                  mr="10px"
+                  disablebtn={(media == "" || base == "")}
+                />
+
               </div>
-              
+
             </div>
 
           </Col>
@@ -876,7 +933,7 @@ function Dashboard() {
                             <Col xs="7">
                               <div className="numbers">
                                 <p className="card-category">volume de diffusion publicitaire</p>
-                                <Card.Title as="h4">{media === 'presse' ? VolumePresse : VolumeMedia}</Card.Title>
+                                <Card.Title as="h4">{count}</Card.Title>
                               </div>
                             </Col>
                           </Row>
@@ -886,7 +943,7 @@ function Dashboard() {
                           <div className="stats">
                             <i className="fas fa-redo mr-1"></i>
 
-                            {media === "presse" ? VolumePresseLastYear : VolumeMediaLastyear}
+                            {countLastYear}
                           </div>
                         </Card.Footer>
                       </Card>
@@ -1321,6 +1378,11 @@ function Dashboard() {
         ErrorHandel={ErrorHandel}
         media={media}
         handleClosePopup={handleClosePopupDataUnavailable}
+      />
+      <NetworkErrorPopup
+        OpenNetworkPopup={ErrorFetchFilter}
+        handleCloseNetworkPopup={HandeErrorFetchFiletrs}
+        message={messageFilterError}
       />
     </div>
   );

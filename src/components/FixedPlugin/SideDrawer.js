@@ -42,37 +42,6 @@ const AnchorTemporaryDrawer = ({ getData, DashboardData,
   const { getDataMedia } = UseMediaDashboardStore((state) => state);
   const { filterVeilledata, veilletvData } = UseVeilleStore((state) => state);
   const [sideShow, setSideShow] = React.useState(false)
-
-  const {
-    getAnnonceursActifPresse,
-    getAnnonceursActif,
-    getCreationUniques,
-
-
-    getBudgetBrut,
-    getSupportDiffusion,
-
-
-    getDreeTotalDiffusion,
-    getDreeTotalMoyenne,
-
-    getPicCommunication,
-
-    getPrtMarchet,
-    getVolumePresse,
-    getTop20Annonceurs,
-    getCreationUniquesPresse,
-    getBudgetBrutPresse,
-    getSupportDiffusionPresse,
-    getCouleur,
-    getTop20famillesSectorielles,
-
-    getTop20Marques,
-    getTop20Produits,
-    getRepartitionFormat,
-    getAnnonceursParSupport,
-    getCreationParAnnonceur,
-  } = UsePigeDashboardStore((state) => state)
   const {
     
     Filtersupports,
@@ -121,16 +90,7 @@ const AnchorTemporaryDrawer = ({ getData, DashboardData,
     setSuccess(isSucces);
     getFilters && getFilters()
   }, [media, date1, date2])
-  React.useEffect(() => {
-    //setState({ right: true }); 
-  }, [])
   const toggleDrawer = (anchor, open) => (event) => {
-    //setLoadingbtn(true);
-    //setSuccess(isSucces);
-    // setTimeout(() => {
-    //   setLoadingbtn(false);
-    // }, 500);
-    //setLoadingbtn(true);
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
@@ -144,52 +104,7 @@ const AnchorTemporaryDrawer = ({ getData, DashboardData,
   const handelApplyFilters = () => {
     setSideShow(false)
   };
-  // const handleGetData = async () => {
-  //   setLoading(true);
-  //   setLoadingshow(false)
-  //   try {
-  //     if (media === "presse") {
-  //       const data = await getDataPresse && getDataPresse(
-  //          Filtersupports,
-  //          Filterfamilles,
-  //          Filterclassesids,
-  //          Filtersecteursids,
-  //          Filtervarietiesids, 
-  //          Filterannonceursids,
-  //          Filtermarquesids,
-  //          Filterproduitsids
-
-  //         );
-  //       setLoading(false);
-  //       setLoadingshow(true)
-
-  //     } else if (media !== "presse") {
-  //       setLoadingshow(false)
-  //       const data = (await getDataMedia) && getDataMedia(
-  //         media,
-  //          Filtersupports,
-  //          Filterfamilles,
-  //          Filterclassesids,
-  //          Filtersecteursids,
-  //          Filtervarietiesids, 
-  //          Filterannonceursids,
-  //          Filtermarquesids,
-  //          Filterproduitsids,
-  //          rangs
-
-
-  //       );
-  //       console.log("data media using isloading", data);
-  //       setLoading(false);
-  //       console.log("is loading", loading);
-  //       setLoadingshow(true)
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     setLoading(false);
-  //   }
-  // };
-
+  
   React.useEffect(() => {
     if (location.pathname == "/admin/veille") {
       setShowBase(false)

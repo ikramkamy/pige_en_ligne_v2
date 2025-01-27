@@ -4,7 +4,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 const LoadingButtonFilter = ({title,isloading,isSucces,handelUpdatePassword,disablebtn, getData}) => {
-  const { getDataPresse, PressData, sendDownloadLink ,IsPressdataisFetched,ResePressdataisFetched} = UsePigeDashboardStore((state) => state);
+  const {PressData, sendDownloadLink ,IsPressdataisFetched,ResePressdataisFetched} = UsePigeDashboardStore((state) => state);
   const [loading, setLoading] = useState(false);
   const {media,
     base}=UseFiltersStore((state)=>state)

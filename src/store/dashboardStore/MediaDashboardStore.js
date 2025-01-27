@@ -6,6 +6,11 @@ export const UseMediaDashboardStore = create((set, get) => ({
   IsMediadataisFetched: false,
   ErrorHandel: false,
   IsDataPigeLoading: false,
+  ServerErrorOpen: false,
+  messageServer: "",
+  HandelServerErrorPopup: () => {
+    set({ ServerErrorOpen: false })
+  },
   HandelErrorPopup: (show) => {
 
     set({ ErrorHandel: show })
@@ -56,9 +61,8 @@ export const UseMediaDashboardStore = create((set, get) => ({
 
   //       },
   getDataMedia: async (email, media, supports, familles, classes,
-    secteurs, varieties, annonceurs, marques, produits,date1, date2) => {
+    secteurs, varieties, annonceurs, marques, produits, date1, date2) => {
     let isDataFetched = false;
-
     try {
       set({ IsDataPigeLoading: true, })
       const response = await axios.post(`${PORT}/${media}/table`, {
@@ -75,24 +79,29 @@ export const UseMediaDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      // console.log("data is ready",)
-      //Assuming you want to set the MediaData in your state management
-      set({
-        MediaData: response.data,
-        IsDataPigeLoading: false,
-      });
-      isDataFetched = true;
-      set({ IsMediadataisFetched: true })
-      if (response.data.length === 0) {
-        // console.log("data empty")
-        set({ ErrorHandel: true })
+
+      if (response.data) {
+        //server respond with data
+        set({
+          MediaData: response.data,
+          IsDataPigeLoading: false,
+        });
+        isDataFetched = true;
+        set({ IsMediadataisFetched: true })
+
       } else {
-        //do nothing
+        //server respond with error
+        set({
+          ErrorHandel: true,
+          ServerErrorOpen:true,
+          messageServer: response.message
+        })
+        //console.log(response.message)
       }
       // Return the data for further use
       return response.data;
     } catch (error) {
-      console.error("Error fetching data:", error);
+      //console.error("Error fetching data:", error);
       set({
         MediaData: [],
         ErrorHandel: true,

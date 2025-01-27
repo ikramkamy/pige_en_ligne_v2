@@ -7,11 +7,11 @@ export const UseCountStore = create((set, get) => ({
   count: -2,
   VeilleCount: 0,
   count_v: -2,
-  IsCounting:false,
+  IsCounting: false,
   getPigeCount: async (email, media, supports, familles, classes,
     secteurs, varieties, annonceurs, marques, produits, date1, date2) => {
     try {
-      set({IsCounting:true})
+      set({ IsCounting: true })
       var media_type = media == "" ? "presse" : media;
       console.log('calling axios')
       const response = await axios.post(`${PORT}/${media_type}/count`, {
@@ -48,14 +48,58 @@ export const UseCountStore = create((set, get) => ({
           count: 0
         });
       }
-      set({IsCounting:false})
+      set({ IsCounting: false })
     } catch (error) {
       console.log('network isssue')
       set({
         PigeCount: -2,
         count: -2,
         OpenNetworkPopupCount: true,
-        IsCounting:false
+        IsCounting: false
+      })
+    }
+  },
+  getPigeCountLastYear: async (email, media, supports, familles, classes,
+    secteurs, varieties, annonceurs, marques, produits, date1, date2) => {
+    try {
+      set({ IsCounting: true })
+      var media_type = media == "" ? "presse" : media;
+      const response = await axios.post(`${PORT}/${media_type}/count`, {
+        email: email,
+        supports: supports,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+      });
+      var dataLength = Number(response.data.total)
+      if (dataLength > Limit_Data_Allowed) {
+        set({         
+          countLastYear: response.data.total
+        });
+      } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
+        set({        
+          countLastYear: response.data.total
+        });
+      } else if (dataLength === 0) {
+
+        set({ 
+          countLastYear: 0
+        });
+      }
+      set({ IsCounting: false })
+    } catch (error) {
+      //console.log('network isssue')
+      set({
+        PigeCount: -2,
+        count: -2,
+        OpenNetworkPopupCount: true,
+        IsCounting: false
       })
     }
   },
@@ -84,7 +128,7 @@ export const UseCountStore = create((set, get) => ({
     Filtermarquesids,
     Filterproduitsids
   ) => {
-    try {    
+    try {
       var media_type = media == "" ? "presse" : media;
       // console.log("calling count veille ",`${PORT}/${media_type}-veille-${veille_diffusion}/count`,{
       //   email: email,
@@ -119,6 +163,6 @@ export const UseCountStore = create((set, get) => ({
   },
   OpenNetworkPopupCount: false,
   handleCloseNetworkPopupCount: () => {
-    set({OpenNetworkPopupCount: false, })
+    set({ OpenNetworkPopupCount: false, })
   }
 }))

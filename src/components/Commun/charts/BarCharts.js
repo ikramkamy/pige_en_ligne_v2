@@ -380,8 +380,8 @@ const CustomDataLabelFamilles = () => {
                         options={options}
                         series={series}
                         type="bar"
-                        style={{ margin: "50px" }}
-                        height={550}
+                        style={{ margin: "5px" }}
+                        height={350}
                     />) : (
 
                     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
@@ -423,12 +423,7 @@ const CustomDataLabelAnnonceurs = () => {
 
     }
     useEffect(() => {
-
-
-
         if (Top20Annonceurs && Top20Annonceurs.length > 0) {
-
-
             if (base === 'budget') {
                 switch (media) {
                     case 'presse':
@@ -716,13 +711,13 @@ const CustomDataLabelAnnonceurs = () => {
 
                     <ReactApexChart
                         id='charts-container2'
-                        style={{ margin: "50px" }}
+                        style={{ margin: "5px" }}
                         dir="ltr"
                         className="apex-charts"
                         options={options}
                         series={series}
                         type="bar"
-                        height={550}
+                        height={350}
                     />) : (
 
                     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
@@ -1049,7 +1044,7 @@ const CustomDataLabelMarques = () => {
                         options={options}
                         series={series}
                         type="bar"
-                        height={550}
+                        height={350}
                     />) : (
                     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
                         <img src={WatingChart} alt="immar" />
@@ -1372,7 +1367,7 @@ const CustomDataLabelProduits = () => {
                         options={options}
                         series={series}
                         type="bar"
-                        height={550}
+                        height={350}
                     />) : (
 
                     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
@@ -1604,7 +1599,7 @@ const CustomDataLabelAnnonceurParSupport = () => {
                         options={options}
                         series={series}
                         type="bar"
-                        height={550}
+                        height={350}
                     />) : (
                     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
                         <img src={WatingChart} alt="immar" />
@@ -1834,7 +1829,7 @@ const CustomDataLabelCreationParAnnonceur = () => {
                         options={options}
                         series={series}
                         type="bar"
-                        height={550}
+                        height={350}
                     />) : (
                     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
 

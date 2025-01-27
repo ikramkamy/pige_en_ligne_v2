@@ -628,17 +628,15 @@ export const PieChartRepartitionFormat = () => {
 
     textStyle: {
       fontFamily: 'Poppins, sans-serif',
-      fontSize: 20,
+      fontSize: 16,
     },
   };
   const [codeColor, setCodeColor] = useState('#F7F7F7')
   const getData = () => {
     if (base === "budget") {
       setCodeColor('#ff9966')
-
     } else if (base === "volume") {
       setCodeColor('#d1edd3')
-
     } else if (base === 'duree') {
       setCodeColor('#d1ebed')
     }
@@ -646,7 +644,6 @@ export const PieChartRepartitionFormat = () => {
     getRepartitionFormat(Filtersupports, Filterfamilles, 
       Filterclassesids, Filtersecteursids, Filtervarietiesids, 
       Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
-
   }
 
   return (
