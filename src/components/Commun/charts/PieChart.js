@@ -124,7 +124,6 @@ export const PieChartVelson = () => {
           case 'television':
             var list = [];
             var dataset = PartMarche.forEach((elem) => {
-
               const item = {
                 //  x:elem.Chaine_Lib + elem.proportion,
                 //  y:Number(elem.chaine_count)
@@ -144,7 +143,7 @@ export const PieChartVelson = () => {
             //console.log("liste2",list2)
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-            //console.log("average 20", average20)
+           
             setAverage(average20.toFixed(2))
 
             break;
@@ -212,10 +211,11 @@ export const PieChartVelson = () => {
             var list2 = list.map((e) => e.value)
             // setAverage(Number(PartMarche[0].average_tarif_per_chaine).toFixed(2));
 
-            var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list2.length;
             //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
+            console.log("average 20", average20,sum,list2)
             break;
         }
 
@@ -614,8 +614,9 @@ const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) 
 
 var autre={value:totalSum,name:`autres ${totalSumPourcentage}%` }
 // console.log("autres",autre,autresList[0].name.split(" ")[2])
-setAnnonceursOptions && setAnnonceursOptions([...AnnonceursOptions,autre])
-},[array, AnnonceursOptions])
+///setAnnonceursOptions && setAnnonceursOptions([...AnnonceursOptions,autre])
+},[AnnonceursOptions])
+
   var option = {
     tooltip: {
       trigger: 'item',
@@ -628,8 +629,8 @@ setAnnonceursOptions && setAnnonceursOptions([...AnnonceursOptions,autre])
         type: 'pie',
         radius: '50%',
         title: "Part de Marché",
-        //data: array,
-        data:AnnonceursOptions,
+        data: array,
+        //data:AnnonceursOptions,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -679,7 +680,7 @@ setAnnonceursOptions && setAnnonceursOptions([...AnnonceursOptions,autre])
 
           </Row>
        
-       <SelectGraphOptions options={array}/>
+       {/* <SelectGraphOptions options={array}/> */}
         </CardHeader>
 
         {(FormatRepartition) ? (

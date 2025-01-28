@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import logoImmar from "assets/logo (2).png";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
+import powerbi from "assets/img/icons/PowerBI.webp"
 import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon } from '@heroicons/react/outline';
 import './navbar.css';
 import Navback from 'assets/navbar.png'
@@ -150,7 +151,23 @@ console.log("call logout function")
           <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
         </span>
 
-
+<span className="no-icon" style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          height: "80px",
+         
+        }} >
+          <Link to="/media/tableau_de_bord_powerbi" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            {/* <ChartBarIcon
+             className="icon_nav"
+              style={{color: "white", }}
+            /> */}
+            <img src={powerbi} className="" alt="powerbi" width="30px"/>
+          </Link>
+          <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
+        </span>
 
         <span className="no-icon" style={{
           display: "flex",
@@ -172,7 +189,7 @@ console.log("call logout function")
           <p style={{ textTransform: "", fontSize: "10px" }}>déconnexion</p>
         </span>
 
-       
+        
       </div>
       </div>
 

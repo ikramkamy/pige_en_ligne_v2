@@ -12,14 +12,14 @@ import { Button, CircularProgress, Box } from '@mui/material';
 import SearchPopupVarieties from './SearchPopupVarities';
 import "./commun.css"
 export default function MultipleSelectVarieties() {
-  const { Filtervarieties, produits, setFiltervariete, 
+  const { Filtervarieties, produits, setFiltervariete,
     annonceurs, marques, Filtervarietiesids } = UseFiltersStore((state) => state);
   const [inputValue, setInputValue] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
   const [previousSelection, setPreviousSelection] = useState([]);
 
 
-  const filteredElems =Filtervarieties.filter((item) => {
+  const filteredElems = Filtervarieties.filter((item) => {
     return item.Variété_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
 
@@ -68,44 +68,44 @@ export default function MultipleSelectVarieties() {
 
   return (
     <FormControl sx={{ m: 1, width: "100%", }} >
-    
-        {/* Custom Select All option */}
-          <MenuItem onClick={handleSelectAll}>
-            <Checkbox checked={isAllSelected} />
-            <ListItemText primary="variétés" />
+
+      {/* Custom Select All option */}
+      <MenuItem onClick={handleSelectAll}>
+        <Checkbox checked={isAllSelected} />
+        <ListItemText primary="variétés" />
+      </MenuItem>
+
+      <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
+
+
+      <Autocomplete
+        sx={{ height: "40px" }}
+        multiple
+        freeSolo
+        options={filteredElems}
+        disabled={showloadingPopup}
+        value={Filtervarieties.filter((item) => previousSelection.includes(item.Variété_Id))}
+        onChange={handleAutocompleteChange}
+        getOptionLabel={(option) => option.Variété_Lib}
+        inputValue={inputValue}
+        onInputChange={onInputChange}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={`variétés (${previousSelection.length})`}
+            // Display the count of selected items
+            variant="outlined"
+          />
+        )}
+        renderOption={(props, option) => (
+          <MenuItem {...props} key={option.Variété_Id} value={option.Variété_Id}>
+            <Checkbox checked={previousSelection.includes(option.Variété_Id)} />
+            <ListItemText primary={option.Variété_Lib} />
           </MenuItem>
-       
-        <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
-
-
-            <Autocomplete 
-            sx={{height:"40px"}}
-            multiple
-            freeSolo
-            options={filteredElems}
-            disabled={showloadingPopup}
-            value={Filtervarieties.filter((item) => previousSelection.includes(item.Variété_Id))}
-            onChange={handleAutocompleteChange}
-            getOptionLabel={(option) => option.Variété_Lib}
-            inputValue={inputValue}
-            onInputChange={onInputChange}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={`variétés (${previousSelection.length})`} 
-                // Display the count of selected items
-                variant="outlined"
-              />
-            )}
-            renderOption={(props, option) => (
-              <MenuItem {...props} key={option.Variété_Id} value={option.Variété_Id}>
-                <Checkbox  checked={previousSelection.includes(option.Variété_Id)} />
-                <ListItemText primary={option.Variété_Lib} />
-              </MenuItem>
-            )}
-            renderTags={(value, getTagProps) => null}
-            disableCloseOnSelect
-          /> 
+        )}
+        renderTags={(value, getTagProps) => null}
+        disableCloseOnSelect
+      />
       {showloadingPopup && (<div>Loading...</div>)}
       <SearchPopupVarieties openSeachVarities={openSeachVarities}
         handleCloseSearchVarieties={handleCloseSearchVarieties}

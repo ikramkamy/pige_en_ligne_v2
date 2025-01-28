@@ -9,6 +9,7 @@ import VeillePub from "views/VeillePub";
 import Privacy from 'views/Privacy';
 import CGV from 'views/Termes';
 import ExportPPT from "views/PptFile";
+import PowerBiDashbord from "views/PowerBiDashboard";
 const dashboardRoutes = [
   {
     path: "/accueil",
@@ -43,6 +44,13 @@ const dashboardRoutes = [
     name: "Dashboard",
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,
+    layout: "/media"
+  },
+  {
+    path: "/tableau_de_bord_powerbi",
+    name: "Dashboard",
+    icon: "nc-icon nc-chart-pie-35",
+    component: PowerBiDashbord,
     layout: "/media"
   },
   {

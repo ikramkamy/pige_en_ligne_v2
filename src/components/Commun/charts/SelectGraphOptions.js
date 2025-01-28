@@ -18,18 +18,21 @@ const MenuProps = {
 };
 
 export default function SelectGraphOptions({ options }) {
-    const { setAnnonceursOptions } = UseGraphStore((state) => state)
+    const { setAnnonceursOptions, AnnonceursOptions } = UseGraphStore((state) => state)
     const optionList = options.map((e) => e.name.split(' ')[0])
     //console.log("optionList",optionList)
     const [selectedItems, setSelectedItems] = useState('')
-    const [selectedList,setSelectedList]=useState(options.slice(0,5))
+    const [selectedList, setSelectedList] = useState(options.slice(0, 5))
     useEffect(() => {
         setSelectedItems(optionList.slice(0, 5))
     }, [options])
     const handleChange = (event, value) => {
         var selected = event.target.value
+        console.log("selected", selectedItems, selected, selectedItems.indexOf(selected))
         if (selectedItems.indexOf(selected) === -1) {
             if (selectedItems.length === 5) {
+                setSelectedItems(selectedItems.pop())
+                console.log(selectedItems)
                 const newSelectedItems = [...selectedItems.slice(1), selected];
                 setSelectedItems(newSelectedItems);
             } else {
@@ -37,14 +40,17 @@ export default function SelectGraphOptions({ options }) {
             }
         } else {
             setSelectedItems(selectedItems.filter((item) => item !== selected));
-        }   
-        setSelectedList(options.filter((e)=> selectedItems.includes(e.name.split(" ")[0])))        
+        }
+        setSelectedList(options.filter((e) => selectedItems.includes(e.name.split(" ")[0])))
+        setAnnonceursOptions && setAnnonceursOptions(options.filter((e) => selectedItems.includes(e.name.split(" ")[0])))
     };
-    useEffect(()=>{
+    useEffect(() => {
         setAnnonceursOptions && setAnnonceursOptions(selectedList)
-    },[selectedList])
+        console.log("Annonceurs option", AnnonceursOptions)
+    }, [selectedList])
     //console.log("selected", selectedItems)
-    console.log("selected list", selectedList)
+    //console.log("selected list", selectedList)
+
     return (
         <div>
             <FormControl
