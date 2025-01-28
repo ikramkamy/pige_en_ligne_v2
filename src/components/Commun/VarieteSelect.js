@@ -22,9 +22,7 @@ export default function MultipleSelectVarieties() {
   const filteredElems =Filtervarieties.filter((item) => {
     return item.Variété_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
   });
-  // const filteredElems =Filtervarieties.filter((item) => {
-  //   return item.Variété_Lib.toLowerCase().startsWith(inputValue.toLowerCase());
-  // })
+
 
   useEffect(() => {
     setPreviousSelection(Filtervarietiesids);

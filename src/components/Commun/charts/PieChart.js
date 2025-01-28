@@ -6,11 +6,10 @@ import CardHeader from 'react-bootstrap/esm/CardHeader';
 import ReactEcharts from "echarts-for-react";
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { useEffect, useState } from "react";
-import DropDownBase from '../DropDownMenu';
 import BaseDialog from '../DialogueBox';
-import DropDownBaseRepartitionFormat from 'components/Commun/DropDownComponents/BaseGrapheRepartitionMarchet';
 import WatingChart from 'assets/img/loading3.gif';
-
+import SelectGraphOptions from './SelectGraphOptions';
+import { UseGraphStore } from 'store/GraphStore';
 export function PieActiveArc() {
   const { PartMarche } = UsePigeDashboardStore((state) => state)
   const array = [];
@@ -354,7 +353,7 @@ export const PieChartVelson = () => {
 }
 export const PieChartRepartitionFormat = () => {
 
-
+  const {AnnonceursOptions,setAnnonceursOptions}=UseGraphStore((state)=>state)
   const chartDatalabelsBarColors = [
     // "#C7E6F6",
     // "#B9D9E4",
@@ -400,7 +399,8 @@ export const PieChartRepartitionFormat = () => {
   ];
   const { FormatRepartition, getRepartitionFormat } = UsePigeDashboardStore((state) => state);
 
-  const { base, media, baseGraphe, Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
+  const { base, media, baseGraphe, Filtersupports, 
+    Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
   const [average, setAverage] = useState(0);
   const [array, setArray] = useState([]);
 
@@ -602,7 +602,20 @@ export const PieChartRepartitionFormat = () => {
 
   }, [FormatRepartition])
 
+console.log("Annonceurs options",AnnonceursOptions)
+console.log("Annonceurs options array",array)
+useEffect(()=>{
+var autresList=array.filter((e)=> !AnnonceursOptions.includes(e))
 
+var valueAutre=autresList.map((e)=> Number(e.value))
+var PourcentageAutre=autresList.map((e)=> Number(e.name.split(" ")[2].split('%')[0]))
+const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0); 
+const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0); 
+
+var autre={value:totalSum,name:`autres ${totalSumPourcentage}%` }
+// console.log("autres",autre,autresList[0].name.split(" ")[2])
+setAnnonceursOptions && setAnnonceursOptions([...AnnonceursOptions,autre])
+},[array, AnnonceursOptions])
   var option = {
     tooltip: {
       trigger: 'item',
@@ -615,8 +628,8 @@ export const PieChartRepartitionFormat = () => {
         type: 'pie',
         radius: '50%',
         title: "Part de Marché",
-        data: array,
-
+        //data: array,
+        data:AnnonceursOptions,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -665,6 +678,8 @@ export const PieChartRepartitionFormat = () => {
             </Col>
 
           </Row>
+       
+       <SelectGraphOptions options={array}/>
         </CardHeader>
 
         {(FormatRepartition) ? (
