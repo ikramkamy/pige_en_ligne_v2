@@ -8,7 +8,7 @@ import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { useEffect, useState } from "react";
 import BaseDialog from '../DialogueBox';
 import WatingChart from 'assets/img/loading3.gif';
-import SelectGraphOptions from './SelectGraphOptions';
+import { SelectGraphOptions, SelectGraphOptionsMarche } from './SelectGraphOptions';
 import { UseGraphStore } from 'store/GraphStore';
 export function PieActiveArc() {
   const { PartMarche } = UsePigeDashboardStore((state) => state)
@@ -64,9 +64,9 @@ export const PieChartVelson = () => {
     "#001415"
   ];
   const { PartMarche, getPrtMarchet } = UsePigeDashboardStore((state) => state);
-
-  const { base, media, baseGraphe, Filtersupports, Filterfamilles, 
-    Filterclassesids, Filtersecteursids, Filtervarietiesids, 
+  const { MarcheOptions } = UseGraphStore((state) => state)
+  const { base, media, baseGraphe, Filtersupports, Filterfamilles,
+    Filterclassesids, Filtersecteursids, Filtervarietiesids,
     Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
   const [average, setAverage] = useState(0);
   const [array, setArray] = useState([]);
@@ -74,8 +74,6 @@ export const PieChartVelson = () => {
   useEffect(() => {
 
     if (PartMarche && PartMarche.length !== 0) {
-      //console.log('PartMarche', PartMarche)
-      //2797
       if (base === "volume" || baseGraphe === 'volume') {
         switch (media) {
           case 'presse':
@@ -83,7 +81,7 @@ export const PieChartVelson = () => {
             var dataset = PartMarche.forEach((elem) => {
               const item = {
                 value: Number(elem.appearance_count),
-                name: `${elem.Titre_Lib}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.Titre_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
               }
               list.push(item)
               return array;
@@ -104,7 +102,7 @@ export const PieChartVelson = () => {
                 //  x:elem.Chaine_Lib + elem.proportion,
                 //  y:Number(elem.chaine_count)
                 value: Number(elem.chaine_count),
-                name: `${elem.Chaine_Lib}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
               }
 
               list.push(item)
@@ -128,7 +126,7 @@ export const PieChartVelson = () => {
                 //  x:elem.Chaine_Lib + elem.proportion,
                 //  y:Number(elem.chaine_count)
                 value: Number(elem.chaine_count),
-                name: `${elem.Chaine_Lib}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
               }
 
               list.push(item)
@@ -143,7 +141,7 @@ export const PieChartVelson = () => {
             //console.log("liste2",list2)
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
-           
+
             setAverage(average20.toFixed(2))
 
             break;
@@ -157,7 +155,7 @@ export const PieChartVelson = () => {
 
               const item = {
                 value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.Titre_Lib}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.Titre_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
               }
 
               list.push(item)
@@ -178,7 +176,7 @@ export const PieChartVelson = () => {
                 //    x:elem.Chaine_Lib + elem.proportion,
                 //    y:Number(elem.total_tarif)
                 value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.Chaine_Lib}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
 
               }
 
@@ -200,22 +198,18 @@ export const PieChartVelson = () => {
               const item = {
 
                 value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.support}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-
+                name: `${elem.support}-${Number(elem.proportion).toFixed(2) + "%"}`,
               }
-
               list.push(item)
               return array;
             })
             setArray(list)
             var list2 = list.map((e) => e.value)
-            // setAverage(Number(PartMarche[0].average_tarif_per_chaine).toFixed(2));
-
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list2.length;
             //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
-            console.log("average 20", average20,sum,list2)
+            // console.log("average 20", average20, sum, list2)
             break;
         }
 
@@ -226,7 +220,7 @@ export const PieChartVelson = () => {
             var dataset = PartMarche.forEach((elem) => {
               const item = {
                 value: Number(elem.total_duree).toFixed(2),
-                name: `${elem.Chaine_Lib}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
               }
               list.push(item)
               return array;
@@ -245,12 +239,9 @@ export const PieChartVelson = () => {
               const item = {
                 //    x:elem.Chaine_Lib + elem.proportion,
                 //    y:Number(elem.total_duree)
-
                 value: Number(elem.total_duree).toFixed(2),
-                name: `${elem.Chaine_Lib}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-
+                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
               }
-
               list.push(item)
               return array;
             })
@@ -262,16 +253,30 @@ export const PieChartVelson = () => {
             //console.log("average 20", average20)
             setAverage(average20.toFixed(2))
             break;
-
         }
-
       }
-
     }
-
-
   }, [PartMarche])
 
+  const [dynamicList, setDynamicList] = useState(MarcheOptions)
+  const ModifyList = () => {
+    
+  
+    var autresList = array.filter((e) => !MarcheOptions.includes(e))
+   
+    var valueAutre = autresList.map((e) => Number(e.value))
+    var PourcentageAutre = autresList.map((e) => Number(e.name.split('-')[1].split('%')[0]))
+   
+    const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    var listWithAutre = MarcheOptions;
+    var autre = {
+      value: totalSum.toFixed(2).toString(),
+      name: `autres ${totalSumPourcentage.toFixed(2)}%`
+    }
+    listWithAutre.push(autre)
+    setDynamicList([...listWithAutre])
+  }
   var option = {
     tooltip: {
       trigger: 'item',
@@ -284,7 +289,8 @@ export const PieChartVelson = () => {
         type: 'pie',
         radius: '50%',
         title: "Part de Marché",
-        data: array,
+        //data: array,
+        data: dynamicList,
 
         emphasis: {
           itemStyle: {
@@ -313,8 +319,8 @@ export const PieChartVelson = () => {
     } else if (base === 'duree') {
       setCodeColor('#d1ebed')
     }
-    getPrtMarchet && getPrtMarchet(Filtersupports, Filterfamilles, 
-      Filterclassesids, Filtersecteursids, Filtervarietiesids, 
+    getPrtMarchet && getPrtMarchet(Filtersupports, Filterfamilles,
+      Filterclassesids, Filtersecteursids, Filtervarietiesids,
       Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
 
   }
@@ -325,26 +331,39 @@ export const PieChartVelson = () => {
         <CardHeader style={{ backgroundColor: codeColor, padding: 20, borderBottom: '1px solid #ddd' }}>
           <Row>
             <Col>
-              <h4 className="card-title mb-0" style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
-                Part de Marché
+              <h4 className="card-title mb-0"
+                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
+                Part de Marché &#8205;
               </h4>
             </Col>
             <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <h4 className="card-title mb-0" style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
+              <h4 className="card-title mb-0"
+                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
                 La moyenne = {average}
-                <BaseDialog getData={getData} title="Part de Marché" />
+
               </h4>
 
             </Col>
 
           </Row>
+          <Row style={{display:"flex", justifyContent:"space-between"}}>
+            <Col>
+              <BaseDialog getData={getData} title="Part de Marché" />
+            </Col>
+            <Col style={{ display: 'flex', justifyContent: 'flex-end', padding: "0px" }}>
+              <SelectGraphOptionsMarche
+                UpdatedGraphDisplay={ModifyList}
+                options={array}
+              />
+            </Col>
+          </Row>
+      
         </CardHeader>
 
         <div className="card-body" style={{ padding: 0 }} id="charts-container5">
-          <ReactEcharts 
-         
-          style={{ height: '450px' }}          
-          option={option} />
+          <ReactEcharts
+            style={{ height: '450px' }}
+            option={option} />
         </div>
       </Card>
 
@@ -353,7 +372,7 @@ export const PieChartVelson = () => {
 }
 export const PieChartRepartitionFormat = () => {
 
-  const {AnnonceursOptions,setAnnonceursOptions}=UseGraphStore((state)=>state)
+  const { AnnonceursOptions, setAnnonceursOptions } = UseGraphStore((state) => state)
   const chartDatalabelsBarColors = [
     // "#C7E6F6",
     // "#B9D9E4",
@@ -399,8 +418,10 @@ export const PieChartRepartitionFormat = () => {
   ];
   const { FormatRepartition, getRepartitionFormat } = UsePigeDashboardStore((state) => state);
 
-  const { base, media, baseGraphe, Filtersupports, 
-    Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
+  const { base, media, baseGraphe, Filtersupports,
+    Filterfamilles, Filterclassesids, Filtersecteursids,
+    Filtervarietiesids, Filterannonceursids,
+    Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
   const [average, setAverage] = useState(0);
   const [array, setArray] = useState([]);
 
@@ -415,6 +436,7 @@ export const PieChartRepartitionFormat = () => {
               const item = {
                 value: Number(elem.appearance_count),
                 name: `${elem.format}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+
               }
               list.push(item)
               //array.push(item)
@@ -437,18 +459,13 @@ export const PieChartRepartitionFormat = () => {
                 //  x:elem.Chaine_Lib + elem.proportion,
                 //  y:Number(elem.chaine_count)
                 value: Number(elem.format_count),
-                name: `${elem.RadioPub_Format + "s "}   ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.RadioPub_Format + "s"}  ${Number(elem.proportion).toFixed(2) + "%"}`,
               }
 
               list.push(item)
               return array;
             })
             setArray(list)
-            //
-            //                 setAverage(Number(FormatRepartition[0].
-            //  average_diffusion_per_format
-            //                             ).toFixed(2));
-
             var list2 = list.map((e) => e.value)
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
@@ -465,7 +482,7 @@ export const PieChartRepartitionFormat = () => {
                 //  x:elem.Chaine_Lib + elem.proportion,
                 //  y:Number(elem.chaine_count)
                 value: Number(elem.format_count),
-                name: `${elem.TelePub_Format + "s "}  ${Number(elem.proportion).toFixed(2) + "%"}`,
+                name: `${elem.TelePub_Format + "s"}  ${Number(elem.proportion).toFixed(2) + "%"}`,
               }
 
               list.push(item)
@@ -476,7 +493,7 @@ export const PieChartRepartitionFormat = () => {
 
             //   setAverage(Number(FormatRepartition[0].average_diffusion_per_format).toFixed(2));
             // }
-            var list2=list.map((e)=>e.value)
+            var list2 = list.map((e) => e.value)
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
@@ -503,7 +520,7 @@ export const PieChartRepartitionFormat = () => {
             })
             setArray(list);
             //setAverage(Number(FormatRepartition[0].average_tarif_per_format).toFixed(2));
-            var list2=list.map((e)=>e.value)
+            var list2 = list.map((e) => e.value)
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
@@ -526,7 +543,7 @@ export const PieChartRepartitionFormat = () => {
             })
             setArray(list);
             //setAverage(Number(FormatRepartition[0].average_tarif_per_chaine).toFixed(2));
-            var list2=list.map((e)=>e.value)
+            var list2 = list.map((e) => e.value)
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
@@ -549,7 +566,7 @@ export const PieChartRepartitionFormat = () => {
             })
             setArray(list)
             //setAverage(Number(FormatRepartition[0].average_tarif_per_format).toFixed(2));
-            var list2=list.map((e)=>e.value)
+            var list2 = list.map((e) => e.value)
             //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
             var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
             var average20 = sum / list.length;
@@ -598,24 +615,28 @@ export const PieChartRepartitionFormat = () => {
       }
 
     }
-
-
   }, [FormatRepartition])
+  const [dynamicList, setDynamicList] = useState(AnnonceursOptions)
+  const ModifyList = () => {
+    var autresList = array.filter((e) => !AnnonceursOptions.includes(e))
+    var valueAutre = autresList.map((e) => Number(e.value))
+    if (media === "presse") {
+      setDynamicList(AnnonceursOptions)
+    } else {
+      var PourcentageAutre = autresList.map((e) => Number(e.name.split(" ")[2].split('%')[0]))
+      const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      var listWithAutre = AnnonceursOptions;
+      var autre = {
+        value: totalSum.toFixed(2).toString(),
+        name: `autres ${totalSumPourcentage.toFixed(2)}%`
+      }
+      listWithAutre.push(autre)
+      setDynamicList([...listWithAutre])
 
-console.log("Annonceurs options",AnnonceursOptions)
-console.log("Annonceurs options array",array)
-useEffect(()=>{
-var autresList=array.filter((e)=> !AnnonceursOptions.includes(e))
+    }
 
-var valueAutre=autresList.map((e)=> Number(e.value))
-var PourcentageAutre=autresList.map((e)=> Number(e.name.split(" ")[2].split('%')[0]))
-const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0); 
-const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0); 
-
-var autre={value:totalSum,name:`autres ${totalSumPourcentage}%` }
-// console.log("autres",autre,autresList[0].name.split(" ")[2])
-///setAnnonceursOptions && setAnnonceursOptions([...AnnonceursOptions,autre])
-},[AnnonceursOptions])
+  }
 
   var option = {
     tooltip: {
@@ -629,8 +650,7 @@ var autre={value:totalSum,name:`autres ${totalSumPourcentage}%` }
         type: 'pie',
         radius: '50%',
         title: "Part de Marché",
-        data: array,
-        //data:AnnonceursOptions,
+        data: dynamicList,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -654,10 +674,11 @@ var autre={value:totalSum,name:`autres ${totalSumPourcentage}%` }
     } else if (base === 'duree') {
       setCodeColor('#d1ebed')
     }
-    getRepartitionFormat && 
-    getRepartitionFormat(Filtersupports, Filterfamilles, 
-      Filterclassesids, Filtersecteursids, Filtervarietiesids, 
-      Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
+    getRepartitionFormat &&
+      getRepartitionFormat(Filtersupports, Filterfamilles,
+        Filterclassesids, Filtersecteursids, Filtervarietiesids,
+        Filterannonceursids, Filtermarquesids,
+        Filterproduitsids, base, media, rangs, date1, date2)
   }
 
   return (
@@ -666,30 +687,40 @@ var autre={value:totalSum,name:`autres ${totalSumPourcentage}%` }
         <CardHeader style={{ backgroundColor: codeColor, padding: 20, borderBottom: '1px solid #ddd' }}>
           <Row>
             <Col>
-              <h4 className="card-title mb-0" style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
+              <h4 className="card-title mb-0"
+                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
                 Répartition par Format
               </h4>
             </Col>
             <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <h4 className="card-title mb-0" style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
+              <h4 className="card-title mb-0"
+                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
                 La moyenne = {average}
-                <BaseDialog getData={getData} title="Répartition par Format" />
+
               </h4>
 
             </Col>
 
           </Row>
-       
-       {/* <SelectGraphOptions options={array}/> */}
+          <Row style={{ display: "flex", justifyContent: "space-between" }}>
+            <Col>
+              <BaseDialog getData={getData} title="Répartition par Format" />
+            </Col>
+            <Col style={{ display: 'flex', justifyContent: 'flex-end', padding: "0px" }}>
+              <SelectGraphOptions options={array} UpdatedGraphDisplay={ModifyList}
+
+              />
+            </Col>
+          </Row>
         </CardHeader>
 
         {(FormatRepartition) ? (
           <div className="card-body" style={{ padding: 0 }} id="charts-container6">
-            <ReactEcharts 
-           
-            style={{ height: '450px' }} 
-            
-            option={option} />
+            <ReactEcharts
+
+              style={{ height: '450px' }}
+
+              option={option} />
           </div>
 
         ) : (

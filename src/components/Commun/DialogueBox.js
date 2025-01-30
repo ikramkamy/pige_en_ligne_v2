@@ -7,12 +7,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
-import LoadingBaseChangeBtn from 'components/Commun/LoadingBaseChangeBtn'
-import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
 import DropDownBaseRepartitionFormat from './DropDownComponents/BaseGrapheRepartitionMarchet';
 
 export default function BaseDialog({getData,title}) {
@@ -53,7 +47,7 @@ export default function BaseDialog({getData,title}) {
         <DialogTitle>Base de calcul</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          Etes-vous sûr de vouloir changer la base de calcule pour {title}?
+          Etes-vous sûr de vouloir changer la base de calcule pour les {title}?
           </DialogContentText>
           <Box
             noValidate
@@ -65,7 +59,7 @@ export default function BaseDialog({getData,title}) {
               width: '500',
             }}
           >
-            <FormControl sx={{ mt: 2, minWidth: 520 }}>
+            <FormControl sx={{ mt: 2, minWidth:100 }}>
         
 
               <DropDownBaseRepartitionFormat />

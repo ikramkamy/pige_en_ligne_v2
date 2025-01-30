@@ -4,10 +4,11 @@ import { create } from 'zustand'
 export const UseGraphStore = create((set, get) => ({
   
     AnnonceursOptions:[],
+    MarcheOptions:[],
     setAnnonceursOptions:(options)=>{
-        console.log('selected',options)
         set({AnnonceursOptions:options})         
+    },
+    setMarcheOptions:(options)=>{ 
+        set({MarcheOptions:options})         
     }
-
-
 }))

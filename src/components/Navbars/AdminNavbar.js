@@ -43,8 +43,8 @@ function Header() {
   //   }
   // const history=useHistory()
 
-const handelLogout = () => {
-console.log("call logout function")
+  const handelLogout = () => {
+    console.log("call logout function")
     // window.localStorage.clear()
     localStorage.removeItem('user_email');
     localStorage.removeItem('user_id');
@@ -55,103 +55,104 @@ console.log("call logout function")
     <div className="navbar_back" style={{
       display: "flex", width: "100%",
       justifyContent: "center", alignItems: "center",
-      backgroundSize: 'cover',   
+      backgroundSize: 'cover',
       backgroundPosition: 'center',
-      position:"fixed",
-      top:'0px',
-      zIndex:"10"
+      position: "fixed",
+      top: '0px',
+      zIndex: "10"
     }}>
-      <div style={{width:"90%", display:"flex",
-       justifyContent:"space-between",
-       alignItems:"start",paddingTop: '0px', 
-       
-      }}>
-      <div style={{paddingTop:"0px"}} >
-        <Link to="/main/accueil">
-          <img src={logoImmar} alt="immar media" className="logo-immar"/>
-        </Link>
-      </div>
       <div style={{
-        display: "flex", width: "100%",
-        display: "flex", justifyContent: "flex-end", alignItems: "center",       
+        width: "90%", display: "flex",
+        justifyContent: "space-between",
+        alignItems: "start", paddingTop: '0px',
+
       }}>
-        <span className="no-icon" style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "80px",         
-          color: "white"
+        <div style={{ paddingTop: "0px" }} >
+          <Link to="/main/accueil">
+            <img src={logoImmar} alt="immar media" className="logo-immar" />
+          </Link>
+        </div>
+        <div style={{
+          display: "flex", width: "100%",
+          display: "flex", justifyContent: "flex-end", alignItems: "center",
         }}>
-          <Link
-            to="/pige/pige_en_ligne"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <SearchCircleIcon className="icon_nav" style={{
-              // width: "35px",
+          <span className="no-icon" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
+            color: "white"
+          }}>
+            <Link
+              to="/pige/pige_en_ligne"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <SearchCircleIcon className="icon_nav" style={{
+                // width: "35px",
 
-              color: "white",
-              // "&:hover": {
-              //   color: "#1DC7EA", 
-              // },
+                color: "white",
+                // "&:hover": {
+                //   color: "#1DC7EA", 
+                // },
 
-            }} />
+              }} />
 
-          </Link>
-          <p style={{ textTransform: "", fontSize: "10px" }}>pige</p>
-        </span>
-
-
-        <span className="no-icon " style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "80px",
-         
-        }}>
-          <Link
-            to="/veille/veille_creations_publicitaires"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <SpeakerphoneIcon className="icon_nav"
-              style={{color: "white", }}
-            />
-
-          </Link>
-          <p style={{ textTransform: "", fontSize: "10px" }}>veille</p>
-        </span>
+            </Link>
+            <p style={{ textTransform: "", fontSize: "10px" }}>pige</p>
+          </span>
 
 
+          <span className="no-icon " style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
 
-        <span className="no-icon" style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "80px",
-         
-        }} >
-          <Link to="/media/tableau_de_bord" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <ChartBarIcon
-             className="icon_nav"
-              style={{color: "white", }}
-            />
-          </Link>
-          <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
-        </span>
+          }}>
+            <Link
+              to="/veille/veille_creations_publicitaires"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <SpeakerphoneIcon className="icon_nav"
+                style={{ color: "white", }}
+              />
 
-<span className="no-icon" style={{
+            </Link>
+            <p style={{ textTransform: "", fontSize: "10px" }}>veille</p>
+          </span>
+
+
+
+          <span className="no-icon" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
+
+          }} >
+            <Link to="/media/tableau_de_bord" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              <ChartBarIcon
+                className="icon_nav"
+                style={{ color: "white", }}
+              />
+            </Link>
+            <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
+          </span>
+
+          {/* <span className="no-icon" style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -160,37 +161,33 @@ console.log("call logout function")
          
         }} >
           <Link to="/media/tableau_de_bord_powerbi" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            {/* <ChartBarIcon
-             className="icon_nav"
-              style={{color: "white", }}
-            /> */}
             <img src={powerbi} className="" alt="powerbi" width="30px"/>
           </Link>
           <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
-        </span>
+        </span> */}
 
-        <span className="no-icon" style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "80px",        
-        }}>
-          <Link to="/login"
-            style={{
-              display: "flex", flexDirection: "column",
-              alignItems: "center", justifyContent: "center"
-            }}>
-            <LogoutIcon onClick={handelLogout}
-             className="icon_nav"
-              style={{color: "white"}}
-            />
-          </Link>
-          <p style={{ textTransform: "", fontSize: "10px" }}>déconnexion</p>
-        </span>
+          <span className="no-icon" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
+          }}>
+            <Link to="/login"
+              style={{
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center"
+              }}>
+              <LogoutIcon onClick={handelLogout}
+                className="icon_nav"
+                style={{ color: "white" }}
+              />
+            </Link>
+            <p style={{ textTransform: "", fontSize: "10px" }}>déconnexion</p>
+          </span>
 
-        
-      </div>
+
+        </div>
       </div>
 
     </div>

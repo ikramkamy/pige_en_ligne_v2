@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { UseGraphStore } from 'store/GraphStore';
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -17,63 +18,63 @@ const MenuProps = {
     },
 };
 
-export default function SelectGraphOptions({ options }) {
-    const { setAnnonceursOptions, AnnonceursOptions } = UseGraphStore((state) => state)
-    const optionList = options.map((e) => e.name.split(' ')[0])
-    //console.log("optionList",optionList)
-    const [selectedItems, setSelectedItems] = useState('')
-    const [selectedList, setSelectedList] = useState(options.slice(0, 5))
+export function SelectGraphOptions({ options, UpdatedGraphDisplay }) {
+    const { setAnnonceursOptions, AnnonceursOptions } = UseGraphStore((state) => state);
+    const optionList = options.map((e) => e.name.split(' ')[0]);
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [selectedList, setSelectedList] = useState(options.slice(0, 5));
+
     useEffect(() => {
-        setSelectedItems(optionList.slice(0, 5))
-    }, [options])
-    const handleChange = (event, value) => {
-        var selected = event.target.value
-        console.log("selected", selectedItems, selected, selectedItems.indexOf(selected))
-        if (selectedItems.indexOf(selected) === -1) {
-            if (selectedItems.length === 5) {
-                setSelectedItems(selectedItems.pop())
-                console.log(selectedItems)
-                const newSelectedItems = [...selectedItems.slice(1), selected];
-                setSelectedItems(newSelectedItems);
+        setSelectedItems(optionList.slice(0, 5));
+    }, [options]);
+
+    const handleChange = (event) => {
+        const selected = event.target.value;
+        setSelectedItems((prevSelectedItems) => {
+            if (prevSelectedItems.includes(selected)) {
+                return prevSelectedItems.filter((item) => item !== selected);
             } else {
-                setSelectedItems([...selectedItems, selected]);
+                if (prevSelectedItems.length >= 5) {
+                    return [...prevSelectedItems.slice(1), selected];
+                } else {
+                    return [...prevSelectedItems, selected];
+                }
             }
-        } else {
-            setSelectedItems(selectedItems.filter((item) => item !== selected));
-        }
-        setSelectedList(options.filter((e) => selectedItems.includes(e.name.split(" ")[0])))
-        setAnnonceursOptions && setAnnonceursOptions(options.filter((e) => selectedItems.includes(e.name.split(" ")[0])))
+        });
+
     };
     useEffect(() => {
-        setAnnonceursOptions && setAnnonceursOptions(selectedList)
-        console.log("Annonceurs option", AnnonceursOptions)
+        const newSelectedList = options.filter((e) =>
+            selectedItems.includes(e.name.split(" ")[0])
+        );
+        setSelectedList(newSelectedList);
+        setAnnonceursOptions && setAnnonceursOptions(newSelectedList);
+    }, [selectedItems, options, setAnnonceursOptions]);
+    useEffect(() => {
+        UpdatedGraphDisplay()
     }, [selectedList])
-    //console.log("selected", selectedItems)
-    //console.log("selected list", selectedList)
-
     return (
         <div>
             <FormControl
                 sx={{
                     m: 0,
                     width: 150,
-                    marginRight: { xs: 0, sm: "10px" }
+                    marginRight: { xs: 0, sm: "0px" }
                 }}>
                 <Select
-
                     labelId="demo-multiple-checkbox-label"
-                    value="top 5 annonceurs"
+                    value={selectedItems}
                     onChange={handleChange}
                     input={<OutlinedInput label="top 5 annonceurs" />}
-                    renderValue={(selected) => selected}
+
+                    renderValue={() => `Top ${selectedItems.length} Format`}
                     MenuProps={MenuProps}
                     sx={{ backgroundColor: "white", height: "40px" }}
                 >
                     {optionList.map((elem) => (
-                        <MenuItem key={elem} value={elem} >
-                            <Checkbox checked={selectedItems.indexOf(elem) > -1} />
-                            <ListItemText primary={elem}
-                            />
+                        <MenuItem key={elem} value={elem}>
+                            <Checkbox checked={selectedItems.includes(elem)} />
+                            <ListItemText primary={elem} />
                         </MenuItem>
                     ))}
                 </Select>
@@ -81,3 +82,69 @@ export default function SelectGraphOptions({ options }) {
         </div>
     );
 }
+export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay }) {
+    const { MarcheOptions,
+        setMarcheOptions } = UseGraphStore((state) => state);
+    const optionList = options.map((e) => e.name.split('-')[0]);
+    const [selectedItems, setSelectedItems] = useState([]);  
+    const [selectedList, setSelectedList] = useState(options.slice(0,5));
+   
+    useEffect(() => {
+        setSelectedItems(optionList.slice(0,5));
+    }, [options]);
+    
+    const handleChange = (event) => {
+        const selected = event.target.value;
+        setSelectedItems((prevSelectedItems) => {
+            if (prevSelectedItems.includes(selected)) {
+                return prevSelectedItems.filter((item) => item !== selected);
+            } else {
+                if (prevSelectedItems.length >= 5) {
+                    return [...prevSelectedItems.slice(1), selected];
+                } else {
+                    return [...prevSelectedItems, selected];
+                }
+            }
+        });
+
+    };
+    useEffect(() => {
+        const newSelectedList = options.filter((e) =>
+            selectedItems.includes(e.name.split("-")[0])
+        );
+        setSelectedList(newSelectedList);
+        setMarcheOptions && setMarcheOptions(newSelectedList);
+    }, [selectedItems, options, setMarcheOptions]);
+    useEffect(() => {
+        UpdatedGraphDisplay()
+    }, [selectedList])
+    return (
+        <div>
+            <FormControl
+                sx={{
+                    m: 0,
+                    width: 150,
+                    marginRight: { xs: 0, sm: "0px" }
+                }}>
+                <Select
+                    labelId="demo-multiple-checkbox-label"
+                    value={selectedItems}
+                    onChange={handleChange}
+                    input={<OutlinedInput label="top 5 annonceurs" />}
+
+                    renderValue={() => `Top ${selectedItems.length} Marché`}
+                    MenuProps={MenuProps}
+                    sx={{ backgroundColor: "white", height: "40px" }}
+                >
+                    {optionList.map((elem) => (
+                        <MenuItem key={optionList.indexOf(elem)} value={elem}>
+                            <Checkbox checked={selectedItems.includes(elem)} />
+                            <ListItemText primary={elem} />
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </div>
+    );
+}
+

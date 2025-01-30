@@ -41,6 +41,7 @@ import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 import { NetworkErrorPopup } from "components/Commun/popups";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
+import { Widget } from "components/Commun/DashboardWidgets/Widgets";
 function Dashboard() {
   const slides = [
     <CustomDataLabelFamilles />,
@@ -197,17 +198,14 @@ function Dashboard() {
 
 
   const ShowDashboardData = async () => {
+    getFilters && getFilters(email, media, date1, date2)
+    console.log("filters",Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2)
     setIsCalculating(true)
     setDashboardIllustration(false)
     setShow(true)
 
     const startTime = new Date().getTime();
     if (media === 'presse' && !isCalculating) {
-      // getVolumePresse && getVolumePresse(Filtersupports, Filterfamilles,
-      //   Filterclassesids, Filtersecteursids, Filtervarietiesids,
-      //   Filterannonceursids, Filtermarquesids,
-      //   Filterproduitsids, date1, date2)
-
       await Promise.all([
         getCreationUniquesPresse && getCreationUniquesPresse(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
         getCreationParAnnonceur && getCreationUniquesPresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
@@ -349,9 +347,9 @@ function Dashboard() {
       setLoadingStep(fetchDataTime / 100)
     }, fetchDataTime);
   }
-  
+
   useEffect(() => {
-    if (Number(count)===0) {
+    if (Number(count) === 0) {
       HandelErrorPopup && HandelErrorPopup(true)
     } else {
       //do nothing 
@@ -384,7 +382,7 @@ function Dashboard() {
     setShow(false)
     setDataExist(true)
   }, [media, date1, date2])
-  
+
   const [resStyle, setResStyle] = useState({
     FlexDirection: 'row',
     back: '',
@@ -418,7 +416,7 @@ function Dashboard() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
+  
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
   const exportToPDF = () => {
@@ -906,11 +904,8 @@ function Dashboard() {
         {show && (<div >
 
           <Row className="" onClick={() => handeToggleSideBar()}>
-            {isCalculating && (<LoadingIndicator step={loadingStep} totalDuration={fetchDataTime} />)}
-            {/* <div className="w-100 justify-content-center"
-              style={{ display: "flex", justifyContent: "flex-start", alignItems: "start" }}>
-              <img src={Animated} alt="IMMAR DASHBOARDs" />
-            </div> */}
+            {isCalculating && (<LoadingIndicator step={loadingStep}
+              totalDuration={fetchDataTime} />)}
           </Row>
           <div id="all">
             {(dashDisplay && !isCalculating &&
@@ -918,360 +913,75 @@ function Dashboard() {
                 <div >
 
                   <Row className="mt-3" style={{ marginTop: 20 }} id="dashboard" >
+                    <Widget
+                      icon={iconVolume}
+                      value={count}
+                      title="Volume de diffusion publicitaire"
+                      valueLastYear={countLastYear}
 
+                    />
+                    <Widget
+                      icon={iconAnnonceur}
+                      value={media === 'presse' ? AnnonceursActifPresse : AnnonceursActifMedia}
+                      title="Annonceurs actifs"
+                      valueLastYear={media === "presse" ? AnnonceursActifPresseLastYear : AnnonceursActifMediaLastYear}
 
-                    <Col lg="3" sm="6">
-                      <Card className="card-stats">
-                        <Card.Body>
-                          <Row>
-                            <Col xs="5">
-                              <div className="icon-big text-center icon-warning">
+                    />
+                    <Widget
+                      icon={iconCreation}
+                      value={media === 'presse' ?
+                        CreationUniquesPresse : CreationUniquesMedia}
+                      title="Creations uniques"
+                      valueLastYear={media === "presse" ? AnnonceursActifPresseLastYear : AnnonceursActifMediaLastYear}
+                    />
 
-                                <img src={iconVolume} alt="immar media" />
-                              </div>
-                            </Col>
-                            <Col xs="7">
-                              <div className="numbers">
-                                <p className="card-category">volume de diffusion publicitaire</p>
-                                <Card.Title as="h4">{count}</Card.Title>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Card.Body>
-                        <Card.Footer>
-                          <hr></hr>
-                          <div className="stats">
-                            <i className="fas fa-redo mr-1"></i>
+                    <Widget
+                      icon={iconBudget}
+                      value={media === 'presse' ? BudgetBrutPresse : BudgetBrutMedia}
+                      title="Budget Brut"
+                      valueLastYear={media === "presse" ? BudgetBrutPresseLastYear : BudgetBrutMediaLastYear}
+                    />
 
-                            {countLastYear}
-                          </div>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-                    {/* <CCol sm={6}>
-                      <CWidgetStatsA
-                        className="mb-4"
-                        color="primary"
-                        value={
-                          <>
-                            $9.000{' '}
-                            <span className="fs-6 fw-normal">
-                              (40.9% <CIcon icon={cilArrowTop} />)
-                            </span>
-                          </>
-                        }
-                        title="Widget title"
-                        action={
-                          <CDropdown alignment="end">
-                            <CDropdownToggle color="transparent" caret={false} className="p-0">
-                              <CIcon icon={cilOptions} className="text-white" />
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-                              <CDropdownItem>Action</CDropdownItem>
-                              <CDropdownItem>Another action</CDropdownItem>
-                              <CDropdownItem>Something else here...</CDropdownItem>
-                              <CDropdownItem disabled>Disabled action</CDropdownItem>
-                            </CDropdownMenu>
-                          </CDropdown>
-                        }
-                        chart={
-                          <CChartLine
-                            className="mt-3 mx-3"
-                            style={{ height: '70px' }}
-                            data={{
-                              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                              datasets: [
-                                {
-                                  label: 'My First dataset',
-                                  backgroundColor: 'transparent',
-                                  borderColor: 'rgba(255,255,255,.55)',
-                                  pointBackgroundColor: '#5856d6',
-                                  data: [65, 59, 84, 84, 51, 55, 40],
-                                },
-                              ],
-                            }}
-                            options={{
-                              plugins: {
-                                legend: {
-                                  display: false,
-                                },
-                              },
-                              maintainAspectRatio: false,
-                              scales: {
-                                x: {
-                                  border: {
-                                    display: false,
-                                  },
-                                  grid: {
-                                    display: false,
-                                  },
-                                  ticks: {
-                                    display: false,
-                                  },
-                                },
-                                y: {
-                                  min: 30,
-                                  max: 89,
-                                  display: false,
-                                  grid: {
-                                    display: false,
-                                  },
-                                  ticks: {
-                                    display: false,
-                                  },
-                                },
-                              },
-                              elements: {
-                                line: {
-                                  borderWidth: 1,
-                                  tension: 0.4,
-                                },
-                                point: {
-                                  radius: 4,
-                                  hitRadius: 10,
-                                  hoverRadius: 4,
-                                },
-                              },
-                            }}
-                          />
-                        }
-                      />
-                    </CCol> */}
-                    <Col lg="3" sm="6">
-                      <Card className="card-stats">
-                        <Card.Body>
-                          <Row>
-                            <Col xs="5">
-                              <div className="icon-big text-center icon-warning">
-
-                                <img src={iconAnnonceur} alt="immar" />
-                              </div>
-                            </Col>
-                            <Col xs="7">
-                              <div className="numbers">
-                                <p className="card-category">Annonceurs actifs</p>
-                                <Card.Title as="h4">{media === 'presse' ? AnnonceursActifPresse : AnnonceursActifMedia}</Card.Title>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Card.Body>
-                        <Card.Footer>
-                          <hr></hr>
-                          <div className="stats">
-                            <i className="fas fa-redo mr-1"></i>
-                            {media === "presse" ? AnnonceursActifPresseLastYear : AnnonceursActifMediaLastYear}
-                          </div>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-                    <Col lg="3" sm="6">
-                      <Card className="card-stats">
-                        <Card.Body>
-                          <Row>
-                            <Col xs="5">
-                              <div className="icon-big text-center icon-warning">
-
-
-                                <img src={iconCreation} alt="immar media" />
-                              </div>
-                            </Col>
-                            <Col xs="7">
-                              <div className="numbers">
-                                <p className="card-category">Creations uniques</p>
-                                <Card.Title as="h4">{media === 'presse' ?
-                                  CreationUniquesPresse : CreationUniquesMedia}</Card.Title>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Card.Body>
-                        <Card.Footer>
-                          <hr></hr>
-                          <div className="stats" >
-                            <i className="far fa-clock-o mr-1"></i>
-                            {media === "presse" ? CreationUniquesPresseLastYear : CreationUniquesMediaLastYear}
-                          </div>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-
-                    <Col lg="3" sm="6">
-                      <Card className="card-stats">
-                        <Card.Body>
-                          <Row>
-                            <Col xs="5">
-                              <div className="icon-big text-center icon-warning">
-                                <img src={iconBudget} alt="immar media" />
-                              </div>
-                            </Col>
-                            <Col xs="7">
-                              <div className="numbers">
-                                <p className="card-category">Budget Brut</p>
-                                <Card.Title as="h4">{media === 'presse' ? BudgetBrutPresse : BudgetBrutMedia}</Card.Title>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Card.Body>
-                        <Card.Footer>
-                          <hr></hr>
-                          <div className="stats" >
-                            <i className="fas fa-redo mr-1"></i>
-                            {media === "presse" ? BudgetBrutPresseLastYear : BudgetBrutMediaLastYear}
-                          </div>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-
-                    <Col lg="3" sm="6">
-                      <Card className="card-stats">
-                        <Card.Body>
-                          <Row>
-                            <Col xs="5">
-                              <div className="icon-big text-center icon-warning">
-                                <img src={iconSupprt} alt="immar media" />
-                              </div>
-                            </Col>
-                            <Col xs="7">
-                              <div className="numbers">
-                                <p className="card-category">Support de diffusion</p>
-                                <Card.Title as="h4">{media === "presse" ? SupportDiffusionPresse : SupportDiffusionMedia}</Card.Title>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Card.Body>
-                        <Card.Footer>
-                          <hr></hr>
-                          <div className="stats">
-                            <i className="fas fa-redo mr-1"></i>
-                            {media === "presse" ? SupportDiffusionPresseLastYear : SupportDiffusionMediaLastYear}
-                          </div>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-
+                    <Widget
+                      icon={iconSupprt}
+                      value={media === "presse" ? SupportDiffusionPresse : SupportDiffusionMedia}
+                      title="Support de diffusion"
+                      valueLastYear={media === "presse" ? SupportDiffusionPresseLastYear : SupportDiffusionMediaLastYear}
+                    />
                     {(media === 'presse') && (
-                      <Col lg="3" sm="6">
-                        <Card className="card-stats">
-                          <Card.Body>
-                            <Row>
-                              <Col xs="5">
-                                <div className="icon-big text-center icon-warning">
-                                  <img src={iconPresse} alt="immar media" />
-                                </div>
-                              </Col>
-                              <Col xs="7">
-                                <div className="numbers">
-                                  <p className="card-category">Couleur/Noir et Blanc</p>
-                                  <Card.Title as="h4">{Couleur} / {NoireBlanc}</Card.Title>
-                                </div>
-                              </Col>
-                            </Row>
-                          </Card.Body>
-                          <Card.Footer>
-                            <hr></hr>
-                            <div className="stats" style={{ color: 'transparent' }}>
-                              <i className="fas fa-redo mr-1"></i>
-                              Update now
-                            </div>
-                          </Card.Footer>
-                        </Card>
-                      </Col>
 
 
+                      <Widget
+                        icon={iconPresse}
+                        value={`${Couleur}/${NoireBlanc}`}
+                        title="Couleur/Noir et Blanc"
+                         valueLastYear=""
+                        />
                     )}
 
 
                     {(media === "radio" || media === "television") &&
                       <>
-                        <Col lg="3" sm="6">
-                          <Card className="card-stats">
-                            <Card.Body>
-                              <Row>
-                                <Col xs="5">
-                                  <div className="icon-big text-center icon-warning">
-                                    <img src={iconDuree} alt="immar media" />
-                                  </div>
-                                </Col>
-                                <Col xs="7">
-                                  <div className="numbers">
-                                    <p className="card-category">Durée Pub Totale</p>
-                                    <Card.Title as="h4">{DureeTotal}</Card.Title>
-                                  </div>
-                                </Col>
-                              </Row>
-                            </Card.Body>
-                            <Card.Footer>
-                              <hr></hr>
-                              <div className="stats">
-                                <i className="fas fa-redo mr-1"></i>
-                                {DureeTotalLastYear}
-                              </div>
-                            </Card.Footer>
-                          </Card>
-                        </Col>
-                        <Col lg="3" sm="6">
-                          <Card className="card-stats">
-                            <Card.Body>
-                              <Row>
-                                <Col xs="5">
-                                  <div className="icon-big text-center icon-warning">
-                                    <img src={iconTime} alt="immar medias" />
-                                  </div>
-                                </Col>
-                                <Col xs="7">
-                                  <div className="numbers">
-                                    <p className="card-category">Durée Myenne par Spot diffusé</p>
-                                    <Card.Title as="h4">{Number(DureeMoyenne).toFixed(2)}</Card.Title>
-                                  </div>
-                                </Col>
-                              </Row>
-                            </Card.Body>
-                            <Card.Footer>
-                              <hr></hr>
-                              <div className="stats">
-                                <i className="fas fa-redo mr-1"></i>
-                                {DureeMoyenneLastYear}
-                              </div>
-                            </Card.Footer>
-                          </Card>
-                        </Col>
-
-                        <Col lg="3" sm="6">
-                          <Card className="card-stats">
-                            <Card.Body>
-                              <Row>
-                                <Col xs="5">
-                                  <div className="icon-big text-center icon-warning">
-                                    <img src={iconPis} alt="immar media" />
-                                  </div>
-                                </Col>
-                                <Col xs="7">
-                                  <div className="numbers">
-                                    <p className="card-category">Pic publicitaire</p>
-                                    <Card.Title as="h4">{PicCommunication ? PicCommunication.count : 0}</Card.Title>
-                                    <p className="card-category">de {PicCommunication ? (
-                                      `${PicCommunication.interval_start.slice(0, -3)} à ${PicCommunication.interval_end.slice(0, -3)}`
-                                    ) : (
-                                      '0'
-                                    )}</p>
-                                  </div>
-                                </Col>
-                              </Row>
-                            </Card.Body>
-                            <Card.Footer>
-                              <hr></hr>
-                              <div className="stats" style={{ display: "flex", alignItems: "center" }}>
-                                <i className="fas fa-redo mr-1"></i>
-                                <p className="card-category">de {PicCommunicationLastYear ? (
-                                  `${PicCommunicationLastYear.interval_start.slice(0, -3)} à ${PicCommunicationLastYear.interval_end.slice(0, -3)}`
-                                ) : (
-                                  '0'
-                                )}</p>
-                              </div>
-                            </Card.Footer>
-                          </Card>
-                        </Col>
-
-
+                                             
+                      <Widget
+                        icon={iconDuree}
+                        value={DureeTotal}
+                        title="Durée Pub Totale"
+                         valueLastYear={DureeTotalLastYear}
+                        />                 
+                        <Widget
+                        icon={iconTime}
+                        value={Number(DureeMoyenne).toFixed(2)}
+                        title="Durée Myenne par Spot diffusé"
+                        valueLastYear={DureeMoyenneLastYear}
+                        />                      
+                        <Widget
+                        icon={iconPis}
+                        value={`${PicCommunication.interval_start.slice(0, -3)} à 
+                        ${PicCommunication.interval_end.slice(0, -3)}`}
+                        title="Pic publicitaire"
+                        valueLastYear={`${PicCommunicationLastYear.interval_start.slice(0, -3)} à ${PicCommunicationLastYear.interval_end.slice(0, -3)}`}
+                        />
                       </>
 
                     }
@@ -1312,24 +1022,6 @@ function Dashboard() {
                   />
                 )} */}
               </Button>}
-
-            {/* 
-    <ExportPPT/>
-      <CustomDataLabelFamilles />
-      <CustomDataLabelAnnonceurs />
-    <CustomDataLabelMarques />
-    <CustomDataLabelProduits />
-     <PieChartVelson/>
-    <PieChartRepartitionFormat/>
-    <CustomDataLabelAnnonceurParSupport />
-    <CustomDataLabelCreationParAnnonceur /> 
-    */}
-
-
-
-
-
-
             {(Top20produits?.length === 0 && !isCalculating) && (<Container
               fluid
               style={{
@@ -1372,8 +1064,6 @@ function Dashboard() {
 
       </Container>
       <AutomaticSideFilterBar getData={ShowDashboardData} />
-
-
       <DataUnavailablePopup
         ErrorHandel={ErrorHandel}
         media={media}
