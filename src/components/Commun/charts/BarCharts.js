@@ -4,12 +4,12 @@ import user from "assets/img/new_logo.png";
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import getChartColorsArray from "./ChartsDynamicColor";
-//import WatingChart from 'assets/img/loading.gif';
 import WatingChart from 'assets/img/loading3.gif';
 import { Card, Col, Row } from 'react-bootstrap';
 import CardHeader from 'react-bootstrap/esm/CardHeader';
-import DropDownBaseRepartitionFormat from '../DropDownComponents/BaseGrapheRepartitionMarchet';
 import BaseDialog from '../../Commun/DialogueBox';
+import { SelectGraphOptionsAnnonceurParsupport, SelectGraphOptionsCreationParAnnonceur } from './SelectGraphOptions'
+import { UseGraphStore } from 'store/GraphStore';
 const Basic = ({ dataColors }) => {
     var BasicColors = getChartColorsArray(dataColors);
     const series = [{
@@ -374,7 +374,7 @@ const CustomDataLabelFamilles = () => {
                 {(data.length !== 0 || Top20famillesSectorielles) ? (
 
                     <ReactApexChart
-                    id='charts-container1'
+                        id='charts-container1'
                         dir="ltr"
                         className="apex-charts"
                         options={options}
@@ -1090,7 +1090,7 @@ const CustomDataLabelProduits = () => {
                         setAverage(average20.toFixed(2))
                         break;
                     case 'television':
-                        setNames(Top20produits.map((elem) => elem.produit + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
+                        setNames(Top20produits.map((elem) => elem.Product_Name + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                         var list = Top20produits.map((elem) => Number(elem.produit_tarif).toFixed(2))
                         setData(list)
                         var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
@@ -1231,7 +1231,7 @@ const CustomDataLabelProduits = () => {
         "#001415"
     ];
 
-
+    console.log("top 20produit", Top20produits)
     const series = [{
         data: data,
 
@@ -1383,22 +1383,22 @@ const CustomDataLabelProduits = () => {
     );
 };
 const CustomDataLabelAnnonceurParSupport = () => {
-
     const { AnnonceurParSupport } = UsePigeDashboardStore((state) => state)
+    const { AnnonceurSupportOptions } = UseGraphStore((state) => state)
     const { base, media } = UseFiltersStore((state) => state)
-
     const [data, setData] = useState([])
     const [average, setAverage] = useState(0)
     const [names, setNames] = useState()
-
+    // console.log("AnnonceurSupportOptions",AnnonceurSupportOptions)
+    const [dynamicList, setDynamicList] = useState([])
     useEffect(() => {
         if (AnnonceurParSupport && AnnonceurParSupport.length > 0) {
 
             switch (media) {
                 case 'presse':
                     //setAverage(Number(AnnonceurParSupport[0].average_ratio).toFixed(2))
-                    setNames(AnnonceurParSupport.map((elem) => elem.Titre_Lib + " " + "( " + Number(elem.proportion).toFixed(2) + "%" + ")"))
-                    var list = AnnonceurParSupport.map((elem) => Number(elem.annonceur_count))
+                    setNames(AnnonceurSupportOptions.map((elem) => elem.Titre_Lib + " " + "( " + Number(elem.proportion).toFixed(2) + "%" + ")"))
+                    var list = AnnonceurSupportOptions.map((elem) => Number(elem.annonceur_count))
                     setData(list)
                     //console.log("list volume annonceur", list)
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
@@ -1408,8 +1408,8 @@ const CustomDataLabelAnnonceurParSupport = () => {
                     break;
                 case 'radio':
 
-                    setNames(AnnonceurParSupport.map((elem) => elem.Chaine_Lib + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
-                    var list = AnnonceurParSupport.map((elem) => Number(elem.annonceur_count))
+                    setNames(AnnonceurSupportOptions.map((elem) => elem.Chaine_Lib + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
+                    var list = AnnonceurSupportOptions.map((elem) => Number(elem.annonceur_count))
                     setData(list)
                     //console.log("list volume annonceur", list)
                     //setAverage(Number(AnnonceurParSupport[0].average_annonceur_count).toFixed(2))
@@ -1421,22 +1421,38 @@ const CustomDataLabelAnnonceurParSupport = () => {
                     break;
                 case 'television':
 
-                    setNames(AnnonceurParSupport.map((elem) => elem.Chaine_Lib + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
-                    var list = AnnonceurParSupport.map((elem) => Number(elem.annonceur_count))
+                    setNames(AnnonceurSupportOptions.map((elem) =>
+                        elem.Chaine_Lib + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
+                    var list = AnnonceurSupportOptions.map((elem) => Number(elem.annonceur_count))
                     setData(list)
-                    //console.log("list volume annonceur", list)
-                    //setAverage(Number(AnnonceurParSupport[0].average_annonceur_count).toFixed(2))
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     var average20 = sum / list.length;
-                    //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
-
 
                     break;
             }
         }
-    }, [AnnonceurParSupport])
+    }, [AnnonceurParSupport, AnnonceurSupportOptions])
 
+    const ModifyList = () => {
+        var autresList = AnnonceurParSupport.filter((e) => !AnnonceurSupportOptions.includes(e))
+
+        // var autresList = AnnonceurParSupport 
+        var valueAutre = autresList.map((e) => Number(e.annonceur_count))
+        var PourcentageAutre = autresList.map((e) => Number(e.proportion))
+        const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        var listWithAutre = AnnonceurSupportOptions;
+        var autre = {
+            annonceur_count: totalSum.toFixed(2).toString(),
+            proportion: totalSumPourcentage.toFixed(2),
+            Chaine_Lib: `autres`,
+            Titre_Lib: "autre"
+        }
+        listWithAutre.push(autre)
+        setDynamicList([...listWithAutre])
+        console.log("dynamic list", dynamicList, AnnonceurParSupport)
+    }
     const chartDatalabelsBarColors = [
         // "#FF69B4", // Hot magenta
         // "#33CC33", // Bright lime
@@ -1478,11 +1494,8 @@ const CustomDataLabelAnnonceurParSupport = () => {
         "#001415"
     ];
 
-
     const series = [{
         data: data,
-        //data2:[400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
-        //[400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
     }];
     var options = {
         chart: {
@@ -1575,18 +1588,28 @@ const CustomDataLabelAnnonceurParSupport = () => {
                 <CardHeader style={{ backgroundColor: '#f7f7f7', padding: 20, borderBottom: '1px solid #ddd' }}>
                     <Row>
                         <Col>
-                            <h4 className="card-title mb-0" style={{ fontSize: 16, fontWeight: 500, color: '#333' }}>
+                            <h4 className="card-title mb-0"
+                                style={{ fontSize: 16, fontWeight: 500, color: '#333' }}>
                                 Nombre d’annonceurs actifs par support
                             </h4>
                         </Col>
                         <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <h4 className="card-title mb-0" style={{ fontSize: 18, fontWeight: 500, color: '#333' }}>
+                            <h4 className="card-title mb-0"
+                                style={{ fontSize: 18, fontWeight: 500, color: '#333' }}>
                                 La moyenne = {average}
 
                             </h4>
 
                         </Col>
 
+                    </Row>
+                    <Row>
+                        <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <SelectGraphOptionsAnnonceurParsupport
+                                media={media}
+                                options={AnnonceurParSupport} UpdatedGraphDisplay={ModifyList}
+                            />
+                        </Col>
                     </Row>
                 </CardHeader>
 
@@ -1617,7 +1640,8 @@ const CustomDataLabelCreationParAnnonceur = () => {
 
     const { CreationParAnnonceur } = UsePigeDashboardStore((state) => state)
     const { base, media } = UseFiltersStore((state) => state)
-
+    const { setCreationParAnnonceurOptions,
+        CreationParAnnonceurOptions } = UseGraphStore((state) => state)
     const [data, setData] = useState([])
     const [average, setAverage] = useState(0)
     const [names, setNames] = useState()
@@ -1627,8 +1651,8 @@ const CustomDataLabelCreationParAnnonceur = () => {
             //console.log('media')
             switch (media) {
                 case 'presse':
-                    setNames(CreationParAnnonceur.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
-                    var list = CreationParAnnonceur.map((elem) => Number(elem.pressepub_count))
+                    setNames(CreationParAnnonceurOptions.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
+                    var list = CreationParAnnonceurOptions.map((elem) => Number(elem.pressepub_count))
                     setData(list)
                     //setAverage(Number(CreationParAnnonceur[0].average_ratio).toFixed(2))
                     var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
@@ -1638,8 +1662,8 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     // //console.log("CreationParAnnonceur ici", data)
                     break;
                 case 'radio':
-                    setNames(CreationParAnnonceur.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
-                    var list = CreationParAnnonceur.map((elem) => Number(elem.radiopub_count).toFixed(2))
+                    setNames(CreationParAnnonceurOptions.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
+                    var list = CreationParAnnonceurOptions.map((elem) => Number(elem.radiopub_count).toFixed(2))
                     setData(list)
                     //console.log("list names", names)
                     //setAverage(Number(CreationParAnnonceur[0].average_radiopub_count_per_annonceur).toFixed(2))
@@ -1647,11 +1671,10 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     var average20 = sum / list.length;
                     //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
-
                     break;
                 case 'television':
-                    setNames(CreationParAnnonceur.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
-                    var list = CreationParAnnonceur.map((elem) => Number(elem.radiopub_count).toFixed(2))
+                    setNames(CreationParAnnonceurOptions.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
+                    var list = CreationParAnnonceurOptions.map((elem) => Number(elem.radiopub_count).toFixed(2))
                     setData(list)
                     //console.log("list names", names)
                     //setAverage(Number(CreationParAnnonceur[0].average_radiopub_count_per_annonceur).toFixed(2))
@@ -1659,14 +1682,10 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     var average20 = sum / list.length;
                     //console.log("average 20", list)
                     setAverage(average20.toFixed(2))
-
                     break;
-
             }
-
-
         }
-    }, [CreationParAnnonceur])
+    }, [CreationParAnnonceur, CreationParAnnonceurOptions])
 
     const chartDatalabelsBarColors = [
         // "#FF99CC", // Pastel pink
@@ -1709,7 +1728,40 @@ const CustomDataLabelCreationParAnnonceur = () => {
         "#00171a",
         "#001415"
     ];
+    const [dynamicList, setDynamicList] = useState([])
+    const ModifyList = () => {
+        var autresList = CreationParAnnonceur.filter((e) => !CreationParAnnonceurOptions.includes(e))
+        console.log("autresList",CreationParAnnonceur,CreationParAnnonceurOptions,autresList)
 
+        var valueAutre = [];
+        if(media=="presse"){
+            var valueAutre = autresList?.map((e) => Number(e.pressepub_count))
+        }else{
+            var valueAutre = autresList?.map((e) => Number(e.radiopub_count))
+        }
+        var PourcentageAutre = autresList?.map((e) => Number(e.proportion))
+        
+        const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+        const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+
+        var listWithAutre = CreationParAnnonceurOptions;
+        var autre = {
+            radiopub_count: totalSum.toFixed(2).toString(),
+            pressepub_count:totalSum.toFixed(2).toString(),
+            proportion: totalSumPourcentage.toFixed(2),
+            Annonceur_Nom: `autres`,
+            average_radiopub_count_per_annonceur: 0,
+            total_crea_count: 0,
+            annonceur_count: "0",
+            all_pub_count: ""
+        }
+        console.log("count & pourcentage", autre)
+        listWithAutre.push(autre)
+        setDynamicList([...listWithAutre])
+       
+    }
 
     const series = [{
         data: data,
@@ -1819,6 +1871,17 @@ const CustomDataLabelCreationParAnnonceur = () => {
                         </Col>
 
                     </Row>
+                    <Row>
+                        <Col style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <SelectGraphOptionsCreationParAnnonceur
+                                media={media}
+                                options={CreationParAnnonceur}
+                                UpdatedGraphDisplay={ModifyList}
+
+                            />
+                        </Col>
+                    </Row>
+
                 </CardHeader>
 
                 {data.length !== 0 ? (

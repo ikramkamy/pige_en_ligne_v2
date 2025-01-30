@@ -19,7 +19,6 @@ import LoadingIndicator from "components/Commun/LoadingIndcator";
 import LoadingButtonData from "components/Commun/LoadingBtnData";
 import AutomaticSideFilterBar from 'components/FixedPlugin/AutomatiSideFilterBar';
 import {
-  Card,
   Container,
   Row,
   Col
@@ -184,16 +183,31 @@ function Dashboard() {
   const [annonceurnames, setAnnonceurnames] = useState([])
   const [marquenames, setMarquenames] = useState([])
   useEffect(() => {
-    const selectedSupportnames = supports.filter((e) => Filtersupports.includes(e.support_id))
-    const selectedFamillenames = familles.filter((e) => Filterfamilles.includes(e.CodeFamille))
-    const selectedAnnonceurnames = annonceurs.filter((e) => Filterannonceursids.includes(e.Annonceur_Id))
-    const selectedMarquenames = marques.filter((e) => Filtermarques.includes(e.Marque_id))
-    var selection = selectedSupportnames.map((e) => e.support_name)
-    setMarquenames(selectedMarquenames.map((e) => e.Marque_Lib))
-    setFamillenames(selectedFamillenames.map((e) => e.Famille))
-    //too large number we do not display it in ppt file
-    setAnnonceurnames(selectedAnnonceurnames.map((e) => e.Annonceur_Nom))
-    setSupportnames(selection)
+    var selectedSupportnames =[]
+    if(media==='presse'){
+      const selectedSupportnames =[]
+      const selectedFamillenames = familles.filter((e) => Filterfamilles.includes(e.CodeFamille))
+      const selectedAnnonceurnames = annonceurs.filter((e) => Filterannonceursids.includes(e.Annonceur_Id))
+      const selectedMarquenames = marques.filter((e) => Filtermarques.includes(e.Marque_id))
+      var selection = selectedSupportnames?.map((e) => e.support_name)
+      setMarquenames(selectedMarquenames.map((e) => e.Marque_Lib))
+      setFamillenames(selectedFamillenames.map((e) => e.Famille))
+      //too large number we do not display it in ppt file
+      setAnnonceurnames(selectedAnnonceurnames.map((e) => e.Annonceur_Nom))
+      setSupportnames(selection)
+    }else{
+      const selectedSupportnames = supports.filter((e) => Filtersupports.includes(e.support_id)) 
+      const selectedFamillenames = familles.filter((e) => Filterfamilles.includes(e.CodeFamille))
+      const selectedAnnonceurnames = annonceurs.filter((e) => Filterannonceursids.includes(e.Annonceur_Id))
+      const selectedMarquenames = marques.filter((e) => Filtermarques.includes(e.Marque_id))
+      var selection = selectedSupportnames.map((e) => e.support_name)
+      setMarquenames(selectedMarquenames.map((e) => e.Marque_Lib))
+      setFamillenames(selectedFamillenames.map((e) => e.Famille))
+      //too large number we do not display it in ppt file
+      setAnnonceurnames(selectedAnnonceurnames.map((e) => e.Annonceur_Nom))
+      setSupportnames(selection)
+    }
+    
   }, [Filtersupports, Filterfamilles, Filterannonceursids, Filtermarques])
 
 

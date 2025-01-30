@@ -89,10 +89,7 @@ export default function DropDownBaseRepartitionFormat({ getData }) {
     const startTime = new Date().getTime();
     setBase(event.target.textContent)
     setProgressControled(0)
-    //  getPrtMarchet && getPrtMarchet(Filtersupports,Filterfamilles,
-    //  Filterclassesids,Filtersecteursids, Filtervarietiesids,
-    //  Filterannonceursids,Filtermarquesids,Filterproduitsids,
-    //  event.target.textContent,media,rangs,date1,date2)
+
 
 
 
@@ -130,17 +127,11 @@ export default function DropDownBaseRepartitionFormat({ getData }) {
 
         {basesg.map((elem) => (
           <MenuItem key={elem.value} onClick={handleMenuItemClick}>
-            {/* <Checkbox checked={selectedBase === elem.label} /> */}
             <ListItemText primary={elem.label} />
           </MenuItem>
         ))}
 
       </Select>
-
-      {/* </Menu> */}
-
-
-      {/* <LoadingBarIndicator progressControled={progressControled} step={0.5}/> */}
     </div>
   );
 }

@@ -152,7 +152,7 @@ function Header() {
             <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
           </span>
 
-          {/* <span className="no-icon" style={{
+          <span className="no-icon" style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -160,11 +160,13 @@ function Header() {
           height: "80px",
          
         }} >
-          <Link to="/media/tableau_de_bord_powerbi" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <Link to="/media/tableau_de_bord_powerbi" 
+          style={{ display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center" }}>
             <img src={powerbi} className="" alt="powerbi" width="30px"/>
           </Link>
           <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
-        </span> */}
+        </span>
 
           <span className="no-icon" style={{
             display: "flex",

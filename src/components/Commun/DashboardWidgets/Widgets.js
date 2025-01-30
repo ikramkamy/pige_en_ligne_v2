@@ -14,7 +14,7 @@ import {
               <Col xs="5">
                 <div className="icon-big text-center icon-warning">
 
-                  <img src={icon} alt="immar media" />
+                  <img src={icon} alt="immar media" style={{width:"50px"}}/>
                 </div>
               </Col>
               <Col xs="7">
@@ -29,7 +29,6 @@ import {
             <hr></hr>
             <div className="stats">
               <UndoIcon/>
-
               {valueLastYear}
             </div>
           </Card.Footer>
