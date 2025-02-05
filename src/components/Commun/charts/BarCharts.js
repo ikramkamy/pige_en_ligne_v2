@@ -85,6 +85,13 @@ const CustomDataLabelFamilles = () => {
     }
     useEffect(() => {
         if (Top20famillesSectorielles && Top20famillesSectorielles.length !== 0) {
+         console.log('top 20 famille',Top20famillesSectorielles)
+            setNames(Top20famillesSectorielles.map((elem) => elem.famille + " " + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
+            var list = Top20famillesSectorielles.map((elem) => Number(elem.famille_tarif).toFixed(2))
+
+            setData(list)
+            ////console.log('list,familletv', names)
+            setAverage(Number(Top20famillesSectorielles[0].average_tarif_per_famille).toFixed(2))
             if (base === 'budget') {
 
                 switch (media) {
@@ -172,28 +179,7 @@ const CustomDataLabelFamilles = () => {
     }, [Top20famillesSectorielles])
 
     const chartDatalabelsBarColors = [
-        // "#FFC107", // Warm orange
-        // "#8BC34A", // Muted green
-        // "#45B3FA", // Soft blue
-        // "#E67E73", // Pastel pink
-        // "#F7DC6F", // Soft yellow
-        // "#2196F3", // Deep blue
-        // "#9C27B0", // Rich purple
-        // "#66D9EF", // Soft blue-green
-        // "#FF69B4", // Bright pink
-        // "#34C759", // Lime green
-        // "#1A1D23", // Dark gray
-        // "#8E76A8", // Muted purple
-        // "#2F4F7F", // Dark blue
-        // "#9B59B6", // Rich pink
-        // "#33B5E5", // Soft blue
-        // "#F2C464", // Softer yellow
-        // "#4CAF50", // Deep green
-        // "#03A9F4", // Bright blue
-        // "#E5E5EA", // Light gray
-        // "#8F9E45", // Earthy brown
-        // "#FF9900" // Warm red
-
+    
         "#00a6e0",
         "#0099d5",
         "#008ac9",
@@ -355,14 +341,13 @@ const CustomDataLabelFamilles = () => {
                                 Top 20 des familles sectorielles
                             </h4>
                         </Col>
-                        <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        {/* <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <h4 className="card-title mb-0" style={{ fontSize: 18, fontWeight: 500, color: '#333' }}>
                                 La moyenne = {average}
-                                {/* <DropDownBaseRepartitionFormat getData={getData} /> */}
                                 <BaseDialog getData={getData} title="Top 20 familles Sectorielles" />
                             </h4>
 
-                        </Col>
+                        </Col> */}
 
                     </Row>
 
@@ -1401,8 +1386,9 @@ const CustomDataLabelAnnonceurParSupport = () => {
                     var list = AnnonceurSupportOptions.map((elem) => Number(elem.annonceur_count))
                     setData(list)
                     //console.log("list volume annonceur", list)
-                    var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-                    var average20 = sum / list.length;
+                    var listforAverage=AnnonceurParSupport.map((e)=>Number(e.annonceur_count))                   
+                    var sum = listforAverage.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    var average20 = sum / listforAverage.length;
                     //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
                     break;
@@ -1413,22 +1399,22 @@ const CustomDataLabelAnnonceurParSupport = () => {
                     setData(list)
                     //console.log("list volume annonceur", list)
                     //setAverage(Number(AnnonceurParSupport[0].average_annonceur_count).toFixed(2))
-                    var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-                    var average20 = sum / list.length;
+                    var listforAverage=AnnonceurParSupport.map((e)=>Number(e.annonceur_count))
+                    var sum = listforAverage.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    var average20 = sum / listforAverage.length;
                     //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
 
                     break;
                 case 'television':
-
                     setNames(AnnonceurSupportOptions.map((elem) =>
                         elem.Chaine_Lib + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = AnnonceurSupportOptions.map((elem) => Number(elem.annonceur_count))
                     setData(list)
-                    var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-                    var average20 = sum / list.length;
+                    var listforAverage=AnnonceurParSupport.map((e)=>Number(e.annonceur_count))
+                    var sum = listforAverage.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    var average20 = sum / listforAverage.length;
                     setAverage(average20.toFixed(2))
-
                     break;
             }
         }
@@ -1451,7 +1437,7 @@ const CustomDataLabelAnnonceurParSupport = () => {
         }
         listWithAutre.push(autre)
         setDynamicList([...listWithAutre])
-        console.log("dynamic list", dynamicList, AnnonceurParSupport)
+        // console.log("dynamic list", dynamicList, AnnonceurParSupport)
     }
     const chartDatalabelsBarColors = [
         // "#FF69B4", // Hot magenta
@@ -1655,8 +1641,9 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     var list = CreationParAnnonceurOptions.map((elem) => Number(elem.pressepub_count))
                     setData(list)
                     //setAverage(Number(CreationParAnnonceur[0].average_ratio).toFixed(2))
-                    var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-                    var average20 = sum / list.length;
+                    var listforAverage=CreationParAnnonceur.map((e)=>Number(e.pressepub_count))
+                    var sum = listforAverage.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    var average20 = sum / listforAverage.length;
                     //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
                     // //console.log("CreationParAnnonceur ici", data)
@@ -1665,10 +1652,11 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     setNames(CreationParAnnonceurOptions.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = CreationParAnnonceurOptions.map((elem) => Number(elem.radiopub_count).toFixed(2))
                     setData(list)
+                    var listforAverage=CreationParAnnonceur.map((e)=>Number(e.radiopub_count))
                     //console.log("list names", names)
                     //setAverage(Number(CreationParAnnonceur[0].average_radiopub_count_per_annonceur).toFixed(2))
-                    var sum = list.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-                    var average20 = sum / list.length;
+                    var sum = listforAverage.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    var average20 = sum / listforAverage.length;
                     //console.log("average 20", average20)
                     setAverage(average20.toFixed(2))
                     break;
@@ -1676,10 +1664,11 @@ const CustomDataLabelCreationParAnnonceur = () => {
                     setNames(CreationParAnnonceurOptions.map((elem) => elem.Annonceur_Nom + " " + " (" + Number(elem.proportion).toFixed(2) + "%" + ")"))
                     var list = CreationParAnnonceurOptions.map((elem) => Number(elem.radiopub_count).toFixed(2))
                     setData(list)
+                    var listforAverage=CreationParAnnonceur.map((e)=>Number(e.radiopub_count))
                     //console.log("list names", names)
                     //setAverage(Number(CreationParAnnonceur[0].average_radiopub_count_per_annonceur).toFixed(2))
-                    var sum = list.reduce((accumulator, currentValue) => Number(accumulator) + parseFloat(currentValue), 0);
-                    var average20 = sum / list.length;
+                    var sum = listforAverage.reduce((accumulator, currentValue) => Number(accumulator) + parseFloat(currentValue), 0);
+                    var average20 = sum / listforAverage.length;
                     //console.log("average 20", list)
                     setAverage(average20.toFixed(2))
                     break;
@@ -1849,7 +1838,6 @@ const CustomDataLabelCreationParAnnonceur = () => {
             show: false
         }
     };
-
 
     return (
         <div >

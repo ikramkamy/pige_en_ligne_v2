@@ -253,7 +253,6 @@ export const UseFiltersStore = create((set, get) => ({
 
     try {
       if (ids == []) {
-
         var classesByFamilles = [];
         var secteurByFamille = [];
         var varietiesByFamille = [];

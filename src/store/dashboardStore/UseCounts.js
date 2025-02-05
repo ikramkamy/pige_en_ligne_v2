@@ -61,9 +61,11 @@ export const UseCountStore = create((set, get) => ({
   },
   getPigeCountLastYear: async (email, media, supports, familles, classes,
     secteurs, varieties, annonceurs, marques, produits, date1, date2) => {
+      
     try {
       set({ IsCounting: true })
       var media_type = media == "" ? "presse" : media;
+      console.log("callling count last year",`${PORT}/${media_type}/count`)
       const response = await axios.post(`${PORT}/${media_type}/count`, {
         email: email,
         supports: supports,
@@ -77,6 +79,7 @@ export const UseCountStore = create((set, get) => ({
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
+      console.log("resposne",response)
       var dataLength = Number(response.data.total)
       if (dataLength > Limit_Data_Allowed) {
         set({         

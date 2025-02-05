@@ -215,9 +215,9 @@ export function SelectGraphOptionsAnnonceurParsupport({ options, UpdatedGraphDis
                     labelId="demo-multiple-checkbox-label"
                     value={selectedItems}
                     onChange={handleChange}
-                    input={<OutlinedInput label="top 5 annonceurs" />}
+                    input={<OutlinedInput label="" />}
 
-                    renderValue={() => `Top ${selectedItems.length} annonceurs`}
+                    renderValue={() => `Top ${selectedItems.length} supports`}
                     MenuProps={MenuProps}
                     sx={{ backgroundColor: "white", height: "40px" }}
                 >

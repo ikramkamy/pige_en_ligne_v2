@@ -40,7 +40,7 @@ import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 import { NetworkErrorPopup } from "components/Commun/popups";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
-import { Widget } from "components/Commun/DashboardWidgets/Widgets";
+import { Widget,WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets";
 function Dashboard() {
   const slides = [
     <CustomDataLabelFamilles />,
@@ -62,46 +62,47 @@ function Dashboard() {
     VolumePresseLastYear,
     VolumeMedia,
     VolumeMediaLastyear,
-    BudgetBrutPresseLastYear,
-    BudgetBrutMediaLastYear,
+    BudgetBrutLastYear,
     DureeTotalLastYear,
     DureeMoyenneLastYear,
     PicCommunicationLastYear,
 
     getVolumePresseLastYear,
-    getBudgetBrutPresseLastYear,
-    getCreationUniquesLastYear,
     getBudgetBrutLastYear,
+   
+  
     getAnnonceursActifPresseLastYear,
 
+    SupportDiffusion,
+    SupportDiffusionLastYear,
+    getSupportDiffusion,
     getSupportDiffusionLastYear,
     SupportDiffusionMediaLastYear,
 
-    AnnonceursActifPresse,
-    AnnonceursActifPresseLastYear,
+    AnnonceursActif,
+    AnnonceursActifLastYear,
     AnnonceursActifMediaLastYear,
     getAnnonceursActifLastYear,
     AnnonceursActifMedia,
 
 
-    CreationUniquesPresse,
-    getCreationUniquesPresseLastYear,
-    CreationUniquesPresseLastYear,
+    CreationUniques,
+    getCreationUniquesLastYear,
+    CreationUniquesLastYear,
     CreationUniquesMedia,
 
     CreationUniquesMediaLastYear,
-    BudgetBrutPresse,
-    SupportDiffusionPresse,
+    BudgetBrut,
+    
     SupportDiffusionMedia,
     Couleur,
     NoireBlanc,
     getAnnonceursActifPresse,
     getAnnonceursActif,
-    getCreationUniques,
     BudgetBrutMedia,
 
     getBudgetBrut,
-    getSupportDiffusion,
+    
 
     DureeTotal,
     PicCommunication,
@@ -114,12 +115,10 @@ function Dashboard() {
     getPrtMarchet,
     getVolumePresse,
     getTop20Annonceurs,
-    getCreationUniquesPresse,
+    getCreationUniques,
     getBudgetBrutPresse,
-    getSupportDiffusionPresse,
-    getSupportDiffusionPresseLastYear,
-    SupportDiffusionPresseLastYear,
 
+  
     getDureeTotalDiffusionLastYear,
     getDureeTotalMoyenneLastYear,
     getPicCommunicationLastYear,
@@ -134,7 +133,7 @@ function Dashboard() {
     getRepartitionFormat,
     getAnnonceursParSupport,
     getCreationParAnnonceur,
-
+    loadingCalcul
   } = UsePigeDashboardStore((state) => state)
 
   const { countLastYear, count, getPigeCount,
@@ -182,10 +181,11 @@ function Dashboard() {
   const [famillenames, setFamillenames] = useState([])
   const [annonceurnames, setAnnonceurnames] = useState([])
   const [marquenames, setMarquenames] = useState([])
+  const [fetchFilter, setFetchFilter] = useState(false)
   useEffect(() => {
-    var selectedSupportnames =[]
-    if(media==='presse'){
-      const selectedSupportnames =[]
+    var selectedSupportnames = []
+    if (media === 'presse') {
+      const selectedSupportnames = []
       const selectedFamillenames = familles.filter((e) => Filterfamilles.includes(e.CodeFamille))
       const selectedAnnonceurnames = annonceurs.filter((e) => Filterannonceursids.includes(e.Annonceur_Id))
       const selectedMarquenames = marques.filter((e) => Filtermarques.includes(e.Marque_id))
@@ -195,8 +195,8 @@ function Dashboard() {
       //too large number we do not display it in ppt file
       setAnnonceurnames(selectedAnnonceurnames.map((e) => e.Annonceur_Nom))
       setSupportnames(selection)
-    }else{
-      const selectedSupportnames = supports.filter((e) => Filtersupports.includes(e.support_id)) 
+    } else {
+      const selectedSupportnames = supports.filter((e) => Filtersupports.includes(e.support_id))
       const selectedFamillenames = familles.filter((e) => Filterfamilles.includes(e.CodeFamille))
       const selectedAnnonceurnames = annonceurs.filter((e) => Filterannonceursids.includes(e.Annonceur_Id))
       const selectedMarquenames = marques.filter((e) => Filtermarques.includes(e.Marque_id))
@@ -207,146 +207,478 @@ function Dashboard() {
       setAnnonceurnames(selectedAnnonceurnames.map((e) => e.Annonceur_Nom))
       setSupportnames(selection)
     }
-    
+
   }, [Filtersupports, Filterfamilles, Filterannonceursids, Filtermarques])
 
 
   const ShowDashboardData = async () => {
-    getFilters && getFilters(email, media, date1, date2)
-    console.log("filters",Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2)
     setIsCalculating(true)
     setDashboardIllustration(false)
     setShow(true)
-
-    const startTime = new Date().getTime();
-    if (media === 'presse' && !isCalculating) {
-      await Promise.all([
-        getCreationUniquesPresse && getCreationUniquesPresse(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getCreationParAnnonceur && getCreationUniquesPresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getBudgetBrutPresse && getBudgetBrutPresse(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getBudgetBrutPresseLastYear && getBudgetBrutPresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getSupportDiffusionPresse && getSupportDiffusionPresse(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getSupportDiffusionPresseLastYear && getSupportDiffusionPresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getCouleur && getCouleur(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getAnnonceursActifPresse && getAnnonceursActifPresse(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getAnnonceursActifPresseLastYear && getAnnonceursActifPresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2),
-        getVolumePresseLastYear && getVolumePresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2)
-      ])
-      //pour tou types de media
-      await Promise.all([
-        getPigeCount && getPigeCount(email,
-          media,
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2),
-        getPigeCountLastYear && getPigeCountLastYear(email,
-          media,
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2),
-        getTop20famillesSectorielles && getTop20famillesSectorielles(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getTop20Annonceurs && getTop20Annonceurs(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getAnnonceursActif && getAnnonceursActif(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getAnnonceursActifLastYear && getAnnonceursActifLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getCreationUniques && getCreationUniques(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getCreationUniquesLastYear && getCreationUniquesLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getSupportDiffusion && getSupportDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getSupportDiffusionLastYear && getSupportDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getBudgetBrut && getBudgetBrut(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getBudgetBrutLastYear && getBudgetBrutLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalDiffusion && getDureeTotalDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalDiffusionLastYear && getDureeTotalDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalMoyenne && getDureeTotalMoyenne(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalMoyenneLastYear && getDureeTotalMoyenneLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getPicCommunication && getPicCommunication(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getPicCommunicationLastYear && getPicCommunicationLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getPrtMarchet && getPrtMarchet(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getTop20Marques && getTop20Marques(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getTop20Produits && getTop20Produits(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getRepartitionFormat && getRepartitionFormat(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getAnnonceursParSupport && getAnnonceursParSupport(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getCreationParAnnonceur && getCreationParAnnonceur(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
-      ])
-      setIsCalculating(false)
-
-
-    } else if (media === 'radio' || media === 'television') {
-      await getVolume && getVolume(Filtersupports, Filterfamilles, Filterclassesids,
-        Filtersecteursids, Filtervarietiesids, Filterannonceursids,
-        Filtermarquesids, Filterproduitsids, media,
-        rangs, date1, date2)
-      await Promise.all([
-        getVolumelastyear && getVolumelastyear(Filtersupports, Filterfamilles, Filterclassesids,
-          Filtersecteursids, Filtervarietiesids, Filterannonceursids,
-          Filtermarquesids, Filterproduitsids, media,
-          rangs, date1, date2),
-      ])
-      //pour tou types de media
-      await Promise.all([
-        getPigeCount && getPigeCount(email,
-          media,
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2),
-        getPigeCountLastYear && getPigeCountLastYear(email,
-          media,
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2),
-        getTop20famillesSectorielles && getTop20famillesSectorielles(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getTop20Annonceurs && getTop20Annonceurs(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getAnnonceursActif && getAnnonceursActif(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getAnnonceursActifLastYear && getAnnonceursActifLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getCreationUniques && getCreationUniques(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getCreationUniquesLastYear && getCreationUniquesLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getSupportDiffusion && getSupportDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getSupportDiffusionLastYear && getSupportDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getBudgetBrut && getBudgetBrut(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getBudgetBrutLastYear && getBudgetBrutLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalDiffusion && getDureeTotalDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalDiffusionLastYear && getDureeTotalDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalMoyenne && getDureeTotalMoyenne(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getDureeTotalMoyenneLastYear && getDureeTotalMoyenneLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getPicCommunication && getPicCommunication(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getPicCommunicationLastYear && getPicCommunicationLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
-        getPrtMarchet && getPrtMarchet(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getTop20Marques && getTop20Marques(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getTop20Produits && getTop20Produits(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getRepartitionFormat && getRepartitionFormat(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getAnnonceursParSupport && getAnnonceursParSupport(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
-        getCreationParAnnonceur && getCreationParAnnonceur(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
-
-      ])
-      setIsCalculating(false)
+    if (fetchFilter === true) {
+      console.log("requiring filters befor calculating")
+      getFilters && getFilters(email, media, date1, date2)
     }
+    const startTime = new Date().getTime();
+
+    await Promise.all([
+      getCreationUniques && getCreationUniques(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "creationunique"),
+        getCreationUniquesLastYear && getCreationUniquesLastYear(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "creationunique"),
+      getBudgetBrut && getBudgetBrut(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "budget"),
+      getBudgetBrutLastYear && getBudgetBrutLastYear(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "budget"),
+      getSupportDiffusion && getSupportDiffusion(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "supportdiffusion"),
+      getSupportDiffusionLastYear && getSupportDiffusionLastYear(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "supportdiffusion"),
+     
+      getAnnonceursActif && getAnnonceursActif(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email, "annonceuractif"),
+      getAnnonceursActifLastYear && getAnnonceursActifLastYear(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email, 
+        "annonceuractif"),
+      getVolumePresseLastYear && getVolumePresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2)
+    ])
+    if (media === 'presse' && !isCalculating) {
+      getCouleur && getCouleur(
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "couleur")
+      }else{
+        getDureeTotalDiffusion && getDureeTotalDiffusion(
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2,
+          media,
+          email,
+          "dureetotal")
+        getDureeTotalDiffusionLastYear && getDureeTotalDiffusionLastYear(
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2,
+          media,
+          email,
+          "dureetotal")
+          getDureeTotalMoyenne && getDureeTotalMoyenne(
+            Filtersupports,
+            Filterfamilles,
+            Filterclassesids,
+            Filtersecteursids,
+            Filtervarietiesids,
+            Filterannonceursids,
+            Filtermarquesids,
+            Filterproduitsids,
+            date1,
+            date2,
+            media,
+            email,
+            "dureemoyenne")
+            getDureeTotalMoyenneLastYear && getDureeTotalMoyenneLastYear(
+              Filtersupports,
+            Filterfamilles,
+            Filterclassesids,
+            Filtersecteursids,
+            Filtervarietiesids,
+            Filterannonceursids,
+            Filtermarquesids,
+            Filterproduitsids,
+            date1,
+            date2,
+            media,
+            email,
+            "dureemoyenne"
+            )
+          getPicCommunication && getPicCommunication(
+            Filtersupports,
+            Filterfamilles,
+            Filterclassesids,
+            Filtersecteursids,
+            Filtervarietiesids,
+            Filterannonceursids,
+            Filtermarquesids,
+            Filterproduitsids,
+            date1,
+            date2,
+            media,
+            email,
+            "piccommunication") 
+            getPicCommunicationLastYear && getPicCommunicationLastYear(
+              Filtersupports,
+              Filterfamilles,
+              Filterclassesids,
+              Filtersecteursids,
+              Filtervarietiesids,
+              Filterannonceursids,
+              Filtermarquesids,
+              Filterproduitsids,
+              date1,
+              date2,
+              media,
+              email,
+              "piccommunication") 
+      }
+      //pour tout types de media
+      await Promise.all([
+        getPigeCount && getPigeCount(email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2),
+        getPigeCountLastYear && getPigeCountLastYear(email,
+          media,
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2),
+          getAnnonceursActif && getAnnonceursActif(
+            Filtersupports,
+              Filterfamilles,
+              Filterclassesids,
+              Filtersecteursids,
+              Filtervarietiesids,
+              Filterannonceursids,
+              Filtermarquesids,
+              Filterproduitsids,
+              date1,
+              date2,
+              media,
+              email,
+              "annonceuractif",
+              base),
+          getTop20famillesSectorielles && getTop20famillesSectorielles(
+            Filtersupports,
+            Filterfamilles,
+            Filterclassesids,
+            Filtersecteursids,
+            Filtervarietiesids,
+            Filterannonceursids,
+            Filtermarquesids,
+            Filterproduitsids,
+            date1,
+            date2,
+            media,
+            email,
+            "top20famille",
+            base),
+            getTop20Annonceurs && getTop20Annonceurs(
+              Filtersupports,
+              Filterfamilles,
+              Filterclassesids,
+              Filtersecteursids,
+              Filtervarietiesids,
+              Filterannonceursids,
+              Filtermarquesids,
+              Filterproduitsids,
+              date1,
+              date2,
+              media,
+              email,
+              "top20annonceur",
+              base),
+        // getAnnonceursActif && getAnnonceursActif(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getAnnonceursActifLastYear && getAnnonceursActifLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getCreationUniques && getCreationUniques(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getCreationUniquesLastYear && getCreationUniquesLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getSupportDiffusion && getSupportDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getSupportDiffusionLastYear && getSupportDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getBudgetBrut && getBudgetBrut(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getBudgetBrutLastYear && getBudgetBrutLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getDureeTotalDiffusion && getDureeTotalDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getDureeTotalDiffusionLastYear && getDureeTotalDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getDureeTotalMoyenne && getDureeTotalMoyenne(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getDureeTotalMoyenneLastYear && getDureeTotalMoyenneLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getPicCommunication && getPicCommunication(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        // getPicCommunicationLastYear && getPicCommunicationLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+        getPrtMarchet && getPrtMarchet(
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2,
+          media,
+          email,
+          "repartitionmarche",
+          base),
+          getTop20Marques && getTop20Marques(
+            Filtersupports,
+            Filterfamilles,
+            Filterclassesids,
+            Filtersecteursids,
+            Filtervarietiesids,
+            Filterannonceursids,
+            Filtermarquesids,
+            Filterproduitsids,
+            date1,
+            date2,
+            media,
+            email,
+            "top20marque",
+            base),
+            getTop20Produits && getTop20Produits(
+              Filtersupports,
+              Filterfamilles,
+              Filterclassesids,
+              Filtersecteursids,
+              Filtervarietiesids,
+              Filterannonceursids,
+              Filtermarquesids,
+              Filterproduitsids,
+              date1,
+              date2,
+              media,
+              email,
+              "top20produit",
+              base),
+              getRepartitionFormat && getRepartitionFormat(
+                Filtersupports,
+                Filterfamilles,
+                Filterclassesids,
+                Filtersecteursids,
+                Filtervarietiesids,
+                Filterannonceursids,
+                Filtermarquesids,
+                Filterproduitsids,
+                date1,
+                date2,
+                media,
+                email,
+                "repartitionformat",
+                base),
+                getAnnonceursParSupport && getAnnonceursParSupport(
+                  Filtersupports,
+                  Filterfamilles,
+                  Filterclassesids,
+                  Filtersecteursids,
+                  Filtervarietiesids,
+                  Filterannonceursids,
+                  Filtermarquesids,
+                  Filterproduitsids,
+                  date1,
+                  date2,
+                  media,
+                  email,
+                  "annonceurparsupport",
+                  base),
+                  getCreationParAnnonceur && getCreationParAnnonceur(
+                    Filtersupports,
+                    Filterfamilles,
+                    Filterclassesids,
+                    Filtersecteursids,
+                    Filtervarietiesids,
+                    Filterannonceursids,
+                    Filtermarquesids,
+                    Filterproduitsids,
+                    date1,
+                    date2,
+                    media,
+                    email,
+                    "creationparannonceur",
+                    base)
+      ])
+      setIsCalculating(false)
+
+
+    // } else if (media === 'radio' || media === 'television') {
+      // await getVolume && getVolume(Filtersupports, Filterfamilles, Filterclassesids,
+      //   Filtersecteursids, Filtervarietiesids, Filterannonceursids,
+      //   Filtermarquesids, Filterproduitsids, media,
+      //   rangs, date1, date2)
+      // await Promise.all([
+      //   getVolumelastyear && getVolumelastyear(Filtersupports, Filterfamilles, Filterclassesids,
+      //     Filtersecteursids, Filtervarietiesids, Filterannonceursids,
+      //     Filtermarquesids, Filterproduitsids, media,
+      //     rangs, date1, date2),
+      // ])
+      // //pour tou types de media
+      // await Promise.all([
+      //   getPigeCount && getPigeCount(email,
+      //     media,
+      //     Filtersupports,
+      //     Filterfamilles,
+      //     Filterclassesids,
+      //     Filtersecteursids,
+      //     Filtervarietiesids,
+      //     Filterannonceursids,
+      //     Filtermarquesids,
+      //     Filterproduitsids,
+      //     date1,
+      //     date2),
+      //   getPigeCountLastYear && getPigeCountLastYear(email,
+      //     media,
+      //     Filtersupports,
+      //     Filterfamilles,
+      //     Filterclassesids,
+      //     Filtersecteursids,
+      //     Filtervarietiesids,
+      //     Filterannonceursids,
+      //     Filtermarquesids,
+      //     Filterproduitsids,
+      //     date1,
+      //     date2),
+      //   getTop20famillesSectorielles && getTop20famillesSectorielles(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
+      //   getTop20Annonceurs && getTop20Annonceurs(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
+      //   getAnnonceursActif && getAnnonceursActif(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getAnnonceursActifLastYear && getAnnonceursActifLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getCreationUniques && getCreationUniques(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getCreationUniquesLastYear && getCreationUniquesLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getSupportDiffusion && getSupportDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getSupportDiffusionLastYear && getSupportDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getBudgetBrut && getBudgetBrut(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getBudgetBrutLastYear && getBudgetBrutLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getDureeTotalDiffusion && getDureeTotalDiffusion(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getDureeTotalDiffusionLastYear && getDureeTotalDiffusionLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getDureeTotalMoyenne && getDureeTotalMoyenne(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getDureeTotalMoyenneLastYear && getDureeTotalMoyenneLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getPicCommunication && getPicCommunication(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getPicCommunicationLastYear && getPicCommunicationLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, media, rangs, date1, date2),
+      //   getPrtMarchet && getPrtMarchet(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
+      //   getTop20Marques && getTop20Marques(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
+      //   getTop20Produits && getTop20Produits(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
+      //   getRepartitionFormat && getRepartitionFormat(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
+      //   getAnnonceursParSupport && getAnnonceursParSupport(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2),
+      //   getCreationParAnnonceur && getCreationParAnnonceur(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
+
+      // ])
+      // setIsCalculating(false)
+    
     const endTime = new Date().getTime();
     setFetchDataTime(endTime - startTime);
     setDashDisplay(true)
@@ -372,7 +704,7 @@ function Dashboard() {
   const handeToggleSideBar = () => {
     ManageSideBarfilterDisplay('-100%');
   }
-  const [fetchFilter, setFetchFilter] = useState(false)
+
   const handeOpenSideBar = () => {
     if (fetchFilter === true) {
       //console.log("calling filters",fetchFilter)
@@ -430,7 +762,7 @@ function Dashboard() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  
+
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
   const exportToPDF = () => {
@@ -803,7 +1135,26 @@ function Dashboard() {
 
 
   };
-
+  const test = () => {
+    console.log('top20produit')
+    getTop20Produits && getTop20Produits(
+      Filtersupports,
+      Filterfamilles,
+      Filterclassesids,
+      Filtersecteursids,
+      Filtervarietiesids,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      date1,
+      date2,
+      media,
+      email,
+      "top20produit",
+      base,
+    ) 
+  }
+ 
   if (!client) {
     history.push('/login')
   }
@@ -849,6 +1200,7 @@ function Dashboard() {
       marginBottom: resStyle.marginTopAll
     }}
     >
+      {/* <Button onClick={test}>TEST</Button> */}
       <Container fluid style={{ display: "flex", flexDirection: "column" }} >
         <Row className="mt-3" style={{
           display: "flex",
@@ -927,40 +1279,41 @@ function Dashboard() {
                 <div >
 
                   <Row className="mt-3" style={{ marginTop: 20 }} id="dashboard" >
+                    <WidgetShadcn
+                    
+                    />
                     <Widget
                       icon={iconVolume}
                       value={count}
                       title="Volume de diffusion publicitaire"
                       valueLastYear={countLastYear}
-
                     />
                     <Widget
                       icon={iconAnnonceur}
-                      value={media === 'presse' ? AnnonceursActifPresse : AnnonceursActifMedia}
+                      value={AnnonceursActif}
                       title="Annonceurs actifs"
-                      valueLastYear={media === "presse" ? AnnonceursActifPresseLastYear : AnnonceursActifMediaLastYear}
+                      valueLastYear={AnnonceursActifLastYear}
 
                     />
                     <Widget
                       icon={iconCreation}
-                      value={media === 'presse' ?
-                        CreationUniquesPresse : CreationUniquesMedia}
+                      value={CreationUniques}
                       title="Creations uniques"
-                      valueLastYear={media === "presse" ? AnnonceursActifPresseLastYear : AnnonceursActifMediaLastYear}
+                      valueLastYear={CreationUniquesLastYear}
                     />
 
                     <Widget
                       icon={iconBudget}
-                      value={media === 'presse' ? BudgetBrutPresse : BudgetBrutMedia}
+                      value={BudgetBrut}
                       title="Budget Brut"
-                      valueLastYear={media === "presse" ? BudgetBrutPresseLastYear : BudgetBrutMediaLastYear}
+                      valueLastYear={BudgetBrutLastYear}
                     />
 
                     <Widget
                       icon={iconSupprt}
-                      value={media === "presse" ? SupportDiffusionPresse : SupportDiffusionMedia}
+                      value={SupportDiffusion}
                       title="Support de diffusion"
-                      valueLastYear={media === "presse" ? SupportDiffusionPresseLastYear : SupportDiffusionMediaLastYear}
+                      valueLastYear={SupportDiffusionLastYear}
                     />
                     {(media === 'presse') && (
 
@@ -969,40 +1322,39 @@ function Dashboard() {
                         icon={iconPresse}
                         value={`${Couleur}/${NoireBlanc}`}
                         title="Couleur/Noir et Blanc"
-                         valueLastYear=""
-                        />
+                        valueLastYear=""
+                      />
                     )}
 
 
                     {(media === "radio" || media === "television") &&
                       <>
-                                             
-                      <Widget
-                        icon={iconDuree}
-                        value={DureeTotal}
-                        title="Durée Pub Totale"
-                         valueLastYear={DureeTotalLastYear}
-                        />                 
+
                         <Widget
-                        icon={iconTime}
-                        value={Number(DureeMoyenne).toFixed(2)}
-                        title="Durée Myenne par Spot diffusé"
-                        valueLastYear={DureeMoyenneLastYear}
-                        />                      
+                          icon={iconDuree}
+                          value={DureeTotal}
+                          title="Durée Pub Totale"
+                          valueLastYear={DureeTotalLastYear}
+                        />
                         <Widget
-                        icon={iconPis}
-                        value={`${PicCommunication.interval_start.slice(0, -3)} à 
+                          icon={iconTime}
+                          value={Number(DureeMoyenne).toFixed(2)}
+                          title="Durée Myenne par Spot diffusé"
+                          valueLastYear={DureeMoyenneLastYear}
+                        />
+                        <Widget
+                          icon={iconPis}
+                          value={`${PicCommunication.interval_start.slice(0, -3)} à 
                         ${PicCommunication.interval_end.slice(0, -3)}`}
-                        title="Pic publicitaire"
-                        valueLastYear={`${PicCommunicationLastYear.interval_start.slice(0, -3)} à ${PicCommunicationLastYear.interval_end.slice(0, -3)}`}
+                          title="Pic publicitaire"
+                          valueLastYear={`${PicCommunicationLastYear?.interval_start.slice(0, -3)} à ${PicCommunicationLastYear?.interval_end.slice(0, -3)}`}
                         />
                       </>
-
                     }
 
                   </Row>
 
-                  <GridDemo />
+                  <GridDemo date1={date1} date2={date2} media={media}/>
                 </div>
               </div>)}
             {(dashDisplay && !isCalculating &&

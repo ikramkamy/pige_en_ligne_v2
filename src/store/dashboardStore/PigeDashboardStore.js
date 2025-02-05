@@ -2,7 +2,9 @@ import { create } from "zustand";
 import axios from "axios";
 import dayjs from "dayjs";
 const PORT = "https://pige-dev.immar-media.com/api/index.php";
-const PORT2 = "https://immar-media.com/"
+const PORT2 = "https://immar-media.com/";
+const PORT3 = "https://pige.immar-media.com/api/index.php";
+
 export const UsePigeDashboardStore = create((set, get) => ({
   PressData: [],
   VolumePresse: 0,
@@ -10,26 +12,26 @@ export const UsePigeDashboardStore = create((set, get) => ({
   VolumeMedia: 0,
   VolumeMediaLastyear: 0,
 
-  AnnonceursActifPresse: 0,
-  AnnonceursActifPresseLastYear: 0,
+  AnnonceursActif: 0,
+  AnnonceursActifLastYear: 0,
 
   AnnonceursActifMedia: 0,
   AnnonceursActifMediaLastYear: 0,
 
-  CreationUniquesPresse: 0,
-  CreationUniquesPresseLastYear: 0,
+  CreationUniques: 0,
+  CreationUniquesLastYear: 0,
 
 
   CreationUniquesMedia: 0,
   CreationUniquesMediaLastYear: 0,
-  BudgetBrutPresse: 0,
-  BudgetBrutPresseLastYear: 0,
+  BudgetBrut: 0,
+  BudgetBrutLastYear: 0,
 
   BudgetBrutMedia: 0,
   BudgetBrutMediaLastYear: 0,
 
-  SupportDiffusionPresse: 0,
-  SupportDiffusionPresseLastYear: 0,
+  SupportDiffusion: 0,
+  SupportDiffusionLastYear: 0,
 
   SupportDiffusionMedia: 0,
   SupportDiffusionMediaLastYear: 0,
@@ -89,11 +91,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
       PartMarche: [],
       //VolumePresse:0,
       //VolumeMedia:0,
-      AnnonceursActifPresse: 0,
+      AnnonceursActif: 0,
       AnnonceursActifMedia: 0,
-      CreationUniquesPresse: 0,
+      CreationUniques: 0,
       CreationUniquesMedia: 0,
-      BudgetBrutPresse: 0,
+      BudgetBrut: 0,
       BudgetBrutMedia: 0,
       SupportDiffusionPresse: 0,
       SupportDiffusionMedia: 0,
@@ -207,149 +209,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     set({ base: "" })
 
   },
-  getAnnonceursActifPresse: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    date1,
-    date2,) => {
-
-    try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        media: "presse",
-        annonceursactifs: "annonceursactifs",
-
-      });
-      set({ AnnonceursActifPresse: Number(response.data.data[0].count) });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getAnnonceursActifPresseLastYear: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    date1,
-    date2,) => {
-
-    try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        media: "presse",
-        annonceursactifs: "annonceursactifs",
-
-      });
-      set({ AnnonceursActifPresseLastYear: Number(response.data.data[0].count) });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getCreationUniquesPresse: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    date1,
-    date2,) => {
-
-    try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        media: "presse",
-        creationsunique: "creationsunique",
-
-      });
-      set({ CreationUniquesPresse: Number(response.data.data[0].count) });
-
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getCreationUniquesPresseLastYear: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    date1,
-    date2,) => {
-
-    try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        media: "presse",
-        creationsunique: "creationsunique",
-
-      });
-      set({ CreationUniquesPresseLastYear: Number(response.data.data[0].count) });
-
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getBudgetBrutPresse: async (
+  getAnnonceursActif: async (
     supports,
     familles,
     classes,
@@ -360,12 +220,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
     produits,
     date1,
     date2,
-
-  ) => {
+    media,
+    email,
+    parametre) => {
 
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -374,21 +236,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        media: "presse",
-        budgettotal: "budgettotal",
-
+        date_debut: date1,
+        date_fin: date2,
       });
-      //  console.log('response',response)
-      set({ BudgetBrutPresse: Number(response.data.data[0].total).toFixed(2) });
-
+      console.log("response ann actif", response)
+      set({ AnnonceursActif: Number(response.data[0].total) });
     } catch (error) {
       console.log(error);
     }
   },
-  getBudgetBrutPresseLastYear: async (
+  getAnnonceursActifLastYear: async (
     supports,
     familles,
     classes,
@@ -399,13 +256,15 @@ export const UsePigeDashboardStore = create((set, get) => ({
     produits,
     date1,
     date2,
-
-  ) => {
+    media,
+    email,
+    parametre) => {
 
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        supports:supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -413,21 +272,169 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        media: "presse",
-        budgettotal: "budgettotal",
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        
+      });
+     console.log("ann acti last",response)
+      set({ AnnonceursActifLastYear: Number(response.data[0].total) });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
+  loadingCalcul:false,
+  getCreationUniques: async (
+    supports,
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre
+  ) => {
+
+    try {
+      set({loadingCalcul:true})
+     
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        supports:supports,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: date1,
+        date_fin: date2,
+        
+      });
+     console.log("get creation unique",response)
+      set({CreationUniques: Number(response.data[0].total),
+        loadingCalcul:false
+       });
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getCreationUniquesLastYear: async (
+    supports,
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre) => {
+    try {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        supports:supports,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        
+      });
+      set({ CreationUniquesLastYear: Number(response.data[0].total) });
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getBudgetBrut: async (
+    supports,
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre
+  ) => {
+    try {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        supports:supports,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: date1,
+        date_fin: date2,
+        
+
+      });
+     
+      set({ BudgetBrut: Number(response.data[0].total).toFixed(2) });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getBudgetBrutLastYear: async (
+    supports,
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre
+  ) => {
+   try {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        supports:supports,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
       // console.log('response',response)
-      set({ BudgetBrutPresseLastYear: Number(response.data.data[0].total).toFixed(2) });
+      set({ BudgetBrutLastYear: Number(response.data[0].total).toFixed(2) });
 
     } catch (error) {
       console.log(error);
     }
   },
-  getSupportDiffusionPresse: async (
+  getSupportDiffusion: async (
     supports,
     familles,
     classes,
@@ -437,12 +444,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
     marques,
     produits,
     date1,
-    date2,) => {
+    date2,
+    media,
+    email,
+    parametre) => {
 
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        supports:supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -450,21 +461,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        media: "presse",
-        supportsdiffusion: "supportsdiffusion",
-
+        date_debut: date1,
+        date_fin: date2,
       });
-
-      set({ SupportDiffusionPresse: Number(response.data.data[0].count) });
+      console.log("response sup", response)
+      set({ SupportDiffusion: Number(response.data[0].total) });
 
     } catch (error) {
       console.log(error);
     }
   },
-  getSupportDiffusionPresseLastYear: async (
+
+  getSupportDiffusionLastYear: async (
     supports,
     familles,
     classes,
@@ -474,12 +482,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
     marques,
     produits,
     date1,
-    date2,) => {
+    date2,
+    media,
+    email,
+    parametre) => {
 
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        supports:supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -487,27 +499,34 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        media: "presse",
-        supportsdiffusion: "supportsdiffusion",
-
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+       
       });
 
-      set({ SupportDiffusionPresseLastYear: Number(response.data.data[0].count) });
+      set({ SupportDiffusionLastYear: Number(response.data[0].total) });
 
     } catch (error) {
       console.log(error);
     }
   },
-  getCouleur: async (supports, familles, classes, secteurs, varieties, annonceurs, marques, produits, date1,
-    date2,) => {
 
+  getCouleur: async (
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre) => {
     try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -515,16 +534,12 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        media: "presse",
-        nombrecouleur: "nombrecouleur",
-
+        date_debut: date1,
+        date_fin: date2
       });
-
-      set({ Couleur: Number(response.data.data.couleur) });
-      set({ NoireBlanc: Number(response.data.data.noir_et_blanc) });
+    console.log("response couleur", response)
+      set({ Couleur: Number(response.data.data1[0].total) });
+      set({ NoireBlanc: Number(response.data.data2[0].total) });
 
     } catch (error) {
       console.log(error);
@@ -621,84 +636,84 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log(error);
     }
   },
-  getAnnonceursActif: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
+  // getAnnonceursActif: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
 
-  ) => {
+  // ) => {
 
-    try {
+  //   try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        rangs: rangs,
-        dashboard: "dashboard",
-        media: media,
-        annonceursactifs: "annonceursactifs",
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       rangs: rangs,
+  //       dashboard: "dashboard",
+  //       media: media,
+  //       annonceursactifs: "annonceursactifs",
 
-      });
-      //console.log('response', response)
-      set({ AnnonceursActifMedia: Number(response.data.data[0].count) });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getAnnonceursActifLastYear: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
+  //     });
+  //     //console.log('response', response)
+  //     set({ AnnonceursActifMedia: Number(response.data.data[0].count) });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+  // getAnnonceursActifLastYear: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
 
-  ) => {
+  // ) => {
 
-    try {
+  //   try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        rangs: rangs,
-        dashboard: "dashboard",
-        media: media,
-        annonceursactifs: "annonceursactifs",
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       rangs: rangs,
+  //       dashboard: "dashboard",
+  //       media: media,
+  //       annonceursactifs: "annonceursactifs",
 
-      });
-      //console.log('response', response)
-      set({ AnnonceursActifMediaLastYear: Number(response.data.data[0].count) });
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  //     });
+  //     //console.log('response', response)
+  //     set({ AnnonceursActifMediaLastYear: Number(response.data.data[0].count) });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
   //les fontions sont en commun entre presse radio television
   getTop20famillesSectorielles: async (
     supports,
@@ -709,21 +724,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
 
     try {
       set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        base: base,
-        top20familles: "top20familles",
-        supports: supports,
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -731,16 +743,13 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: date1,
-        date2: date2,
-        rangs: rangs,
-
-
+        date_debut: date1,
+        date_fin: date2,
       });
-
-      set({ Top20famillesSectorielles: response.data.data });
+      console.log('resposne',response)
+      set({ Top20famillesSectorielles: response.data});
       set({ isloading: false })
-      //console.table("response top 20 famille", response)
+      
 
     } catch (error) {
       console.log(error);
@@ -755,22 +764,20 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
-
+    
     try {
       set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
         media: media,
-        dashboard: "dashboard",
-        base: base,
-        top20annonceurs: "top20annonceurs",
-
-        supports: supports,
+        email: email,
+        supports:supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -778,16 +785,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: date1,
-        date2: date2,
-        rangs: rangs,
+        date_debut: date1,
+        date_fin: date2,
       });
-
-      //  console.log('rangs',rangs)
-      //  console.log('media',media)
-      //  console.log('base',base)
-      //  console.log('response',response)
-      set({ Top20Annonceurs: response.data.data });
+     console.log('reponse',response)
+      set({ Top20Annonceurs: response.data});
       set({ isloading: false })
 
 
@@ -798,7 +800,6 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
   },
   getPrtMarchet: async (
-
     supports,
     familles,
     classes,
@@ -807,16 +808,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
-
     try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {   
+        email: email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -825,18 +826,15 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
         media: media,
         base: base,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        partmarche: "partmarche",
-
+        date_debut: date1,
+        date_fin: date2,
+  
       });
 
-      // console.log('part marche',response)
-      set({ PartMarche: response.data.data });
+      console.log('response',response)
+      set({ PartMarche: response.data});
 
     } catch (error) {
       console.log(error);
@@ -859,22 +857,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
 
     try {
       set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        base: base,
-
-        top20marques: "top20marques",
-
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
+        email: email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -883,18 +877,17 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: date1,
-        date2: date2,
-        rangs: rangs,
-
-
+        media: media,
+        base: base,
+        date_debut: date1,
+        date_fin: date2,
       });
 
       // console.log('rangs',rangs)
       // console.log('media',media)
       // console.log('base',base)
-      // console.log('response',response)
-      set({ Top20marques: response.data.data });
+      console.log('response',response)
+      set({ Top20marques: response.data });
       set({ isloading: false })
 
 
@@ -911,22 +904,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
 
     try {
       set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        base: base,
-
-        top20produits: "top20produits",
-
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
+        email: email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -935,17 +924,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        date1: date1,
-        date2: date2,
+        media: media,
+        base: base,
+        date_debut: date1,
+        date_fin: date2,
 
       });
-
-      // console.log('rangs',rangs)
-      // console.log('media',media)
-      // console.log('base',base)
-      // console.log('response produit',response)
-      set({ Top20produits: response.data.data });
+      console.log('response 20 produits',response)
+      set({ Top20produits: response.data });
       set({ isloading: false })
 
 
@@ -962,22 +948,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
 
     try {
       set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        base: base,
-        repartitionformat: "repartitionformat",
-
-
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
+        email: email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -986,19 +968,15 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        date1: date1,
-        date2: date2,
+        media: media,
+        base: base,
+        date_debut: date1,
+        date_fin: date2,
 
       });
-
-      // console.log('rangs',rangs)
-      // console.log('media',media)
-      // console.log('base',base)
-      // console.log('response repartition',response)
+      // console.log('response',response)
       set({ FormatRepartition: response.data.data });
       set({ isloading: false })
-
 
     } catch (error) {
       console.log(error);
@@ -1013,22 +991,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
 
     try {
       set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        base: base,
-
-        annonceurparsupport: "annonceurparsupport",
-
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -1037,17 +1011,13 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        date1: date1,
-        date2: date2,
-
+        media: media,
+        base: base,
+        date_debut: date1,
+        date_fin: date2,
       });
-
-      // console.log('rangs',rangs)
-      // console.log('media',media)
-      // console.log('base',base)
-      // console.log('response a a par support',response)
-      set({ AnnonceurParSupport: response.data.data });
+      // console.log("response",response)
+      set({ AnnonceurParSupport: response.data });
       set({ isloading: false })
 
 
@@ -1065,22 +1035,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    base,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
 
     try {
       set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        base: base,
-
-        creationparannonceurs: "creationparannonceurs",
-
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
         supports: supports,
         familles: familles,
         classes: classes,
@@ -1089,17 +1055,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        date1: date1,
-        date2: date2,
+        media: media,
+        base: base,
+        date_debut: date1,
+        date_fin: date2,
 
       });
-
-      // console.log('rangs',rangs)
-      // console.log('media',media)
-      // console.log('base',base)
-      // console.log('response creation par annonceur',response)
-      set({ CreationParAnnonceur: response.data.data });
+      console.log("response",response)
+      set({ CreationParAnnonceur: response.data });
       set({ isloading: false })
 
 
@@ -1109,273 +1072,271 @@ export const UsePigeDashboardStore = create((set, get) => ({
   },
 
   //Parametres Dashboard
-  getCreationUniques: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
+  // getCreationUniques: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
 
-  ) => {
+  // ) => {
 
-    try {
-      set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        media: media,
-        rangs: rangs,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        creationsunique: "creationsunique",
+  //   try {
+  //     set({ isloading: true })
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       media: media,
+  //       rangs: rangs,
+  //       date1: date1,
+  //       date2: date2,
+  //       dashboard: "dashboard",
+  //       creationsunique: "creationsunique",
 
-      });
-      // console.log("creation unique",response)
-      set({ CreationUniquesMedia: Number(response.data.data[0].count) });
-      set({ isloading: false })
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getCreationUniquesLastYear: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
+  //     });
+  //     // console.log("creation unique",response)
+  //     set({ CreationUniquesMedia: Number(response.data.data[0].count) });
+  //     set({ isloading: false })
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+  // getCreationUniquesLastYear: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
 
-  ) => {
+  // ) => {
 
-    try {
-      set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        media: media,
-        rangs: rangs,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        creationsunique: "creationsunique",
+  //   try {
+  //     set({ isloading: true })
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       media: media,
+  //       rangs: rangs,
+  //       date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+  //       date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+  //       dashboard: "dashboard",
+  //       creationsunique: "creationsunique",
 
-      });
-      // console.log("creation unique",response)
-      set({ CreationUniquesMediaLastYear: Number(response.data.data[0].count) });
-      set({ isloading: false })
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  //     });
+  //     // console.log("creation unique",response)
+  //     set({ CreationUniquesMediaLastYear: Number(response.data.data[0].count) });
+  //     set({ isloading: false })
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+  // getBudgetBrut: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
+  // ) => {
 
-  getBudgetBrut: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
-  ) => {
+  //   try {
+  //     set({ isloading: true })
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       media: media,
+  //       dashboard: "dashboard",
+  //       budgettotal: "budgettotal",
 
-    try {
-      set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        budgettotal: "budgettotal",
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       date1: date1,
+  //       date2: date2,
+  //       rangs: rangs,
 
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        date1: date1,
-        date2: date2,
-        rangs: rangs,
+  //     });
+  //     // console.log("media", media)
+  //     // console.log("reponse budget", response)
+  //     if (Number(response.data.data[0].count) > 1000) {
+  //       set({ BudgetBrutMedia: (Number(response.data.data[0].count) / 1000).toFixed(1) + "Md" });
+  //       set({ isloading: true })
+  //     } else {
+  //       set({ BudgetBrutMedia: (Number(response.data.data[0].count).toFixed(1)) + "M" });
+  //       set({ isloading: true })
+  //     }
 
-      });
-      // console.log("media", media)
-      // console.log("reponse budget", response)
-      if (Number(response.data.data[0].count) > 1000) {
-        set({ BudgetBrutMedia: (Number(response.data.data[0].count) / 1000).toFixed(1) + "Md" });
-        set({ isloading: true })
-      } else {
-        set({ BudgetBrutMedia: (Number(response.data.data[0].count).toFixed(1)) + "M" });
-        set({ isloading: true })
-      }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+  // getBudgetBrutLastYear: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
+  // ) => {
 
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getBudgetBrutLastYear: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
-  ) => {
+  //   try {
+  //     set({ isloading: true })
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       media: media,
+  //       dashboard: "dashboard",
+  //       budgettotal: "budgettotal",
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+  //       date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+  //       rangs: rangs,
 
-    try {
-      set({ isloading: true })
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        media: media,
-        dashboard: "dashboard",
-        budgettotal: "budgettotal",
+  //     });
+  //     // console.log("media", media)
+  //     // console.log("reponse budget", response)
+  //     if (Number(response.data.data[0].count) > 1000) {
+  //       set({ BudgetBrutMediaLastYear: (Number(response.data.data[0].count) / 1000).toFixed(1) + "Md" });
+  //       set({ isloading: true })
+  //     } else {
+  //       set({ BudgetBrutMediaLastYear: (Number(response.data.data[0].count).toFixed(1)) + "M" });
+  //       set({ isloading: true })
+  //     }
 
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        rangs: rangs,
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
 
-      });
-      // console.log("media", media)
-      // console.log("reponse budget", response)
-      if (Number(response.data.data[0].count) > 1000) {
-        set({ BudgetBrutMediaLastYear: (Number(response.data.data[0].count) / 1000).toFixed(1) + "Md" });
-        set({ isloading: true })
-      } else {
-        set({ BudgetBrutMediaLastYear: (Number(response.data.data[0].count).toFixed(1)) + "M" });
-        set({ isloading: true })
-      }
+  // getSupportDiffusion: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
+  // ) => {
 
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  //   try {
 
-  getSupportDiffusion: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
-  ) => {
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       rangs: rangs,
+  //       media: media,
+  //       date1: date1,
+  //       date2: date2,
+  //       dashboard: "dashboard",
+  //       supportdiffusion: "supportdiffusion",
 
-    try {
+  //     });
+  //     //  console.log("support de diffusion",response)
+  //     set({ SupportDiffusionMedia: Number(response.data.data[0].count) });
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        rangs: rangs,
-        media: media,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        supportdiffusion: "supportdiffusion",
+  //   } catch (error) {
+  //     console.log(error);
+  //     set({ SupportDiffusionMedia: 0 });
+  //   }
+  // },
+  // getSupportDiffusionLastYear: async (
+  //   supports,
+  //   familles,
+  //   classes,
+  //   secteurs,
+  //   varieties,
+  //   annonceurs,
+  //   marques,
+  //   produits,
+  //   media,
+  //   rangs,
+  //   date1,
+  //   date2,
+  // ) => {
 
-      });
-      //  console.log("support de diffusion",response)
-      set({ SupportDiffusionMedia: Number(response.data.data[0].count) });
+  //   try {
 
-    } catch (error) {
-      console.log(error);
-      set({ SupportDiffusionMedia: 0 });
-    }
-  },
-  getSupportDiffusionLastYear: async (
-    supports,
-    familles,
-    classes,
-    secteurs,
-    varieties,
-    annonceurs,
-    marques,
-    produits,
-    media,
-    rangs,
-    date1,
-    date2,
-  ) => {
+  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
+  //       supports: supports,
+  //       familles: familles,
+  //       classes: classes,
+  //       secteurs: secteurs,
+  //       varieties: varieties,
+  //       annonceurs: annonceurs,
+  //       marques: marques,
+  //       produits: produits,
+  //       rangs: rangs,
+  //       media: media,
+  //       date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+  //       date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+  //       dashboard: "dashboard",
+  //       supportdiffusion: "supportdiffusion",
 
-    try {
+  //     });
+  //     // console.log("support de diffusion",response)
+  //     set({ SupportDiffusionMediaLastYear: Number(response.data.data[0].count) });
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
-        supports: supports,
-        familles: familles,
-        classes: classes,
-        secteurs: secteurs,
-        varieties: varieties,
-        annonceurs: annonceurs,
-        marques: marques,
-        produits: produits,
-        rangs: rangs,
-        media: media,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        supportdiffusion: "supportdiffusion",
-
-      });
-      // console.log("support de diffusion",response)
-      set({ SupportDiffusionMediaLastYear: Number(response.data.data[0].count) });
-
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
 
 
   getDureeTotalDiffusion: async (
@@ -1387,15 +1348,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
+    base
   ) => {
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         supports: supports,
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -1403,23 +1367,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
         media: media,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        dureetotal: "dureetotal",
-
+        date_debut: date1,
+        date_fin:date2,
       });
-      // console.log('response duree',response)
-      if (Number(response.data.data[0].count) > 3600) {
-        set({ DureeTotal: (Number(response.data.data[0].count) / 3600).toFixed(2) + "H" });
+      console.log('response duree',response)
+      if (Number(response.data[0].total) > 3600) {
+        set({ DureeTotal: (Number(response.data[0].total) / 3600).toFixed(2) + "H" });
       } else {
-        set({ DureeTotal: Number(response.data.data[0].count) + "s" });
-
+        set({ DureeTotal: Number(response.data[0].total) + "s" });
       }
-
-
     } catch (error) {
       console.log(error);
     }
@@ -1434,15 +1391,17 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre,
   ) => {
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         supports: supports,
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -1450,19 +1409,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        media: media,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        dureetotal: "dureetotal",
-
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
       // console.log('response duree',response)
-      if (Number(response.data.data[0].count) > 3600) {
-        set({ DureeTotalLastYear: (Number(response.data.data[0].count) / 3600).toFixed(2) + "H" });
+      if (Number(response.data[0].count) > 3600) {
+        set({ DureeTotalLastYear: (Number(response.data[0].total) / 3600).toFixed(2) + "H" });
       } else {
-        set({ DureeTotalLastYear: Number(response.data.data[0].count) + "s" });
+        set({ DureeTotalLastYear: Number(response.data[0].total) + "s" });
 
       }
 
@@ -1482,15 +1436,17 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre
   ) => {
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         supports: supports,
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -1498,16 +1454,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        media: media,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        dureemoyenne: "dureemoyenne",
-
+        date_debut: date1,
+        date_fin: date2,
       });
-      // console.log('duree moyenne', response)
-      set({ DureeMoyenne: Number(response.data.data[0].proportion) });
+       console.log('duree moyenne', response)
+      set({ DureeMoyenne: Number(response.data[0].proportion)});
 
     } catch (error) {
       console.log(error);
@@ -1523,15 +1474,17 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre
   ) => {
     try {
 
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         supports: supports,
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -1539,21 +1492,15 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        media: media,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        dureemoyenne: "dureemoyenne",
-
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      // console.log('duree moyenne', response)
-      set({ DureeMoyenneLastYear: Number(response.data.data[0].proportion.toFixed(2)) });
+      console.log('duree moyenne last', response)
+      set({ DureeMoyenneLastYear: Number(response.data[0].proportion).toFixed(2) });
 
     } catch (error) {
       console.log(error);
     }
-
   },
 
   getPicCommunication: async (
@@ -1565,16 +1512,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre
   ) => {
-
     try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         supports: supports,
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -1582,16 +1529,12 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        media: media,
-        date1: date1,
-        date2: date2,
-        dashboard: "dashboard",
-        piccommunication: "piccommunication",
+        date_debut:date1,
+        date_fin:date2,
 
       });
-      // console.log("pic",response)
-      set({ PicCommunication: response.data.data[0] });
+      console.log("pic",response.data[0].interval_start)
+      set({ PicCommunication: response.data[0] });
 
     } catch (error) {
       console.log(error);
@@ -1610,16 +1553,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
     annonceurs,
     marques,
     produits,
-    media,
-    rangs,
     date1,
     date2,
+    media,
+    email,
+    parametre
   ) => {
-
     try {
-
-      let response = await axios.post(`${PORT2}/getfilters2.php`, {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         supports: supports,
+        email: email,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -1627,16 +1570,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        rangs: rangs,
-        media: media,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        dashboard: "dashboard",
-        piccommunication: "piccommunication",
-
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      // console.log("pic",response)
-      set({ PicCommunicationLastYear: response.data.data[0] });
+      console.log("pic",response)
+      set({ PicCommunicationLastYear: response.data[0] });
 
     } catch (error) {
       console.log(error);
@@ -1682,6 +1620,33 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
     }
 
-  }
+  },
+
+ formatDateToFrench:(dateString)=> {
+    // Define an array of French month abbreviations
+    const frenchMonths = [
+        "Jan", "Fév", "Mars", "Avr", "Mai", "Juin",
+        "Juil", "Août", "Sept", "Oct", "Nov", "Déc"
+    ];
+
+    // Parse the input date string into a Date object
+    const date = new Date(dateString);
+
+    // Ensure the date is valid
+    if (isNaN(date.getTime())) {
+        throw new Error("Invalid date format");
+    }
+
+    // Extract day, month, and year
+    const day = date.getDate() + ",";
+    const monthIndex = date.getMonth(); // Months are zero-based (0 = January)
+    const year = date.getFullYear();
+
+    // Get the French month abbreviation
+    const monthAbbreviation = frenchMonths[monthIndex];
+
+    // Format the date as "Fév 4 2025"
+    return `${monthAbbreviation} ${day} ${year}`;
+}
 
 }))
