@@ -21,6 +21,7 @@ const {client,email,date_debut,date_fin}=UseLoginStore((state)=>state)
   // const date_fin = window.localStorage.getItem('date_fin');
   if (!client) {
     history.push('/login')
+    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
     }
 
   return (

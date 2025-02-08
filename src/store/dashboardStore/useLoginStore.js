@@ -68,7 +68,10 @@ export const UseLoginStore = create((set, get) => ({
       email:"",
     })
     try {
-      let response = await axios.get(`${PORT}/deconnexion.php`)
+      let response = await axios.post(`${PORT}/logout`,{
+        email:"ikramzerkout13@gmail.com"
+      })
+      console.log(response)
     } catch (error) {
     }
   },
@@ -212,6 +215,7 @@ export const UseLoginStore = create((set, get) => ({
       window.location.href = '/#/login/motdepasseoublier';
     }
   }
-}
 
+  
+}
 ))

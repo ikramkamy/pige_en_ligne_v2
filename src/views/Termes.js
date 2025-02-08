@@ -5,10 +5,11 @@ import {
   Row} from "react-bootstrap";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 function CGV() {
-  const { client, email } = UseLoginStore((state) => state)
+  const { client, email,LougoutRestErrorMessages } = UseLoginStore((state) => state)
   const history = useHistory()
   if (!client) {
     history.push('/login')
+    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
   return (
     <>

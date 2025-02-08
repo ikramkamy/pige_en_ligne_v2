@@ -21,7 +21,8 @@ export default function SignIn() {
   const user_id = window.localStorage.getItem('user_id')
   const history = useHistory()
   const { Loginuser, errormessage, showAlert2, showAlert1,
-    setLoginInputs, setTestvalue, test,ReseAlertShwing,client,email } = UseLoginStore((state) => state)
+    setLoginInputs, setTestvalue, test,
+    ReseAlertShwing,client,email,LougoutRestErrorMessages } = UseLoginStore((state) => state)
     console.log('email ',email,"client",client)
 const handleChange = (event) => {
     const { name, value } = event.target;
@@ -50,14 +51,20 @@ const handleChange = (event) => {
   React.useEffect(() => {
     if (email) {
      history.push("/main/accueil")
+  
     } else {
       //console.log('notallowed')
+      LougoutRestErrorMessages && LougoutRestErrorMessages(email)
     }
   }, [email])
 
   React.useEffect(()=>{
     ReseAlertShwing && ReseAlertShwing()
   },[])
+  const logout=()=>{
+    LougoutRestErrorMessages && LougoutRestErrorMessages("ikramzerkout13@gmail.com")
+  }
+
   return (
    
       <Container component="main" maxWidth="xs" style={{
@@ -66,6 +73,7 @@ const handleChange = (event) => {
         alignItems:"center"
         ,flexDirection:"column"
       }}>
+        <Button onClick={logout}>Logout</Button>
         <CssBaseline />
         <img src={logoImmar} alt="immar" width="150px" />
         <Box

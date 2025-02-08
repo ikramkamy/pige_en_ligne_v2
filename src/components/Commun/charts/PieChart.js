@@ -10,273 +10,90 @@ import BaseDialog from '../DialogueBox';
 import WatingChart from 'assets/img/loading3.gif';
 import { SelectGraphOptions, SelectGraphOptionsMarche } from './SelectGraphOptions';
 import { UseGraphStore } from 'store/GraphStore';
-export function PieActiveArc() {
-  const { PartMarche } = UsePigeDashboardStore((state) => state)
-  const array = [];
-  const dataset = PartMarche.forEach((elem) => {
-    const item = {
-      id: elem.Titre_Lib,
-      value: Number(elem.appearance_count),
-      label: elem.Titre_Lib,
-    }
-    array.push(item)
-    return array;
-  })
+import ColorCheckboxes from './BaseCheckBoxGroupe';
+import { BarChartIcon, PieChartIcon } from "lucide-react";
+import html2canvas from "html2canvas";
+// export function PieActiveArc() {
+//   const { PartMarche ,formatDateToFrench} = UsePigeDashboardStore((state) => state)
+//   const array = [];
+//   const dataset = PartMarche.forEach((elem) => {
+//     const item = {
+//       id: elem.Titre_Lib,
+//       value: Number(elem.appearance_count),
+//       label: elem.Titre_Lib,
+//     }
+//     array.push(item)
+//     return array;
+//   })
 
-  return (
-    <PieChart
-      colors={['#8B0A1A', '#45B3FA', '#F7DC6F', '#9B59B6', '#2ECC71']} // move it here
-      series={[
-        {
-          data,
-          highlightScope: { faded: 'global', highlighted: 'item' },
-          faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-          colors: ['#8B0A1A', '#45B3FA', '#F7DC6F', '#9B59B6', '#2ECC71'], // add this line
-        },
-      ]}
-      height={200}
-    />
-  );
-}
+//   return (
+//     <PieChart
+//       colors={['#8B0A1A', '#45B3FA', '#F7DC6F', '#9B59B6', '#2ECC71']} // move it here
+//       series={[
+//         {
+//           data,
+//           highlightScope: { faded: 'global', highlighted: 'item' },
+//           faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+//           colors: ['#8B0A1A', '#45B3FA', '#F7DC6F', '#9B59B6', '#2ECC71'], // add this line
+//         },
+//       ]}
+//       height={200}
+//     />
+//   );
+// }
 
-export const PieChartVelson = () => {
-
-  const chartDatalabelsBarColors = [
-    "#00a6e0",
-    "#0099d5",
-    "#008ac9",
-    "#007ebd",
-    "#0072b1",
-    "#0066a5",
-    "#005d99",
-    "#00538d",
-    "#004c81",
-    "#00446f",
-    "#003d5d",
-    "#003a4b",
-    "#00334a",
-    "#002f3a",
-    "#002a39",
-    "#002435",
-    "#001f31",
-    "#001b2d",
-    "#00171a",
-    "#001415"
-  ];
-  const { PartMarche, getPrtMarchet } = UsePigeDashboardStore((state) => state);
+export const PieChartVelson = ({ date1, date2, data,title,ChangeBaseFunction,
+  parametre }) => {
+  const chartDatalabelsBarColors = ['#9a0036', '#b71c1c', '#d81b60', '#e91e63', '#f48fb1']
+  //   "#d81b60",
+  //   "#2196f3",
+  //   "#43a047",
+  const { PartMarche, getPrtMarchet, formatDateToFrench } = UsePigeDashboardStore((state) => state);
   const { MarcheOptions } = UseGraphStore((state) => state)
   const { base, media, baseGraphe, Filtersupports, Filterfamilles,
     Filterclassesids, Filtersecteursids, Filtervarietiesids,
-    Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
+    Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs } = UseFiltersStore((state) => state)
   const [average, setAverage] = useState(0);
   const [array, setArray] = useState([]);
-
+  console.log("PartMarche", PartMarche)
   useEffect(() => {
 
-    if (PartMarche && PartMarche.length !== 0) {
-      if (base === "volume" || baseGraphe === 'volume') {
-        switch (media) {
-          case 'presse':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-              const item = {
-                value: Number(elem.appearance_count),
-                name: `${elem.Titre_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-
-            var list2 = list.map((e) => e.value)
-            // setAverage(Number(PartMarche[0].average_ratio).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break
-          case 'radio':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-              const item = {
-                //  x:elem.Chaine_Lib + elem.proportion,
-                //  y:Number(elem.chaine_count)
-                value: Number(elem.chaine_count),
-                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-
-              list.push(item)
-              return array;
-            })
-
-            setArray(list)
-            var list2 = list.map((e) => e.value)
-            // setAverage(Number(PartMarche[0].average_diffusion_per_chaine).toFixed(2));
-
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list2.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-
-            break;
-          case 'television':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-              const item = {
-                //  x:elem.Chaine_Lib + elem.proportion,
-                //  y:Number(elem.chaine_count)
-                value: Number(elem.chaine_count),
-                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            var list2 = list.map((e) => e.value)
-            // if(PartMarche && PartMarche.length!==0){
-            //     //console.log(Number(PartMarche[0].average_diffusion_per_chaine).toFixed(2))
-            //     setAverage(Number(PartMarche[0].average_diffusion_per_chaine).toFixed(2));
-            // }
-            //console.log("liste2",list2)
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-
-            setAverage(average20.toFixed(2))
-
-            break;
+    if (data && data.length !== 0) {
+      var list = [];
+      var dataset = data.forEach((elem) => {
+        const item = {
+          value: Number(elem.total),
+          name: `${elem.name}-${Number(elem.proportion).toFixed(2) + "%"}`,
         }
-
-      } else if (base === "budget" || baseGraphe === 'budget') {
-        switch (media) {
-          case 'presse':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-
-              const item = {
-                value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.Titre_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list);
-            var list2 = list.map((e) => e.value)
-            // setAverage(Number(PartMarche[0].average_tarif_per_titre).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list2.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break;
-          case 'radio':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-              const item = {
-                //    x:elem.Chaine_Lib + elem.proportion,
-                //    y:Number(elem.total_tarif)
-                value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
-
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list);
-            var list2 = list.map((e) => e.value)
-            //console.log('liste2', list2)
-            // setAverage(Number(PartMarche[0].average_tarif_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list2.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break;
-          case 'television':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-              const item = {
-
-                value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.support}-${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            var list2 = list.map((e) => e.value)
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list2.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            // console.log("average 20", average20, sum, list2)
-            break;
-        }
-
-      } else if (base === 'duree' || baseGraphe === 'duree') {
-        switch (media) {
-          case 'radio':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-              const item = {
-                value: Number(elem.total_duree).toFixed(2),
-                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            var list2 = list.map((e) => e.total_duree)
-            // setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break;
-          case 'television':
-            var list = [];
-            var dataset = PartMarche.forEach((elem) => {
-              const item = {
-                //    x:elem.Chaine_Lib + elem.proportion,
-                //    y:Number(elem.total_duree)
-                value: Number(elem.total_duree).toFixed(2),
-                name: `${elem.Chaine_Lib}-${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            var list2 = list.map((e) => e.value)
-            //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break;
-        }
-      }
+        list.push(item)
+        return array;
+      })
+      setArray(list)
+      var list2 = list.map((e) => e.value)
+      var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+      var average20 = sum / list.length;
+      setAverage(average20.toFixed(2))
     }
   }, [PartMarche])
 
   const [dynamicList, setDynamicList] = useState(MarcheOptions)
   const ModifyList = () => {
-    
-  
     var autresList = array.filter((e) => !MarcheOptions.includes(e))
-   
+
     var valueAutre = autresList.map((e) => Number(e.value))
     var PourcentageAutre = autresList.map((e) => Number(e.name.split('-')[1].split('%')[0]))
-   
+
     const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     var listWithAutre = MarcheOptions;
-    var autre = {
-      value: totalSum.toFixed(2).toString(),
-      name: `autres ${totalSumPourcentage.toFixed(2)}%`
-    }
-    listWithAutre.push(autre)
+    // var autre = {
+    //   value: totalSum.toFixed(2).toString(),
+    //   name: `autres ${totalSumPourcentage.toFixed(2)}%`
+    // }
+    // listWithAutre.push(autre)
     setDynamicList([...listWithAutre])
   }
+  console.log("array repartition format", data, array)
   var option = {
     tooltip: {
       trigger: 'item',
@@ -298,11 +115,19 @@ export const PieChartVelson = () => {
             shadowOffsetX: 0,
             shadowColor: 'rgba(0, 0, 0, 0.5)'
           }
-        }
+        },
+        labelLine: {
+          normal: {
+            show: true, // Show the line connecting the label to the slice
+            
+            lineStyle: {
+              color: 'white', // Color of the line
+            },
+          }}
       }],
 
     textStyle: {
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: '',
       fontSize: 16,
       color: 'red',
       fontWeight: 500,
@@ -324,47 +149,67 @@ export const PieChartVelson = () => {
       Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
 
   }
+  const handleDownloadChart = () => {
+    console.log('download')
+    const chartContainer = document.querySelector(".bar-chart-container");
+    if (!chartContainer) return;
 
+    html2canvas(chartContainer, {
+        onclone: (clonedDoc) => {
+            // Find the cloned container and set its background to black
+            const clonedContainer = clonedDoc.querySelector(".bar-chart-container");
+            if (clonedContainer) {
+                clonedContainer.style.backgroundColor = "black"; // Set black background for the cloned element
+            }
+        },
+    }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "chart.png"; // Set the filename
+        link.click(); // Trigger the download
+    });
+
+};
   return (
-    <div  >
-      <Card style={{ borderRadius: 10, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-        <CardHeader style={{ backgroundColor: codeColor, padding: 20, borderBottom: '1px solid #ddd' }}>
-          <Row>
-            <Col>
-              <h4 className="card-title mb-0"
-                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
-                Part de Marché &#8205;
-              </h4>
-            </Col>
-            <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <h4 className="card-title mb-0"
-                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
-                La moyenne = {average}
-
-              </h4>
-
-            </Col>
-
-          </Row>
-          <Row style={{display:"flex", justifyContent:"space-between"}}>
-            <Col>
-              <BaseDialog getData={getData} title="Part de Marché" />
-            </Col>
-            <Col style={{ display: 'flex', justifyContent: 'flex-end', padding: "0px" }}>
+    <div className='mt-4' style={{color:"white"}}>
+      <Card style={{ borderRadius: 10,
+         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+         backgroundColor:"transparent",color:"white", border:"1px solid lightgrey" }}>
+        <div className="card-body p-4" style={{ padding: 0 }} id="charts-container5">
+        <div style={{
+                width: "100%", display: "flex",
+                justifyContent: "space-between",
+                alignItems: "start",
+                paddingTop: "5px"
+            }}>
+                <div>{title}</div>
+               
+                    <div>La moyenne ={Number(average).toFixed(2)}</div>
+                         
               <SelectGraphOptionsMarche
                 UpdatedGraphDisplay={ModifyList}
                 options={array}
               />
-            </Col>
-          </Row>
-      
-        </CardHeader>
 
-        <div className="card-body" style={{ padding: 0 }} id="charts-container5">
+            </div>
+
+          {/* {formatDateToFrench(date1)} - {formatDateToFrench(date2)} */}
           <ReactEcharts
-            style={{ height: '450px' }}
+            style={{ height: '350px' }}
             option={option} />
+          <div className=""
+                          style={{
+                              width:"100%",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center"
+                          }}>
+                          <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} />
+                          <PieChartIcon onClick={handleDownloadChart}  style={{cursor:"pointer"}}/>
+                      </div>
         </div>
+
       </Card>
 
     </div>
@@ -416,8 +261,7 @@ export const PieChartRepartitionFormat = () => {
     "#001415"
 
   ];
-  const { FormatRepartition, getRepartitionFormat } = UsePigeDashboardStore((state) => state);
-
+  const { FormatRepartition, getRepartitionFormat, formatDateToFrench } = UsePigeDashboardStore((state) => state);
   const { base, media, baseGraphe, Filtersupports,
     Filterfamilles, Filterclassesids, Filtersecteursids,
     Filtervarietiesids, Filterannonceursids,

@@ -41,7 +41,9 @@ import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 import { NetworkErrorPopup } from "components/Commun/popups";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
 import { Widget,WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets";
+import { UseGraphStore } from "store/GraphStore";
 function Dashboard() {
+  const {getEvolutionData}=UseGraphStore((state)=>state)
   const slides = [
     <CustomDataLabelFamilles />,
     <CustomDataLabelAnnonceurs />,
@@ -138,7 +140,7 @@ function Dashboard() {
 
   const { countLastYear, count, getPigeCount,
     getPigeCountLastYear } = UseCountStore((state) => state)
-  const { autoriseDash, client, email } = UseLoginStore((state) => state)
+  const { autoriseDash, client, email ,LougoutRestErrorMessages} = UseLoginStore((state) => state)
   const {
     Filtersupports,
     Filterclassesids,
@@ -336,6 +338,22 @@ function Dashboard() {
         "annonceuractif"),
       getVolumePresseLastYear && getVolumePresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2)
     ])
+    getEvolutionData && getEvolutionData(
+      Filtersupports,
+      Filterfamilles,
+      Filterclassesids,
+      Filtersecteursids,
+      Filtervarietiesids,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      date1,
+      date2,
+      media,
+      email,
+      "evolution",
+      base,
+    ) 
     if (media === 'presse' && !isCalculating) {
       getCouleur && getCouleur(
         Filterfamilles,
@@ -1127,17 +1145,10 @@ function Dashboard() {
     //     }
     //   });
     // });
-
-
-
-
-
-
-
   };
   const test = () => {
-    console.log('top20produit')
-    getTop20Produits && getTop20Produits(
+    console.log('getEvolutionData')
+    getEvolutionData && getEvolutionData(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -1150,13 +1161,14 @@ function Dashboard() {
       date2,
       media,
       email,
-      "top20produit",
+      "evolution",
       base,
     ) 
   }
  
   if (!client) {
     history.push('/login')
+    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
   if (!autoriseDash && client) {
     return (
@@ -1200,7 +1212,7 @@ function Dashboard() {
       marginBottom: resStyle.marginTopAll
     }}
     >
-      {/* <Button onClick={test}>TEST</Button> */}
+      <Button onClick={test}>TEST</Button>
       <Container fluid style={{ display: "flex", flexDirection: "column" }} >
         <Row className="mt-3" style={{
           display: "flex",
@@ -1279,9 +1291,9 @@ function Dashboard() {
                 <div >
 
                   <Row className="mt-3" style={{ marginTop: 20 }} id="dashboard" >
-                    <WidgetShadcn
+                    {/* <WidgetShadcn
                     
-                    />
+                    /> */}
                     <Widget
                       icon={iconVolume}
                       value={count}
@@ -1354,7 +1366,7 @@ function Dashboard() {
 
                   </Row>
 
-                  <GridDemo date1={date1} date2={date2} media={media}/>
+                  <GridDemo date1={date1} date2={date2} media={media} base={base}/>
                 </div>
               </div>)}
             {(dashDisplay && !isCalculating &&

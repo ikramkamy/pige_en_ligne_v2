@@ -193,7 +193,7 @@ export default function DataTablePige() {
   const [pageSize, setPageSize] = React.useState(25);
   const { autorisePigePresse,
     autorisePigeRadio,
-    autorisePigeTv, client, email } = UseLoginStore((state) => state)
+    autorisePigeTv, client, email ,LougoutRestErrorMessages} = UseLoginStore((state) => state)
   const { sendDownloadLink,
     IsPressdataisFetched, ResePressdataisFetched,
     ExportExcelPending, DisplayEmailSent,
@@ -611,8 +611,9 @@ export default function DataTablePige() {
 
   if (!client) {
     history.push('/login')
+    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
-  console.log('ErrorFetchFilter', ErrorFetchFilter)
+ 
   return (
     <div style={{
       height: "auto", width: "100%", padding: "2%",

@@ -736,6 +736,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
         email: email,
+        supports:supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -746,7 +747,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log('resposne',response)
+      console.log('resposne top 20',response)
       set({ Top20famillesSectorielles: response.data});
       set({ isloading: false })
       
@@ -975,7 +976,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       });
       // console.log('response',response)
-      set({ FormatRepartition: response.data.data });
+      set({ FormatRepartition: response.data });
       set({ isloading: false })
 
     } catch (error) {

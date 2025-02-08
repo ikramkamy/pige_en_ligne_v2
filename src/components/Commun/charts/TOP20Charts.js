@@ -1,24 +1,51 @@
 import * as React from 'react';
 
 import {
-  CustomDataLabelFamilles, CustomDataLabelAnnonceurs, CustomDataLabelMarques, CustomDataLabelProduits, CustomDataLabelAnnonceurParSupport,
+  CustomDataLabelFamilles, CustomDataLabelAnnonceurs,
+  CustomDataLabelMarques, CustomDataLabelProduits, CustomDataLabelAnnonceurParSupport,
   CustomDataLabelCreationParAnnonceur
 } from '../../Commun/charts/BarCharts';
 import { Row, Col } from "react-bootstrap";
-import { PieChartVelson, PieChartRepartitionFormat } from '../charts/PieChart';
+import { PieChartVelson } from '../charts/PieChart';
 import { BarchartShadcn, BarChartComponent } from "./BarChartNew"
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { CaseLower } from 'lucide-react';
+import { UseGraphStore } from 'store/GraphStore';
+import InteractiveLineChart from './DiffusionEvolutionChart'
+export default function GridDemo({ date1, date2, media, base }) {
+  const { setFamillesOptions,
+    FamillesOptions,
+    setAnnonceurOptions,
+    setMarqueOptions,
+    setProduitsOptions,
+    AnnonceurOptions,
+    MarqueOptions,
+    ProduitsOptions,
+    setAnnonceurSupportOptions,
+    AnnonceurSupportOptions,
+    setCreationParAnnonceurOptions,
+    CreationParAnnonceurOptions
 
-export default function GridDemo({ date1, date2, media }) {
-  const { Top20famillesSectorielles,
+  } = UseGraphStore((state) => state)
+  const {
+    Top20famillesSectorielles,
+    getTop20famillesSectorielles,
+    getTop20Annonceurs,
+    getPrtMarchet,
+    getTop20Marques,
+    getTop20Produits,
+    getRepartitionFormat,
+    getAnnonceursParSupport,
+    getCreationParAnnonceur,
     CreationParAnnonceur,
     Top20Annonceurs, Top20marques,
     Top20produits,
     AnnonceurParSupport,
+    PartMarche,
+    FormatRepartition,
   } = UsePigeDashboardStore((state) => state)
   const top20familleModified = Top20famillesSectorielles.map((e) => {
-    return { name: e.Famille_Lib, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   })
   const Top20AnnonceursModified = Top20Annonceurs.map((e) => { return { name: e.Annonceur_Lib.toLowerCase(), proportion: e.proportion, total: e.total, average: e.average } })
 
@@ -37,26 +64,95 @@ export default function GridDemo({ date1, date2, media }) {
   const CreationParAnnonceurModified = CreationParAnnonceur.map((e) => {
     return { name: e.Annonceur_Lib.toLowerCase(), proportion: e.proportion, total: e.count, average: e.average_ratio }
   })
-  console.log("AnnonceurParSupport", CreationParAnnonceurModified,)
+  console.log("FamillesOptions", FamillesOptions)
+  const PartMarcheModified = PartMarche.map((e) => {
+    return { name: e.Support_Lib, proportion: e.proportion, total: e.total, average: e.average }
+  })
+  console.log("FormatRepartition", FormatRepartition)
+  const FormatRepartitionModified = FormatRepartition?.map((e) => {
+    return { name: e.Durée, proportion: e.proportion, total: e.total, average: e.average }
+  })
   return (
     <div >
+
+      <InteractiveLineChart base={base} />
       <Row>
         <Col md={6}>
-          <BarchartShadcn date1={date1} date2={date2} title="Top 20 Familles Sectorielles"
-            data={top20familleModified}
+          <BarchartShadcn date1={date1} date2={date2}
+            title={`Top ${FamillesOptions.length} Familles Sectorielles`}
+
+            data={FamillesOptions.length > 0 ? FamillesOptions : top20familleModified.slice(0, 5)}
             media={media}
-            options={CreationParAnnonceur}
+            options={top20familleModified}
+            SetOptionFunction={setFamillesOptions}
+            ChangeBaseFunction={getTop20famillesSectorielles}
+            filters="familles"
+            parametre="top20famille"
           />
-          {/* <CustomDataLabelFamilles /> */}
         </Col>
 
         <Col md={6}>
-          {/* <CustomDataLabelAnnonceurs /> */}
+
           <BarchartShadcn date1={date1} date2={date2}
-            title="Top 20 annonceurs"
-            data={Top20AnnonceursModified}
+            title={`Top ${AnnonceurOptions.length} annonceurs`}
+            data={AnnonceurOptions}
             media={media}
-            options={CreationParAnnonceur}
+            options={Top20AnnonceursModified}
+            SetOptionFunction={setAnnonceurOptions}
+            ChangeBaseFunction={getTop20Annonceurs}
+            filters="annonceurs"
+            parametre="top20annonceur"
+
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          < PieChartVelson
+            title="Part Marché"
+            date1={date1} date2={date2}
+            data={PartMarcheModified}
+            ChangeBaseFunction={getPrtMarchet}
+            parametre="repartitionmarche"
+          />
+        </Col>
+        <Col>
+
+          < PieChartVelson
+            title="Répartition par Format"
+            date1={date1} date2={date2}
+            data={FormatRepartitionModified}
+            ChangeBaseFunction={getRepartitionFormat}
+            parametre="repartitionformat"
+          />
+
+        </Col>
+
+
+      </Row>
+      <Row className='mt-4'>
+        <Col md={6} >
+          <BarchartShadcn date1={date1} date2={date2}
+            title={`Top ${MarqueOptions.length} marques`}
+            data={MarqueOptions}
+            media={media}
+            options={top20marquemodified}
+            SetOptionFunction={setMarqueOptions}
+            ChangeBaseFunction={getTop20Marques}
+            filters="marques"
+            parametre="top20marque"
+          />
+        </Col>
+        <Col md={6} >
+          <BarchartShadcn date1={date1} date2={date2}
+            title={`Top ${ProduitsOptions.length} produits`}
+            data={ProduitsOptions}
+            media={media}
+            options={Top20produitsmodified}
+            SetOptionFunction={setProduitsOptions}
+            ChangeBaseFunction={getTop20Produits}
+            filters="produits"
+            parametre="top20produit"
 
           />
         </Col>
@@ -64,43 +160,32 @@ export default function GridDemo({ date1, date2, media }) {
       <Row className='mt-4'>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
-            title="Top 20 marques"
-            data={top20marquemodified}
+            title="Annonceurs actifs par support"
+            data={AnnonceurSupportOptions}
             media={media}
-            options={CreationParAnnonceur}
-
-          />
-        </Col>
-        <Col md={6} >
-          <BarchartShadcn date1={date1} date2={date2}
-            title="Top 20 produits"
-            data={Top20produitsmodified}
-            media={media}
-            options={CreationParAnnonceur}
-
-          />
-        </Col>
-      </Row>
-      <Row className='mt-4'>
-        <Col md={6} >
-          <BarchartShadcn date1={date1} date2={date2}
-            title="Annonceurs actifs par suppor"
-            data={AnnonceurParSupportModified}
-            media={media}
-            options={CreationParAnnonceur}
-
+            options={AnnonceurParSupportModified}
+            SetOptionFunction={setAnnonceurSupportOptions}
+            ChangeBaseFunction={getAnnonceursParSupport}
+            filters="Annonceurs"
+            parametre="annonceurparsupport"
           />
         </Col>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
             title="Créations uniques par annonceurs"
-            data={CreationParAnnonceurModified.slice(0,10)}
+            data={CreationParAnnonceurOptions}
             media={media}
-            options={CreationParAnnonceur}
+            options={CreationParAnnonceurModified}
+            SetOptionFunction={setCreationParAnnonceurOptions}
+            ChangeBaseFunction={getCreationParAnnonceur}
+            filters="Créations uniques"
+            parametre="creationparannonceur"
 
           />
         </Col>
       </Row>
+
+
       {/* <Row>
     
     

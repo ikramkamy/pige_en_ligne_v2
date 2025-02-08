@@ -9,7 +9,7 @@ import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 function Home() {
   document.title='Accueil'
   const history=useHistory();
-  const {client,email}=UseLoginStore((state)=>state)
+  const {client,LougoutRestErrorMessages,email}=UseLoginStore((state)=>state)
   console.log("email",email,"client",client)
 
 const HomeCardinfo=[{
@@ -39,6 +39,7 @@ const HomeCardinfo=[{
 React.useEffect(() => {
   if (!client) {
     history.push('/login')
+    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
     }else{
       //do nothing
     }

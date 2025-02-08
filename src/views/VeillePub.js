@@ -514,6 +514,7 @@ export default function VeillePub() {
   }
   if (!client) {
     history.push('/login')
+    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
   return (
     <div style={{

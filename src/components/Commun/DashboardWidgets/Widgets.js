@@ -9,8 +9,12 @@ import {
 } from "react-bootstrap";
 import UndoIcon from '@mui/icons-material/Undo';
 export const Widget = ({ icon, title, value, valueLastYear }) => {
-  return (<Col lg="3" sm="6">
-    <Card className="card-stats" style={{ cursor: "pointer" }}>
+  return (
+  <Col lg="4" sm="6">
+    <Card className="card-stats" style={{ cursor: "pointer" ,
+      backgroundColor:"#010A41E6", color:"white", 
+      border:"1px solid lightgrey"
+      }}>
       <Card.Body>
         <Row>
           <Col xs="5">
@@ -21,17 +25,21 @@ export const Widget = ({ icon, title, value, valueLastYear }) => {
           </Col>
           <Col xs="7">
             <div className="numbers">
-              <p className="card-category" style={{ color: "black" }}>{title}</p>
-              <Card.Title as="h4">{value}</Card.Title>
+             
+              <Card.Title as="h3" style={{color:"white"}}>{value}</Card.Title>
             </div>
           </Col>
         </Row>
       </Card.Body>
-      <Card.Footer>
+      <Card.Footer  >
         <hr></hr>
-        <div className="stats">
-          <UndoIcon />
-          {valueLastYear}
+       
+        <div className="stats" style={{display:"flex", justifyContent:"space-between"}}>
+          <div style={{color:"white"}}>
+          {/* <UndoIcon /> */}
+          VS {new Date().getFullYear()-1} : {valueLastYear}
+          </div>
+          <p className="card-category" style={{ color: "white" }}>{title}</p>
         </div>
       </Card.Footer>
     </Card>
@@ -43,10 +51,11 @@ export const Widget = ({ icon, title, value, valueLastYear }) => {
 
 
 
-const chartData = [{ browser: "Télevision", visitors: 1260, fill: "red" }]
+
 
 
 export const WidgetShadcn = ({value, valueLastYear}) => {
+  const chartData = [{ browser: "Télevision", visitors: value, fill: "red" }]
   return (
     <Card className="flex flex-col" style={{backgroundColor:"lightblue"}}>
       <ResponsiveContainer width="100%" minHeight={400} className="px-4" >
@@ -70,7 +79,7 @@ export const WidgetShadcn = ({value, valueLastYear}) => {
                     <text x={viewBox.cx} y={viewBox.cy}
                       textAnchor="middle" dominantBaseline="middle">
                       <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-4xl font-bold">
-                        {chartData[0].visitors.toLocaleString()}
+                        {chartData[0].visitors?.toLocaleString()}
                       </tspan>
                       <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
                         Diffusion
