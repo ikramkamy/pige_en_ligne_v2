@@ -1,40 +1,51 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo ,useEffect} from "react";
 import {
   LineChart,
   Line,
   XAxis,
+  YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UseGraphStore } from "store/GraphStore";
+import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import ColorCheckboxes from './BaseCheckBoxGroupe';
-const chartConfig = {
-  heure: {
-    label: "Heure",
-    color: "#d81b60",
-  },
-  jour: {
-    label: "Jour",
-    color: "#d81b60",
-  },
-  mois: {
-    label: "Mois",
-    color: "#d81b60",
-  },
-};
+import CircularProgress from '@mui/material/CircularProgress';
 
-export default function InteractiveLineChart({base,ChangeBaseFunction}) {
-  const [activeChart, setActiveChart] = useState("heure");
-  const { EvolutionData } = UseGraphStore((state) => state);
+export default function InteractiveLineChart({ base,ChangeBaseFunction,parametre,isloading}) {
+  const listColors=[
+    "#43a047",
+    "#2196f3",
+    "#d81b60",
+  ]
+  const [activeChart, setActiveChart] = useState("jour");
+  const {date1,date2}=UseFiltersStore((state)=>state)
+  const {formatDateToFrench}=UsePigeDashboardStore((state)=>state)
+  const { EvolutionData,secondsToHoursObject ,baseGraphs,setBaseGraphs} = UseGraphStore((state) => state);
+ const sortByHeure=(arr)=> {
+    return arr.sort((a, b) => {
+      // Convert "HH:MM" to minutes for accurate comparison
+      const toMinutes = (time) => {
+        const [hours, minutes] = time.split(":").map(Number);
+        return hours * 60 + minutes;
+      };
+      return toMinutes(a.heure) - toMinutes(b.heure);
+    });
+  }
+  
+ 
+  const EvolutionDataHeure = EvolutionData?.heure
+  ? sortByHeure(EvolutionData.heure).map((e) => ({
+      date: e.Date,
+      name: e.heure,
+      total: e.total,
+      jour: e.Jour,
+    }))
+  : [];
 
-  const EvolutionDataHeure = EvolutionData?.heure?.map((e) => ({
-    date: e.Date,
-    name: e.heure,
-    total: Number(e.total)*1000000,
-    jour: e.Jour,
-  })) || [];
-
+  
   const EvolutionDataJour = EvolutionData?.jour?.map((e) => ({
     date: e.Date,
     heur: e.heure,
@@ -54,9 +65,30 @@ export default function InteractiveLineChart({base,ChangeBaseFunction}) {
     jour: EvolutionDataJour,
     mois: EvolutionDataMois,
   };
-
+  const [localColor,setLocalColor]=useState('red')
   const currentData = dataMapping[activeChart] || [];
+  const chartConfig = {
+    heure: {
+      label: "Heure",
+      //color: "#d81b60",
+      color: localColor,
+      total:EvolutionData?.heure?.length,
+      max:EvolutionDataHeure[0]?.total
+    },
+    jour: {
+      label: "Jour",
+      color: localColor,
+      total:EvolutionData?.jour?.length,
+      max:EvolutionDataJour[0]?.total
 
+    },
+    mois: {
+      label: "Mois",
+      color: localColor,
+      total:EvolutionData?.mois?.length,
+      max:EvolutionDataMois[0]?.total
+    },
+  };
   const total = useMemo(() => {
     return {
       heure: "",
@@ -64,96 +96,179 @@ export default function InteractiveLineChart({base,ChangeBaseFunction}) {
       mois: "",
     };
   }, [EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois]);
-console.log("evolution", EvolutionDataHeure,EvolutionDataJour, EvolutionDataMois)
-
-
-
-// Custom Tooltip Content Function
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div
-        style={{
-          backgroundColor: "#fff",
-          border: "1px solid #ccc",
-          padding: "10px",
-          borderRadius: "5px",
-        }}
-      >
-        <p><strong style={{color:"#d81b60"}} >Date:</strong> {payload[0].payload.date}</p>
-        <p><strong style={{color:"#d81b60"}}>Name:</strong> {label}</p>
-        <p><strong style={{color:"#d81b60"}}>Total:</strong> {payload[0].value}</p>
-        {/* Add more fields as needed */}
-        {payload[0].payload.jour && <p>
-            <strong style={{color:"#d81b60"}}>Jour:</strong> 
-            {payload[0].payload.jour}</p>}
-      </div>
-    );
+  //console.log("evolution", EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois)
+  // Custom Tooltip Content Function
+  const LocalBaseGraph=baseGraphs[parametre]=="" ? base : baseGraphs[parametre]
+  const colorMapping = [
+    { value: 'volume', codeColor: '#43a047' },
+    { value: 'budget', codeColor: '#2196f3' },
+    { value: 'duree', codeColor: '#d81b60' }
+  ];
+  const getColorByValue=(value)=> {
+    const item = colorMapping.find(item => item.value === value);
+    return item ? item.codeColor : '#blue'; 
   }
-  return null;
-};
+useEffect(()=>{
+  let LocalColor= getColorByValue(LocalBaseGraph)
+  setLocalColor(LocalColor)
+},[baseGraphs,isloading,EvolutionData,base])
 
-// Usage in LineChart
-<LineChart data={currentData} margin={{ left: 12, right: 12, top: 10, bottom: 10 }}>
-  {/* Other components */}
-  <Tooltip content={<CustomTooltip />} />
-  <Line
-    dataKey="total"
-    type="monotone"
-    stroke={chartConfig[activeChart]?.color || "red"}
-    strokeWidth={2}
-    dot={false}
-  />
-</LineChart>
+useEffect(()=>{
+  setBaseGraphs && setBaseGraphs(parametre,base)
+  console.log("baseGraphs",baseGraphs)
+},[])
+const max=Number(chartConfig[activeChart]?.max)
+// console.log("max",max,chartConfig)
+  const CustomTooltip = ({ active, payload, label }) => {
+    console.log("payload",payload[0]?.payload)
+    if (active && payload && payload.length) {
+
+      return (
+        <div
+          style={{
+            backgroundColor: "#fff",
+            border: "1px solid #ccc",
+            padding: "10px",
+            borderRadius: "5px",
+          }}
+        >
+          <strong style={{ color: "#d81b60" }} >{(payload[0]?.payload.name)}</strong>
+          <br/>
+          <strong style={{ color: "#d81b60" }} >{(payload[0]?.payload.date)}</strong>
+          <br/>
+          <strong style={{ color: "#d81b60" }} >{(payload[0]?.payload.total)}</strong>
+
+          {/* <p><strong style={{ color: "#d81b60" }} >Date:</strong> </p>
+          <p><strong style={{ color: "#d81b60" }}>Mois:</strong> {payload[0]?.payload.name}</p>
+          <p><strong style={{ color: "#d81b60" }}>Total:</strong> {payload[0]?.payload.total}</p> */}
+          {/* Add more fields as needed */}
+          {/* {payload[0].payload.jour && <p>
+            <strong style={{ color: "#d81b60" }}>Jour:</strong>
+            {payload[0]?.payload.jour}</p>} */}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Usage in LineChart
+  <LineChart data={currentData} margin={{ left: 12, right: 12, top: 10, bottom: 10 }}>
+    {/* Other components */}
+    <Tooltip content={<CustomTooltip />} />
+    <Line
+      dataKey="total"
+      type="monotone"
+      stroke={chartConfig[activeChart]?.color || "red"}
+      strokeWidth={2}
+      dot={false}
+    />
+  </LineChart>
   return (
     <div
       className="mb-4"
       style={{
         backgroundColor: "transparent",
-        padding: "20px",
+        //padding: "20px",
         border: "1px solid lightgrey",
         borderRadius: "5px",
         color: "white",
+        position:"relative"
       }}
     >
+ {isloading && (
+                <div style={{
+                position: "absolute", height: "100%", width: "100%",
+                backgroundColor: "#FFFFFF4D", zIndex: 3, top: "0px", left: "0px",
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center"
 
-<div style={{
-                width: "100%", display: "flex",
-                justifyContent: "space-between",
-                alignItems: "start",
-                paddingTop:"5px"
             }}>
-                <div>
-                Evolution du {base} de diffusion par{" "}
-    {Object.keys(chartConfig)
-      .filter((key) => key === activeChart)
-      .map((key) => (
-        <span key={key} className="text-sm font-medium">
-          {chartConfig[key].label}
-        </span>
-      ))}
-      </div>
+                <CircularProgress />
+            </div>
+            )}
+      <div style={{
+        width: "100%", display: "flex",
+       
+        justifyContent: "space-between",
+        alignItems: "start",
+        
+        //paddingTop: "5px"
+      }}>
+        <div className="px-4 " style={{
+          height: "100%",
+          paddingTop: "32px", 
+          paddingBottom: "32px",         
+          display:"flex",
+          justifyContent:"center",
+          flexDirection:"column",
+          alignItems:"start",
+          height:"100px"
+
+        }}>
+        <div style={{fontWeight:"bold", fontSize:"1rem"}}>{LocalBaseGraph=="duree"? "durée":LocalBaseGraph} de diffusion par{" "}
+          {Object.keys(chartConfig)
+            .filter((key) => key === activeChart)
+            .map((key) => (
+              <span key={key} className=" font-bold bold" style={{fontWeight:"bold"}}>
+                {chartConfig[key].label}
                 
+              </span>
+            ))}
+        </div>
+        <div>
+        {formatDateToFrench(date1)} - {formatDateToFrench(date2)}
+        </div>
+        </div>
+        
+        <div className="flex gap " style={{
+          display: "flex", width: "70%",
+          justifyContent: "flex-end", alignItems: "center",
+          height:"100px"
 
-      <div className="flex gap-2 mb-4">
-        {Object.keys(chartConfig).map((key) => (
-          <button
-            key={key}
-            className={`px-4 py-2 border rounded ${
-              activeChart === key ? "bg-gray-200" : "bg-transparent"
-            }`}
-            onClick={() => setActiveChart(key)}
-          >
-            <span className="text-sm">{chartConfig[key].label}</span>
-            <span className="block text-lg font-bold">
-              {total[key]?.toLocaleString()}
-            </span>
-          </button>
-        ))}
-      </div>
+        }}>
+          {Object.keys(chartConfig).map((key) => (
+            <div
+              style={{
+
+                width: "15%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderLeft: "1px solid lightgrey",
+                paddingTop: "32px",
+                paddingBottom: "32px",
+                paddingLeft: "40px",
+                paddingRight: "40px",
+                cursor: "pointer",
+                backgroundColor: activeChart === key ? "#4D5479" : "transparent",
+                transition: "background-color 0.3s ease", 
+                height:"100%"
+
+              }}
+              key={key}
+              className={`
+                cursor-pointer 
+                ${activeChart === key ? "bg-gray-200" : "bg-transparent hover:bg-gray-100"}
+              `}
+              onClick={() => setActiveChart(key)}
+            >
+              <div className="flex flex-col justify-start">
+              <span className="text-sm">{chartConfig[key].label}</span>
+              <p style={{fontSize:"1.5rem", fontWeight:"bold"}}>
+                {chartConfig[key].total}</p>
+
+              </div>
+              <span className="block text-lg font-bold">
+                {total[key]?.toLocaleString()}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <ResponsiveContainer width="100%" minHeight={300}>
+      <ResponsiveContainer width="100%" minHeight={300} 
+      style={{ borderTop: "1px solid #4D5479", marginBottom:"20px", padding:"20px"}} >
         <LineChart
           data={currentData}
           margin={{
@@ -163,7 +278,7 @@ const CustomTooltip = ({ active, payload, label }) => {
             bottom: 10,
           }}
         >
-          <CartesianGrid vertical={false} stroke="#e0e0e0" />
+          <CartesianGrid vertical={false} stroke="#FFFFFF4D" />
           <XAxis
             dataKey="name"
             tickLine={false}
@@ -172,18 +287,24 @@ const CustomTooltip = ({ active, payload, label }) => {
             minTickGap={32}
             tickFormatter={(value) => value}
             tick={{ fill: "white" }}
+            tickCount={24}
           />
-          <Tooltip content={<CustomTooltip />}/>
+          <YAxis 
+          domain={[0, max]}
+          tick={{fill:"#FFFFFF4D", fontSize:"12px"}}
+          />
+          <Tooltip content={<CustomTooltip />} />
           <Line
             dataKey="total"
             type="monotone"
+            
             stroke={chartConfig[activeChart]?.color || "red"}
             strokeWidth={2}
             dot={false}
           />
         </LineChart>
       </ResponsiveContainer>
-      <ColorCheckboxes/>
+      <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base}/>
     </div>
   );
 }

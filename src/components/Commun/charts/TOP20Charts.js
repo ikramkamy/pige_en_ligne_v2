@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   CustomDataLabelFamilles, CustomDataLabelAnnonceurs,
@@ -20,12 +20,19 @@ export default function GridDemo({ date1, date2, media, base }) {
     setProduitsOptions,
     AnnonceurOptions,
     MarqueOptions,
+    setFormatOptions,
     ProduitsOptions,
+    setMarcheOptions,
     setAnnonceurSupportOptions,
     AnnonceurSupportOptions,
     setCreationParAnnonceurOptions,
-    CreationParAnnonceurOptions
-
+    CreationParAnnonceurOptions,
+    getEvolutionData,
+    MarcheOptions,
+    FormatOptions,
+    setBaseGraphs,
+    baseGraphs,
+    loadingEvolution,
   } = UseGraphStore((state) => state)
   const {
     Top20famillesSectorielles,
@@ -43,6 +50,14 @@ export default function GridDemo({ date1, date2, media, base }) {
     AnnonceurParSupport,
     PartMarche,
     FormatRepartition,
+    loadingFamille,
+    loadingAnnonceur,
+    loadingMarche,
+    loadingMarque,
+    loadingProduit,
+    loadingFormat,
+    loadingAnnonceurSupport,
+    loagingCreationAnnonceur,
   } = UsePigeDashboardStore((state) => state)
   const top20familleModified = Top20famillesSectorielles.map((e) => {
     return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
@@ -60,22 +75,29 @@ export default function GridDemo({ date1, date2, media, base }) {
   const AnnonceurParSupportModified = AnnonceurParSupport.map((e) => {
     return { name: e.Support_Lib, proportion: e.proportion, total: e.annonceur_count, average: e.average_ratio }
   })
-
   const CreationParAnnonceurModified = CreationParAnnonceur.map((e) => {
     return { name: e.Annonceur_Lib.toLowerCase(), proportion: e.proportion, total: e.count, average: e.average_ratio }
   })
-  console.log("FamillesOptions", FamillesOptions)
   const PartMarcheModified = PartMarche.map((e) => {
     return { name: e.Support_Lib, proportion: e.proportion, total: e.total, average: e.average }
   })
-  console.log("FormatRepartition", FormatRepartition)
+  console.log('PartMarcheModified', PartMarche, PartMarcheModified, PartMarche)
   const FormatRepartitionModified = FormatRepartition?.map((e) => {
-    return { name: e.Durée, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Format, proportion: e.proportion, total: e.total, average: e.average }
   })
+  console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
+ 
+
   return (
     <div >
 
-      <InteractiveLineChart base={base} />
+      <InteractiveLineChart
+        base={base}
+        ChangeBaseFunction={getEvolutionData}
+        parametre="evolution"
+        isloading={loadingEvolution}
+
+      />
       <Row>
         <Col md={6}>
           <BarchartShadcn date1={date1} date2={date2}
@@ -88,6 +110,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             ChangeBaseFunction={getTop20famillesSectorielles}
             filters="familles"
             parametre="top20famille"
+            isloading={loadingFamille}
           />
         </Col>
 
@@ -102,6 +125,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             ChangeBaseFunction={getTop20Annonceurs}
             filters="annonceurs"
             parametre="top20annonceur"
+            isloading={loadingAnnonceur}
 
           />
         </Col>
@@ -110,20 +134,31 @@ export default function GridDemo({ date1, date2, media, base }) {
         <Col>
           < PieChartVelson
             title="Part Marché"
-            date1={date1} date2={date2}
+            date1={date1}
+            date2={date2}
             data={PartMarcheModified}
+            SetOptionFunction={setMarcheOptions}
             ChangeBaseFunction={getPrtMarchet}
             parametre="repartitionmarche"
+            filter="Marché"
+            initialOptions={MarcheOptions}
+            isloading={loadingMarche}
+
           />
         </Col>
         <Col>
 
           < PieChartVelson
             title="Répartition par Format"
-            date1={date1} date2={date2}
+            date1={date1}
+            date2={date2}
             data={FormatRepartitionModified}
+            SetOptionFunction={setFormatOptions}
             ChangeBaseFunction={getRepartitionFormat}
             parametre="repartitionformat"
+            filter="Format"
+            initialOptions={FormatOptions}
+            isloading={loadingFormat}
           />
 
         </Col>
@@ -141,6 +176,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             ChangeBaseFunction={getTop20Marques}
             filters="marques"
             parametre="top20marque"
+            isloading={loadingMarque}
           />
         </Col>
         <Col md={6} >
@@ -153,6 +189,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             ChangeBaseFunction={getTop20Produits}
             filters="produits"
             parametre="top20produit"
+            isloading={loadingProduit}
 
           />
         </Col>
@@ -168,6 +205,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             ChangeBaseFunction={getAnnonceursParSupport}
             filters="Annonceurs"
             parametre="annonceurparsupport"
+            isloading={loadingAnnonceurSupport}
           />
         </Col>
         <Col md={6} >
@@ -180,6 +218,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             ChangeBaseFunction={getCreationParAnnonceur}
             filters="Créations uniques"
             parametre="creationparannonceur"
+            isloading={loagingCreationAnnonceur}
 
           />
         </Col>

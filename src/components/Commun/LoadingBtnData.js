@@ -22,7 +22,7 @@ const LoadingButtonData = ({mr,title,isloading,isSucces,handelUpdatePassword,dis
 
   return (
     <Box display="flex" alignItems="center" 
-    sx={{backgroundColor:"white", marginRight:mr,
+    sx={{marginRight:mr,
 
       borderRadius:"5px"
     }}>
@@ -38,7 +38,11 @@ const LoadingButtonData = ({mr,title,isloading,isSucces,handelUpdatePassword,dis
         color: '',
         '&:hover': {
           backgroundColor: '#00a6e0',
-        }
+        },
+        '&:disabled': {
+        color: 'white', 
+        backgroundColor: 'lightgrey',
+      },
       }}
         variant="contained"
         color="primary"

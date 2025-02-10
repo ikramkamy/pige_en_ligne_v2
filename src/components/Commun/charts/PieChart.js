@@ -13,6 +13,7 @@ import { UseGraphStore } from 'store/GraphStore';
 import ColorCheckboxes from './BaseCheckBoxGroupe';
 import { BarChartIcon, PieChartIcon } from "lucide-react";
 import html2canvas from "html2canvas";
+import CircularProgress from '@mui/material/CircularProgress';
 // export function PieActiveArc() {
 //   const { PartMarche ,formatDateToFrench} = UsePigeDashboardStore((state) => state)
 //   const array = [];
@@ -42,50 +43,76 @@ import html2canvas from "html2canvas";
 //   );
 // }
 
-export const PieChartVelson = ({ date1, date2, data,title,ChangeBaseFunction,
-  parametre }) => {
-  const chartDatalabelsBarColors = ['#9a0036', '#b71c1c', '#d81b60', '#e91e63', '#f48fb1']
+export const PieChartVelson = ({ date1, date2, data, title, isloading,
+  ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
+    const { PartMarche, FormatRepartition } = UsePigeDashboardStore((state) => state);
+    const { MarcheOptions, setBaseGraphs,baseGraphs } = UseGraphStore((state) => state)
+  //const chartDatalabelsBarColors = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c']
+  const [chartDatalabelsBarColors, setChartDatalabelsBarColors] = useState([])
+  const chartDatalabelsBarColorsVolume = ['#C8E6C9', '#81C784', '#43A047', '#2E7D32', '#1B5E20'];
+  const chartDatalabelsBarColorsBudget = ['#BBDEFB', '#64B5F6', '#2196F3', '#1976D2', '#0D47A1'];
+  const chartDatalabelsBarColorsDuree = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c'];
+  const colorMapping = [
+    { value: 'volume', codeColor: chartDatalabelsBarColorsVolume },
+    { value: 'budget', codeColor: chartDatalabelsBarColorsBudget },
+    { value: 'duree', codeColor: chartDatalabelsBarColorsDuree}
+  ];
+  const LocalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
+  const getColorByValue = (value) => {
+    const item = colorMapping.find(item => item.value === value);
+    return item ? item.codeColor : '#2196f3';
+  }
+
   //   "#d81b60",
   //   "#2196f3",
   //   "#43a047",
-  const { PartMarche, getPrtMarchet, formatDateToFrench } = UsePigeDashboardStore((state) => state);
-  const { MarcheOptions } = UseGraphStore((state) => state)
-  const { base, media, baseGraphe, Filtersupports, Filterfamilles,
-    Filterclassesids, Filtersecteursids, Filtervarietiesids,
-    Filterannonceursids, Filtermarquesids, Filterproduitsids, rangs } = UseFiltersStore((state) => state)
+ 
+
+  const { base } = UseFiltersStore((state) => state)
   const [average, setAverage] = useState(0);
-  const [array, setArray] = useState([]);
-  console.log("PartMarche", PartMarche)
+  const [dynamicList, setDynamicList] = useState([])
+  const [array, setArray] = useState([])
+
   useEffect(() => {
+    setBaseGraphs && setBaseGraphs(parametre, base)
+  }, [])
 
-    if (data && data.length !== 0) {
-      var list = [];
-      var dataset = data.forEach((elem) => {
-        const item = {
-          value: Number(elem.total),
-          name: `${elem.name}-${Number(elem.proportion).toFixed(2) + "%"}`,
-        }
-        list.push(item)
-        return array;
-      })
-      setArray(list)
-      var list2 = list.map((e) => e.value)
-      var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-      var average20 = sum / list.length;
-      setAverage(average20.toFixed(2))
+  useEffect(()=>{
+    let array=getColorByValue(LocalBaseGraph)
+     console.log('array',array)
+     setChartDatalabelsBarColors(array)
+  },[baseGraphs])
+  const display = data?.map((elem) => {
+    return {
+      value: Number(elem.total),
+      name: `${elem.name}-${Number(elem.proportion).toFixed(2) + "%"}`,
     }
-  }, [PartMarche])
+  })
+  useEffect(() => {
+    if (data && data.length !== 0) {
+      const list = data.map((elem) => ({
+        value: Number(elem.total),
+        name: `${elem.name}-${Number(elem.proportion).toFixed(2)}%`,
+      }));
+      setArray(list);
 
-  const [dynamicList, setDynamicList] = useState(MarcheOptions)
+      const list2 = list.map((e) => e.value);
+      const sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+      const average20 = sum / list.length;
+      setAverage(average20.toFixed(2));
+    }
+  }, [PartMarche, FormatRepartition]);
+
+
   const ModifyList = () => {
-    var autresList = array.filter((e) => !MarcheOptions.includes(e))
+    var autresList = array.filter((e) => !data.includes(e))
 
     var valueAutre = autresList.map((e) => Number(e.value))
     var PourcentageAutre = autresList.map((e) => Number(e.name.split('-')[1].split('%')[0]))
 
     const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    var listWithAutre = MarcheOptions;
+    var listWithAutre = initialOptions;
     // var autre = {
     //   value: totalSum.toFixed(2).toString(),
     //   name: `autres ${totalSumPourcentage.toFixed(2)}%`
@@ -93,7 +120,7 @@ export const PieChartVelson = ({ date1, date2, data,title,ChangeBaseFunction,
     // listWithAutre.push(autre)
     setDynamicList([...listWithAutre])
   }
-  console.log("array repartition format", data, array)
+  //console.log("array repartition format all",data,array,dynamicList)
   var option = {
     tooltip: {
       trigger: 'item',
@@ -113,105 +140,118 @@ export const PieChartVelson = ({ date1, date2, data,title,ChangeBaseFunction,
           itemStyle: {
             shadowBlur: 10,
             shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
           }
+        },
+        label: {
+          normal: {
+            show: true,
+            fontSize: 14,
+            fontWeight: 'normal',
+            color: 'white',
+            fontFamily: 'Arial, sans-serif',
+          },
         },
         labelLine: {
           normal: {
-            show: true, // Show the line connecting the label to the slice
-            
-            lineStyle: {
-              color: 'white', // Color of the line
-            },
-          }}
+            show: true, // Hide the lines connecting the labels to the slices
+          },
+        },
       }],
 
     textStyle: {
       fontFamily: '',
       fontSize: 16,
       color: 'red',
-      fontWeight: 500,
+      fontWeight: 100,
     },
+
   };
-  const [codeColor, setCodeColor] = useState('#F7F7F7')
-  const getData = () => {
-    if (base === "budget") {
-      setCodeColor('#ff9966')
 
-    } else if (base === "volume") {
-      setCodeColor('#d1edd3')
 
-    } else if (base === 'duree') {
-      setCodeColor('#d1ebed')
-    }
-    getPrtMarchet && getPrtMarchet(Filtersupports, Filterfamilles,
-      Filterclassesids, Filtersecteursids, Filtervarietiesids,
-      Filterannonceursids, Filtermarquesids, Filterproduitsids, base, media, rangs, date1, date2)
-
-  }
   const handleDownloadChart = () => {
     console.log('download')
     const chartContainer = document.querySelector(".bar-chart-container");
     if (!chartContainer) return;
 
     html2canvas(chartContainer, {
-        onclone: (clonedDoc) => {
-            // Find the cloned container and set its background to black
-            const clonedContainer = clonedDoc.querySelector(".bar-chart-container");
-            if (clonedContainer) {
-                clonedContainer.style.backgroundColor = "black"; // Set black background for the cloned element
-            }
-        },
+      onclone: (clonedDoc) => {
+        // Find the cloned container and set its background to black
+        const clonedContainer = clonedDoc.querySelector(".bar-chart-container");
+        if (clonedContainer) {
+          clonedContainer.style.backgroundColor = "black"; // Set black background for the cloned element
+        }
+      },
     }).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
-        const link = document.createElement("a");
-        link.href = imgData;
-        link.download = "chart.png"; // Set the filename
-        link.click(); // Trigger the download
+      const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "chart.png"; // Set the filename
+      link.click(); // Trigger the download
     });
 
-};
+  };
   return (
-    <div className='mt-4' style={{color:"white"}}>
-      <Card style={{ borderRadius: 10,
-         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-         backgroundColor:"transparent",color:"white", border:"1px solid lightgrey" }}>
-        <div className="card-body p-4" style={{ padding: 0 }} id="charts-container5">
-        <div style={{
-                width: "100%", display: "flex",
-                justifyContent: "space-between",
-                alignItems: "start",
-                paddingTop: "5px"
-            }}>
-                <div>{title}</div>
-               
-                    <div>La moyenne ={Number(average).toFixed(2)}</div>
-                         
-              <SelectGraphOptionsMarche
-                UpdatedGraphDisplay={ModifyList}
-                options={array}
-              />
+    <div className='mt-4' style={{ color: "white" }}>
+      <Card style={{
+        borderRadius: 10,
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+        backgroundColor: "transparent",
+        color: "white",
+        border: "1px solid lightgrey",
+        position: "relative",
+      }}>
 
-            </div>
+        {isloading && (
+          <div style={{
+            position: "absolute", height: "100%", width: "100%",
+            backgroundColor: "#FFFFFF4D", zIndex: 3, top: "0px", left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
 
+          }}>
+            <CircularProgress />
+          </div>
+        )}
+        <div className="card-body p-4" style={{
+          padding: 0,
+          display: "flex", flexDirection: "column"
+        }} id="charts-container5">
+          <div style={{
+            width: "100%", display: "flex",
+            justifyContent: "space-between",
+            alignItems: "start",
+            paddingTop: "5px"
+          }}>
+            <div>{title}</div>
+            <div>La moyenne ={Number(average).toFixed(2)}</div>
+            <SelectGraphOptionsMarche
+              UpdatedGraphDisplay={ModifyList}
+              options={array}
+              filter={filter}
+              SetOptionFunction={SetOptionFunction}
+            />
+          </div>
           {/* {formatDateToFrench(date1)} - {formatDateToFrench(date2)} */}
           <ReactEcharts
-            style={{ height: '350px' }}
+            style={{
+              height: '350px',
+              display: "flex",
+              justifyContent: "center"
+            }}
             option={option} />
           <div className=""
-                          style={{
-                              width:"100%",
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center"
-                          }}>
-                          <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} />
-                          <PieChartIcon onClick={handleDownloadChart}  style={{cursor:"pointer"}}/>
-                      </div>
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center"
+            }}>
+            <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} />
+            <PieChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} />
+          </div>
         </div>
-
       </Card>
-
     </div>
   )
 }

@@ -82,9 +82,7 @@ export function SelectGraphOptions({ options, UpdatedGraphDisplay }) {
         </div>
     );
 }
-export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay }) {
-    const { MarcheOptions,
-        setMarcheOptions } = UseGraphStore((state) => state);
+export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,SetOptionFunction }) {
     const optionList = options.map((e) => e.name.split('-')[0]);
     const [selectedItems, setSelectedItems] = useState([]);  
     const [selectedList, setSelectedList] = useState(options.slice(0,5));
@@ -92,7 +90,7 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay }) {
     useEffect(() => {
         setSelectedItems(optionList.slice(0,5));
     }, [options]);
-    
+ 
     const handleChange = (event) => {
         const selected = event.target.value;
         setSelectedItems((prevSelectedItems) => {
@@ -113,28 +111,28 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay }) {
             selectedItems.includes(e.name.split("-")[0])
         );
         setSelectedList(newSelectedList);
-        setMarcheOptions && setMarcheOptions(newSelectedList);
-    }, [selectedItems, options, setMarcheOptions]);
+        SetOptionFunction && SetOptionFunction(newSelectedList);
+    }, [selectedItems, options, SetOptionFunction]);
     useEffect(() => {
         UpdatedGraphDisplay()
     }, [selectedList])
     return (
-        <div>
             <FormControl
                 sx={{
                     m: 0,
                     width: 150,
-                    marginRight: { xs: 0, sm: "0px" }
+                    marginTop: "-5px",
+                    marginRight: { xs: 0, sm: "0px" },
+                                      
                 }}>
                 <Select
                     labelId="demo-multiple-checkbox-label"
                     value={selectedItems}
                     onChange={handleChange}
                     input={<OutlinedInput label="top 5 annonceurs" />}
-
-                    renderValue={() => `Top ${selectedItems.length} Marché`}
+                    renderValue={() => `Top ${selectedItems.length} ${filter}`}
                     MenuProps={MenuProps}
-                    sx={{ backgroundColor: "white", height: "40px" }}
+                    sx={{ backgroundColor: "010A41E6", height: "35px" ,color:"white"}}
                 >
                     {optionList.map((elem) => (
                         <MenuItem key={optionList.indexOf(elem)} value={elem}>
@@ -144,7 +142,7 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay }) {
                     ))}
                 </Select>
             </FormControl>
-        </div>
+       
     );
 }
 export function SelectGraphOptionsAnnonceurParsupport({ options, UpdatedGraphDisplay,media }) {

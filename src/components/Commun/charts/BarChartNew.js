@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import ColorCheckboxes from './BaseCheckBoxGroupe';
+import CircularProgress from '@mui/material/CircularProgress';
 import './style.css';
 import { BarChartIcon } from "lucide-react";
 import { UseGraphStore } from "store/GraphStore";
@@ -26,16 +27,40 @@ export const BarchartShadcn = ({
     SetOptionFunction,
     filters,
     ChangeBaseFunction,
-    parametre }) => {
+    parametre,
+    isloading }) => {
+    const { graphColor, baseGraphs,setBaseGraphs } = UseGraphStore((state) => state)
+   
+    const { base } = UseFiltersStore((state) => state)
     const { formatDateToFrench } = UsePigeDashboardStore((state) => state)
+    const [localColor, setLocalColor] = useState('#2196f3')
+    useEffect(()=>{
+        setBaseGraphs && setBaseGraphs(parametre,base)
+          },[])
+          console.log('baseGraphs', baseGraphs)
+    const colorMapping = [
+        { value: 'volume', codeColor: '#43a047' },
+        { value: 'budget', codeColor: '#2196f3' },
+        { value: 'duree', codeColor: '#d81b60' }
+    ];
+    const LocalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
+    const getColorByValue = (value) => {
+        const item = colorMapping.find(item => item.value === value);
+        return item ? item.codeColor : '#2196f3';
+    }
+    useEffect(() => {
+        let LocalColor = getColorByValue(LocalBaseGraph)
+        setLocalColor(LocalColor)
+        console.log("LocalColor", LocalColor)
+    }, [baseGraphs])
 
-    console.log('data in graph', data)
-    const { CreationParAnnonceur, FamillesOptions, graphColor } = UseGraphStore((state) => state)
+
 
     const [chartData, setChartData] = useState(data);
-    const [average, setAverage] = useState(data[0]?.average || 0);
-    const max = data.length > 0 ? Number(data[0]?.total) : 0;
-    console.log("max", max, chartData, data)
+    //const [average, setAverage] = useState(data[0]?.average || 0);
+    const average = data[0]?.average;
+    const max = Number(data[0]?.total);
+
     const colorMap = {
         volume: "#43a047", // Green
         budget: "#2196f3", // Blue
@@ -44,14 +69,12 @@ export const BarchartShadcn = ({
 
     const GraphColor = colorMap[graphColor] || "#2196f3";
     useEffect(() => {
-        console.log("changing graph", data)
+
         const updatedData = calculateChartData(data, options);
 
         setChartData(data);
-        setAverage(updatedData[0]?.average || 0);
+        // setAverage(updatedData[0]?.average || 0);
     }, [options, data]);
-
-
     const calculateChartData = (data, options) => {
 
         return data.filter((item) => options.includes(item.someKey));
@@ -84,8 +107,24 @@ export const BarchartShadcn = ({
             backgroundColor: "transparent",
             color: "white",
             borderRadius: "10px", padding: "15px",
-            border: "1px solid white"
+            border: "1px solid white",
+            position: "relative"
+
         }} className="bar-chart-container">
+
+            {isloading && (
+                <div style={{
+                position: "absolute", height: "100%", width: "100%",
+                backgroundColor: "#FFFFFF4D", zIndex: 3, top: "0px", left: "0px",
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center"
+
+            }}>
+                <CircularProgress />
+            </div>
+            )}
+            
             {/* <div style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -106,23 +145,24 @@ export const BarchartShadcn = ({
                 width: "100%", display: "flex",
                 justifyContent: "space-between",
                 alignItems: "start",
-                paddingTop: "5px"
+                paddingTop: "5px",
+                marginBottom: "10px"
             }}>
                 <div>{title}</div>
-                <div className="">
-                    <div>La moyenne ={Number(average).toFixed(2)}</div>
-                    <MultiselectForGraph
-                        options={options}
-                        UpdatedGraphDisplay={UpdatedGraphDisplay}
-                        media={media}
-                        SetOptionFunction={SetOptionFunction}
-                        filters={filters}
-                    />
-                </div>
+
+                <div>La moyenne ={Number(average).toFixed(2)}</div>
+                <MultiselectForGraph
+                    options={options}
+                    UpdatedGraphDisplay={UpdatedGraphDisplay}
+                    media={media}
+                    SetOptionFunction={SetOptionFunction}
+                    filters={filters}
+                />
+
             </div>
 
             <ResponsiveContainer width="100%" minHeight={300}
-                className="px-4 .bar-chart-container" >
+                className="px-2 .bar-chart-container" >
                 <BarChart
                     data={chartData}
                     layout="vertical"
@@ -164,14 +204,15 @@ export const BarchartShadcn = ({
 
                     <Bar dataKey="total"
 
-                        fill={GraphColor}
+                        fill={localColor}
 
                         radius={[10, 10, 10, 10]} >
                         <LabelList dataKey="total"
                             position="right"
                             fill="white"
-                            fontSize={12}
+                            fontSize={10}
                             fontWeight="500"
+
 
                         />
                         <LabelList
@@ -193,7 +234,7 @@ export const BarchartShadcn = ({
                     justifyContent: "space-between",
                     alignItems: "center"
                 }}>
-                <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} />
+                <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
                 <BarChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} />
             </div>
             {/* <div className="text-gray-600">Showing total visitors for the last 6 months</div> */}
@@ -204,7 +245,7 @@ export const BarchartShadcn = ({
 
 
 const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, filters }) => {
-    const { FamillesOptions, graphColor } = UseGraphStore((state) => state)
+    const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state)
     const { Top20famillesSectorielles } = UsePigeDashboardStore((state) => state)
     console.log('FamillesOptions', FamillesOptions, options.slice(0, 5))
     const [selectedList, setSelectedList] = useState(options.slice(0, 5));
@@ -257,7 +298,7 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
             }
         });
     };
-    console.log("selectedItems", selectedItems)
+
     useEffect(() => {
         const newSelectedList = options.filter((e) =>
             selectedItems.includes(e.name)
@@ -268,18 +309,19 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
     useEffect(() => {
         ModifyList()
     }, [])
-
+    console.log("baseGraphs", baseGraphs)
     const [isOpen, setIsOpen] = useState(false)
     return (
         <FormControl sx={{
-            m: 1,
-            width: "55%",
-            marginTop: "0px",
+            m: 0,
+            width: "150px",
+            marginTop: "-5px",
             margin: "0px",
-            color: "white"
+
+
         }}>
             <Select
-                sx={{ height: "35px", color: "white" }}
+                sx={{ height: "35px", backgroundColor: "010A41E6", color: "white" }}
                 labelId="demo-multiple-checkbox-label"
                 input={<OutlinedInput label={`${filters}`} />}
                 // open={isOpen}
@@ -290,7 +332,6 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
                 renderValue={() => `Top ${selectedItems.length} ${filters}`}
 
             >
-
                 {options.map((elem) => (
                     <MenuItem key={options.indexOf(elem)} value={elem.name} >
                         <Checkbox checked={selectedItems.includes(elem.name)} />

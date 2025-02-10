@@ -45,8 +45,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
   PicCommunication: {
     count: 0,
-    interval_start: "08:00",
-    interval_end: "08:15",
+    interval_start: "--:--",
+    interval_end: "--:--",
   },
   PicCommunicationLastYear: {
     count: 0,
@@ -69,11 +69,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
   DisplayEmailSent: false,
   CloseEmailExcel: () => {
     set({ DisplayEmailSent: false })
-  }, 
-  
-  ErrorDashboard:false,
-  HandelErrorDashboard:()=>{
-  set({ErrorDashboard:true})
+  },
+
+  ErrorDashboard: false,
+  HandelErrorDashboard: () => {
+    set({ ErrorDashboard: true })
   },
   // Methods
   ResetDataArrays: async () => {
@@ -110,6 +110,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
         interval_start: "08:00",
         interval_end: "08:15",
       },
+      loadingFamille: false,
+      loadingAnnonceur: false,
+      loadingMarche: false,
+      loadingMarque: false,
+      loadingProduit: false,
+      loadingFormat: false,
+      loadingAnnonceurSupport: false,
+      loagingCreationAnnonceur: false,
 
     })
   },
@@ -120,7 +128,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
   ResePressdataisFetched: () => {
     set({ IsPressdataisFetched: false })
   },
-   
+
   getVolumePresse: async (
     supports,
     familles,
@@ -264,7 +272,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -274,16 +282,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
         produits: produits,
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        
+
       });
-     console.log("ann acti last",response)
+      console.log("ann acti last", response)
       set({ AnnonceursActifLastYear: Number(response.data[0].total) });
     } catch (error) {
       console.log(error);
     }
   },
 
-  loadingCalcul:false,
+  loadingCalcul: false,
   getCreationUniques: async (
     supports,
     familles,
@@ -301,11 +309,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
   ) => {
 
     try {
-      set({loadingCalcul:true})
-     
+      set({ loadingCalcul: true })
+
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -315,12 +323,13 @@ export const UsePigeDashboardStore = create((set, get) => ({
         produits: produits,
         date_debut: date1,
         date_fin: date2,
-        
+
       });
-     console.log("get creation unique",response)
-      set({CreationUniques: Number(response.data[0].total),
-        loadingCalcul:false
-       });
+      console.log("get creation unique", response)
+      set({
+        CreationUniques: Number(response.data[0].total),
+        loadingCalcul: false
+      });
 
     } catch (error) {
       console.log(error);
@@ -343,7 +352,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     try {
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -353,7 +362,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         produits: produits,
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-        
+
       });
       set({ CreationUniquesLastYear: Number(response.data[0].total) });
 
@@ -379,7 +388,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     try {
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -389,11 +398,15 @@ export const UsePigeDashboardStore = create((set, get) => ({
         produits: produits,
         date_debut: date1,
         date_fin: date2,
-        
+
 
       });
-     
-      set({ BudgetBrut: Number(response.data[0].total).toFixed(2) });
+      if (Number(response.data[0].total) < 1000) {
+        set({ BudgetBrut: Number(response.data[0].total).toFixed(2)+"M" });
+      } else {
+        set({ BudgetBrut: Number(response.data[0].total).toFixed(2)+"Mrd" });
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -413,10 +426,10 @@ export const UsePigeDashboardStore = create((set, get) => ({
     email,
     parametre
   ) => {
-   try {
+    try {
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -453,7 +466,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -491,7 +504,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -501,7 +514,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         produits: produits,
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-       
+
       });
 
       set({ SupportDiffusionLastYear: Number(response.data[0].total) });
@@ -537,9 +550,45 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2
       });
-    console.log("response couleur", response)
+      console.log("response couleur", response)
       set({ Couleur: Number(response.data.data1[0].total) });
       set({ NoireBlanc: Number(response.data.data2[0].total) });
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  CouleurLastYear:0,
+  NoireBlancLastYear:0,
+  getCouleurLastYear: async (
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre) => {
+    try {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        email: email,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+      });
+      console.log("response couleur", response)
+      set({ CouleurLastYear: Number(response.data.data1[0].total) });
+      set({ NoireBlancLastYear: Number(response.data.data2[0].total) });
 
     } catch (error) {
       console.log(error);
@@ -636,6 +685,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log(error);
     }
   },
+  loadingFamille: false,
   // getAnnonceursActif: async (
   //   supports,
   //   familles,
@@ -731,12 +781,15 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-
+    console.log('resposne top 20', email,
+      parametre,
+      base)
+    set({ loadingFamille: true })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -747,15 +800,19 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log('resposne top 20',response)
-      set({ Top20famillesSectorielles: response.data});
+
+      set({
+        Top20famillesSectorielles: response.data,
+        loadingFamille: false
+      });
       set({ isloading: false })
-      
+
 
     } catch (error) {
       console.log(error);
     }
   },
+  loadingAnnonceur: false,
   getTop20Annonceurs: async (
     supports,
     familles,
@@ -772,13 +829,13 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-    
+    set({ loadingAnnonceur: true })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
         media: media,
         email: email,
-        supports:supports,
+        supports: supports,
         familles: familles,
         classes: classes,
         secteurs: secteurs,
@@ -789,8 +846,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-     console.log('reponse',response)
-      set({ Top20Annonceurs: response.data});
+      console.log('reponse', response)
+      set({
+        Top20Annonceurs: response.data,
+        loadingAnnonceur: false
+      });
       set({ isloading: false })
 
 
@@ -800,6 +860,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     }
 
   },
+  loadingMarche: false,
   getPrtMarchet: async (
     supports,
     familles,
@@ -816,8 +877,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
+    set({ loadingMarche: true })
     try {
-      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {   
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
         email: email,
         supports: supports,
         familles: familles,
@@ -831,11 +893,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
         base: base,
         date_debut: date1,
         date_fin: date2,
-  
+
       });
 
-      console.log('response',response)
-      set({ PartMarche: response.data});
+      console.log('response marché', response)
+      set({
+        PartMarche: response.data,
+        loadingMarche: false,
+      });
 
     } catch (error) {
       console.log(error);
@@ -849,6 +914,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
   },
+
+  loadingMarque: false,
+
   getTop20Marques: async (
     supports,
     familles,
@@ -865,7 +933,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-
+    set({ loadingMarque: true })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
@@ -887,8 +955,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
       // console.log('rangs',rangs)
       // console.log('media',media)
       // console.log('base',base)
-      console.log('response',response)
-      set({ Top20marques: response.data });
+      console.log('response', response)
+      set({
+        Top20marques: response.data,
+        loadingMarque: false,
+      });
       set({ isloading: false })
 
 
@@ -896,6 +967,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log(error);
     }
   },
+  loadingProduit: false,
   getTop20Produits: async (
     supports,
     familles,
@@ -912,7 +984,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-
+    set({ loadingProduit: true })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
@@ -931,8 +1003,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log('response 20 produits',response)
-      set({ Top20produits: response.data });
+      console.log('response 20 produits', response)
+      set({
+        Top20produits: response.data,
+        loadingProduit: false
+      });
       set({ isloading: false })
 
 
@@ -940,6 +1015,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log(error);
     }
   },
+  loadingFormat: false,
   getRepartitionFormat: async (
     supports,
     familles,
@@ -956,7 +1032,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-
+    set({ loadingFormat: false })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
@@ -975,14 +1051,18 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      // console.log('response',response)
-      set({ FormatRepartition: response.data });
+      console.log('response marché', response)
+      set({
+        FormatRepartition: response.data,
+        loadingFormat: false,
+      });
       set({ isloading: false })
 
     } catch (error) {
       console.log(error);
     }
   },
+  loadingAnnonceurSupport: false,
   getAnnonceursParSupport: async (
     supports,
     familles,
@@ -999,7 +1079,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-
+    set({ loadingAnnonceurSupport: false })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
@@ -1018,7 +1098,10 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
       });
       // console.log("response",response)
-      set({ AnnonceurParSupport: response.data });
+      set({
+        AnnonceurParSupport: response.data,
+        loadingAnnonceurSupport: false
+      });
       set({ isloading: false })
 
 
@@ -1026,7 +1109,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log(error);
     }
   },
-
+  loagingCreationAnnonceur: false,
   getCreationParAnnonceur: async (
     supports,
     familles,
@@ -1043,7 +1126,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-
+    set({ loagingCreationAnnonceur: true })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
@@ -1062,8 +1145,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log("response",response)
-      set({ CreationParAnnonceur: response.data });
+      console.log("response", response)
+      set({
+        CreationParAnnonceur: response.data,
+        loagingCreationAnnonceur: false
+      });
       set({ isloading: false })
 
 
@@ -1370,9 +1456,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
         produits: produits,
         media: media,
         date_debut: date1,
-        date_fin:date2,
+        date_fin: date2,
       });
-      console.log('response duree',response)
+      console.log('response duree', response)
       if (Number(response.data[0].total) > 3600) {
         set({ DureeTotal: (Number(response.data[0].total) / 3600).toFixed(2) + "H" });
       } else {
@@ -1413,14 +1499,12 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      // console.log('response duree',response)
-      if (Number(response.data[0].count) > 3600) {
-        set({ DureeTotalLastYear: (Number(response.data[0].total) / 3600).toFixed(2) + "H" });
+      
+      if (Number(response.data[0].total) > 3600) {
+        set({ DureeTotalLastYear: (Number(response.data[0].total)/3600).toFixed(2) + "H" });
       } else {
         set({ DureeTotalLastYear: Number(response.data[0].total) + "s" });
-
       }
-
 
     } catch (error) {
       console.log(error);
@@ -1458,8 +1542,13 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-       console.log('duree moyenne', response)
-      set({ DureeMoyenne: Number(response.data[0].proportion)});
+      console.log('duree moyenne', (Number(response.data[0].proportion)) + "s")
+      if(Number(response.data[0].proportion) > 3600){
+        
+        set({ DureeMoyenne:(Number(response.data[0].proportion) / 3600).toFixed(2) + "H" });
+       }else{
+         set({ DureeMoyenne:(Number(response.data[0].proportion).toFixed(2)) + "s" });
+       }
 
     } catch (error) {
       console.log(error);
@@ -1497,7 +1586,13 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
       console.log('duree moyenne last', response)
-      set({ DureeMoyenneLastYear: Number(response.data[0].proportion).toFixed(2) });
+      if(Number(response.data[0].proportion) >3600){
+        
+       set({ DureeMoyenneLastYear:(Number(response.data[0].proportion) / 3600).toFixed(2) + "H" });
+      }else{
+        set({ DureeMoyenneLastYear:(Number(response.data[0].proportion).toFixed(2)) + "s" });
+      }
+      //set({ DureeMoyenneLastYear: Number(response.data[0].proportion).toFixed(2) });
 
     } catch (error) {
       console.log(error);
@@ -1530,11 +1625,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut:date1,
-        date_fin:date2,
+        date_debut: date1,
+        date_fin: date2,
 
       });
-      console.log("pic",response.data[0].interval_start)
+      console.log("pic", response.data[0].interval_start)
       set({ PicCommunication: response.data[0] });
 
     } catch (error) {
@@ -1574,8 +1669,16 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      console.log("pic",response)
-      set({ PicCommunicationLastYear: response.data[0] });
+      console.log("pic", response)
+      if(response.data[0]){
+        set({ PicCommunicationLastYear: response.data[0] });
+      }else{
+        set({ PicCommunicationLastYear: {
+          count: 0,
+          interval_start: "--:--",
+          interval_end: "--:--",} });
+      }
+     
 
     } catch (error) {
       console.log(error);
@@ -1623,11 +1726,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
   },
 
- formatDateToFrench:(dateString)=> {
+  formatDateToFrench: (dateString) => {
     // Define an array of French month abbreviations
     const frenchMonths = [
-        "Jan", "Fév", "Mars", "Avr", "Mai", "Juin",
-        "Juil", "Août", "Sept", "Oct", "Nov", "Déc"
+      "Jan", "Fév", "Mars", "Avr", "Mai", "Juin",
+      "Juil", "Août", "Sept", "Oct", "Nov", "Déc"
     ];
 
     // Parse the input date string into a Date object
@@ -1635,7 +1738,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
     // Ensure the date is valid
     if (isNaN(date.getTime())) {
-        throw new Error("Invalid date format");
+      throw new Error("Invalid date format");
     }
 
     // Extract day, month, and year
@@ -1648,6 +1751,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
     // Format the date as "Fév 4 2025"
     return `${monthAbbreviation} ${day} ${year}`;
-}
+  }
 
 }))
+
+
+
+
+

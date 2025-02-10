@@ -152,7 +152,7 @@ function Header() {
             <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
           </span>
 
-          <span className="no-icon" style={{
+          {/* <span className="no-icon" style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -166,7 +166,7 @@ function Header() {
             <img src={powerbi} className="" alt="powerbi" width="30px"/>
           </Link>
           <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
-        </span>
+        </span> */}
 
           <span className="no-icon" style={{
             display: "flex",

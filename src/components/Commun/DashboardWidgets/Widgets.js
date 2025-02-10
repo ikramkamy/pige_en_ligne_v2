@@ -1,5 +1,8 @@
 import { TrendingUp } from "lucide-react"
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer } from "recharts"
+import {
+  Label, PolarGrid, PolarRadiusAxis,
+  RadialBar, RadialBarChart, ResponsiveContainer
+} from "recharts"
 import { Button } from "@mui/material";
 import {
   Card,
@@ -8,42 +11,45 @@ import {
   Col
 } from "react-bootstrap";
 import UndoIcon from '@mui/icons-material/Undo';
-export const Widget = ({ icon, title, value, valueLastYear }) => {
+export const Widget = ({ icon, title, value, valueLastYear, valuepic }) => {
   return (
-  <Col lg="4" sm="6">
-    <Card className="card-stats" style={{ cursor: "pointer" ,
-      backgroundColor:"#010A41E6", color:"white", 
-      border:"1px solid lightgrey"
+    <Col lg="4" sm="6">
+      <Card className="card-stats" style={{
+        cursor: "pointer",
+        backgroundColor: "#010A41E6", color: "white",
+        border: "1px solid lightgrey"
       }}>
-      <Card.Body>
-        <Row>
-          <Col xs="5">
-            <div className="icon-big text-center icon-warning">
-
-              <img src={icon} alt="immar media" style={{ width: "50px" }} />
-            </div>
-          </Col>
-          <Col xs="7">
-            <div className="numbers">
+        <Card.Body>
+          <Row>
+            <Col xs="5">
+              <div className="icon-big text-center icon-warning">
+                
+                <img src={icon} alt="immar media" style={{ width: "50px" }} />
+              </div>
+            </Col>
+            <Col xs="7">
+              <div className="numbers">
+              
+                <Card.Title as="h3" style={{ color: "white" }}>{value}</Card.Title>
              
-              <Card.Title as="h3" style={{color:"white"}}>{value}</Card.Title>
+                <p className="text-grey-200 text-sm">{valuepic}</p>
+              </div>
+            </Col>
+          </Row>
+        </Card.Body>
+        <Card.Footer  >
+          <hr></hr>
+
+          <div className="stats" style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ color: "white" }}>
+              {/* <UndoIcon /> */}
+              VS {new Date().getFullYear() - 1} : {valueLastYear}
             </div>
-          </Col>
-        </Row>
-      </Card.Body>
-      <Card.Footer  >
-        <hr></hr>
-       
-        <div className="stats" style={{display:"flex", justifyContent:"space-between"}}>
-          <div style={{color:"white"}}>
-          {/* <UndoIcon /> */}
-          VS {new Date().getFullYear()-1} : {valueLastYear}
+            <p className="card-category" style={{ color: "white" }}>{title}</p>
           </div>
-          <p className="card-category" style={{ color: "white" }}>{title}</p>
-        </div>
-      </Card.Footer>
-    </Card>
-  </Col>)
+        </Card.Footer>
+      </Card>
+    </Col>)
 }
 
 
@@ -54,10 +60,10 @@ export const Widget = ({ icon, title, value, valueLastYear }) => {
 
 
 
-export const WidgetShadcn = ({value, valueLastYear}) => {
+export const WidgetShadcn = ({ value, valueLastYear }) => {
   const chartData = [{ browser: "Télevision", visitors: value, fill: "red" }]
   return (
-    <Card className="flex flex-col" style={{backgroundColor:"lightblue"}}>
+    <Card className="flex flex-col" style={{ backgroundColor: "lightblue" }}>
       <ResponsiveContainer width="100%" minHeight={400} className="px-4" >
         <RadialBarChart data={chartData} endAngle={100} innerRadius={80} outerRadius={140}>
           <PolarGrid

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import axios from 'axios';
-const PORT = "https://pige-dev.immar-media.com/api/index.php"
+import dayjs from "dayjs";
+const PORT = "https://pige.immar-media.com/api/index.php"
 const Limit_Data_Allowed = 200000
 export const UseCountStore = create((set, get) => ({
   PigeCount: 0,
@@ -64,8 +65,8 @@ export const UseCountStore = create((set, get) => ({
       
     try {
       set({ IsCounting: true })
-      var media_type = media == "" ? "presse" : media;
-      console.log("callling count last year",`${PORT}/${media_type}/count`)
+      var media_type = media == "" ? "presse" : media;    
+      
       const response = await axios.post(`${PORT}/${media_type}/count`, {
         email: email,
         supports: supports,
@@ -79,7 +80,7 @@ export const UseCountStore = create((set, get) => ({
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      console.log("resposne",response)
+      console.log('response',response)
       var dataLength = Number(response.data.total)
       if (dataLength > Limit_Data_Allowed) {
         set({         

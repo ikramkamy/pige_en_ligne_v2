@@ -2,44 +2,62 @@ import { create } from 'zustand'
 const PORT = "https://pige.immar-media.com/api/index.php";
 import axios from 'axios';
 export const UseGraphStore = create((set, get) => ({
-  
-    AnnonceursOptions:[],
-    MarcheOptions:[],
-    AnnonceurSupportOptions:[],
-    CreationParAnnonceurOptions:[],
-    FamillesOptions:[],
-    AnnonceurOptions:[],
-    MarqueOptions:[],
-    ProduitsOptions:[],
-    EvolutionData:[],
-    graphColor:"#2196f3",
 
-    setAnnonceursOptions:(options)=>{
-        set({AnnonceursOptions:options})         
+    AnnonceursOptions: [],
+    MarcheOptions: [],
+    FormatOptions: [],
+    AnnonceurSupportOptions: [],
+    CreationParAnnonceurOptions: [],
+    FamillesOptions: [],
+    AnnonceurOptions: [],
+    MarqueOptions: [],
+    ProduitsOptions: [],
+    EvolutionData: [],
+    graphColor: "#2196f3",
+    baseGraphs: {
+        "evolution": "",
+        "top20famille": "",
+        "top20annonceur": "",
+        "top20marque": "",
+        "top20produit": "",
+        "repartitionmarche": "",
+        "repartitionformat": "",
+        "creationParAnnonceur": "",
+        "annonceurSupport": "",
+        "annonceurparsupport":"",
+        "creationparannonceur":""
     },
-    setMarcheOptions:(options)=>{ 
-        set({MarcheOptions:options})         
+
+    setAnnonceursOptions: (options) => {
+        set({ AnnonceursOptions: options })
     },
-    setAnnonceurSupportOptions:(options)=>{ 
-        set({AnnonceurSupportOptions:options})         
+    setMarcheOptions: (options) => {
+        set({ MarcheOptions: options })
     },
-    setCreationParAnnonceurOptions:(options)=>{ 
-        set({CreationParAnnonceurOptions:options})         
+    setAnnonceurSupportOptions: (options) => {
+        set({ AnnonceurSupportOptions: options })
     },
-    setFamillesOptions:(options)=>{ 
-        set({FamillesOptions:options})         
+    setCreationParAnnonceurOptions: (options) => {
+        set({ CreationParAnnonceurOptions: options })
     },
-    setAnnonceurOptions:(options)=>{ 
-        set({AnnonceurOptions:options})         
+    setFamillesOptions: (options) => {
+        set({ FamillesOptions: options })
     },
-    setMarqueOptions:(options)=>{ 
-        set({MarqueOptions:options})         
+    setAnnonceurOptions: (options) => {
+        set({ AnnonceurOptions: options })
+    },
+    setMarqueOptions: (options) => {
+        set({ MarqueOptions: options })
     }
     ,
-    setProduitsOptions:(options)=>{ 
-        set({ProduitsOptions:options})         
+    setFormatOptions: (options) => {
+        set({ FormatOptions: options })
     },
-    getEvolutionData:async(
+    setProduitsOptions: (options) => {
+        set({ ProduitsOptions: options })
+    },
+    loadingEvolution:false,
+    getEvolutionData: async (
         supports,
         familles,
         classes,
@@ -53,15 +71,15 @@ export const UseGraphStore = create((set, get) => ({
         media,
         email,
         parametre,
-        base)=>{
-
+        base) => {
+         set({loadingEvolution:true})
         try {
-          
+
             let response = await axios.post(`${PORT}/${media}/dashboard/${parametre}/${base}`, {
                 email: email,
                 familles: familles,
                 classes: classes,
-                supports:supports,
+                supports: supports,
                 secteurs: secteurs,
                 varieties: varieties,
                 annonceurs: annonceurs,
@@ -70,16 +88,36 @@ export const UseGraphStore = create((set, get) => ({
                 date_debut: date1,
                 date_fin: date2,
             })
-            console.log('resposne',response)
-            
-            set({ EvolutionData: response.data })
-            
-      
-          } catch (error) {
+            console.log('resposne', response)
+
+            set({ EvolutionData: response.data,
+                loadingEvolution:false,
+             })
+
+
+        } catch (error) {
             console.log(error);
-          }},
-    seCodeColor:(colorbase)=>{
-       set({graphColor:colorbase})
-    }
+        }
+    },
+    seCodeColor: (colorbase) => {
+        set({ graphColor: colorbase })
+    },
+    secondsToHoursObject(seconds) {
+        if (typeof seconds !== 'number' || seconds < 0) {
+            throw new Error("Input must be a non-negative number.");
+        }
+
+        const hours = (seconds / 3600);
+        return `${hours.toFixed(2)}`;
+    },
+    setBaseGraphs: (key, value) => {
+        set((state) => ({
+            baseGraphs: {
+                ...state.baseGraphs,
+                [key]: value,
+            },
+        }));
+    },
+
 
 }))

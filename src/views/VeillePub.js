@@ -728,17 +728,17 @@ export default function VeillePub() {
       </Container>
 
 
-      <NetworkErrorPopup
+      {/* <NetworkErrorPopup
         OpenNetworkPopup={OpenNetworkPopupVeille || OpenNetworkPopupCount}
         handleCloseNetworkPopup={handleCloseNetworkPopupCount}
 
-      />
+      /> */}
       {/* error Popup filter pige*/}
-      <NetworkErrorPopup
+      {/* <NetworkErrorPopup
         OpenNetworkPopup={ErrorFetchFilter}
         handleCloseNetworkPopup={HandeErrorFetchFiletrs}
         message={messageFilterError}
-      />
+      /> */}
     </div>
   );
 }

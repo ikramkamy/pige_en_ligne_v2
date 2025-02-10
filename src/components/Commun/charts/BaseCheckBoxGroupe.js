@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { pink ,green, blue, orange} from '@mui/material/colors';
+import { pink, green, blue, orange } from '@mui/material/colors';
 import Checkbox from '@mui/material/Checkbox';
 import { useState } from 'react';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
@@ -7,17 +7,16 @@ import { UseLoginStore } from 'store/dashboardStore/useLoginStore';
 import { UseGraphStore } from 'store/GraphStore';
 // Define labels and their corresponding names
 const checkboxes = [
-    { label: 'Volume', name: 'volume',value:'volume', color: green[600], checkedColor: green[600],codeColor:"#43a047"},
-    { label: 'Budget', name: 'budget',value:'budget', color: blue[500], checkedColor: blue[500],codeColor:"#2196f3"},
-    { label: 'Durée', name: 'durée',value:'duree', color: pink[800], checkedColor: pink[600],codeColor:"#d81b60"}, 
+  { label: 'Volume', name: 'volume', value: 'volume', color: green[600], checkedColor: green[600], codeColor: "#43a047" },
+  { label: 'Budget', name: 'budget', value: 'budget', color: blue[500], checkedColor: blue[500], codeColor: "#2196f3" },
+  { label: 'Durée', name: 'durée', value: 'duree', color: pink[800], checkedColor: pink[600], codeColor: "#d81b60" },
 ];
 
-export default function ColorCheckboxes({ChangeBaseFunction, parametre}) {
-
-  const [baseGraph,setBaseGraph]=React.useState('')
-  const {email}=UseLoginStore((state)=>state)
-  const {seCodeColor}=UseGraphStore((state)=>state)
-  const { 
+export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre, base }) {
+  const { email } = UseLoginStore((state) => state)
+  const { seCodeColor, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
+  const[b,setB]=useState((''))
+  const {
     Filtersupports,
     Filterfamilles,
     Filterclassesids,
@@ -30,11 +29,17 @@ export default function ColorCheckboxes({ChangeBaseFunction, parametre}) {
     date2,
     media,
 
-  }=UseFiltersStore((state)=>state)
-  const handelBaseGraphChange=(item,value)=>{
-    setBaseGraph(checkboxes[value].value)
+  } = UseFiltersStore((state) => state)
+  const LoacalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
+  const handelBaseGraphChange = (item, value) => {
+
     seCodeColor(checkboxes[value].value)
-    
+    // alert(`êtes-vous sûr de vouloir changer 
+    //   de base en ${checkboxes[value].value} ${parametre}`)
+    setBaseGraphs && setBaseGraphs(parametre, checkboxes[value].value)
+    //console.log('LoacalBaseGraph',parametre, checkboxes[value].value, ChangeBaseFunction)
+    setB(checkboxes[value].value)
+    // alert(``)
     ChangeBaseFunction(
       Filtersupports,
       Filterfamilles,
@@ -49,21 +54,38 @@ export default function ColorCheckboxes({ChangeBaseFunction, parametre}) {
       media,
       email,
       parametre,
-      baseGraph)
+      checkboxes[value].value)
   }
-
+  // React.useEffect(()=>{
+  //   ChangeBaseFunction(
+  //     Filtersupports,
+  //     Filterfamilles,
+  //     Filterclassesids,
+  //     Filtersecteursids,
+  //     Filtervarietiesids,
+  //     Filterannonceursids,
+  //     Filtermarquesids,
+  //     Filterproduitsids,
+  //     date1,
+  //     date2,
+  //     media,
+  //     email,
+  //     parametre,
+  //     b)
+  // },[baseGraphs])
+  console.log('LoacalBaseGraph',LoacalBaseGraph)
   return (
     <div>
       {checkboxes.map((item, index) => (
         <React.Fragment key={index}>
           <Checkbox
-           checked={baseGraph===item.value}
-           onClick={()=>handelBaseGraphChange(item,index)}
+            checked={LoacalBaseGraph === item.value}
+            onClick={() => handelBaseGraphChange(item, index)}
             {...{
               ...label,
-              inputProps: { 
-                ...label.inputProps, 
-                name: item.name, 
+              inputProps: {
+                ...label.inputProps,
+                name: item.name,
               },
             }}
             color={item.color ? 'default' : item.color} // Use 'default' for custom colors
