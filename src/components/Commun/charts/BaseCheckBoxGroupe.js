@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { pink, green, blue, orange } from '@mui/material/colors';
 import Checkbox from '@mui/material/Checkbox';
+import { Radio } from '@mui/material';
 import { useState } from 'react';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UseLoginStore } from 'store/dashboardStore/useLoginStore';
@@ -73,12 +74,22 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
   //     parametre,
   //     b)
   // },[baseGraphs])
-  console.log('LoacalBaseGraph',LoacalBaseGraph)
+  const [disable,setDisable]=useState(false)
+  React.useEffect(()=>{
+    if(parametre=="annonceurparsupport" || parametre=="creationparannonceur"){
+      setDisable(true)
+    }else{
+      setDisable(false)
+    }
+    console.log('LoacalBaseGraph',LoacalBaseGraph)
+  },[])
+  
   return (
     <div>
       {checkboxes.map((item, index) => (
         <React.Fragment key={index}>
-          <Checkbox
+          <Radio
+            disabled={disable}
             checked={LoacalBaseGraph === item.value}
             onClick={() => handelBaseGraphChange(item, index)}
             {...{

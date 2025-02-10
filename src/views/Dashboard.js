@@ -1170,7 +1170,7 @@ getCouleurLastYear,
       marginBottom: resStyle.marginTopAll
     }}
     >
-      <Button onClick={test}>TEST</Button>
+      {/* <Button onClick={test}>TEST</Button> */}
       <Container fluid style={{ display: "flex", flexDirection: "column" }} >
         <Row className="mt-3" style={{
           display: "flex",
@@ -1316,14 +1316,14 @@ getCouleurLastYear,
                         <Widget
                           icon={iconTime}
                           value={DureeMoyenne}
-                          title="Durée Myenne par Spot diffusé"
+                          title="Durée moyenne par spot"
                           valueLastYear={DureeMoyenneLastYear}
                         />
                         <Widget
                           icon={iconPis}
-                          valuepic={PicCommunication.count}
-                          value={`${PicCommunication.interval_start.slice(0, -3)} à 
+                          valuepic={`${PicCommunication.interval_start.slice(0, -3)} à 
                         ${PicCommunication.interval_end.slice(0, -3)}`}
+                          value={PicCommunication.count}
                           title="Pic publicitaire"
                           valueLastYear={`${PicCommunicationLastYear?.interval_start.slice(0, -3)} à ${PicCommunicationLastYear?.interval_end.slice(0, -3)}`}
                         />

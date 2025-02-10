@@ -23,15 +23,21 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic }) => {
           <Row>
             <Col xs="5">
               <div className="icon-big text-center icon-warning">
-                
+
                 <img src={icon} alt="immar media" style={{ width: "50px" }} />
               </div>
             </Col>
             <Col xs="7">
               <div className="numbers">
-              
-                <Card.Title as="h3" style={{ color: "white" }}>{value}</Card.Title>
-             
+
+                <Card.Title as="h3" style={{
+                  color: "white",
+                  fontSize: "40px", fontWeight: "400",
+
+
+
+                }}>{value}</Card.Title>
+
                 <p className="text-grey-200 text-sm">{valuepic}</p>
               </div>
             </Col>
@@ -41,11 +47,18 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic }) => {
           <hr></hr>
 
           <div className="stats" style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={{ color: "white" }}>
+            <div style={{
+              color: "white",
+              fontSize: "18px"
+            }}>
               {/* <UndoIcon /> */}
               VS {new Date().getFullYear() - 1} : {valueLastYear}
             </div>
-            <p className="card-category" style={{ color: "white" }}>{title}</p>
+            <p className="card-category"
+              style={{
+                color: "white",
+                fontSize: "18px"
+              }}>{title}</p>
           </div>
         </Card.Footer>
       </Card>

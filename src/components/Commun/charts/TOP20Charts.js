@@ -62,21 +62,21 @@ export default function GridDemo({ date1, date2, media, base }) {
   const top20familleModified = Top20famillesSectorielles.map((e) => {
     return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   })
-  const Top20AnnonceursModified = Top20Annonceurs.map((e) => { return { name: e.Annonceur_Lib.toLowerCase(), proportion: e.proportion, total: e.total, average: e.average } })
+  const Top20AnnonceursModified = Top20Annonceurs.map((e) => { return { name: e.Annonceur_Lib, proportion: e.proportion, total: e.total, average: e.average } })
 
   const top20marquemodified = Top20marques.map((e) => {
-    return { name: e.Marque_Lib.toLowerCase(), proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Marque_Lib, proportion: e.proportion, total: e.total, average: e.average }
   }
   )
   const Top20produitsmodified = Top20produits.map((e) => {
-    return { name: e.Produit_Lib.toLowerCase(), proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Produit_Lib, proportion: e.proportion, total: e.total, average: e.average }
   }
   )
   const AnnonceurParSupportModified = AnnonceurParSupport.map((e) => {
     return { name: e.Support_Lib, proportion: e.proportion, total: e.annonceur_count, average: e.average_ratio }
   })
   const CreationParAnnonceurModified = CreationParAnnonceur.map((e) => {
-    return { name: e.Annonceur_Lib.toLowerCase(), proportion: e.proportion, total: e.count, average: e.average_ratio }
+    return { name: e.Annonceur_Lib, proportion: e.proportion, total: e.count, average: e.average_ratio }
   })
   const PartMarcheModified = PartMarche.map((e) => {
     return { name: e.Support_Lib, proportion: e.proportion, total: e.total, average: e.average }
@@ -130,41 +130,7 @@ export default function GridDemo({ date1, date2, media, base }) {
           />
         </Col>
       </Row>
-      <Row>
-        <Col>
-          < PieChartVelson
-            title="Part Marché"
-            date1={date1}
-            date2={date2}
-            data={PartMarcheModified}
-            SetOptionFunction={setMarcheOptions}
-            ChangeBaseFunction={getPrtMarchet}
-            parametre="repartitionmarche"
-            filter="Marché"
-            initialOptions={MarcheOptions}
-            isloading={loadingMarche}
-
-          />
-        </Col>
-        <Col>
-
-          < PieChartVelson
-            title="Répartition par Format"
-            date1={date1}
-            date2={date2}
-            data={FormatRepartitionModified}
-            SetOptionFunction={setFormatOptions}
-            ChangeBaseFunction={getRepartitionFormat}
-            parametre="repartitionformat"
-            filter="Format"
-            initialOptions={FormatOptions}
-            isloading={loadingFormat}
-          />
-
-        </Col>
-
-
-      </Row>
+     
       <Row className='mt-4'>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
@@ -219,12 +185,46 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="Créations uniques"
             parametre="creationparannonceur"
             isloading={loagingCreationAnnonceur}
-
+            
           />
         </Col>
       </Row>
 
+      <Row>
+        <Col>
+          < PieChartVelson
+            title="Part Marché"
+            date1={date1}
+            date2={date2}
+            data={PartMarcheModified}
+            SetOptionFunction={setMarcheOptions}
+            ChangeBaseFunction={getPrtMarchet}
+            parametre="repartitionmarche"
+            filter="Marché"
+            initialOptions={MarcheOptions}
+            isloading={loadingMarche}
 
+          />
+        </Col>
+        <Col>
+
+          < PieChartVelson
+            title="Répartition par Format"
+            date1={date1}
+            date2={date2}
+            data={FormatRepartitionModified}
+            SetOptionFunction={setFormatOptions}
+            ChangeBaseFunction={getRepartitionFormat}
+            parametre="repartitionformat"
+            filter="Format"
+            initialOptions={FormatOptions}
+            isloading={loadingFormat}
+          />
+
+        </Col>
+
+
+      </Row>
       {/* <Row>
     
     

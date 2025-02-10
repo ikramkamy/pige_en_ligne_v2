@@ -1079,7 +1079,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-    set({ loadingAnnonceurSupport: false })
+    set({ loadingAnnonceurSupport: true })
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {

@@ -45,12 +45,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export const PieChartVelson = ({ date1, date2, data, title, isloading,
   ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
+    const { base } = UseFiltersStore((state) => state)
     const { PartMarche, FormatRepartition } = UsePigeDashboardStore((state) => state);
     const { MarcheOptions, setBaseGraphs,baseGraphs } = UseGraphStore((state) => state)
   //const chartDatalabelsBarColors = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c']
   const [chartDatalabelsBarColors, setChartDatalabelsBarColors] = useState([])
-  const chartDatalabelsBarColorsVolume = ['#C8E6C9', '#81C784', '#43A047', '#2E7D32', '#1B5E20'];
-  const chartDatalabelsBarColorsBudget = ['#BBDEFB', '#64B5F6', '#2196F3', '#1976D2', '#0D47A1'];
+  const chartDatalabelsBarColorsVolume = ['#2E7D32', '#1B5E20', '#154A18', '#0F3812', '#0A270C'];
+  const chartDatalabelsBarColorsBudget = ['#1565C0', '#0D47A1', '#0B3C91', '#092C6C', '#061E4A'];
   const chartDatalabelsBarColorsDuree = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c'];
   const colorMapping = [
     { value: 'volume', codeColor: chartDatalabelsBarColorsVolume },
@@ -68,7 +69,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   //   "#43a047",
  
 
-  const { base } = UseFiltersStore((state) => state)
+  
   const [average, setAverage] = useState(0);
   const [dynamicList, setDynamicList] = useState([])
   const [array, setArray] = useState([])
