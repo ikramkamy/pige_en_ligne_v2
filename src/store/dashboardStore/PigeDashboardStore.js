@@ -1689,6 +1689,90 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
   },
+  DiffusionParCreation:0,
+  getDiffusionParCreation: async (
+    supports,
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre
+  ) => {
+    try {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        supports: supports,
+        email: email,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: date1,
+        date_fin: date2,
+
+      });
+      console.log("response",response.data)
+     set({ DiffusionParCreation: Number(response.data[0].average).toFixed(2) });
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
+
+  },
+  DiffusionParCreationLastYear:0,
+  getDiffusionParCreationLastYear: async (
+    supports,
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre
+  ) => {
+    try {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${parametre}`, {
+        supports: supports,
+        email: email,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+
+      });
+      
+      set({ DiffusionParCreationLastYear: Number(response.data[0].average).toFixed(2) });
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
+
+  },
   sendDownloadLink: async (
     email,
     date1,

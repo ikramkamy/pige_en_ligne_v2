@@ -31,20 +31,21 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) =>
             <Col xs="7">
               <div className="numbers">
 
-                <Card.Title as="h3" style={{
+                {/* <Card.Title as="h3" style={{
                   color: "white",
-                  fontSize: "40px", fontWeight: "400",
-
-
-                  
-                }}>{value}</Card.Title>
-                {typeof(value)}
+                  fontSize: "35px", fontWeight: "400",      
+                }}>{value}</Card.Title> */}
+                
                 <CountUp
+                style={{
+                  color: "white",
+                  fontSize: "35px", fontWeight: "400", 
+                }}
                   start={0}
                   prefix=""
                   suffix={unite}
                   separator=""
-                  end={typeof(value)=="string"? 200:100}
+                  end={typeof(value)=='string' ? Number(value?.split(" ")[0]) : value}
                   decimals={0}
                   duration={4}
 
@@ -59,8 +60,8 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) =>
 
           <div className="stats" style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{
-              color: "white",
-              fontSize: "18px"
+              color: "#FFFFFF4D",
+              fontSize: "13px"
             }}>
               {/* <UndoIcon /> */}
               VS {new Date().getFullYear() - 1} : {valueLastYear}

@@ -83,7 +83,7 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
     }
     console.log('LoacalBaseGraph', LoacalBaseGraph)
   }, [])
-
+console.log('b',b)
   return (
     <div style={{ display: "flex", width:"" }}>
 
@@ -102,18 +102,17 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
         >
           
           <span
-            className='mx-2'
+           className="mx-2 px-2 border border-light rounded py-2 hover-effect"
             style={{
               //marginLeft: 8,
               width: "fit-content",
-             
+              backgroundColor:b==item.value? item.checkedColor:"",
               border: "1px solid lightgrey",
               borderRadius: "5px",
-              padding: "10px",
+              padding: "5px",
+              fontSize:"12px",
               cursor:"pointer",
-              '& hover ': {
-                backgroundColor: "lightgrey",
-              }
+              
               
             }}>
               {item.label}
@@ -131,3 +130,4 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
 
 // Shared label configuration
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+

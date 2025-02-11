@@ -15,7 +15,7 @@ import { UseGraphStore } from "store/GraphStore";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import ColorCheckboxes from './BaseCheckBoxGroupe';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Container,Row,Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import './style.css'
 export default function InteractiveLineChart({ base, ChangeBaseFunction, parametre, isloading }) {
   const listColors = [
@@ -27,6 +27,15 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   const { date1, date2 } = UseFiltersStore((state) => state)
   const { formatDateToFrench } = UsePigeDashboardStore((state) => state)
   const { EvolutionData, secondsToHoursObject, baseGraphs, setBaseGraphs } = UseGraphStore((state) => state);
+
+  const arrTosort = EvolutionData?.heure.map((e) => {
+    return ({
+      date: e.Date,
+      heure: e.interval_start.split(':')[0] + ":" + e.interval_end.split(':')[1],
+      total: e.total,
+      jour: e.Jour,
+    })
+  })
   const sortByHeure = (arr) => {
     return arr.sort((a, b) => {
       // Convert "HH:MM" to minutes for accurate comparison
@@ -38,28 +47,30 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     });
   }
 
-
-  const EvolutionDataHeure = EvolutionData?.heure
-    ? sortByHeure(EvolutionData.heure).map((e) => ({
-      date: e.Date,
+  const EvolutionDataHeure = sortByHeure(arrTosort).map((e) => {
+    return ({
       name: e.heure,
-      total: e.total,
+      date: e.Date,
+      total: Number(e.total),
       jour: e.Jour,
-    }))
-    : [];
+    })
+  })
+
+
+  console.log("EvolutionDataHeure", sortByHeure(arrTosort), EvolutionData, EvolutionDataHeure)
 
 
   const EvolutionDataJour = EvolutionData?.jour?.map((e) => ({
-    date: e.Date,
+    date: e.Jour,
     heur: e.heure,
-    total: e.total,
-    name: e.Jour,
+    total: Number(e.total),
+    name: e.Date,
   })) || [];
 
   const EvolutionDataMois = EvolutionData?.mois?.map((e) => ({
     date: e.Date,
     name: e.Mois,
-    total: e.total,
+    total: Number(e.total),
     jour: e.Jour,
   })) || [];
 
@@ -70,26 +81,34 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   };
   const [localColor, setLocalColor] = useState('red')
   const currentData = dataMapping[activeChart] || [];
+  const getMinvalue=(currentData)=>{
+    const min = currentData.reduce((acc, current) => Math.min(acc, current.total),
+    Infinity);
+    return min
+  }
   const chartConfig = {
     heure: {
       label: "Heure",
       //color: "#d81b60",
       color: localColor,
       total: EvolutionData?.heure?.length,
-      max: EvolutionDataHeure[0]?.total
+      max: EvolutionDataHeure[0]?.total,
+      min: getMinvalue(EvolutionDataHeure),
     },
     jour: {
       label: "Jour",
       color: localColor,
       total: EvolutionData?.jour?.length,
-      max: EvolutionDataJour[0]?.total
+      max: EvolutionDataJour[0]?.total,
+      min: getMinvalue(EvolutionDataJour),
 
     },
     mois: {
       label: "Mois",
       color: localColor,
       total: EvolutionData?.mois?.length,
-      max: EvolutionDataMois[0]?.total
+      max: EvolutionDataMois[0]?.total,
+      min :getMinvalue(EvolutionDataMois),
     },
   };
   const total = useMemo(() => {
@@ -99,7 +118,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       mois: "",
     };
   }, [EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois]);
-  //console.log("evolution", EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois)
+  console.log("evolution", EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois)
   // Custom Tooltip Content Function
   const LocalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
   const colorMapping = [
@@ -121,7 +140,8 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     console.log("baseGraphs", baseGraphs)
   }, [])
   const max = Number(chartConfig[activeChart]?.max)
-  // console.log("max",max,chartConfig)
+  const min = Number(chartConfig[activeChart]?.min)
+  console.log("min",min,chartConfig)
   const CustomTooltip = ({ active, payload, label }) => {
     console.log("payload", payload[0]?.payload)
     if (active && payload && payload.length) {
@@ -230,31 +250,31 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
           height: "100px"
 
         }}>
-      
-        <div className="custom_responsive">
-        <div>{formatDateToFrench(date1)} - {formatDateToFrench(date2)}</div>
-        <p className="fw-bold">
-          {LocalBaseGraph === "duree" ? "durée" : LocalBaseGraph} de diffusion par{" "}          
-          {Object.keys(chartConfig)
-            .filter((key) => key === activeChart)
-            .map((key) => (
-              <span key={key} className="fw-bold" style={{ fontWeight: "bold" }}>
-                {chartConfig[key].label}
-              </span>
-            ))}
-        </p>
-          
-  
-     </div>
- 
-      
+
+          <div className="custom_responsive">
+            <div>{formatDateToFrench(date1)} - {formatDateToFrench(date2)}</div>
+            <p className="fw-bold">
+              {LocalBaseGraph === "duree" ? "durée" : LocalBaseGraph} de diffusion par{" "}
+              {Object.keys(chartConfig)
+                .filter((key) => key === activeChart)
+                .map((key) => (
+                  <span key={key} className="fw-bold" style={{ fontWeight: "bold" }}>
+                    {chartConfig[key].label}
+                  </span>
+                ))}
+            </p>
+
+
+          </div>
+
+
         </div>
 
         <div className="flex gap " style={{
           display: "flex", width: "70%",
           justifyContent: "flex-end", alignItems: "center",
           height: "100px",
-          
+
         }}>
           {Object.keys(chartConfig).map((key) => (
             <div
@@ -319,7 +339,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
             tickCount={24}
           />
           <YAxis
-            domain={[0, max]}
+            domain={[min, max]}
             tick={{ fill: "#FFFFFF4D", fontSize: "12px" }}
           />
           <Tooltip content={<CustomTooltip />} />

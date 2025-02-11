@@ -11,7 +11,8 @@ import { BarchartShadcn, BarChartComponent } from "./BarChartNew"
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { CaseLower } from 'lucide-react';
 import { UseGraphStore } from 'store/GraphStore';
-import InteractiveLineChart from './DiffusionEvolutionChart'
+import InteractiveLineChart from './DiffusionEvolutionChart';
+import { InteractivePieChart } from './ShadCnPieChart'
 export default function GridDemo({ date1, date2, media, base }) {
   const { setFamillesOptions,
     FamillesOptions,
@@ -85,8 +86,8 @@ export default function GridDemo({ date1, date2, media, base }) {
   const FormatRepartitionModified = FormatRepartition?.map((e) => {
     return { name: e.Format, proportion: e.proportion, total: e.total, average: e.average }
   })
-  console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
- 
+  // console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
+
 
   return (
     <div >
@@ -130,7 +131,7 @@ export default function GridDemo({ date1, date2, media, base }) {
           />
         </Col>
       </Row>
-     
+
       <Row className='mt-4'>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
@@ -185,13 +186,13 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="Créations uniques"
             parametre="creationparannonceur"
             isloading={loagingCreationAnnonceur}
-            
+
           />
         </Col>
       </Row>
 
-      <Row>
-        <Col>
+      <Row className='mt-4'>
+        {/* <Col>
           < PieChartVelson
             title="Part Marché"
             date1={date1}
@@ -221,8 +222,17 @@ export default function GridDemo({ date1, date2, media, base }) {
             isloading={loadingFormat}
           />
 
+        </Col> */}
+        <Col>
+          <InteractivePieChart />
         </Col>
+        <Col>
+          <InteractivePieChart />
 
+        </Col>
+        <Col>
+          <InteractivePieChart />
+        </Col>
 
       </Row>
       {/* <Row>

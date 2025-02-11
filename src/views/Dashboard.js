@@ -12,6 +12,7 @@ import iconSupprt from 'assets/img/icons/radio-station.png';
 import iconTime from 'assets/img/icons/time.png';
 import iconDuree from 'assets/img/icons/stopwatch.png';
 import iconPis from 'assets/img/icons/rank.png';
+import DiffuIcon from 'assets/img/icons/seo-report.png'
 import MultipleSelectBase from 'components/Commun/BaseSelect';
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 import iconPresse from 'assets/img/icons/press-release.png';
@@ -137,8 +138,13 @@ function Dashboard() {
     getCreationParAnnonceur,
     loadingCalcul,
     CouleurLastYear,
-NoireBlancLastYear,
-getCouleurLastYear,
+    NoireBlancLastYear,
+    getCouleurLastYear,
+    DiffusionParCreation,
+    getDiffusionParCreation,
+    DiffusionParCreationLastYear,
+    getDiffusionParCreationLastYear,
+  
   } = UsePigeDashboardStore((state) => state)
 
   const { countLastYear, count, getPigeCount,
@@ -322,6 +328,38 @@ getCouleurLastYear,
         date2,
         media,
         email, "annonceuractif"),
+        getDiffusionParCreation && getDiffusionParCreation(
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2,
+          media,
+          email,
+          "diffusionparcreation",
+          base,
+        ),
+        getDiffusionParCreationLastYear && getDiffusionParCreationLastYear(
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2,
+          media,
+          email,
+          "diffusionparcreation",
+          base,
+        ),
       getAnnonceursActifLastYear && getAnnonceursActifLastYear(
         Filtersupports,
         Filterfamilles,
@@ -370,18 +408,18 @@ getCouleurLastYear,
         email,
         "couleur"
       )
-        getCouleurLastYear && getCouleurLastYear( Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2,
-          media,
-          email,
-          "couleur")
+      getCouleurLastYear && getCouleurLastYear(Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "couleur")
     } else {
       getDureeTotalDiffusion && getDureeTotalDiffusion(
         Filtersupports,
@@ -1083,7 +1121,7 @@ getCouleurLastYear,
     // });
   };
   const test = () => {
-    getEvolutionData && getEvolutionData(
+    getDiffusionParCreation && getDiffusionParCreation(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -1096,7 +1134,7 @@ getCouleurLastYear,
       date2,
       media,
       email,
-      "evolution",
+      "diffusionparcreation",
       base,
     )
   }
@@ -1259,6 +1297,7 @@ getCouleurLastYear,
                     <Widget
                       icon={iconBudget}
                       value={BudgetBrut}
+                      unite={" " + BudgetBrut.split(' ')[1]}
                       title="Budget Brut"
                       valueLastYear={BudgetBrutLastYear}
                     />
@@ -1268,6 +1307,12 @@ getCouleurLastYear,
                       value={SupportDiffusion}
                       title="Support de diffusion"
                       valueLastYear={SupportDiffusionLastYear}
+                    />
+                      <Widget
+                      icon={DiffuIcon}
+                      value={DiffusionParCreation}
+                      title="Diffusion par Création"
+                      valueLastYear={DiffusionParCreationLastYear}
                     />
                     {(media === 'presse') && (
 
@@ -1287,12 +1332,14 @@ getCouleurLastYear,
                         <Widget
                           icon={iconDuree}
                           value={DureeTotal}
+                          unite={" " + DureeTotal.split(' ')[1]}
                           title="Durée Pub Totale"
                           valueLastYear={DureeTotalLastYear}
                         />
                         <Widget
                           icon={iconTime}
                           value={DureeMoyenne}
+                          unite={" " + DureeMoyenne.split(' ')[1]}
                           title="Durée moyenne par spot"
                           valueLastYear={DureeMoyenneLastYear}
                         />

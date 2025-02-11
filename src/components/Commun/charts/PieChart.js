@@ -14,6 +14,7 @@ import ColorCheckboxes from './BaseCheckBoxGroupe';
 import { BarChartIcon, PieChartIcon } from "lucide-react";
 import html2canvas from "html2canvas";
 import CircularProgress from '@mui/material/CircularProgress';
+
 // export function PieActiveArc() {
 //   const { PartMarche ,formatDateToFrench} = UsePigeDashboardStore((state) => state)
 //   const array = [];
@@ -620,5 +621,4 @@ export const PieChartRepartitionFormat = () => {
     </div>
   )
 }
-
 
