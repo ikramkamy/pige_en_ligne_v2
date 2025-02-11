@@ -123,7 +123,7 @@ export const BarchartShadcn = ({
                     <CircularProgress />
                 </div>
             )}
-             <div className=""
+             <div className="mt-2 mb-4"
                 style={{
                     width: "100%",
                     display: "flex",
@@ -132,7 +132,16 @@ export const BarchartShadcn = ({
                 }}>
                 <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
                 <div>AVG ={Number(average).toFixed(2)}</div>
+                <div>
                 <DownloadIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} />
+                <MultiselectForGraph
+                    options={options}
+                    UpdatedGraphDisplay={UpdatedGraphDisplay}
+                    media={media}
+                    SetOptionFunction={SetOptionFunction}
+                    filters={filters}
+                />
+                </div>
             </div>
             <div style={{
                 width: "100%", display: "flex",
@@ -141,15 +150,9 @@ export const BarchartShadcn = ({
                 paddingTop: "5px",
                 marginBottom: "10px"
             }}>
-                <div>{title}</div>
+                <div style={{fontWeight:"400", fontSize:"22px"}}>{title}</div>
               
-                <MultiselectForGraph
-                    options={options}
-                    UpdatedGraphDisplay={UpdatedGraphDisplay}
-                    media={media}
-                    SetOptionFunction={SetOptionFunction}
-                    filters={filters}
-                />
+               
             </div>
 
             <ResponsiveContainer width="100%" minHeight={300}

@@ -176,7 +176,7 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
-            title="Créations uniques par annonceurs"
+            title="Créations uniques par annonceur"
             data={CreationParAnnonceurOptions}
             media={media}
             options={CreationParAnnonceurModified}

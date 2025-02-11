@@ -16,7 +16,7 @@ const checkboxes = [
 export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre, base }) {
   const { email } = UseLoginStore((state) => state)
   const { seCodeColor, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
-  const[b,setB]=useState((''))
+  const [b, setB] = useState((''))
   const {
     Filtersupports,
     Filterfamilles,
@@ -74,42 +74,57 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
   //     parametre,
   //     b)
   // },[baseGraphs])
-  const [disable,setDisable]=useState(false)
-  React.useEffect(()=>{
-    if(parametre=="annonceurparsupport" || parametre=="creationparannonceur"){
+  const [disable, setDisable] = useState(false)
+  React.useEffect(() => {
+    if (parametre == "annonceurparsupport" || parametre == "creationparannonceur") {
       setDisable(true)
-    }else{
+    } else {
       setDisable(false)
     }
-    console.log('LoacalBaseGraph',LoacalBaseGraph)
-  },[])
-  
+    console.log('LoacalBaseGraph', LoacalBaseGraph)
+  }, [])
+
   return (
-    <div>
+    <div style={{ display: "flex", width:"" }}>
+
       {checkboxes.map((item, index) => (
-        <React.Fragment key={index}>
-          <Radio
-            disabled={disable}
-            checked={LoacalBaseGraph === item.value}
-            onClick={() => handelBaseGraphChange(item, index)}
-            {...{
-              ...label,
-              inputProps: {
-                ...label.inputProps,
-                name: item.name,
-              },
-            }}
-            color={item.color ? 'default' : item.color} // Use 'default' for custom colors
-            sx={{
-              color: item.color || 'inherit', // Set custom color if provided
-              '&.Mui-checked': {
-                color: item.checkedColor || item.color, // Set checked color if provided
-              },
-            }}
-          />
-          <span style={{ marginLeft: 8 }}>{item.label}</span> {/* Display label */}
-        </React.Fragment>
+        <div onClick={() => handelBaseGraphChange(item, index)}
+
+
+        // color={item.color ? 'default' : item.color} // Use 'default' for custom colors
+        // sx={{
+        //   color: item.color || 'inherit', // Set custom color if provided
+        //   '&.Mui-checked': {
+        //     color: item.checkedColor || item.color, // Set checked color if provided
+        //   },
+        // }}
+
+        >
+          
+          <span
+            className='mx-2'
+            style={{
+              //marginLeft: 8,
+              width: "fit-content",
+             
+              border: "1px solid lightgrey",
+              borderRadius: "5px",
+              padding: "10px",
+              cursor:"pointer",
+              '& hover ': {
+                backgroundColor: "lightgrey",
+              }
+              
+            }}>
+              {item.label}
+          </span>
+        </div>
+
+
+
+
       ))}
+
     </div>
   );
 }

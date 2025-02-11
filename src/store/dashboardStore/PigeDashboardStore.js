@@ -398,13 +398,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         produits: produits,
         date_debut: date1,
         date_fin: date2,
-
-
       });
       if (Number(response.data[0].total) < 1000) {
-        set({ BudgetBrut: Number(response.data[0].total).toFixed(2)+"M" });
+        set({ BudgetBrut: Number(response.data[0].total).toFixed(2)+" M" });
       } else {
-        set({ BudgetBrut: Number(response.data[0].total).toFixed(2)+"Mrd" });
+        set({ BudgetBrut: (Number(response.data[0].total)/1000).toFixed(2)+" Mrd" });
       }
 
     } catch (error) {
@@ -441,8 +439,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
       // console.log('response',response)
-      set({ BudgetBrutLastYear: Number(response.data[0].total).toFixed(2) });
-
+      if (Number(response.data[0].total) < 1000) {
+        set({ BudgetBrutLastYear: Number(response.data[0].total).toFixed(2)+" M" });
+      } else {
+        set({ BudgetBrutLastYear: (Number(response.data[0].total)/1000).toFixed(2)+" Mrd" });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -1460,9 +1461,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
       });
       console.log('response duree', response)
       if (Number(response.data[0].total) > 3600) {
-        set({ DureeTotal: (Number(response.data[0].total) / 3600).toFixed(2) + "H" });
+        set({ DureeTotal: (Number(response.data[0].total) / 3600).toFixed(2) + " H" });
       } else {
-        set({ DureeTotal: Number(response.data[0].total) + "s" });
+        set({ DureeTotal: Number(response.data[0].total) + " s" });
       }
     } catch (error) {
       console.log(error);
@@ -1501,9 +1502,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
       });
       
       if (Number(response.data[0].total) > 3600) {
-        set({ DureeTotalLastYear: (Number(response.data[0].total)/3600).toFixed(2) + "H" });
+        set({ DureeTotalLastYear: (Number(response.data[0].total)/3600).toFixed(2) + " H" });
       } else {
-        set({ DureeTotalLastYear: Number(response.data[0].total) + "s" });
+        set({ DureeTotalLastYear: Number(response.data[0].total) + " s" });
       }
 
     } catch (error) {
@@ -1545,9 +1546,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log('duree moyenne', (Number(response.data[0].proportion)) + "s")
       if(Number(response.data[0].proportion) > 3600){
         
-        set({ DureeMoyenne:(Number(response.data[0].proportion) / 3600).toFixed(2) + "H" });
+        set({ DureeMoyenne:(Number(response.data[0].proportion) / 3600).toFixed(2) + " H" });
        }else{
-         set({ DureeMoyenne:(Number(response.data[0].proportion).toFixed(2)) + "s" });
+         set({ DureeMoyenne:(Number(response.data[0].proportion).toFixed(2)) + " s" });
        }
 
     } catch (error) {
@@ -1588,9 +1589,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log('duree moyenne last', response)
       if(Number(response.data[0].proportion) >3600){
         
-       set({ DureeMoyenneLastYear:(Number(response.data[0].proportion) / 3600).toFixed(2) + "H" });
+       set({ DureeMoyenneLastYear:(Number(response.data[0].proportion) / 3600).toFixed(2) + " H" });
       }else{
-        set({ DureeMoyenneLastYear:(Number(response.data[0].proportion).toFixed(2)) + "s" });
+        set({ DureeMoyenneLastYear:(Number(response.data[0].proportion).toFixed(2)) + " s" });
       }
       //set({ DureeMoyenneLastYear: Number(response.data[0].proportion).toFixed(2) });
 

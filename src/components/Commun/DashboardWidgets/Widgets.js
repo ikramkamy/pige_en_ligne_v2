@@ -1,4 +1,5 @@
-import { TrendingUp } from "lucide-react"
+import { TrendingUp } from "lucide-react";
+import CountUp from "react-countup";
 import {
   Label, PolarGrid, PolarRadiusAxis,
   RadialBar, RadialBarChart, ResponsiveContainer
@@ -11,7 +12,7 @@ import {
   Col
 } from "react-bootstrap";
 import UndoIcon from '@mui/icons-material/Undo';
-export const Widget = ({ icon, title, value, valueLastYear, valuepic }) => {
+export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) => {
   return (
     <Col lg="4" sm="6">
       <Card className="card-stats" style={{
@@ -35,9 +36,19 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic }) => {
                   fontSize: "40px", fontWeight: "400",
 
 
-
+                  
                 }}>{value}</Card.Title>
+                {typeof(value)}
+                <CountUp
+                  start={0}
+                  prefix=""
+                  suffix={unite}
+                  separator=""
+                  end={typeof(value)=="string"? 200:100}
+                  decimals={0}
+                  duration={4}
 
+                />
                 <p className="text-grey-200 text-sm">{valuepic}</p>
               </div>
             </Col>

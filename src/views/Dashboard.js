@@ -1083,9 +1083,7 @@ getCouleurLastYear,
     // });
   };
   const test = () => {
-    console.log('getPigeCountLastYear',{
-      email,
-      media,
+    getEvolutionData && getEvolutionData(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -1095,33 +1093,12 @@ getCouleurLastYear,
       Filtermarquesids,
       Filterproduitsids,
       date1,
-      date2
-    })
-    // getPigeCount && getPigeCount(email,
-    //   media,
-    //   Filtersupports,
-    //   Filterfamilles,
-    //   Filterclassesids,
-    //   Filtersecteursids,
-    //   Filtervarietiesids,
-    //   Filterannonceursids,
-    //   Filtermarquesids,
-    //   Filterproduitsids,
-    //   date1,
-    //   date2)
-    getPigeCountLastYear && getPigeCountLastYear(
-      email,
+      date2,
       media,
-      Filtersupports,
-      Filterfamilles,
-      Filterclassesids,
-      Filtersecteursids,
-      Filtervarietiesids,
-      Filterannonceursids,
-      Filtermarquesids,
-      Filterproduitsids,
-      date1,
-      date2)
+      email,
+      "evolution",
+      base,
+    )
   }
 
   if (!client) {
@@ -1170,7 +1147,7 @@ getCouleurLastYear,
       marginBottom: resStyle.marginTopAll
     }}
     >
-      {/* <Button onClick={test}>TEST</Button> */}
+      <Button onClick={test}>TEST</Button>
       <Container fluid style={{ display: "flex", flexDirection: "column" }} >
         <Row className="mt-3" style={{
           display: "flex",
