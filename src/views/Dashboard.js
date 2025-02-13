@@ -144,7 +144,10 @@ function Dashboard() {
     getDiffusionParCreation,
     DiffusionParCreationLastYear,
     getDiffusionParCreationLastYear,
-  
+    ReaprtitionParType,
+    isloadingRepatitionType,
+    getRepartitionParType,
+
   } = UsePigeDashboardStore((state) => state)
 
   const { countLastYear, count, getPigeCount,
@@ -328,38 +331,38 @@ function Dashboard() {
         date2,
         media,
         email, "annonceuractif"),
-        getDiffusionParCreation && getDiffusionParCreation(
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2,
-          media,
-          email,
-          "diffusionparcreation",
-          base,
-        ),
-        getDiffusionParCreationLastYear && getDiffusionParCreationLastYear(
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2,
-          media,
-          email,
-          "diffusionparcreation",
-          base,
-        ),
+      getDiffusionParCreation && getDiffusionParCreation(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "diffusionparcreation",
+        base,
+      ),
+      getDiffusionParCreationLastYear && getDiffusionParCreationLastYear(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "diffusionparcreation",
+        base,
+      ),
       getAnnonceursActifLastYear && getAnnonceursActifLastYear(
         Filtersupports,
         Filterfamilles,
@@ -506,6 +509,23 @@ function Dashboard() {
         media,
         email,
         "piccommunication")
+        getRepartitionParType && getRepartitionParType(
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2,
+          media,
+          email, 
+          "type", 
+          base,
+         
+        )
     }
     //pour tout types de media
     await Promise.all([
@@ -1121,7 +1141,7 @@ function Dashboard() {
     // });
   };
   const test = () => {
-    getDiffusionParCreation && getDiffusionParCreation(
+getRepartitionParType && getRepartitionParType(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -1133,9 +1153,10 @@ function Dashboard() {
       date1,
       date2,
       media,
-      email,
-      "diffusionparcreation",
+      email, 
+      "type", 
       base,
+     
     )
   }
 
@@ -1308,7 +1329,7 @@ function Dashboard() {
                       title="Support de diffusion"
                       valueLastYear={SupportDiffusionLastYear}
                     />
-                      <Widget
+                    <Widget
                       icon={DiffuIcon}
                       value={DiffusionParCreation}
                       title="Diffusion par Création"

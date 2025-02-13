@@ -22,6 +22,8 @@ export default function GridDemo({ date1, date2, media, base }) {
     AnnonceurOptions,
     MarqueOptions,
     setFormatOptions,
+    setTypeOptions,
+    TypeOptions,
     ProduitsOptions,
     setMarcheOptions,
     setAnnonceurSupportOptions,
@@ -59,36 +61,42 @@ export default function GridDemo({ date1, date2, media, base }) {
     loadingFormat,
     loadingAnnonceurSupport,
     loagingCreationAnnonceur,
+    ReaprtitionParType,
+    getRepartitionParType,
+    isloadingRepatitionType,
+    
   } = UsePigeDashboardStore((state) => state)
-  const top20familleModified = Top20famillesSectorielles.map((e) => {
+  const top20familleModified = Top20famillesSectorielles?.map((e) => {
     return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   })
-  const Top20AnnonceursModified = Top20Annonceurs.map((e) => { return { name: e.Annonceur_Lib, proportion: e.proportion, total: e.total, average: e.average } })
+  const Top20AnnonceursModified = Top20Annonceurs?.map((e) => { return { name: e.Annonceur_Lib, proportion: e.proportion, total: e.total, average: e.average } })
 
-  const top20marquemodified = Top20marques.map((e) => {
+  const top20marquemodified = Top20marques?.map((e) => {
     return { name: e.Marque_Lib, proportion: e.proportion, total: e.total, average: e.average }
   }
   )
-  const Top20produitsmodified = Top20produits.map((e) => {
+  const Top20produitsmodified = Top20produits?.map((e) => {
     return { name: e.Produit_Lib, proportion: e.proportion, total: e.total, average: e.average }
   }
   )
-  const AnnonceurParSupportModified = AnnonceurParSupport.map((e) => {
+  const AnnonceurParSupportModified = AnnonceurParSupport?.map((e) => {
     return { name: e.Support_Lib, proportion: e.proportion, total: e.annonceur_count, average: e.average_ratio }
   })
-  const CreationParAnnonceurModified = CreationParAnnonceur.map((e) => {
+  const CreationParAnnonceurModified = CreationParAnnonceur?.map((e) => {
     return { name: e.Annonceur_Lib, proportion: e.proportion, total: e.count, average: e.average_ratio }
   })
-  const PartMarcheModified = PartMarche.map((e) => {
+  const PartMarcheModified = PartMarche?.map((e) => {
     return { name: e.Support_Lib, proportion: e.proportion, total: e.total, average: e.average }
   })
-  console.log('PartMarcheModified', PartMarche, PartMarcheModified, PartMarche)
+
   const FormatRepartitionModified = FormatRepartition?.map((e) => {
     return { name: e.Format, proportion: e.proportion, total: e.total, average: e.average }
   })
   // console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
 
-
+  const ReaprtitionParTypeModified=ReaprtitionParType?.map((e)=>{
+    return { name: e.Type, proportion: e.proportion, total: e.total, average: e.average }
+  })
   return (
     <div >
 
@@ -112,6 +120,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="familles"
             parametre="top20famille"
             isloading={loadingFamille}
+
           />
         </Col>
 
@@ -173,6 +182,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="Annonceurs"
             parametre="annonceurparsupport"
             isloading={loadingAnnonceurSupport}
+            grapgname=""
           />
         </Col>
         <Col md={6} >
@@ -193,6 +203,21 @@ export default function GridDemo({ date1, date2, media, base }) {
 
       <Row className='mt-4'>
         {/* <Col>
+          <InteractivePieChart
+            title="Répartition par Format"
+          />
+        </Col>
+        <Col>
+          <InteractivePieChart
+            title="Part Marché"
+          />
+
+        </Col> */}
+      
+
+      </Row>
+      <Row className='mt-4 d-flex flex-wrap' style={{width:"100%"}}>
+        <Col >
           < PieChartVelson
             title="Part Marché"
             date1={date1}
@@ -206,10 +231,10 @@ export default function GridDemo({ date1, date2, media, base }) {
             isloading={loadingMarche}
 
           />
+             
         </Col>
-        <Col>
-
-          < PieChartVelson
+        <Col >
+        < PieChartVelson
             title="Répartition par Format"
             date1={date1}
             date2={date2}
@@ -221,55 +246,33 @@ export default function GridDemo({ date1, date2, media, base }) {
             initialOptions={FormatOptions}
             isloading={loadingFormat}
           />
+       
+       
+        </Col>
+        <Col >
+        < PieChartVelson
+            title="Répartition par Type"
+            date1={date1}
+            date2={date2}
+            data={ReaprtitionParTypeModified}
+            SetOptionFunction={setTypeOptions}
+            ChangeBaseFunction={getRepartitionParType}
+            parametre="type"
+            filter="Type"
+            initialOptions={TypeOptions}
+            isloading={isloadingRepatitionType}
+          />
+ 
 
+        </Col>
+
+</Row>
+        {/* <Col>
+          <InteractivePieChart
+            dataType={ReaprtitionParType}
+            title="Répartition par Type"
+          />
         </Col> */}
-        <Col>
-          <InteractivePieChart />
-        </Col>
-        <Col>
-          <InteractivePieChart />
-
-        </Col>
-        <Col>
-          <InteractivePieChart />
-        </Col>
-
-      </Row>
-      {/* <Row>
-    
-    
-    <Col md={6}>
-      <CustomDataLabelMarques/>
-    </Col>
-    <Col md={6}>
-    <CustomDataLabelProduits/>
-    
-    </Col>
-    
-    
-    </Row>
-    <Row>
-    <Col md={6}>
-  
-    < PieChartVelson/>
-    </Col>
-    <Col  md={6}>
-   
-    <PieChartRepartitionFormat/>
-    </Col>
-    </Row>
-
-    <Row>
-
-    <Col  md={6}>
-    <CustomDataLabelAnnonceurParSupport/>
-    </Col>
-    <Col  md={6}>
-    <CustomDataLabelCreationParAnnonceur/>
-   </Col>
-    </Row>
-    */}
-
 
     </div>
 

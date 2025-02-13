@@ -14,7 +14,7 @@ import ColorCheckboxes from './BaseCheckBoxGroupe';
 import { BarChartIcon, PieChartIcon } from "lucide-react";
 import html2canvas from "html2canvas";
 import CircularProgress from '@mui/material/CircularProgress';
-
+import './style.css'
 // export function PieActiveArc() {
 //   const { PartMarche ,formatDateToFrench} = UsePigeDashboardStore((state) => state)
 //   const array = [];
@@ -46,18 +46,84 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export const PieChartVelson = ({ date1, date2, data, title, isloading,
   ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
-    const { base } = UseFiltersStore((state) => state)
-    const { PartMarche, FormatRepartition } = UsePigeDashboardStore((state) => state);
-    const { MarcheOptions, setBaseGraphs,baseGraphs } = UseGraphStore((state) => state)
+  const { base } = UseFiltersStore((state) => state)
+  const { PartMarche, FormatRepartition } = UsePigeDashboardStore((state) => state);
+  const { MarcheOptions, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
   //const chartDatalabelsBarColors = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c']
   const [chartDatalabelsBarColors, setChartDatalabelsBarColors] = useState([])
-  const chartDatalabelsBarColorsVolume = ['#2E7D32', '#1B5E20', '#154A18', '#0F3812', '#0A270C'];
-  const chartDatalabelsBarColorsBudget = ['#1565C0', '#0D47A1', '#0B3C91', '#092C6C', '#061E4A'];
-  const chartDatalabelsBarColorsDuree = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c'];
+  // const chartDatalabelsBarColorsVolume = ['#2E7D32', '#1B5E20', '#154A18', '#0F3812', '#0A270C'];
+  // const chartDatalabelsBarColorsBudget = ['#1565C0', '#0D47A1', '#0B3C91', '#092C6C', '#061E4A'];
+  // const chartDatalabelsBarColorsDuree = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c'];
+  const chartDatalabelsBarColorsVolume = [
+    "#e23670", // Vivid Pink
+    "#2662da", // Bright Blue
+    "#2eb789", // Aqua Green
+    "#ae57da", // Lavender Purple
+    "#e78c2f", // Orange
+    "#098638", // Deep Green
+    "#f7abb7", // Soft Pink
+    "#5f432e", // Earthy Brown
+    "#ff4b00", // Neon Orange
+    "#8c00ff", // Electric Purple
+    "#00e5ff", // Cyan Blue
+    "#ffd700", // Bright Yellow
+    "#ff1493", // Hot Pink
+    "#00ff00", // Neon Green
+    "#ff4500", // Red-Orange
+    "#1e90ff", // Dodger Blue
+    "#ff00ff", // Magenta
+    "#39ff14", // Lime Green
+    "#ff6347", // Tomato Red
+    "#7fff00"  // Chartreuse Green
+  ]
+  const chartDatalabelsBarColorsBudget = [
+    "#e23670", // Vivid Pink
+    "#2662da", // Bright Blue
+    "#2eb789", // Aqua Green
+    "#ae57da", // Lavender Purple
+    "#e78c2f", // Orange
+    "#098638", // Deep Green
+    "#f7abb7", // Soft Pink
+    "#5f432e", // Earthy Brown
+    "#ff4b00", // Neon Orange
+    "#8c00ff", // Electric Purple
+    "#00e5ff", // Cyan Blue
+    "#ffd700", // Bright Yellow
+    "#ff1493", // Hot Pink
+    "#00ff00", // Neon Green
+    "#ff4500", // Red-Orange
+    "#1e90ff", // Dodger Blue
+    "#ff00ff", // Magenta
+    "#39ff14", // Lime Green
+    "#ff6347", // Tomato Red
+    "#7fff00"  // Chartreuse Green
+  ]
+  const chartDatalabelsBarColorsDuree = [
+    "#e23670", // Vivid Pink
+    "#2662da", // Bright Blue
+    "#2eb789", // Aqua Green
+    "#ae57da", // Lavender Purple
+    "#e78c2f", // Orange
+    "#098638", // Deep Green
+    "#f7abb7", // Soft Pink
+    "#5f432e", // Earthy Brown
+    "#ff4b00", // Neon Orange
+    "#8c00ff", // Electric Purple
+    "#00e5ff", // Cyan Blue
+    "#ffd700", // Bright Yellow
+    "#ff1493", // Hot Pink
+    "#00ff00", // Neon Green
+    "#ff4500", // Red-Orange
+    "#1e90ff", // Dodger Blue
+    "#ff00ff", // Magenta
+    "#39ff14", // Lime Green
+    "#ff6347", // Tomato Red
+    "#7fff00"  // Chartreuse Green
+  ]
   const colorMapping = [
     { value: 'volume', codeColor: chartDatalabelsBarColorsVolume },
     { value: 'budget', codeColor: chartDatalabelsBarColorsBudget },
-    { value: 'duree', codeColor: chartDatalabelsBarColorsDuree}
+    { value: 'duree', codeColor: chartDatalabelsBarColorsDuree }
   ];
   const LocalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
   const getColorByValue = (value) => {
@@ -68,9 +134,9 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   //   "#d81b60",
   //   "#2196f3",
   //   "#43a047",
- 
 
-  
+
+
   const [average, setAverage] = useState(0);
   const [dynamicList, setDynamicList] = useState([])
   const [array, setArray] = useState([])
@@ -79,11 +145,11 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     setBaseGraphs && setBaseGraphs(parametre, base)
   }, [])
 
-  useEffect(()=>{
-    let array=getColorByValue(LocalBaseGraph)
-     console.log('array',array)
-     setChartDatalabelsBarColors(array)
-  },[baseGraphs])
+  useEffect(() => {
+    let array = getColorByValue(LocalBaseGraph)
+    //.log('array',array)
+    setChartDatalabelsBarColors(array)
+  }, [baseGraphs])
   const display = data?.map((elem) => {
     return {
       value: Number(elem.total),
@@ -126,14 +192,33 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   var option = {
     tooltip: {
       trigger: 'item',
-
     },
+    display: 'flex',
+    justifyContent: "end",
+    width:"550px",
+    alignItems: 'center',
     color: chartDatalabelsBarColors,
+    legend: {
+      // Add a legend to display labels outside the pie chart
+      show: true,
+      orient: 'vertical', // Vertical layout for the legend
+      left: 'left', // Position the legend on the right side
+      //bottom: "0%",
+      width: "350px",
+      top:"20px",
+      textStyle: {
+        color: 'white', // Set text color for the legend
+        fontSize: 12,
+      },
+      data: dynamicList.map(item => item.name), // Map names from the data to the legend
+      align: 'auto', // Align the legend items properly
+      itemGap: 15, // Add spacing between legend items
+    },
     series:
       [{
         name: `Part Marché base ${base} `,
         type: 'pie',
-        radius: '50%',
+        radius: ['50%', '20%'],
         title: "Part de Marché",
         //data: array,
         data: dynamicList,
@@ -146,7 +231,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         },
         label: {
           normal: {
-            show: true,
+            show: false,
             fontSize: 14,
             fontWeight: 'normal',
             color: 'white',
@@ -155,7 +240,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         },
         labelLine: {
           normal: {
-            show: true, // Hide the lines connecting the labels to the slices
+            show: false, // Hide the lines connecting the labels to the slices
           },
         },
       }],
@@ -169,7 +254,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
 
   };
 
-
+  //console.log('dynamiclist',dynamicList)
   const handleDownloadChart = () => {
     console.log('download')
     const chartContainer = document.querySelector(".bar-chart-container");
@@ -193,7 +278,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
 
   };
   return (
-    <div className='mt-4' style={{ color: "white" }}>
+    <div className='m-2' style={{ color: "white" }}>
       <Card style={{
         borderRadius: 10,
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
@@ -226,7 +311,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             paddingTop: "5px"
           }}>
             <div>{title}</div>
-            <div>La moyenne ={Number(average).toFixed(2)}</div>
+            <div>AVG ={Number(average).toFixed(2)}</div>
             <SelectGraphOptionsMarche
               UpdatedGraphDisplay={ModifyList}
               options={array}
@@ -235,14 +320,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             />
           </div>
           {/* {formatDateToFrench(date1)} - {formatDateToFrench(date2)} */}
-          <ReactEcharts
-            style={{
-              height: '350px',
-              display: "flex",
-              justifyContent: "center"
-            }}
-            option={option} />
-          <div className=""
+          <div className="mt-4"
             style={{
               width: "100%",
               display: "flex",
@@ -252,6 +330,14 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} />
             <PieChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} />
           </div>
+          <ReactEcharts
+            style={{
+              height: '350px',
+              display: "flex",
+              justifyContent: "center"
+            }}
+            option={option} />
+         
         </div>
       </Card>
     </div>

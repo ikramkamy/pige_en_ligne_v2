@@ -1033,7 +1033,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-    set({ loadingFormat: false })
+    set({ loadingFormat:true})
     try {
       set({ isloading: true })
       let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
@@ -1158,275 +1158,6 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log(error);
     }
   },
-
-  //Parametres Dashboard
-  // getCreationUniques: async (
-  //   supports,
-  //   familles,
-  //   classes,
-  //   secteurs,
-  //   varieties,
-  //   annonceurs,
-  //   marques,
-  //   produits,
-  //   media,
-  //   rangs,
-  //   date1,
-  //   date2,
-
-  // ) => {
-
-  //   try {
-  //     set({ isloading: true })
-  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
-  //       supports: supports,
-  //       familles: familles,
-  //       classes: classes,
-  //       secteurs: secteurs,
-  //       varieties: varieties,
-  //       annonceurs: annonceurs,
-  //       marques: marques,
-  //       produits: produits,
-  //       media: media,
-  //       rangs: rangs,
-  //       date1: date1,
-  //       date2: date2,
-  //       dashboard: "dashboard",
-  //       creationsunique: "creationsunique",
-
-  //     });
-  //     // console.log("creation unique",response)
-  //     set({ CreationUniquesMedia: Number(response.data.data[0].count) });
-  //     set({ isloading: false })
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
-  // getCreationUniquesLastYear: async (
-  //   supports,
-  //   familles,
-  //   classes,
-  //   secteurs,
-  //   varieties,
-  //   annonceurs,
-  //   marques,
-  //   produits,
-  //   media,
-  //   rangs,
-  //   date1,
-  //   date2,
-
-  // ) => {
-
-  //   try {
-  //     set({ isloading: true })
-  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
-  //       supports: supports,
-  //       familles: familles,
-  //       classes: classes,
-  //       secteurs: secteurs,
-  //       varieties: varieties,
-  //       annonceurs: annonceurs,
-  //       marques: marques,
-  //       produits: produits,
-  //       media: media,
-  //       rangs: rangs,
-  //       date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-  //       date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-  //       dashboard: "dashboard",
-  //       creationsunique: "creationsunique",
-
-  //     });
-  //     // console.log("creation unique",response)
-  //     set({ CreationUniquesMediaLastYear: Number(response.data.data[0].count) });
-  //     set({ isloading: false })
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
-  // getBudgetBrut: async (
-  //   supports,
-  //   familles,
-  //   classes,
-  //   secteurs,
-  //   varieties,
-  //   annonceurs,
-  //   marques,
-  //   produits,
-  //   media,
-  //   rangs,
-  //   date1,
-  //   date2,
-  // ) => {
-
-  //   try {
-  //     set({ isloading: true })
-  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
-  //       media: media,
-  //       dashboard: "dashboard",
-  //       budgettotal: "budgettotal",
-
-  //       supports: supports,
-  //       familles: familles,
-  //       classes: classes,
-  //       secteurs: secteurs,
-  //       varieties: varieties,
-  //       annonceurs: annonceurs,
-  //       marques: marques,
-  //       produits: produits,
-  //       date1: date1,
-  //       date2: date2,
-  //       rangs: rangs,
-
-  //     });
-  //     // console.log("media", media)
-  //     // console.log("reponse budget", response)
-  //     if (Number(response.data.data[0].count) > 1000) {
-  //       set({ BudgetBrutMedia: (Number(response.data.data[0].count) / 1000).toFixed(1) + "Md" });
-  //       set({ isloading: true })
-  //     } else {
-  //       set({ BudgetBrutMedia: (Number(response.data.data[0].count).toFixed(1)) + "M" });
-  //       set({ isloading: true })
-  //     }
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
-  // getBudgetBrutLastYear: async (
-  //   supports,
-  //   familles,
-  //   classes,
-  //   secteurs,
-  //   varieties,
-  //   annonceurs,
-  //   marques,
-  //   produits,
-  //   media,
-  //   rangs,
-  //   date1,
-  //   date2,
-  // ) => {
-
-  //   try {
-  //     set({ isloading: true })
-  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
-  //       media: media,
-  //       dashboard: "dashboard",
-  //       budgettotal: "budgettotal",
-  //       supports: supports,
-  //       familles: familles,
-  //       classes: classes,
-  //       secteurs: secteurs,
-  //       varieties: varieties,
-  //       annonceurs: annonceurs,
-  //       marques: marques,
-  //       produits: produits,
-  //       date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-  //       date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-  //       rangs: rangs,
-
-  //     });
-  //     // console.log("media", media)
-  //     // console.log("reponse budget", response)
-  //     if (Number(response.data.data[0].count) > 1000) {
-  //       set({ BudgetBrutMediaLastYear: (Number(response.data.data[0].count) / 1000).toFixed(1) + "Md" });
-  //       set({ isloading: true })
-  //     } else {
-  //       set({ BudgetBrutMediaLastYear: (Number(response.data.data[0].count).toFixed(1)) + "M" });
-  //       set({ isloading: true })
-  //     }
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
-
-  // getSupportDiffusion: async (
-  //   supports,
-  //   familles,
-  //   classes,
-  //   secteurs,
-  //   varieties,
-  //   annonceurs,
-  //   marques,
-  //   produits,
-  //   media,
-  //   rangs,
-  //   date1,
-  //   date2,
-  // ) => {
-
-  //   try {
-
-  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
-  //       supports: supports,
-  //       familles: familles,
-  //       classes: classes,
-  //       secteurs: secteurs,
-  //       varieties: varieties,
-  //       annonceurs: annonceurs,
-  //       marques: marques,
-  //       produits: produits,
-  //       rangs: rangs,
-  //       media: media,
-  //       date1: date1,
-  //       date2: date2,
-  //       dashboard: "dashboard",
-  //       supportdiffusion: "supportdiffusion",
-
-  //     });
-  //     //  console.log("support de diffusion",response)
-  //     set({ SupportDiffusionMedia: Number(response.data.data[0].count) });
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     set({ SupportDiffusionMedia: 0 });
-  //   }
-  // },
-  // getSupportDiffusionLastYear: async (
-  //   supports,
-  //   familles,
-  //   classes,
-  //   secteurs,
-  //   varieties,
-  //   annonceurs,
-  //   marques,
-  //   produits,
-  //   media,
-  //   rangs,
-  //   date1,
-  //   date2,
-  // ) => {
-
-  //   try {
-
-  //     let response = await axios.post(`${PORT2}/getfilters2.php`, {
-  //       supports: supports,
-  //       familles: familles,
-  //       classes: classes,
-  //       secteurs: secteurs,
-  //       varieties: varieties,
-  //       annonceurs: annonceurs,
-  //       marques: marques,
-  //       produits: produits,
-  //       rangs: rangs,
-  //       media: media,
-  //       date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-  //       date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
-  //       dashboard: "dashboard",
-  //       supportdiffusion: "supportdiffusion",
-
-  //     });
-  //     // console.log("support de diffusion",response)
-  //     set({ SupportDiffusionMediaLastYear: Number(response.data.data[0].count) });
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
-
-
   getDureeTotalDiffusion: async (
     supports,
     familles,
@@ -1764,6 +1495,55 @@ export const UsePigeDashboardStore = create((set, get) => ({
       });
       
       set({ DiffusionParCreationLastYear: Number(response.data[0].average).toFixed(2) });
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
+
+  },
+   ReaprtitionParType:[],
+   isloadingRepatitionType:false,
+  getRepartitionParType: async (
+    supports,
+    familles,
+    classes,
+    secteurs,
+    varieties,
+    annonceurs,
+    marques,
+    produits,
+    date1,
+    date2,
+    media,
+    email,
+    parametre,
+    base
+  ) => {
+    set({isloadingRepatitionType:true})
+    try {
+      let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
+        supports: supports,
+        email: email,
+        familles: familles,
+        classes: classes,
+        secteurs: secteurs,
+        varieties: varieties,
+        annonceurs: annonceurs,
+        marques: marques,
+        produits: produits,
+        date_debut:date1,
+        date_fin: date2,
+
+      });
+      console.log("response",response)
+      
+      set({ 
+        ReaprtitionParType:response.data,
+        isloadingRepatitionType:false
+       });
 
     } catch (error) {
       console.log(error);

@@ -18,6 +18,7 @@ const MenuProps = {
     },
 };
 
+
 export function SelectGraphOptions({ options, UpdatedGraphDisplay }) {
     const { setAnnonceursOptions, AnnonceursOptions } = UseGraphStore((state) => state);
     const optionList = options.map((e) => e.name.split(' ')[0]);
@@ -88,7 +89,7 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,S
     const [selectedList, setSelectedList] = useState(options.slice(0,5));
    
     useEffect(() => {
-        setSelectedItems(optionList.slice(0,5));
+        setSelectedItems(optionList.slice(0,10));
     }, [options]);
  
     const handleChange = (event) => {
@@ -97,7 +98,7 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,S
             if (prevSelectedItems.includes(selected)) {
                 return prevSelectedItems.filter((item) => item !== selected);
             } else {
-                if (prevSelectedItems.length >= 5) {
+                if (prevSelectedItems.length >= 10) {
                     return [...prevSelectedItems.slice(1), selected];
                 } else {
                     return [...prevSelectedItems, selected];

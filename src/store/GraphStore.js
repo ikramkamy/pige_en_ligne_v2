@@ -53,6 +53,10 @@ export const UseGraphStore = create((set, get) => ({
     setFormatOptions: (options) => {
         set({ FormatOptions: options })
     },
+    TypeOptions:[],
+    setTypeOptions: (options) => {
+        set({ TypeOptions: options })
+    },
     setProduitsOptions: (options) => {
         set({ ProduitsOptions: options })
     },

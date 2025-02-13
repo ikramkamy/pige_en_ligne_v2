@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import {
   LineChart,
   Line,
@@ -9,13 +9,18 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import html2canvas from "html2canvas";
-import { BarChartIcon, LineChartIcon } from "lucide-react";
+import { BarChartIcon, LineChartIcon, DownloadIcon } from "lucide-react";
 import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UseGraphStore } from "store/GraphStore";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import ColorCheckboxes from './BaseCheckBoxGroupe';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Container, Row, Col } from "react-bootstrap";
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import './style.css'
 export default function InteractiveLineChart({ base, ChangeBaseFunction, parametre, isloading }) {
   const listColors = [
@@ -24,11 +29,16 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     "#d81b60",
   ]
   const [activeChart, setActiveChart] = useState("jour");
-  const { date1, date2 } = UseFiltersStore((state) => state)
+  const { date1, date2, media } = UseFiltersStore((state) => state)
   const { formatDateToFrench } = UsePigeDashboardStore((state) => state)
   const { EvolutionData, secondsToHoursObject, baseGraphs, setBaseGraphs } = UseGraphStore((state) => state);
-
-  const arrTosort = EvolutionData?.heure.map((e) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  // Function to handle menu opening
+  const handleDownloadClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const arrTosort = EvolutionData?.heure?.map((e) => {
     return ({
       date: e.Date,
       heure: e.interval_start.split(':')[0] + ":" + e.interval_end.split(':')[1],
@@ -36,28 +46,32 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       jour: e.Jour,
     })
   })
-  const sortByHeure = (arr) => {
-    return arr.sort((a, b) => {
-      // Convert "HH:MM" to minutes for accurate comparison
-      const toMinutes = (time) => {
-        const [hours, minutes] = time.split(":").map(Number);
-        return hours * 60 + minutes;
-      };
-      return toMinutes(a.heure) - toMinutes(b.heure);
-    });
-  }
 
-  const EvolutionDataHeure = sortByHeure(arrTosort).map((e) => {
-    return ({
-      name: e.heure,
-      date: e.Date,
-      total: Number(e.total),
-      jour: e.Jour,
+  let EvolutionDataHeure = []
+
+  if (media !== "presse") {
+    const sortByHeure = (arr) => {
+      return arr.sort((a, b) => {
+        // Convert "HH:MM" to minutes for accurate comparison
+        const toMinutes = (time) => {
+          const [hours, minutes] = time.split(":").map(Number);
+          return hours * 60 + minutes;
+        };
+        return toMinutes(a.heure) - toMinutes(b.heure);
+      });
+    }
+    EvolutionDataHeure = sortByHeure(arrTosort).map((e) => {
+      return ({
+        name: e.heure,
+        date: e.Date,
+        total: Number(e.total),
+        jour: e.Jour,
+      })
     })
-  })
+  } else {
+    EvolutionDataHeure = []
 
-
-  console.log("EvolutionDataHeure", sortByHeure(arrTosort), EvolutionData, EvolutionDataHeure)
+  }
 
 
   const EvolutionDataJour = EvolutionData?.jour?.map((e) => ({
@@ -81,9 +95,9 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   };
   const [localColor, setLocalColor] = useState('red')
   const currentData = dataMapping[activeChart] || [];
-  const getMinvalue=(currentData)=>{
+  const getMinvalue = (currentData) => {
     const min = currentData.reduce((acc, current) => Math.min(acc, current.total),
-    Infinity);
+      Infinity);
     return min
   }
   const chartConfig = {
@@ -108,7 +122,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       color: localColor,
       total: EvolutionData?.mois?.length,
       max: EvolutionDataMois[0]?.total,
-      min :getMinvalue(EvolutionDataMois),
+      min: getMinvalue(EvolutionDataMois),
     },
   };
   const total = useMemo(() => {
@@ -141,7 +155,6 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   }, [])
   const max = Number(chartConfig[activeChart]?.max)
   const min = Number(chartConfig[activeChart]?.min)
-  console.log("min",min,chartConfig)
   const CustomTooltip = ({ active, payload, label }) => {
     console.log("payload", payload[0]?.payload)
     if (active && payload && payload.length) {
@@ -173,17 +186,61 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     }
     return null;
   };
+
+  //Download SVG PNG
+  const handleDownloadSVG = () => {
+    const chartContainer = document.querySelector(".line-chart-container");
+    if (!chartContainer) return;
+
+    // Find the SVG element within the container
+    const svgElement = chartContainer.querySelector("svg");
+    if (!svgElement) return;
+
+    // Serialize the original SVG content
+    const serializer = new XMLSerializer();
+    let svgString = serializer.serializeToString(svgElement);
+
+    // Extract the viewBox attributes to determine the dimensions
+    const viewBox = svgElement.getAttribute("viewBox").split(" ").map(Number);
+    const width = viewBox[2];
+    const height = viewBox[3];
+
+    // Wrap the original SVG content with a black background rectangle
+    const modifiedSvgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
+        <!-- Black background rectangle -->
+        <rect width="${width}" height="${height}" fill="black" />
+        <!-- Original SVG content -->
+        ${svgString}
+      </svg>
+    `;
+
+    // Create a Blob and download the modified SVG
+    const blob = new Blob([modifiedSvgString], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "chart.svg";
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
+
+    // Close the menu after download
+    handleClose();
+  };
   const handleDownloadChart = () => {
     console.log('download')
-    const chartContainer = document.querySelector(".bar-chart-container");
+    const chartContainer = document.querySelector(".line-chart-container");
     if (!chartContainer) return;
 
     html2canvas(chartContainer, {
       onclone: (clonedDoc) => {
         // Find the cloned container and set its background to black
-        const clonedContainer = clonedDoc.querySelector(".bar-chart-container");
+        const clonedContainer = clonedDoc.querySelector(".line-chart-container");
         if (clonedContainer) {
-          clonedContainer.style.backgroundColor = "black"; // Set black background for the cloned element
+          clonedContainer.style.backgroundColor = "black";
         }
       },
     }).then((canvas) => {
@@ -194,6 +251,9 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       link.click(); // Trigger the download
     });
 
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   // Usage in LineChart
   <LineChart data={currentData} margin={{ left: 12, right: 12, top: 10, bottom: 10 }}>
@@ -233,10 +293,8 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       )}
       <div style={{
         width: "100%", display: "flex",
-
         justifyContent: "space-between",
         alignItems: "start",
-
         //paddingTop: "5px"
       }}>
         <div className="px- " style={{
@@ -250,6 +308,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
           height: "100px"
 
         }}>
+
 
           <div className="custom_responsive">
             <div>{formatDateToFrench(date1)} - {formatDateToFrench(date2)}</div>
@@ -315,8 +374,35 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
           ))}
         </div>
       </div>
+      <div className="px-4 mb-4"
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
 
+        }}>
+
+        <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
+
+
+        <IconButton onClick={handleDownloadClick} style={{ cursor: "pointer", color: "white" }}>
+          {/* <DownloadIcon /> */}
+        <DownloadIcon style={{ cursor: "pointer" }} />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          sx={{ width: "100px" }}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleDownloadChart}>PNG</MenuItem>
+          <MenuItem onClick={handleDownloadSVG}>SVG</MenuItem>
+        </Menu>
+
+      </div>
       <ResponsiveContainer width="100%" minHeight={300}
+        className="line-chart-container"
         style={{ borderTop: "1px solid #4D5479", marginBottom: "20px", padding: "20px" }} >
         <LineChart
           data={currentData}
@@ -354,19 +440,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
         </LineChart>
       </ResponsiveContainer>
 
-      <div className="px-4 mb-4"
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
 
-        }}>
-
-        <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
-
-        <LineChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} />
-      </div>
 
     </div>
   );
