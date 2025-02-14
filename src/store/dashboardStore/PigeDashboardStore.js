@@ -1504,7 +1504,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
   },
-   ReaprtitionParType:[],
+   RepartitionParType:[],
    isloadingRepatitionType:false,
   getRepartitionParType: async (
     supports,
@@ -1541,7 +1541,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log("response",response)
       
       set({ 
-        ReaprtitionParType:response.data,
+        RepartitionParType:response.data,
         isloadingRepatitionType:false
        });
 

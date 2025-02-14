@@ -15,39 +15,10 @@ import { BarChartIcon, PieChartIcon } from "lucide-react";
 import html2canvas from "html2canvas";
 import CircularProgress from '@mui/material/CircularProgress';
 import './style.css'
-// export function PieActiveArc() {
-//   const { PartMarche ,formatDateToFrench} = UsePigeDashboardStore((state) => state)
-//   const array = [];
-//   const dataset = PartMarche.forEach((elem) => {
-//     const item = {
-//       id: elem.Titre_Lib,
-//       value: Number(elem.appearance_count),
-//       label: elem.Titre_Lib,
-//     }
-//     array.push(item)
-//     return array;
-//   })
-
-//   return (
-//     <PieChart
-//       colors={['#8B0A1A', '#45B3FA', '#F7DC6F', '#9B59B6', '#2ECC71']} // move it here
-//       series={[
-//         {
-//           data,
-//           highlightScope: { faded: 'global', highlighted: 'item' },
-//           faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-//           colors: ['#8B0A1A', '#45B3FA', '#F7DC6F', '#9B59B6', '#2ECC71'], // add this line
-//         },
-//       ]}
-//       height={200}
-//     />
-//   );
-// }
-
 export const PieChartVelson = ({ date1, date2, data, title, isloading,
   ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
   const { base } = UseFiltersStore((state) => state)
-  const { PartMarche, FormatRepartition } = UsePigeDashboardStore((state) => state);
+  const { PartMarche, FormatRepartition ,RepartitionParType} = UsePigeDashboardStore((state) => state);
   const { MarcheOptions, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
   //const chartDatalabelsBarColors = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c']
   const [chartDatalabelsBarColors, setChartDatalabelsBarColors] = useState([])
@@ -130,13 +101,9 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     const item = colorMapping.find(item => item.value === value);
     return item ? item.codeColor : '#2196f3';
   }
-
   //   "#d81b60",
   //   "#2196f3",
   //   "#43a047",
-
-
-
   const [average, setAverage] = useState(0);
   const [dynamicList, setDynamicList] = useState([])
   const [array, setArray] = useState([])
@@ -169,7 +136,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       const average20 = sum / list.length;
       setAverage(average20.toFixed(2));
     }
-  }, [PartMarche, FormatRepartition]);
+  }, [PartMarche, FormatRepartition,RepartitionParType]);
 
 
   const ModifyList = () => {
@@ -194,18 +161,18 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       trigger: 'item',
     },
     display: 'flex',
-    justifyContent: "end",
-    width:"550px",
+    justifyContent: "center",
+    //width:"450px",
     alignItems: 'center',
     color: chartDatalabelsBarColors,
     legend: {
       // Add a legend to display labels outside the pie chart
       show: true,
-      orient: 'vertical', // Vertical layout for the legend
+      orient: 'horizontal', // Vertical layout for the legend
       left: 'left', // Position the legend on the right side
-      //bottom: "0%",
-      width: "350px",
-      top:"20px",
+      bottom: "0%",
+      //width: "350px",
+      //top:"20px",
       textStyle: {
         color: 'white', // Set text color for the legend
         fontSize: 12,
@@ -222,7 +189,6 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         title: "Part de Marché",
         //data: array,
         data: dynamicList,
-
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -240,7 +206,8 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         },
         labelLine: {
           normal: {
-            show: false, // Hide the lines connecting the labels to the slices
+            show: false, 
+            // Hide the lines connecting the labels to the slices
           },
         },
       }],
@@ -256,7 +223,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
 
   //console.log('dynamiclist',dynamicList)
   const handleDownloadChart = () => {
-    console.log('download')
+    //console.log('download')
     const chartContainer = document.querySelector(".bar-chart-container");
     if (!chartContainer) return;
 
@@ -332,7 +299,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
           </div>
           <ReactEcharts
             style={{
-              height: '350px',
+              height: '450px',
               display: "flex",
               justifyContent: "center"
             }}
@@ -389,7 +356,7 @@ export const PieChartRepartitionFormat = () => {
     "#001415"
 
   ];
-  const { FormatRepartition, getRepartitionFormat, formatDateToFrench } = UsePigeDashboardStore((state) => state);
+  const { FormatRepartition, getRepartitionFormat, formatDateToFrench,RepartitionParType } = UsePigeDashboardStore((state) => state);
   const { base, media, baseGraphe, Filtersupports,
     Filterfamilles, Filterclassesids, Filtersecteursids,
     Filtervarietiesids, Filterannonceursids,

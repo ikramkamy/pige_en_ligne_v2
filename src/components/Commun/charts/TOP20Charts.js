@@ -61,10 +61,9 @@ export default function GridDemo({ date1, date2, media, base }) {
     loadingFormat,
     loadingAnnonceurSupport,
     loagingCreationAnnonceur,
-    ReaprtitionParType,
+    RepartitionParType,
     getRepartitionParType,
     isloadingRepatitionType,
-    
   } = UsePigeDashboardStore((state) => state)
   const top20familleModified = Top20famillesSectorielles?.map((e) => {
     return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
@@ -94,7 +93,7 @@ export default function GridDemo({ date1, date2, media, base }) {
   })
   // console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
 
-  const ReaprtitionParTypeModified=ReaprtitionParType?.map((e)=>{
+  const RepartitionParTypeModified=RepartitionParType?.map((e)=>{
     return { name: e.Type, proportion: e.proportion, total: e.total, average: e.average }
   })
   return (
@@ -216,8 +215,9 @@ export default function GridDemo({ date1, date2, media, base }) {
       
 
       </Row>
-      <Row className='mt-4 d-flex flex-wrap' style={{width:"100%"}}>
-        <Col >
+      
+      <Row className='mt-4' style={{width:"100%"}}>
+        <Col md={6}>
           < PieChartVelson
             title="Part Marché"
             date1={date1}
@@ -233,7 +233,7 @@ export default function GridDemo({ date1, date2, media, base }) {
           />
              
         </Col>
-        <Col >
+        <Col md={6}>
         < PieChartVelson
             title="Répartition par Format"
             date1={date1}
@@ -249,12 +249,12 @@ export default function GridDemo({ date1, date2, media, base }) {
        
        
         </Col>
-        <Col >
+        <Col md={6}>
         < PieChartVelson
             title="Répartition par Type"
             date1={date1}
             date2={date2}
-            data={ReaprtitionParTypeModified}
+            data={RepartitionParTypeModified}
             SetOptionFunction={setTypeOptions}
             ChangeBaseFunction={getRepartitionParType}
             parametre="type"
@@ -262,14 +262,12 @@ export default function GridDemo({ date1, date2, media, base }) {
             initialOptions={TypeOptions}
             isloading={isloadingRepatitionType}
           />
- 
-
         </Col>
 
 </Row>
         {/* <Col>
           <InteractivePieChart
-            dataType={ReaprtitionParType}
+            dataType={RepartitionParType}
             title="Répartition par Type"
           />
         </Col> */}

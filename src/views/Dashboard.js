@@ -144,7 +144,7 @@ function Dashboard() {
     getDiffusionParCreation,
     DiffusionParCreationLastYear,
     getDiffusionParCreationLastYear,
-    ReaprtitionParType,
+    RepartitionParType,
     isloadingRepatitionType,
     getRepartitionParType,
 

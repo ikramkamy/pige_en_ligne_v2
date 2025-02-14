@@ -48,7 +48,20 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   })
 
   let EvolutionDataHeure = []
-
+  const sortDatesAscending =(dateArray)=>{
+    if (!Array.isArray(dateArray)) {
+      throw new Error("Input must be an array of date strings.");
+    }
+  
+    return dateArray.sort((a, b) => {
+      // Convert date strings to Date objects for accurate comparison
+      const dateA = new Date(a);
+      const dateB = new Date(b);
+  
+      // Subtracting Date objects compares their timestamps (milliseconds since January 1, 1970)
+      return dateA - dateB;
+    });
+  }
   if (media !== "presse") {
     const sortByHeure = (arr) => {
       return arr.sort((a, b) => {
@@ -70,17 +83,17 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     })
   } else {
     EvolutionDataHeure = []
-
   }
 
 
-  const EvolutionDataJour = EvolutionData?.jour?.map((e) => ({
+  const EvolutionDataJour2 = EvolutionData?.jour?.map((e) => ({
     date: e.Jour,
     heur: e.heure,
     total: Number(e.total),
     name: e.Date,
   })) || [];
-
+  const EvolutionDataJour=sortDatesAscending(EvolutionDataJour2)
+  console.log('EvolutionDataMois2',EvolutionDataJour2)
   const EvolutionDataMois = EvolutionData?.mois?.map((e) => ({
     date: e.Date,
     name: e.Mois,
@@ -272,11 +285,10 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       className="mb-4"
       style={{
         backgroundColor: "transparent",
-        //padding: "20px",
         border: "1px solid lightgrey",
         borderRadius: "5px",
         color: "white",
-        position: "relative"
+        position: "relative",     
       }}
     >
       {isloading && (
@@ -295,6 +307,8 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
         width: "100%", display: "flex",
         justifyContent: "space-between",
         alignItems: "start",
+        borderBottom: "1px solid #4D5479",
+        marginBottom:"5px",
         //paddingTop: "5px"
       }}>
         <div className="px- " style={{
@@ -305,12 +319,11 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
           justifyContent: "center",
           flexDirection: "column",
           alignItems: "start",
-          height: "100px"
-
+          height: "100px",
         }}>
 
 
-          <div className="custom_responsive">
+          <div className="custom_responsive"   >
             <div>{formatDateToFrench(date1)} - {formatDateToFrench(date2)}</div>
             <p className="fw-bold">
               {LocalBaseGraph === "duree" ? "durée" : LocalBaseGraph} de diffusion par{" "}
@@ -322,13 +335,8 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
                   </span>
                 ))}
             </p>
-
-
           </div>
-
-
         </div>
-
         <div className="flex gap " style={{
           display: "flex", width: "70%",
           justifyContent: "flex-end", alignItems: "center",
@@ -374,18 +382,15 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
           ))}
         </div>
       </div>
-      <div className="px-4 mb-4"
+      <div className="px-4"
         style={{
           width: "100%",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-
+          marginBottom:"20px"
         }}>
-
         <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
-
-
         <IconButton onClick={handleDownloadClick} style={{ cursor: "pointer", color: "white" }}>
           {/* <DownloadIcon /> */}
         <DownloadIcon style={{ cursor: "pointer" }} />
@@ -403,7 +408,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       </div>
       <ResponsiveContainer width="100%" minHeight={300}
         className="line-chart-container"
-        style={{ borderTop: "1px solid #4D5479", marginBottom: "20px", padding: "20px" }} >
+        style={{marginBottom: "20px", padding: "20px" }} >
         <LineChart
           data={currentData}
           margin={{
