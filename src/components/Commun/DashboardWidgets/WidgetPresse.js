@@ -12,7 +12,7 @@ import {
   Col
 } from "react-bootstrap";
 
-export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) => {
+export const WidgetPresse = ({ icon, title, value, valueLastYear, valuepic,unite }) => {
   return (
     <Col lg="4" sm="6">
       <Card className="card-stats" style={{
@@ -30,26 +30,10 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) =>
             </Col>
             <Col xs="7">
               <div className="numbers">
-
-                {/* <Card.Title as="h3" style={{
+                <Card.Title as="h3" style={{
                   color: "white",
-                  fontSize: "35px", fontWeight: "400",      
-                }}>{value}</Card.Title> */}
-                
-                <CountUp
-                style={{
-                  color: "white",
-                  fontSize: "35px", fontWeight: "400", 
-                }}
-                  start={0}
-                  prefix=""
-                  suffix={unite}
-                  separator=""
-                  end={typeof(value)=='string' ? Number(value?.split(" ")[0]) : value}
-                  decimals={0}
-                  duration={4}
-
-                />
+                  fontSize: "25px", fontWeight: "400",      
+                }}>{value}</Card.Title>
                 <p className="text-grey-200 text-sm">{valuepic}</p>
               </div>
             </Col>

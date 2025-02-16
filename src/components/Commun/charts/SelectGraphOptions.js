@@ -6,7 +6,16 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { UseGraphStore } from 'store/GraphStore';
+import {
+    ListSubheader,
+    ClickAwayListener,
+    Grow,
+    Paper,
+    Popper,
+    MenuList,
 
+  } from "@mui/material";
+  import MoreVertIcon from "@mui/icons-material/MoreVert";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -121,19 +130,22 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,S
             <FormControl
                 sx={{
                     m: 0,
-                    width: 150,
-                    marginTop: "-5px",
+                    width: 10,
+                    marginTop: "0px",
                     marginRight: { xs: 0, sm: "0px" },
-                                      
+                    height:"15px"               
                 }}>
                 <Select
                     labelId="demo-multiple-checkbox-label"
                     value={selectedItems}
                     onChange={handleChange}
-                    input={<OutlinedInput label="top 5 annonceurs" />}
-                    renderValue={() => `Top ${selectedItems.length} ${filter}`}
+                    input={<OutlinedInput label="" />}
+                    renderValue={() => <div style={{ color: "white",
+                         transform: "rotate(90deg)", fontWeight:"900" }}>
+                            <span style={{ transform: "rotate(90deg)", fontWeight:"900"}}>...</span>
+                            </div>}
                     MenuProps={MenuProps}
-                    sx={{ backgroundColor: "010A41E6", height: "35px" ,color:"white"}}
+                    sx={{ backgroundColor: "010A41E6", height: "" ,color:"white", }}
                 >
                     {optionList.map((elem) => (
                         <MenuItem key={optionList.indexOf(elem)} value={elem}>
@@ -143,9 +155,129 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,S
                     ))}
                 </Select>
             </FormControl>
-       
+          
     );
 }
+
+// export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay, filter, SetOptionFunction }) {
+//     const optionList = options.map((e) => e.name.split("-")[0]);
+//     const [selectedItems, setSelectedItems] = useState([]);
+//     const [selectedList, setSelectedList] = useState(options.slice(0, 5));
+//     const [anchorEl, setAnchorEl] = useState(null); // For controlling the Popper menu
+//     const open = Boolean(anchorEl);
+
+//     useEffect(() => {
+//         setSelectedItems(optionList.slice(0, 10));
+//     }, [options]);
+
+//     const handleChange = (event) => {
+//         const selected = event.target.value;
+//         setSelectedItems((prevSelectedItems) => {
+//             if (prevSelectedItems.includes(selected)) {
+//                 return prevSelectedItems.filter((item) => item !== selected);
+//             } else {
+//                 if (prevSelectedItems.length >= 10) {
+//                     return [...prevSelectedItems.slice(1), selected];
+//                 } else {
+//                     return [...prevSelectedItems, selected];
+//                 }
+//             }
+//         });
+//     };
+
+//     useEffect(() => {
+//         const newSelectedList = options.filter((e) =>
+//             selectedItems.includes(e.name.split("-")[0])
+//         );
+//         setSelectedList(newSelectedList);
+//         SetOptionFunction && SetOptionFunction(newSelectedList);
+//     }, [selectedItems, options, SetOptionFunction]);
+
+//     useEffect(() => {
+//         UpdatedGraphDisplay();
+//     }, [selectedList]);
+
+//     const handleToggle = (event) => {
+//         setAnchorEl(anchorEl ? null : event.currentTarget);
+//     };
+
+//     const handleClose = (event) => {
+//         if (anchorEl && anchorEl.contains(event.target)) {
+//             return;
+//         }
+//         setAnchorEl(null);
+//     };
+
+//     return (
+//         <div>
+//             {/* Custom trigger button (three vertical points icon) */}
+//             <button
+//                 style={{
+//                     backgroundColor: "#010A41E6",
+//                     color: "white",
+//                     border: "none",
+//                     padding: "5px",
+//                     cursor: "pointer",
+//                     width: "35px",
+//                     height: "35px",
+//                     display: "flex",
+//                     justifyContent: "center",
+//                     alignItems: "center",
+//                     borderRadius: "4px",
+//                 }}
+//                 onClick={handleToggle}
+//                 aria-haspopup="true"
+//                 aria-expanded={open ? "true" : undefined}
+//             >
+//                 <MoreVertIcon />
+//             </button>
+
+//             {/* Popper for the dropdown menu */}
+//             <Popper
+//                 open={open}
+//                 anchorEl={anchorEl}
+//                 role={undefined}
+//                 transition
+//                 disablePortal
+//                 placement="bottom-start"
+//             >
+//                 {({ TransitionProps, placement }) => (
+//                     <Grow
+//                         {...TransitionProps}
+//                         style={{
+//                             transformOrigin:
+//                                 placement === "bottom-start" ? "left top" : "left bottom",
+//                         }}
+//                     >
+//                         <Paper>
+//                             <ClickAwayListener onClickAway={handleClose}>
+//                                 <MenuList
+//                                     autoFocusItem={open}
+//                                     id="menu-list-grow"
+//                                     onKeyDown={handleClose}
+//                                 >
+//                                     {optionList.map((elem) => (
+//                                         <MenuItem
+//                                             key={optionList.indexOf(elem)}
+//                                             value={elem}
+//                                             onClick={(event) => {
+//                                                 handleChange(event);
+//                                                 handleClose(event); // Close the menu after selection
+//                                             }}
+//                                         >
+//                                             <Checkbox checked={selectedItems.includes(elem)} />
+//                                             <ListItemText primary={elem} />
+//                                         </MenuItem>
+//                                     ))}
+//                                 </MenuList>
+//                             </ClickAwayListener>
+//                         </Paper>
+//                     </Grow>
+//                 )}
+//             </Popper>
+//         </div>
+//     );
+// }
 export function SelectGraphOptionsAnnonceurParsupport({ options, UpdatedGraphDisplay,media }) {
     const {setAnnonceurSupportOptions,AnnonceurSupportOptions} = UseGraphStore((state) => state);
     let optionList=[]

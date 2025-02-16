@@ -42,6 +42,7 @@ import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 import { NetworkErrorPopup } from "components/Commun/popups";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
 import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets";
+import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
 function Dashboard() {
   const { getEvolutionData, EvolutionData } = UseGraphStore((state) => state)
@@ -774,20 +775,21 @@ function Dashboard() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
+ 
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
   const exportToPDF = () => {
     setPdfIsCreated(true)
-    const container0 = document.getElementById('dashboard');
-    const container7 = document.getElementById('charts-container7');
-    const container8 = document.getElementById('charts-container8');
-    const container3 = document.getElementById('charts-container3');
-    const container4 = document.getElementById('charts-container4');
-    const container2 = document.getElementById('charts-container2');
-    const container1 = document.getElementById('charts-container1');
-    const container5 = document.getElementById('charts-container5');
-    const container6 = document.getElementById('charts-container6');
+    const container0 = document.querySelector('.dashboard');
+    const container7 = document.querySelector('.top20familles');
+    const container8 = document.querySelector('.top20annonceur');
+    const container3 = document.querySelector('.top20produit');
+    const container4 = document.querySelector('.top20marque');
+    const container2 = document.querySelector('.repartitionmarche');
+    const container1 = document.querySelector('.repartitionformat');
+    const container5 = document.querySelector('.annonceurparsupport');
+    const container6 = document.querySelector('.creationparannonceur');
+    
     const components = [
       container5, container6, container0, container1, container2, container3,
       container4, container7, container8
@@ -1206,7 +1208,7 @@ getRepartitionParType && getRepartitionParType(
       marginBottom: resStyle.marginTopAll
     }}
     >
-      <Button onClick={test}>TEST</Button>
+      {/* <Button onClick={test}>TEST</Button> */}
       <Container fluid style={{ display: "flex", flexDirection: "column" }} >
         <Row className="mt-3" style={{
           display: "flex",
@@ -1338,7 +1340,7 @@ getRepartitionParType && getRepartitionParType(
                     {(media === 'presse') && (
 
 
-                      <Widget
+                      <WidgetPresse
                         icon={iconPresse}
                         value={`${Couleur}/${NoireBlanc}`}
                         title="Couleur/Noir et Blanc"

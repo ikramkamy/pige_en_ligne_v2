@@ -93,12 +93,11 @@ export default function GridDemo({ date1, date2, media, base }) {
   })
   // console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
 
-  const RepartitionParTypeModified=RepartitionParType?.map((e)=>{
+  const RepartitionParTypeModified = RepartitionParType?.map((e) => {
     return { name: e.Type, proportion: e.proportion, total: e.total, average: e.average }
   })
   return (
-    <div >
-
+    <div>
       <InteractiveLineChart
         base={base}
         ChangeBaseFunction={getEvolutionData}
@@ -200,72 +199,54 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
       </Row>
 
-      <Row className='mt-4'>
-        {/* <Col>
-          <InteractivePieChart
-            title="Répartition par Format"
-          />
-        </Col>
-        <Col>
-          <InteractivePieChart
-            title="Part Marché"
-          />
-
-        </Col> */}
-      
-
-      </Row>
-      
-      <Row className='mt-4' style={{width:"100%"}}>
-        <Col md={6}>
-          < PieChartVelson
-            title="Part Marché"
-            date1={date1}
-            date2={date2}
-            data={PartMarcheModified}
-            SetOptionFunction={setMarcheOptions}
-            ChangeBaseFunction={getPrtMarchet}
-            parametre="repartitionmarche"
-            filter="Marché"
-            initialOptions={MarcheOptions}
-            isloading={loadingMarche}
-
-          />
-             
-        </Col>
-        <Col md={6}>
-        < PieChartVelson
-            title="Répartition par Format"
-            date1={date1}
-            date2={date2}
-            data={FormatRepartitionModified}
-            SetOptionFunction={setFormatOptions}
-            ChangeBaseFunction={getRepartitionFormat}
-            parametre="repartitionformat"
-            filter="Format"
-            initialOptions={FormatOptions}
-            isloading={loadingFormat}
-          />
-       
-       
-        </Col>
-        <Col md={6}>
-        < PieChartVelson
-            title="Répartition par Type"
-            date1={date1}
-            date2={date2}
-            data={RepartitionParTypeModified}
-            SetOptionFunction={setTypeOptions}
-            ChangeBaseFunction={getRepartitionParType}
-            parametre="type"
-            filter="Type"
-            initialOptions={TypeOptions}
-            isloading={isloadingRepatitionType}
-          />
-        </Col>
-
+      <Row className="mt-4" style={{ width: "100%",
+        display:"flex",justifyContent:"space-between"}}> {/* Add g-2 for spacing */}
+  <Col md={4}> {/* Each graph takes 1/3 of the width */}
+    <PieChartVelson
+      title="Part Marché"
+      date1={date1}
+      date2={date2}
+      data={PartMarcheModified}
+      SetOptionFunction={setMarcheOptions}
+      ChangeBaseFunction={getPrtMarchet}
+      parametre="repartitionmarche"
+      filter="Marché"
+      initialOptions={MarcheOptions}
+      isloading={loadingMarche}
+    />
+  </Col>
+  <Col md={4}> {/* Each graph takes 1/3 of the width */}
+    <PieChartVelson
+      title="Répartition par Format"
+      date1={date1}
+      date2={date2}
+      data={FormatRepartitionModified}
+      SetOptionFunction={setFormatOptions}
+      ChangeBaseFunction={getRepartitionFormat}
+      parametre="repartitionformat"
+      filter="Format"
+      initialOptions={FormatOptions}
+      isloading={loadingFormat}
+    />
+  </Col>
+  {media !== "presse" && ( /* Ensure proper condition syntax */
+    <Col md={4}> {/* Each graph takes 1/3 of the width */}
+      <PieChartVelson
+        title="Répartition par Type"
+        date1={date1}
+        date2={date2}
+        data={RepartitionParTypeModified}
+        SetOptionFunction={setTypeOptions}
+        ChangeBaseFunction={getRepartitionParType}
+        parametre="type"
+        filter="Type"
+        initialOptions={TypeOptions}
+        isloading={isloadingRepatitionType}
+      />
+    </Col>
+  )}
 </Row>
-        {/* <Col>
+      {/* <Col>
           <InteractivePieChart
             dataType={RepartitionParType}
             title="Répartition par Type"

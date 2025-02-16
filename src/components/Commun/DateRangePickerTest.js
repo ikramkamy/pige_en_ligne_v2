@@ -66,7 +66,7 @@ export default function DateRangeTest() {
 
     setDateRang(formattedStart, formattedEnd);
   }, [dateRange]);
-  
+  console.log('date')
   return (
     <div className="date-picker-container" style={{width:"100%"}}>
       <DatePicker     

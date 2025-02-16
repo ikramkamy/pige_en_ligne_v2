@@ -93,8 +93,8 @@ export const BarchartShadcn = ({
         // Find the cloned container and set its background to black
         const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
         if (clonedContainer) {
-          //clonedContainer.style.backgroundColor = "black";
-          clonedContainer.style.color = "black";
+          clonedContainer.style.backgroundColor = "black";
+          
         }
       },
     }).then((canvas) => {

@@ -1,22 +1,19 @@
 import * as React from 'react';
-import { pink, green, blue, orange } from '@mui/material/colors';
+import { pink, green, blue, } from '@mui/material/colors';
 import Checkbox from '@mui/material/Checkbox';
 import { Radio } from '@mui/material';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UseLoginStore } from 'store/dashboardStore/useLoginStore';
 import { UseGraphStore } from 'store/GraphStore';
 // Define labels and their corresponding names
-const checkboxes = [
-  { label: 'Volume', name: 'volume', value: 'volume', color: green[600], checkedColor: green[600], codeColor: "#43a047" },
-  { label: 'Budget', name: 'budget', value: 'budget', color: blue[500], checkedColor: blue[500], codeColor: "#2196f3" },
-  { label: 'Durée', name: 'durée', value: 'duree', color: pink[800], checkedColor: pink[600], codeColor: "#d81b60" },
-];
+
 
 export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre, base }) {
   const { email } = UseLoginStore((state) => state)
   const { seCodeColor, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
   const [b, setB] = useState((''))
+  const [checkboxes,setCheckboxes]=useState([])
   const {
     Filtersupports,
     Filterfamilles,
@@ -29,8 +26,31 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
     date1,
     date2,
     media,
+  
 
   } = UseFiltersStore((state) => state)
+  // const checkboxes = [
+  //   { label: 'Volume', name: 'volume', value: 'volume', color: green[600], checkedColor: green[600], codeColor: "#43a047" },
+  //   { label: 'Budget', name: 'budget', value: 'budget', color: blue[500], checkedColor: blue[500], codeColor: "#2196f3" },
+  //   { label: 'Durée', name: 'durée', value: 'duree', color: pink[800], checkedColor: pink[600], codeColor: "#d81b60" },
+  // ];
+  useEffect(()=>{
+if(media==="presse"){
+  setCheckboxes([
+    { label: 'Volume', name: 'volume', value: 'volume', color: green[600], checkedColor: green[600], codeColor: "#43a047" },
+    { label: 'Budget', name: 'budget', value: 'budget', color: blue[500], checkedColor: blue[500], codeColor: "#2196f3" },
+   
+  ]);
+
+}else{
+  setCheckboxes([
+    { label: 'Volume', name: 'volume', value: 'volume', color: green[600], checkedColor: green[600], codeColor: "#43a047" },
+    { label: 'Budget', name: 'budget', value: 'budget', color: blue[500], checkedColor: blue[500], codeColor: "#2196f3" },
+    { label: 'Durée', name: 'durée', value: 'duree', color: pink[800], checkedColor: pink[600], codeColor: "#d81b60" },
+  ]);
+}
+  },[date1,date2,media])
+
   const LoacalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
   const handelBaseGraphChange = (item, value) => {
 
@@ -76,6 +96,7 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
   // },[baseGraphs])
   const [disable, setDisable] = useState(false)
   React.useEffect(() => {
+    setB(base)
     if (parametre == "annonceurparsupport" || parametre == "creationparannonceur") {
       setDisable(true)
     } else {
@@ -89,7 +110,7 @@ console.log('b',b)
 
       {checkboxes.map((item, index) => (
         <div onClick={() => handelBaseGraphChange(item, index)}
-
+           
 
         // color={item.color ? 'default' : item.color} // Use 'default' for custom colors
         // sx={{
@@ -106,7 +127,7 @@ console.log('b',b)
             style={{
               //marginLeft: 8,
               width: "fit-content",
-              backgroundColor:b==item.value? item.checkedColor:"",
+              backgroundColor: b==item.value ? item.checkedColor:"",
               border: "1px solid lightgrey",
               borderRadius: "5px",
               padding: "5px",

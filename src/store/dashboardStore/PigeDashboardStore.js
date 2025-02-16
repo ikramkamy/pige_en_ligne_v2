@@ -552,8 +552,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2
       });
       console.log("response couleur", response)
-      set({ Couleur: Number(response.data.data1[0].total) });
-      set({ NoireBlanc: Number(response.data.data2[0].total) });
+      set({ Couleur: response.data.data1[0].total });
+      set({ NoireBlanc:response.data.data2[0].total });
 
     } catch (error) {
       console.log(error);

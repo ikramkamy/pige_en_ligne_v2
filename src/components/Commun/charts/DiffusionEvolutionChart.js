@@ -38,53 +38,66 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   const handleDownloadClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const arrTosort = EvolutionData?.heure?.map((e) => {
     return ({
-      date: e.Date,
-      heure: e.interval_start.split(':')[0] + ":" + e.interval_end.split(':')[1],
-      total: e.total,
-      jour: e.Jour,
-    })
-  })
-
-  let EvolutionDataHeure = []
-  const sortDatesAscending =(dateArray)=>{
-    if (!Array.isArray(dateArray)) {
-      throw new Error("Input must be an array of date strings.");
-    }
-  
-    return dateArray.sort((a, b) => {
-      // Convert date strings to Date objects for accurate comparison
-      const dateA = new Date(a);
-      const dateB = new Date(b);
-  
-      // Subtracting Date objects compares their timestamps (milliseconds since January 1, 1970)
-      return dateA - dateB;
-    });
-  }
-  if (media !== "presse") {
-    const sortByHeure = (arr) => {
-      return arr.sort((a, b) => {
-        // Convert "HH:MM" to minutes for accurate comparison
-        const toMinutes = (time) => {
-          const [hours, minutes] = time.split(":").map(Number);
-          return hours * 60 + minutes;
-        };
-        return toMinutes(a.heure) - toMinutes(b.heure);
-      });
-    }
-    EvolutionDataHeure = sortByHeure(arrTosort).map((e) => {
-      return ({
-        name: e.heure,
         date: e.Date,
-        total: Number(e.total),
+        name: e.interval_start?.split(':')[0] + ":" + e.interval_end?.split(':')[1],
+        //heure:e.interval_end?.split(':')[0]+":"+ e.interval_end?.split(':')[1],
+        total: e.total,
         jour: e.Jour,
       })
-    })
-  } else {
-    EvolutionDataHeure = []
+    
+   
+  })
+
+  let EvolutionDataHeure = arrTosort
+const sortDatesAscending =(dataArray)=>{
+    if (!Array.isArray(dataArray)) {
+      throw new Error("Input must be an array of objects with a 'date' property.");
+    }
+  
+    return dataArray.sort((a, b) => {
+      console.log("a sort",a,"b",b)
+      // Ensure both objects have a 'date' property
+      if (!a.name || !b.name) {
+        throw new Error("Each object in the array must have a 'date' property.");
+      }
+  
+      // Convert the 'date' property to Date objects for accurate comparison
+      const dateA = new Date(a.name);
+      const dateB = new Date(b.name);
+  
+      // Subtracting Date objects compares their timestamps
+      return dateA- dateB;
+    });
   }
 
+  
+  // if (media !== "presse" ) {
+  //   const sortByHeure = (arr) => {
+  //     return arr.sort((a, b) => {
+  //       // Convert "HH:MM" to minutes for accurate comparison
+  //       const toMinutes = (time) => {
+  //         const [hours, minutes] = time.split(":").map(Number);
+  //         return hours * 60 + minutes;
+  //       };
+  //       return toMinutes(a.heure) - toMinutes(b.heure);
+  //     });
+  //   }
+    
+  //   EvolutionDataHeure = sortByHeure(arrTosort).map((e) => {
+  //     return ({
+  //       name: e.heure,
+  //       date: e.Date,
+  //       total: Number(e.total),
+  //       jour: e.Jour,
+  //     })
+  //   })
+  // } else {
+  //   EvolutionDataHeure = []
+  // }
+  
 
   const EvolutionDataJour2 = EvolutionData?.jour?.map((e) => ({
     date: e.Jour,
@@ -93,14 +106,62 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     name: e.Date,
   })) || [];
   const EvolutionDataJour=sortDatesAscending(EvolutionDataJour2)
-  console.log('EvolutionDataMois2',EvolutionDataJour2)
-  const EvolutionDataMois = EvolutionData?.mois?.map((e) => ({
+  
+  const EvolutionDataMois2 = EvolutionData?.mois?.map((e) => ({
     date: e.Date,
     name: e.Mois,
     total: Number(e.total),
     jour: e.Jour,
+    Année:e.Année? e.Année : "" 
   })) || [];
-
+  const sortMonthsAscending = (dataArray) => {
+    if (!Array.isArray(dataArray)) {
+      throw new Error("Input must be an array of objects with 'name' (month) and 'Année' (year) properties.");
+    }
+    // Map of French month names to their numerical values for sorting
+    const monthMap = {
+      janvier: 1,
+      février: 2,
+      mars: 3,
+      avril: 4,
+      mai: 5,
+      juin: 6,
+      juillet: 7,
+      août: 8,
+      septembre: 9,
+      octobre: 10,
+      novembre: 11,
+      décembre: 12,
+    };
+  
+    return dataArray.sort((a, b) => {
+      // Ensure both objects have 'name' and 'Année' properties
+      if (!a.name || !b.name || !a.Année || !b.Année) {
+        throw new Error("Each object in the array must have 'name' (month) and 'Année' (year) properties.");
+      }
+  
+      const yearA = Number(a.Année);
+      const yearB = Number(b.Année);
+  
+      // Compare years first
+      if (yearA !== yearB) {
+        return yearA - yearB; // Sort by year in ascending order
+      }
+  
+      // If years are the same, compare months using the monthMap
+      const monthA = monthMap[a.name.trim().toLowerCase()];
+      const monthB = monthMap[b.name.trim().toLowerCase()];
+  
+      if (monthA === undefined || monthB === undefined) {
+        throw new Error(`Invalid month name: ${a.name} or ${b.name}`);
+      }
+  
+      return monthA - monthB; // Sort by month in ascending order
+    });
+  };
+  
+const EvolutionDataMois=EvolutionDataMois2 
+ console.log("EvolutionDataMois2",sortMonthsAscending(EvolutionDataMois2))
   const dataMapping = {
     heure: EvolutionDataHeure,
     jour: EvolutionDataJour,
@@ -108,19 +169,34 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   };
   const [localColor, setLocalColor] = useState('red')
   const currentData = dataMapping[activeChart] || [];
+
+
   const getMinvalue = (currentData) => {
     const min = currentData.reduce((acc, current) => Math.min(acc, current.total),
       Infinity);
     return min
   }
+  const findMax =(numbers)=> {
+    if (!Array.isArray(numbers) || numbers.length === 0) {
+        throw new Error("Input must be a non-empty array of numbers.");
+    }
+    return numbers.reduce((max, current) => (current > max ? current : max), numbers[0]);
+}
+
+const maxarray=EvolutionDataHeure?.map((e)=>Number(e.total))
+let maxheure=[]
+if(media !=="presse"){
+  maxheure=findMax(maxarray)
+}
+
   const chartConfig = {
     heure: {
       label: "Heure",
       //color: "#d81b60",
       color: localColor,
       total: EvolutionData?.heure?.length,
-      max: EvolutionDataHeure[0]?.total,
-      min: getMinvalue(EvolutionDataHeure),
+      max: maxheure? maxheure :0,
+      min: media!=="presse"? getMinvalue(EvolutionDataHeure):0,
     },
     jour: {
       label: "Jour",
@@ -145,7 +221,8 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       mois: "",
     };
   }, [EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois]);
-  console.log("evolution", EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois)
+
+console.log("maxarray",maxheure)
   // Custom Tooltip Content Function
   const LocalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
   const colorMapping = [

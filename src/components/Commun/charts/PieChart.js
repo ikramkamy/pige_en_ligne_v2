@@ -14,11 +14,19 @@ import ColorCheckboxes from './BaseCheckBoxGroupe';
 import { BarChartIcon, PieChartIcon } from "lucide-react";
 import html2canvas from "html2canvas";
 import CircularProgress from '@mui/material/CircularProgress';
-import './style.css'
+import MenuItem from '@mui/material/MenuItem';
+import './style.css';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+  ListSubheader,
+  IconButton,
+  Menu,
+} from "@mui/material";
+import { DownloadIcon } from "lucide-react";
 export const PieChartVelson = ({ date1, date2, data, title, isloading,
   ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
   const { base } = UseFiltersStore((state) => state)
-  const { PartMarche, FormatRepartition ,RepartitionParType} = UsePigeDashboardStore((state) => state);
+  const { PartMarche, FormatRepartition, RepartitionParType,formatDateToFrench} = UsePigeDashboardStore((state) => state);
   const { MarcheOptions, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
   //const chartDatalabelsBarColors = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c']
   const [chartDatalabelsBarColors, setChartDatalabelsBarColors] = useState([])
@@ -136,7 +144,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       const average20 = sum / list.length;
       setAverage(average20.toFixed(2));
     }
-  }, [PartMarche, FormatRepartition,RepartitionParType]);
+  }, [PartMarche, FormatRepartition, RepartitionParType]);
 
 
   const ModifyList = () => {
@@ -159,6 +167,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   var option = {
     tooltip: {
       trigger: 'item',
+      
     },
     display: 'flex',
     justifyContent: "center",
@@ -166,26 +175,23 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     alignItems: 'center',
     color: chartDatalabelsBarColors,
     legend: {
-      // Add a legend to display labels outside the pie chart
       show: true,
-      orient: 'horizontal', // Vertical layout for the legend
-      left: 'left', // Position the legend on the right side
+      orient: 'horizontal', 
+      left: 'center', 
       bottom: "0%",
-      //width: "350px",
-      //top:"20px",
       textStyle: {
         color: 'white', // Set text color for the legend
-        fontSize: 12,
+        fontSize: 10,
       },
       data: dynamicList.map(item => item.name), // Map names from the data to the legend
       align: 'auto', // Align the legend items properly
-      itemGap: 15, // Add spacing between legend items
+      itemGap: 1, // Add spacing between legend items
     },
     series:
       [{
-        name: `Part Marché base ${base} `,
+        name: `${base} `,
         type: 'pie',
-        radius: ['50%', '20%'],
+        radius: ['40%', '70%'],
         title: "Part de Marché",
         //data: array,
         data: dynamicList,
@@ -206,7 +212,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         },
         labelLine: {
           normal: {
-            show: false, 
+            show: false,
             // Hide the lines connecting the labels to the slices
           },
         },
@@ -222,17 +228,26 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   };
 
   //console.log('dynamiclist',dynamicList)
+  //Download SVG PNG
+  const [anchorEl, setAnchorEl] = useState(null); // For Menu anchor
+  const open = Boolean(anchorEl);
+  const handleDownloadClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
   const handleDownloadChart = () => {
-    //console.log('download')
-    const chartContainer = document.querySelector(".bar-chart-container");
+
+    const chartContainer = document.querySelector(`.${parametre}`);
+    const AxisLabel = document.querySelector(".recharts-layer recharts-cartesian-axis-tick")
+    console.log("AxisLabel", chartContainer, AxisLabel)
     if (!chartContainer) return;
 
     html2canvas(chartContainer, {
       onclone: (clonedDoc) => {
         // Find the cloned container and set its background to black
-        const clonedContainer = clonedDoc.querySelector(".bar-chart-container");
+        const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
         if (clonedContainer) {
-          clonedContainer.style.backgroundColor = "black"; // Set black background for the cloned element
+          clonedContainer.style.backgroundColor = "black";
+
         }
       },
     }).then((canvas) => {
@@ -243,6 +258,54 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       link.click(); // Trigger the download
     });
 
+  };
+  const handleDownloadSVG = () => {
+    const chartContainer = document.querySelector(`.${parametre}`);
+    if (!chartContainer) return;
+
+    // Find the SVG element within the container
+    const svgElement = chartContainer.querySelector("svg");
+    if (!svgElement) return;
+
+    // Serialize the original SVG content
+    const serializer = new XMLSerializer();
+    let svgString = serializer.serializeToString(svgElement);
+
+    // Extract the viewBox attributes to determine the dimensions
+    const viewBox = svgElement.getAttribute("viewBox").split(" ").map(Number);
+    const width = viewBox[2];
+    const height = viewBox[3];
+
+    // Wrap the original SVG content with a black background rectangle
+    const modifiedSvgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
+        <!-- Black background rectangle -->
+        <rect width="${width}" height="${height}" fill="black" />
+        <!-- Original SVG content -->
+        ${svgString}
+      </svg>
+    `;
+
+    // Create a Blob and download the modified SVG
+    const blob = new Blob([modifiedSvgString], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "chart.svg";
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
+
+    // Close the menu after download
+    handleClose();
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleToggleDropdown = (event) => {
+    setAnchorEl(event.currentTarget);
   };
   return (
     <div className='m-2' style={{ color: "white" }}>
@@ -271,40 +334,73 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
           padding: 0,
           display: "flex", flexDirection: "column"
         }} id="charts-container5">
-          <div style={{
-            width: "100%", display: "flex",
-            justifyContent: "space-between",
-            alignItems: "start",
-            paddingTop: "5px"
-          }}>
-            <div>{title}</div>
-            <div>AVG ={Number(average).toFixed(2)}</div>
-            <SelectGraphOptionsMarche
-              UpdatedGraphDisplay={ModifyList}
-              options={array}
-              filter={filter}
-              SetOptionFunction={SetOptionFunction}
-            />
-          </div>
-          {/* {formatDateToFrench(date1)} - {formatDateToFrench(date2)} */}
-          <div className="mt-4"
+          <div className="mt-2"
             style={{
               width: "100%",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center"
             }}>
-            <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} />
-            <PieChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} />
+            <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base}/>
+            {/* <PieChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} /> */}
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+
+              width: "50px"
+            }}>
+              {/* <DownloadIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} /> */}
+              <IconButton onClick={handleDownloadClick} style={{ cursor: "pointer", color: "white" }}>
+                {/* <DownloadIcon /> */}
+                <DownloadIcon style={{ cursor: "pointer" }} />
+              </IconButton>
+
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                sx={{ width: "100px" }}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleDownloadChart}>PNG</MenuItem>
+                <MenuItem onClick={handleDownloadSVG}>SVG</MenuItem>
+              </Menu>
+
+              <SelectGraphOptionsMarche
+                UpdatedGraphDisplay={ModifyList}
+                options={array}
+                filter={filter}
+                SetOptionFunction={SetOptionFunction}
+              />
+            </div>
+
           </div>
+          <div style={{
+            width: "100%", display: "flex",
+            justifyContent: "space-between",
+            alignItems: "start",
+            paddingTop: "5px",
+            marginBottom: "10px"
+          }}>
+            <div style={{ fontWeight: "400", fontSize: "14px" }}>
+              
+              <p>{title}</p>
+              <p>{formatDateToFrench(date1)} - {formatDateToFrench(date2)}</p>
+              </div>
+           
+            <div>AVG ={Number(average).toFixed(2)}</div>
+          </div>
+          <div className="chart-container" style={{ width: '100%', height: '400px' }}>
           <ReactEcharts
+            className={`${parametre}`}
             style={{
-              height: '450px',
+              height: '400px',
               display: "flex",
               justifyContent: "center"
             }}
             option={option} />
-         
+            </div>
+
         </div>
       </Card>
     </div>
@@ -356,7 +452,7 @@ export const PieChartRepartitionFormat = () => {
     "#001415"
 
   ];
-  const { FormatRepartition, getRepartitionFormat, formatDateToFrench,RepartitionParType } = UsePigeDashboardStore((state) => state);
+  const { FormatRepartition, getRepartitionFormat, formatDateToFrench, RepartitionParType } = UsePigeDashboardStore((state) => state);
   const { base, media, baseGraphe, Filtersupports,
     Filterfamilles, Filterclassesids, Filtersecteursids,
     Filtervarietiesids, Filterannonceursids,

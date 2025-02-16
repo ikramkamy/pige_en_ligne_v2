@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+
 import Radio from '@mui/material/Radio';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 const ITEM_HEIGHT = 48;
@@ -23,6 +23,7 @@ export default function MultipleSelectBase() {
   const { media, setBase, base } = UseFiltersStore((state) => state)
   const [previousSelection, setPreviousSelection] = useState([]);
   const [selectedBase, setSelectedBase] = useState('')
+
   const [bases, setBases] = useState([
     {
       label: "volume",
@@ -81,6 +82,7 @@ export default function MultipleSelectBase() {
     const prevSelection = bases.filter((elem) => elem.value == base)
     setPreviousSelection(prevSelection);
   }, [base]);
+
   return (
     <div>
       <FormControl
