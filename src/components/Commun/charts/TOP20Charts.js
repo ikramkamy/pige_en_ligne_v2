@@ -199,9 +199,8 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
       </Row>
 
-      <Row className="mt-4" style={{ width: "100%",
-        display:"flex",justifyContent:"space-between"}}> {/* Add g-2 for spacing */}
-  <Col md={4}> {/* Each graph takes 1/3 of the width */}
+      <Row className="mt-4"> {/* Add g-2 for spacing */}
+  <Col md={6}> {/* Each graph takes 1/3 of the width */}
     <PieChartVelson
       title="Part Marché"
       date1={date1}
@@ -215,7 +214,7 @@ export default function GridDemo({ date1, date2, media, base }) {
       isloading={loadingMarche}
     />
   </Col>
-  <Col md={4}> {/* Each graph takes 1/3 of the width */}
+  <Col md={6}> {/* Each graph takes 1/3 of the width */}
     <PieChartVelson
       title="Répartition par Format"
       date1={date1}
@@ -229,8 +228,10 @@ export default function GridDemo({ date1, date2, media, base }) {
       isloading={loadingFormat}
     />
   </Col>
-  {media !== "presse" && ( /* Ensure proper condition syntax */
-    <Col md={4}> {/* Each graph takes 1/3 of the width */}
+ 
+</Row>
+{media !== "presse" && ( /* Ensure proper condition syntax */
+    <Col md={6}> {/* Each graph takes 1/3 of the width */}
       <PieChartVelson
         title="Répartition par Type"
         date1={date1}
@@ -245,7 +246,6 @@ export default function GridDemo({ date1, date2, media, base }) {
       />
     </Col>
   )}
-</Row>
       {/* <Col>
           <InteractivePieChart
             dataType={RepartitionParType}

@@ -125,17 +125,13 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     //.log('array',array)
     setChartDatalabelsBarColors(array)
   }, [baseGraphs])
-  const display = data?.map((elem) => {
-    return {
-      value: Number(elem.total),
-      name: `${elem.name}-${Number(elem.proportion).toFixed(2) + "%"}`,
-    }
-  })
+
   useEffect(() => {
     if (data && data.length !== 0) {
       const list = data.map((elem) => ({
         value: Number(elem.total),
-        name: `${elem.name}-${Number(elem.proportion).toFixed(2)}%`,
+        namelegend: `${Number(elem.proportion).toFixed(2)}%`,
+        name: `${elem.name}`,
       }));
       setArray(list);
 
@@ -151,7 +147,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     var autresList = array.filter((e) => !data.includes(e))
 
     var valueAutre = autresList.map((e) => Number(e.value))
-    var PourcentageAutre = autresList.map((e) => Number(e.name.split('-')[1].split('%')[0]))
+    var PourcentageAutre = autresList.map((e) => Number(e.name.split('%')[0]))
 
     const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -178,14 +174,15 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       show: true,
       orient: 'horizontal', 
       left: 'center', 
-      bottom: "0%",
+      bottom: "-0%",
       textStyle: {
         color: 'white', // Set text color for the legend
         fontSize: 10,
       },
       data: dynamicList.map(item => item.name), // Map names from the data to the legend
       align: 'auto', // Align the legend items properly
-      itemGap: 1, // Add spacing between legend items
+      itemGap: 5, // Add spacing between legend items
+      padding: [80, 20, -80, 20],
     },
     series:
       [{
@@ -203,17 +200,18 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         },
         label: {
           normal: {
-            show: false,
+            show: true,
             fontSize: 14,
             fontWeight: 'normal',
             color: 'white',
             fontFamily: 'Arial, sans-serif',
+            formatter: '{d}%'
           },
         },
         labelLine: {
           normal: {
-            show: false,
-            // Hide the lines connecting the labels to the slices
+            show: true,
+           
           },
         },
       }],
@@ -406,368 +404,5 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     </div>
   )
 }
-export const PieChartRepartitionFormat = () => {
 
-  const { AnnonceursOptions, setAnnonceursOptions } = UseGraphStore((state) => state)
-  const chartDatalabelsBarColors = [
-    // "#C7E6F6",
-    // "#B9D9E4",
-    // "#ACCBE2",
-    // "#9BC4D0",
-    // "#8AA9C9",
-    // "#7797BE",
-    // "#6885B3",
-    // "#5974A8",
-    // "#49679D",
-    // "#3B638F",
-    // "#2F5992",
-    // "#245F85",
-    // "#1B5678",
-    // "#145A6B",
-    // "#0F4F5E",
-    // "#094753",
-    // "#043C48",
-    // "#00333D",
-    // "#002B34",
-    // "#00222B"
-    "#00a6e0",
-    "#0099d5",
-    "#008ac9",
-    "#007ebd",
-    "#0072b1",
-    "#0066a5",
-    "#005d99",
-    "#00538d",
-    "#004c81",
-    "#00446f",
-    "#003d5d",
-    "#003a4b",
-    "#00334a",
-    "#002f3a",
-    "#002a39",
-    "#002435",
-    "#001f31",
-    "#001b2d",
-    "#00171a",
-    "#001415"
-
-  ];
-  const { FormatRepartition, getRepartitionFormat, formatDateToFrench, RepartitionParType } = UsePigeDashboardStore((state) => state);
-  const { base, media, baseGraphe, Filtersupports,
-    Filterfamilles, Filterclassesids, Filtersecteursids,
-    Filtervarietiesids, Filterannonceursids,
-    Filtermarquesids, Filterproduitsids, rangs, date1, date2 } = UseFiltersStore((state) => state)
-  const [average, setAverage] = useState(0);
-  const [array, setArray] = useState([]);
-
-  useEffect(() => {
-    if (FormatRepartition && FormatRepartition.length !== 0) {
-      //console.log("FormatRepartition", FormatRepartition)
-      if (base === "volume" || baseGraphe === 'volume') {
-        switch (media) {
-          case 'presse':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-              const item = {
-                value: Number(elem.appearance_count),
-                name: `${elem.format}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-
-              }
-              list.push(item)
-              //array.push(item)
-              return array;
-            })
-            //console.log('array presse volume', array)
-            setArray(list)
-            var list2 = list.map((e) => e.value)
-            //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            //setAverage(Number(FormatRepartition[0].average_ratio).toFixed(2));
-            break
-          case 'radio':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-              const item = {
-                //  x:elem.Chaine_Lib + elem.proportion,
-                //  y:Number(elem.chaine_count)
-                value: Number(elem.format_count),
-                name: `${elem.RadioPub_Format + "s"}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            var list2 = list.map((e) => e.value)
-            //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-
-            break;
-          case 'television':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-
-              const item = {
-                //  x:elem.Chaine_Lib + elem.proportion,
-                //  y:Number(elem.chaine_count)
-                value: Number(elem.format_count),
-                name: `${elem.TelePub_Format + "s"}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            // if (FormatRepartition && FormatRepartition.length !== 0) {
-
-            //   setAverage(Number(FormatRepartition[0].average_diffusion_per_format).toFixed(2));
-            // }
-            var list2 = list.map((e) => e.value)
-            //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-
-
-            break;
-        }
-
-      } else if (base === "budget" || baseGraphe === 'budget') {
-        switch (media) {
-          case 'presse':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-
-              const item = {
-                value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.format}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list);
-            //setAverage(Number(FormatRepartition[0].average_tarif_per_format).toFixed(2));
-            var list2 = list.map((e) => e.value)
-            //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break;
-          case 'radio':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-              const item = {
-                //    x:elem.Chaine_Lib + elem.proportion,
-                //    y:Number(elem.total_tarif)
-                value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.RadioPub_Format}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list);
-            //setAverage(Number(FormatRepartition[0].average_tarif_per_chaine).toFixed(2));
-            var list2 = list.map((e) => e.value)
-            //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break;
-          case 'television':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-              const item = {
-                //    x:elem.Chaine_Lib + elem.proportion,
-                //    y:Number(elem.total_tarif)
-                value: Number(elem.total_tarif).toFixed(2),
-                name: `${elem.Pub_Format}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            //setAverage(Number(FormatRepartition[0].average_tarif_per_format).toFixed(2));
-            var list2 = list.map((e) => e.value)
-            //setAverage(Number(PartMarche[0].average_duree_per_chaine).toFixed(2));
-            var sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-            var average20 = sum / list.length;
-            //console.log("average 20", average20)
-            setAverage(average20.toFixed(2))
-            break;
-        }
-
-      } else if (base === 'duree' || baseGraphe === 'duree') {
-        switch (media) {
-          case 'radio':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-              const item = {
-                value: Number(elem.total_duree).toFixed(2),
-                name: `${elem.RadioPub_Format}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-              }
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            setAverage(Number(FormatRepartition[0].average_duree_per_format).toFixed(2));
-
-            break;
-          case 'television':
-            var list = [];
-            var dataset = FormatRepartition.forEach((elem) => {
-              const item = {
-                //    x:elem.Chaine_Lib + elem.proportion,
-                //    y:Number(elem.total_duree)
-
-                value: Number(elem.total_duree).toFixed(2),
-                name: `${elem.TelePub_Format + "s"}  ${Number(elem.proportion).toFixed(2) + "%"}`,
-
-              }
-
-              list.push(item)
-              return array;
-            })
-            setArray(list)
-            setAverage(Number(FormatRepartition[0].average_duree_per_format).toFixed(2));
-            break;
-
-        }
-
-      }
-
-    }
-  }, [FormatRepartition])
-  const [dynamicList, setDynamicList] = useState(AnnonceursOptions)
-  const ModifyList = () => {
-    var autresList = array.filter((e) => !AnnonceursOptions.includes(e))
-    var valueAutre = autresList.map((e) => Number(e.value))
-    if (media === "presse") {
-      setDynamicList(AnnonceursOptions)
-    } else {
-      var PourcentageAutre = autresList.map((e) => Number(e.name.split(" ")[2].split('%')[0]))
-      const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-      const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-      var listWithAutre = AnnonceursOptions;
-      var autre = {
-        value: totalSum.toFixed(2).toString(),
-        name: `autres ${totalSumPourcentage.toFixed(2)}%`
-      }
-      listWithAutre.push(autre)
-      setDynamicList([...listWithAutre])
-
-    }
-
-  }
-
-  var option = {
-    tooltip: {
-      trigger: 'item',
-
-    },
-    color: chartDatalabelsBarColors,
-    series:
-      [{
-        name: `Part Marché base ${base} `,
-        type: 'pie',
-        radius: '50%',
-        title: "Part de Marché",
-        data: dynamicList,
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }],
-
-    textStyle: {
-      fontFamily: 'Poppins, sans-serif',
-      fontSize: 16,
-    },
-  };
-  const [codeColor, setCodeColor] = useState('#F7F7F7')
-  const getData = () => {
-    if (base === "budget") {
-      setCodeColor('#ff9966')
-    } else if (base === "volume") {
-      setCodeColor('#d1edd3')
-    } else if (base === 'duree') {
-      setCodeColor('#d1ebed')
-    }
-    getRepartitionFormat &&
-      getRepartitionFormat(Filtersupports, Filterfamilles,
-        Filterclassesids, Filtersecteursids, Filtervarietiesids,
-        Filterannonceursids, Filtermarquesids,
-        Filterproduitsids, base, media, rangs, date1, date2)
-  }
-
-  return (
-    <div  >
-      <Card style={{ borderRadius: 10, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-        <CardHeader style={{ backgroundColor: codeColor, padding: 20, borderBottom: '1px solid #ddd' }}>
-          <Row>
-            <Col>
-              <h4 className="card-title mb-0"
-                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
-                Répartition par Format
-              </h4>
-            </Col>
-            <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <h4 className="card-title mb-0"
-                style={{ fontSize: 14, fontWeight: 500, color: '#333' }}>
-                La moyenne = {average}
-
-              </h4>
-
-            </Col>
-
-          </Row>
-          <Row style={{ display: "flex", justifyContent: "space-between" }}>
-            <Col>
-              <BaseDialog getData={getData} title="Répartition par Format" />
-            </Col>
-            <Col style={{ display: 'flex', justifyContent: 'flex-end', padding: "0px" }}>
-              <SelectGraphOptions options={array} UpdatedGraphDisplay={ModifyList}
-
-              />
-            </Col>
-          </Row>
-        </CardHeader>
-
-        {(FormatRepartition) ? (
-          <div className="card-body" style={{ padding: 0 }} id="charts-container6">
-            <ReactEcharts
-
-              style={{ height: '450px' }}
-
-              option={option} />
-          </div>
-
-        ) : (
-          <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-            <img src={WatingChart} alt="immar" />
-          </div>
-
-
-        )}
-      </Card>
-
-    </div>
-  )
-}
 

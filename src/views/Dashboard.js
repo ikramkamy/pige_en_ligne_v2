@@ -35,7 +35,7 @@ import {
 } from '../components/Commun/charts/BarCharts';
 import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
-import { PieChartVelson, PieChartRepartitionFormat } from '../components/Commun/charts/PieChart';
+import { PieChartVelson} from '../components/Commun/charts/PieChart';
 import { CircularProgress } from '@mui/material';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
@@ -52,7 +52,6 @@ function Dashboard() {
     <CustomDataLabelMarques />,
     <CustomDataLabelProduits />,
     <PieChartVelson />,
-    <PieChartRepartitionFormat />,
     <CustomDataLabelAnnonceurParSupport />,
     <CustomDataLabelCreationParAnnonceur />,
 
@@ -789,7 +788,7 @@ function Dashboard() {
     const container1 = document.querySelector('.repartitionformat');
     const container5 = document.querySelector('.annonceurparsupport');
     const container6 = document.querySelector('.creationparannonceur');
-    
+
     const components = [
       container5, container6, container0, container1, container2, container3,
       container4, container7, container8
@@ -826,7 +825,7 @@ function Dashboard() {
     const borderColor = [211, 211, 211];
     const verticalCenter = pageHeight / 2;
     pdf.setDrawColor(...borderColor);
-    pdf.setFillColor('#00a6e0');
+    pdf.setFillColor('#020b42');
     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
     pdf.setFontSize(50)
     pdf.setFont('poppins', 'bold');
