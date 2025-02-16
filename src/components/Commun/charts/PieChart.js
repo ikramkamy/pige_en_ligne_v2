@@ -182,7 +182,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       data: dynamicList.map(item => item.name), // Map names from the data to the legend
       align: 'auto', // Align the legend items properly
       itemGap: 5, // Add spacing between legend items
-      padding: [80, 20, -80, 20],
+      padding: [20, 20, 20, 20],
     },
     series:
       [{
@@ -388,11 +388,12 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
            
             <div>AVG ={Number(average).toFixed(2)}</div>
           </div>
-          <div className="chart-container" style={{ width: '100%', height: '400px' }}>
+          <div className="chart-container" style={{ width: '100%', height: '500px' }}>
           <ReactEcharts
             className={`${parametre}`}
             style={{
-              height: '400px',
+              height: '500px',
+             
               display: "flex",
               justifyContent: "center"
             }}

@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from 'react';
-
-import {
-  CustomDataLabelFamilles, CustomDataLabelAnnonceurs,
-  CustomDataLabelMarques, CustomDataLabelProduits, CustomDataLabelAnnonceurParSupport,
-  CustomDataLabelCreationParAnnonceur
-} from '../../Commun/charts/BarCharts';
+import React from 'react';
 import { Row, Col } from "react-bootstrap";
 import { PieChartVelson } from '../charts/PieChart';
-import { BarchartShadcn, BarChartComponent } from "./BarChartNew"
+import { BarchartShadcn} from "./BarChartNew"
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
-import { CaseLower } from 'lucide-react';
 import { UseGraphStore } from 'store/GraphStore';
 import InteractiveLineChart from './DiffusionEvolutionChart';
-import { InteractivePieChart } from './ShadCnPieChart'
 export default function GridDemo({ date1, date2, media, base }) {
   const { setFamillesOptions,
     FamillesOptions,
@@ -246,13 +238,6 @@ export default function GridDemo({ date1, date2, media, base }) {
       />
     </Col>
   )}
-      {/* <Col>
-          <InteractivePieChart
-            dataType={RepartitionParType}
-            title="Répartition par Type"
-          />
-        </Col> */}
-
     </div>
 
   );

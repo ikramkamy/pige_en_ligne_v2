@@ -3,9 +3,6 @@ import ReactApexChart from 'react-apexcharts';
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 
-
-
-
 export const ApexChart = () => {
   const { Top20famillesSectorielles,getTop20famillesSectoriellesPresse }=UsePigeDashboardStore((state)=>state)
    const {base,Filtersupports,familles,classes,secteurs,varieties,annonceurs,
