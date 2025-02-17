@@ -1089,7 +1089,8 @@ function Dashboard() {
     container5.style.backgroundColor = "#020b42";
     const container6 = document.querySelector('.creationparannonceur');
     container6.style.backgroundColor = "#020b42";
-
+    const container9 = document.querySelector('.type');
+    container9.style.backgroundColor = "#020b42";
     const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape orientation
     const pageWidth = 297;
     const pageHeight = 210;
@@ -1128,7 +1129,7 @@ function Dashboard() {
       pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
     });
 
-    html2canvas(container1, { scale: 2 }).then((canvas) => {
+    html2canvas(container1, { scale: 1 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
@@ -1140,8 +1141,7 @@ function Dashboard() {
       pdf.text('Top 20 familles sectorielles', pageWidth / 2, topMargin + 10, { align: 'center' });
       pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
     });
-
-    html2canvas(container2, { scale: 2 }).then((canvas) => {
+    html2canvas(container2, { scale: 1 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
@@ -1153,8 +1153,7 @@ function Dashboard() {
       pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
       pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
     });
-
-    html2canvas(container3, { scale: 2 }).then((canvas) => {
+    html2canvas(container3, { scale: 1 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
@@ -1166,7 +1165,7 @@ function Dashboard() {
       pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
       pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
     });
-    html2canvas(container4, { scale: 2 }).then((canvas) => {
+    html2canvas(container4, { scale: 0.5 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
@@ -1178,7 +1177,7 @@ function Dashboard() {
       pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
       pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
     });
-    html2canvas(container5, { scale: 2 }).then((canvas) => {
+    html2canvas(container5, { scale: 0.5 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
@@ -1190,7 +1189,7 @@ function Dashboard() {
       pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
       pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
     });
-    html2canvas(container7, { scale: 2 }).then((canvas) => {
+    html2canvas(container7, { scale: 0.5 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
@@ -1202,7 +1201,22 @@ function Dashboard() {
       pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
       pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
     }); 
-    html2canvas(container8, { scale: 2 }).then((canvas) => {
+    html2canvas(container8, { scale: 0.5 }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+
+      pdf.addPage();
+      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor("#ffffff"); // White text
+      pdf.text('Nombre de créations uniques par annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+
+      setPdfIsCreated(false);
+      pdf.save(`media_review_${date1}_${date2}.pdf`);
+    });
+    html2canvas(container9, { scale: 0.5 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
@@ -1237,7 +1251,6 @@ function Dashboard() {
 
     )
   }
-
   if (!client) {
     history.push('/login')
     LougoutRestErrorMessages && LougoutRestErrorMessages(email)
