@@ -172,7 +172,7 @@ const EvolutionDataMois=EvolutionDataMois2
 
 
   const getMinvalue = (currentData) => {
-    const min = currentData.reduce((acc, current) => Math.min(acc, current.total),
+    const min = currentData?.reduce((acc, current) => Math.min(acc, current.total),
       Infinity);
     return min
   }
@@ -196,7 +196,7 @@ let maxheure=[]
       color: localColor,
       total: EvolutionData?.heure?.length,
       max: maxarray ? findMax(maxarray) :0,
-      min: media!=="presse"? getMinvalue(EvolutionDataHeure):0,
+      min: media !=="presse" ? getMinvalue(EvolutionDataHeure):0,
     },
     jour: {
       label: "Jour",

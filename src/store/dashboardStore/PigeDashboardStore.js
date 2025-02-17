@@ -1603,7 +1603,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
     // Ensure the date is valid
     if (isNaN(date.getTime())) {
-      throw new Error("Invalid date format");
+      // throw new Error("Invalid date format");
+      return `${dateString}`;
     }
 
     // Extract day, month, and year

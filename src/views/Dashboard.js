@@ -19,6 +19,7 @@ import iconPresse from 'assets/img/icons/press-release.png';
 import LoadingIndicator from "components/Commun/LoadingIndcator";
 import LoadingButtonData from "components/Commun/LoadingBtnData";
 import AutomaticSideFilterBar from 'components/FixedPlugin/AutomatiSideFilterBar';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import {
   Container,
   Row,
@@ -26,7 +27,7 @@ import {
 } from "react-bootstrap";
 import { Button } from "@mui/material";
 import DateRangeTest from 'components/Commun/DateRangePickerTest'
-import {useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
 import { CircularProgress } from '@mui/material';
@@ -37,9 +38,10 @@ import { UseCountStore } from "store/dashboardStore/UseCounts";
 import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets";
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
+
 function Dashboard() {
   const { getEvolutionData, EvolutionData } = UseGraphStore((state) => state)
-  document.title='Tableau de bord'
+  document.title = 'Tableau de bord'
   const history = useHistory()
   const {
     Top20produits,
@@ -759,478 +761,184 @@ function Dashboard() {
 
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
-  // const exportToPDF = () => {
-  //   setPdfIsCreated(true)
-  //   const container0 = document.querySelector('.dashboard');
-  //   const container7 = document.querySelector('.top20familles');
-  //   const container8 = document.querySelector('.top20annonceur');
-  //   const container3 = document.querySelector('.top20produit');
-  //   const container4 = document.querySelector('.top20marque');
-  //   const container2 = document.querySelector('.repartitionmarche');
-  //   const container1 = document.querySelector('.repartitionformat');
-  //   const container5 = document.querySelector('.annonceurparsupport');
-  //   const container6 = document.querySelector('.creationparannonceur');
-
-  //   const components = [
-  //     container5, container6, container0, container1, container2, container3,
-  //     container4, container7, container8
-  //   ];
-
-  //   const pdf = new jsPDF('l', 'mm', 'a4');
-  //   const imgWidth = 97;
-  //   const pageWidth = 297;
-  //   const pageHeight = 210;
-  //   const leftMargin = 20;
-  //   const rightMargin = 10;
-  //   const topMargin = 10;
-  //   const bottomMargin = 10;
-
-  //   let usableWidth = imgWidth - leftMargin - rightMargin;
-  //   let usableHeight = pageHeight - topMargin - bottomMargin;
-  //   // Function to limit text width and automatically break lines
-  //   const drawText = (pdf, text, x, y, maxWidth) => {
-  //     let lines = pdf.splitTextToSize(text, maxWidth);
-  //     pdf.text(lines, x, y);
-  //     return y + (lines.length * 10); // Increase Y position after the lines
-  //   };
-
-  //   // Create a table-like structure for the text information
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.setFontSize(10);
-  //   pdf.setTextColor("black");
-
-  //   // Set table headers and borders
-  //   const rowHeight = 10;
-  //   const columnWidth = [70, 120];
-
-  //   let currentY = topMargin + rowHeight;
-  //   const borderColor = [211, 211, 211];
-  //   const verticalCenter = pageHeight / 2;
-  //   pdf.setDrawColor(...borderColor);
-  //   pdf.setFillColor('#020b42');
-  //   pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //   pdf.setFontSize(50)
-  //   pdf.setFont('poppins', 'bold');
-  //   pdf.setTextColor("white");
-  //   currentY = drawText(pdf, "", leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
-  //   pdf.text('Immar Media', pageWidth / 2, verticalCenter, { align: 'center' });
-  //   currentY = drawText(pdf, "", leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
-
-  //   pdf.addPage();
-
-  //   function getTextHeight(pdf, text, columnWidth) {
-  //     const lines = pdf.splitTextToSize(text, columnWidth);
-  //     const fontSize = pdf.getFontSize();
-  //     const lineHeight = fontSize * 1.2;
-  //     return lines.length * lineHeight;
-  //   }
-  //   // Add title
-  //   pdf.setFont('helvetica', 'bold');
-  //   pdf.setFontSize(50);
-  //   pdf.setTextColor("#00a6e0");
-  //   pdf.text('Media Review', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //   currentY = drawText(pdf, "", leftMargin + columnWidth[0] + 5, currentY + 1, columnWidth[1]);
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.setFontSize(14);
-  //   pdf.setTextColor("black");
-  //   // Media
-  //   pdf.setTextColor("#00a6e0");
-  //   pdf.text('Media:', leftMargin + 5, currentY + 1);
-  //   pdf.setTextColor("black");
-  //   currentY = drawText(pdf, media, leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
-  //   // Date
-  //   pdf.setTextColor("#00a6e0");
-  //   pdf.text('Date:', leftMargin + 5, currentY + 6);
-  //   pdf.setTextColor("black");
-  //   currentY = drawText(pdf, `${date1} / ${date2}`,
-  //     leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
-  //   pdf.setTextColor("#00a6e0");
-  //   pdf.text('Annonceur(s)', leftMargin + 5, currentY + 6);
-  //   pdf.setTextColor("black");
-  //   currentY = drawText(pdf, `${annonceurnames.length}`,
-  //     leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
-  //   pdf.setTextColor("#00a6e0");
-  //   pdf.text('Marque(s)', leftMargin + 5, currentY + 6);
-  //   pdf.setTextColor("black");
-  //   currentY = drawText(pdf, `${Filtermarques.length}`,
-  //   leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
-
-  //   // Support(s)
-  //   let supportText = supportnames?.join(', ') || '';
-  //   let familleText = famillenames?.join(', ') || '';
-  //   let supportTextHeight = getTextHeight(pdf, supportText, 200);
-
-  //   // Adjust the height based on text content
-  //   // pdf.rect(leftMargin, currentY, columnWidth[0] + 200, supportTextHeight); 
-  //   pdf.setTextColor("#00a6e0");
-  //   pdf.text('Support(s):', leftMargin + 5, currentY + 6);
-  //   pdf.setFontSize(10);
-  //   pdf.setTextColor("black");
-  //   pdf.setFillColor('#020b42');
-  //   currentY = drawText(pdf, supportText, leftMargin + columnWidth[0] + 5, currentY + 3, 200);
-
-  //   pdf.setFontSize(18);
-  //   pdf.setTextColor("#00a6e0");
-  //   pdf.text('Famille(s):', leftMargin + 5, currentY - 30);
-  //   pdf.setFontSize(10);
-  //   pdf.setTextColor("black");
-  //   currentY = drawText(pdf, familleText,
-  //     leftMargin + columnWidth[0] + 5, currentY - 30, 200);
-  //   html2canvas(container0, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-
-  //     pdf.addPage();
-  //     // pdf.setFillColor("#020b42");
-  //     // pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("#00a6e0");
-
-  //     pdf.text('Vue d\'ensembre-indicateurs de pige', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 250, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-  //   })
-  //   html2canvas(container1,{ scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-
-
-  //     pdf.addPage();
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("white");
-  //     pdf.text('Top 20 familles sectorielles', pageWidth / 2, topMargin + 10, { align: 'center' });
-
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-  //   })
-  //   html2canvas(container2, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     pdf.addPage();
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("white");
-  //     pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //     pdf.setFillColor('#020b42');
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-
-  //   })
-  //   html2canvas(container3, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     pdf.addPage();
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("#00a6e0");
-  //     pdf.text('Top 20 des marques', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //     pdf.setFillColor('#020b42');
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-  //   })
-  //   html2canvas(container4, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     pdf.addPage();
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("#00a6e0");
-  //     pdf.text('Top 20 des produits', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //     pdf.setFillColor('#020b42');
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-  //   })
-  //   html2canvas(container5, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     pdf.addPage();
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("#00a6e0");
-  //     pdf.text('Part de Marché', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //     pdf.setFillColor('#020b42');
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-  //   })
-  //   html2canvas(container6, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     pdf.addPage();
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("#00a6e0");
-  //     pdf.text('Répartition par Format', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //     pdf.setFillColor('#020b42');
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-  //   })
-  //   html2canvas(container7, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     pdf.addPage();
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("#00a6e0");
-  //     pdf.text('Nombre d’annonceurs actifs par support', pageWidth / 2, topMargin + 10, { align: 'center' });
-  //     pdf.setFillColor('#020b42');
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-  //   })
-  //   html2canvas(container8, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const imgHeight = canvas.height * usableWidth / canvas.width;
-  //     let currentImgWidth = imgWidth;
-  //     let currentImgHeight = imgHeight;
-  //     const headerHeight = 20;
-  //     const imageTopMargin = topMargin + headerHeight + 10;
-  //     pdf.setFillColor('#020b42');
-  //     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  //     pdf.addPage();
-  //     const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
-  //     const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
-  //     pdf.setFontSize(18);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.setTextColor("#00a6e0");
-  //     pdf.text('Nombre de créations uniques par annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-
-  //     pdf.setFillColor('#020b42');
-  //     pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
-  //     let heightLeft = currentImgHeight - pageHeight;
-
-  //     setPdfIsCreated(false)
-  //     pdf.save(`media_review_${date1}_${date2}.pdf`);
-  //   })
-  // };
-
-
-
+  
+const styles = StyleSheet.create({
+    page: {
+      flexDirection: 'row',
+      backgroundColor: '#E4E4E4',
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1,
+    },
+  });
+  
   const exportToPDF = () => {
-    setPdfIsCreated(true);
+    history.push("/pdf/rapport")
+    // setPdfIsCreated(true);
 
-    const container0 = document.getElementById('dashboard');
-    container0.style.backgroundColor = "#020b42";
-    const container7 = document.querySelector('.top20familles');
-    container7 ? container7.style.backgroundColor = "#020b42" : container7;
-    const container8 = document.querySelector('.top20annonceur');
-    container8.style.backgroundColor = "#020b42";
-    const container3 = document.querySelector('.top20produit');
-    container3.style.backgroundColor = "#020b42";
-    const container4 = document.querySelector('.top20marque');
-    container4.style.backgroundColor = "#020b42";
-    const container2 = document.querySelector('.repartitionmarche');
-    container2.style.backgroundColor = "#020b42";
-    const container1 = document.querySelector('.repartitionformat');
-    container1.style.backgroundColor = "#020b42";
-    const container5 = document.querySelector('.annonceurparsupport');
-    container5.style.backgroundColor = "#020b42";
-    const container6 = document.querySelector('.creationparannonceur');
-    container6.style.backgroundColor = "#020b42";
-    const container9 = document.querySelector('.type');
-    container9.style.backgroundColor = "#020b42";
-    const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape orientation
-    const pageWidth = 297;
-    const pageHeight = 210;
-    const leftMargin = 20;
-    const rightMargin = 10;
-    const topMargin = 10;
-    const bottomMargin = 10;
+    // const container0 = document.getElementById('dashboard');
+    // container0.style.backgroundColor = "#020b42";
+    // const container7 = document.querySelector('.top20familles');
+    // container7 ? container7.style.backgroundColor = "#020b42" : container7;
+    // const container8 = document.querySelector('.top20annonceur');
+    // container8.style.backgroundColor = "#020b42";
+    // const container3 = document.querySelector('.top20produit');
+    // container3.style.backgroundColor = "#020b42";
+    // const container4 = document.querySelector('.top20marque');
+    // container4.style.backgroundColor = "#020b42";
+    // const container2 = document.querySelector('.repartitionmarche');
+    // container2.style.backgroundColor = "#020b42";
+    // const container1 = document.querySelector('.repartitionformat');
+    // container1.style.backgroundColor = "#020b42";
+    // const container5 = document.querySelector('.annonceurparsupport');
+    // container5.style.backgroundColor = "#020b42";
+    // const container6 = document.querySelector('.creationparannonceur');
+    // container6.style.backgroundColor = "#020b42";
+    // const container9 = document.querySelector('.type');
+    // container9.style.backgroundColor = "#020b42";
+    // const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape orientation
+    // const pageWidth = 297;
+    // const pageHeight = 210;
+    // const leftMargin = 20;
+    // const rightMargin = 10;
+    // const topMargin = 10;
+    // const bottomMargin = 10;
 
-    // Function to set background color for a page
-    const setPageBackgroundColor = (pdf, color) => {
-      pdf.setFillColor(...color); // Set fill color (e.g., blue)
-      pdf.rect(0, 0, pageWidth, pageHeight, 'F'); // Draw filled rectangle for background
-    };
+    // // Function to set background color for a page
+    // const setPageBackgroundColor = (pdf, color) => {
+    //   pdf.setFillColor(...color); // Set fill color (e.g., blue)
+    //   pdf.rect(0, 0, pageWidth, pageHeight, 'F'); // Draw filled rectangle for background
+    // };
 
-    // Add title page
-    pdf.addPage();
-    setPageBackgroundColor(pdf, [2, 11, 66]);
+    // // Add title page
+    // pdf.addPage();
+    // setPageBackgroundColor(pdf, [2, 11, 66]);
 
 
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(50);
-    pdf.setTextColor("#ffffff"); // White text
-    pdf.text('Media Review', pageWidth / 2, topMargin + 10, { align: 'center' });
+    // pdf.setFont('helvetica', 'bold');
+    // pdf.setFontSize(50);
+    // pdf.setTextColor("#ffffff"); // White text
+    // pdf.text('Media Review', pageWidth / 2, topMargin + 10, { align: 'center' });
 
-    // Add individual pages for each chart
-    html2canvas(container0, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    // // Add individual pages for each chart
+    // html2canvas(container0, { scale: 2 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Vue d\'ensemble - indicateurs de pige', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-    });
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Vue d\'ensemble - indicateurs de pige', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    // });
 
-    html2canvas(container1, { scale: 1 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    // html2canvas(container1, { scale: 1 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Top 20 familles sectorielles', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-    });
-    html2canvas(container2, { scale: 1 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Top 20 familles sectorielles', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    // });
+    // html2canvas(container2, { scale: 1 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-    });
-    html2canvas(container3, { scale: 1 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    // });
+    // html2canvas(container3, { scale: 1 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-    });
-    html2canvas(container4, { scale: 0.5 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    // });
+    // html2canvas(container4, { scale: 1 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-    });
-    html2canvas(container5, { scale: 0.5 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    // });
+    // html2canvas(container5, { scale: 1 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-    });
-    html2canvas(container7, { scale: 0.5 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    // });
+    // html2canvas(container7, { scale: 2 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-    }); 
-    html2canvas(container8, { scale: 0.5 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    // });
+    // html2canvas(container8, { scale: 2 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Nombre de créations uniques par annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Nombre de créations uniques par annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
 
-      setPdfIsCreated(false);
-      pdf.save(`media_review_${date1}_${date2}.pdf`);
-    });
-    html2canvas(container9, { scale: 0.5 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   setPdfIsCreated(false);
+    //   pdf.save(`media_review_${date1}_${date2}.pdf`);
+    // });
+    // html2canvas(container9, { scale: 2 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png');
+    //   //const imgHeight = canvas.height * (pageWidth - leftMargin - rightMargin) / canvas.width;
+    //   const imgHeight = pageHeight / 4;
+    //   const imgWidth = pageHeight / 4;
+    //   pdf.addPage();
+    //   setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
+    //   pdf.setFontSize(18);
+    //   pdf.setFont('helvetica', 'bold');
+    //   pdf.setTextColor("#ffffff"); // White text
+    //   pdf.text('Nombre de créations uniques par annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
+    //   pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgWidth, imgHeight);
 
-      pdf.addPage();
-      setPageBackgroundColor(pdf, [2, 11, 66]); // Set background color (blue)
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#ffffff"); // White text
-      pdf.text('Nombre de créations uniques par annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-      pdf.addImage(imgData, 'PNG', leftMargin, topMargin + 20, pageWidth - leftMargin - rightMargin, imgHeight);
-
-      setPdfIsCreated(false);
-      pdf.save(`media_review_${date1}_${date2}.pdf`);
-    });
+    //   setPdfIsCreated(false);
+    //   pdf.save(`media_review_${date1}_${date2}.pdf`);
+    // });
   };
   const test = () => {
     getRepartitionParType && getRepartitionParType(
@@ -1344,6 +1052,14 @@ function Dashboard() {
 
 
               }}>
+                <LoadingButtonData
+                  getData={exportToPDF}
+                  isloading={false}
+                  isSucces={false}
+                  title="Exporter"
+                  mr="10px"
+                  disablebtn={Top20produits?.length==0}
+                />
                 <LoadingButtonData
                   getData={ShowDashboardData}
                   isloading={isCalculating}
@@ -1471,43 +1187,7 @@ function Dashboard() {
                   <GridDemo date1={date1} date2={date2} media={media} base={base} />
                 </div>
               </div>)}
-            {(dashDisplay && !isCalculating &&
-              !(Top20produits?.length === 0)) &&
-              <Button
-                sx={{
-                  backgroundColor: '#00a6e0',
-                  textTransform: "none",
-                  marginTop: "5%",
-                  marginBottom: "5%",
-                  width: '100%',
-                  color: '',
-                  '&:hover': {
-                    backgroundColor: '#00a6e0',
-                  },
-                  '&:disabled': {
-                    color: 'white',
-                    backgroundColor: 'lightgrey',
-                  },
 
-                }}
-
-                variant="contained"
-                disableElevation
-
-                disabled={pdfIsCreated}
-                onClick={exportToPDF}
-                startIcon={pdfIsCreated ? <CircularProgress size={20} color="inherit" /> : null}
-              //onClick={()=>history.push('/admin/ppt')}
-              >
-
-                {pdfIsCreated ? 'Téléchargement...' : success ?
-                  'Télécharger le rapport' : 'Télécharger le rapport'}
-                {/* {success && (
-                  <CheckCircleIcon
-                    style={{ color: 'green', marginLeft: '10px' }}
-                  />
-                )} */}
-              </Button>}
             {(Top20produits?.length === 0 && !isCalculating) && (<Container
               fluid
               style={{
@@ -1560,6 +1240,10 @@ function Dashboard() {
         handleCloseNetworkPopup={HandeErrorFetchFiletrs}
         message={messageFilterError}
       />
+
+
+
+  
     </div>
   );
 }

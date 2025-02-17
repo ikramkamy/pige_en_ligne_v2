@@ -73,7 +73,7 @@ const handleChange = (event) => {
         alignItems:"center"
         ,flexDirection:"column"
       }}>
-        {/* <Button onClick={logout}>Logout</Button>*/}
+        <Button onClick={logout}>Logout</Button>
         <CssBaseline />
         <img src={logoImmar} alt="immar" width="150px" />
         <Box

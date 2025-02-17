@@ -339,7 +339,7 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
     const elem = options.find((elem) => elem.name === selected);
 
     setSelectedItems((prevSelectedItems) => {
-      console.log("elem to add", elem, prevSelectedItems);
+      //console.log("elem to add", elem, prevSelectedItems);
       if (prevSelectedItems.includes(selected)) {
         return prevSelectedItems.filter((item) => item !== selected);
       } else {

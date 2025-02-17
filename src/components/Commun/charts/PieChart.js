@@ -134,7 +134,6 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         name: `${elem.name}`,
       }));
       setArray(list);
-
       const list2 = list.map((e) => e.value);
       const sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
       const average20 = sum / list.length;
@@ -206,6 +205,16 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             color: 'white',
             fontFamily: 'Arial, sans-serif',
             formatter: '{d}%'
+          },
+          formatter: function (params) {
+            const item = dynamicList.find((entry) => entry.name === params.name);
+            if (item && item.nameLegend) {
+              console.log("item",item)
+              // Return the percentage from the nameLegend property
+              return item.nameLegend;
+            }
+            // Fallback to default percentage if nameLegend is not found
+            return `${params.percent.toFixed(2)}%`;
           },
         },
         labelLine: {
@@ -305,6 +314,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   const handleToggleDropdown = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  console.log("dynamic list", dynamicList)
   return (
     <div className='m-2' style={{ color: "white" }}>
       <Card style={{
