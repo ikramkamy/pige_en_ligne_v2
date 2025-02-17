@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col } from "react-bootstrap";
 import { PieChartVelson } from '../charts/PieChart';
-import { BarchartShadcn} from "./BarChartNew"
+import { BarchartShadcn } from "./BarChartNew"
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseGraphStore } from 'store/GraphStore';
 import InteractiveLineChart from './DiffusionEvolutionChart';
@@ -54,6 +54,7 @@ export default function GridDemo({ date1, date2, media, base }) {
     RepartitionParType,
     getRepartitionParType,
     isloadingRepatitionType,
+    setunifiedGraphStructure,
   } = UsePigeDashboardStore((state) => state)
   const top20familleModified = Top20famillesSectorielles?.map((e) => {
     return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
@@ -86,6 +87,30 @@ export default function GridDemo({ date1, date2, media, base }) {
   const RepartitionParTypeModified = RepartitionParType?.map((e) => {
     return { name: e.Type, proportion: e.proportion, total: e.total, average: e.average }
   })
+
+  useEffect(() => {
+    setunifiedGraphStructure && setunifiedGraphStructure(
+      {
+        top20familleModified: top20familleModified?.[0].total,
+        top20familleModifiedaverage: Number(top20familleModified[0]?.average).toFixed(2),
+        Top20AnnonceursModified: Top20AnnonceursModified,
+        Top20AnnonceursModifiedaverage: Number(Top20AnnonceursModified[0]?.average).toFixed(2),
+        top20marquemodified: top20marquemodified,
+        top20marquemodifiedaverage: Number(top20marquemodified[0]?.average).toFixed(2),
+        Top20produitsmodified: Top20produitsmodified,
+        Top20produitsmodifiedaverage: Number([0]?.average).toFixed(2),
+        AnnonceurParSupportModified: AnnonceurParSupportModified,
+        AnnonceurParSupportModifiedaverage: Number(AnnonceurParSupportModified[0]?.average).toFixed(2),
+        CreationParAnnonceurModified: CreationParAnnonceurModified,
+        CreationParAnnonceurModifiedaverage: Number(CreationParAnnonceurModified[0]?.average).toFixed(2),
+        PartMarcheModified: PartMarcheModified,
+        PartMarcheModifiedaverage: Number(PartMarcheModified[0]?.average).toFixed(2),
+        FormatRepartitionModified: FormatRepartitionModified,
+        FormatRepartitionModifiedaverage: Number(FormatRepartitionModified[0]?.average).toFixed(2),
+        RepartitionParTypeModified: RepartitionParTypeModified,
+        RepartitionParTypeModifiedaverage: Number(RepartitionParTypeModified[0]?.average).toFixed(2),
+      })
+  }, [])
   return (
     <div>
       <InteractiveLineChart
@@ -190,51 +215,51 @@ export default function GridDemo({ date1, date2, media, base }) {
       </Row>
 
       <Row className="mt-4"> {/* Add g-2 for spacing */}
-  <Col md={6}> {/* Each graph takes 1/3 of the width */}
-    <PieChartVelson
-      title="Part Marché"
-      date1={date1}
-      date2={date2}
-      data={PartMarcheModified}
-      SetOptionFunction={setMarcheOptions}
-      ChangeBaseFunction={getPrtMarchet}
-      parametre="repartitionmarche"
-      filter="Marché"
-      initialOptions={MarcheOptions}
-      isloading={loadingMarche}
-    />
-  </Col>
-  <Col md={6}> {/* Each graph takes 1/3 of the width */}
-    <PieChartVelson
-      title="Répartition par Format"
-      date1={date1}
-      date2={date2}
-      data={FormatRepartitionModified}
-      SetOptionFunction={setFormatOptions}
-      ChangeBaseFunction={getRepartitionFormat}
-      parametre="repartitionformat"
-      filter="Format"
-      initialOptions={FormatOptions}
-      isloading={loadingFormat}
-    />
-  </Col>
-  {media !== "presse" && ( 
-    <Col md={6}> 
-      <PieChartVelson
-        title="Répartition par Type"
-        date1={date1}
-        date2={date2}
-        data={RepartitionParTypeModified}
-        SetOptionFunction={setTypeOptions}
-        ChangeBaseFunction={getRepartitionParType}
-        parametre="type"
-        filter="Type"
-        initialOptions={TypeOptions}
-        isloading={isloadingRepatitionType}
-      />
-    </Col>
-  )}
-</Row>
+        <Col md={6}> {/* Each graph takes 1/3 of the width */}
+          <PieChartVelson
+            title="Part Marché"
+            date1={date1}
+            date2={date2}
+            data={PartMarcheModified}
+            SetOptionFunction={setMarcheOptions}
+            ChangeBaseFunction={getPrtMarchet}
+            parametre="repartitionmarche"
+            filter="Marché"
+            initialOptions={MarcheOptions}
+            isloading={loadingMarche}
+          />
+        </Col>
+        <Col md={6}> {/* Each graph takes 1/3 of the width */}
+          <PieChartVelson
+            title="Répartition par Format"
+            date1={date1}
+            date2={date2}
+            data={FormatRepartitionModified}
+            SetOptionFunction={setFormatOptions}
+            ChangeBaseFunction={getRepartitionFormat}
+            parametre="repartitionformat"
+            filter="Format"
+            initialOptions={FormatOptions}
+            isloading={loadingFormat}
+          />
+        </Col>
+        {media !== "presse" && (
+          <Col md={6}>
+            <PieChartVelson
+              title="Répartition par Type"
+              date1={date1}
+              date2={date2}
+              data={RepartitionParTypeModified}
+              SetOptionFunction={setTypeOptions}
+              ChangeBaseFunction={getRepartitionParType}
+              parametre="type"
+              filter="Type"
+              initialOptions={TypeOptions}
+              isloading={isloadingRepatitionType}
+            />
+          </Col>
+        )}
+      </Row>
     </div>
 
   );

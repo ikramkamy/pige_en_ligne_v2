@@ -363,7 +363,6 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
                 {/* <DownloadIcon /> */}
                 <DownloadIcon style={{ cursor: "pointer" }} />
               </IconButton>
-
               <Menu
                 anchorEl={anchorEl}
                 open={open}
@@ -393,7 +392,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             <div style={{ fontWeight: "400", fontSize: "14px" }}>
               
               <p>{title}</p>
-              <p>{formatDateToFrench(date1)} - {formatDateToFrench(date2)}</p>
+              <p>{formatDateToFrench(date1)}-{formatDateToFrench(date2)}</p>
               </div>
            
             <div>AVG ={Number(average).toFixed(2)}</div>

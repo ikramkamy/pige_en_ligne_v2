@@ -13,19 +13,6 @@ import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
 function PdfLayout() {
-    const [image, setImage] = React.useState(sidebarImage);
-    const [color, setColor] = React.useState("black");
-    const [hasImage, setHasImage] = React.useState(true);
-    const { count, countLastYear } = UseCountStore((state) => state)
-    const { date1, date2,
-        supports,
-        familles,
-        annonceurs,
-        marques } = UseFiltersStore((state) => state)
-    const location = useLocation();
-    const mainPanel = React.useRef(null);
-    const [padding, setPadding] = React.useState('40px');
-    const { usePrevilegesFamilles } = UseLoginStore((state) => state)
     const {
         formatDateToFrench,
         AnnonceursActif,
@@ -46,8 +33,22 @@ function PdfLayout() {
         DureeTotalLastYear,
         DureeMoyenne,
         DureeMoyenneLastYear,
-
+        unifiedGraphStructure,
     } = UsePigeDashboardStore((state) => state)
+    const [image, setImage] = React.useState(sidebarImage);
+    const [color, setColor] = React.useState("black");
+    const [hasImage, setHasImage] = React.useState(true);
+    const { count, countLastYear } = UseCountStore((state) => state)
+    const { date1, date2,
+        supports,
+        familles,
+        annonceurs,
+        marques } = UseFiltersStore((state) => state)
+    const location = useLocation();
+    const mainPanel = React.useRef(null);
+    const [padding, setPadding] = React.useState('40px');
+    const { usePrevilegesFamilles } = UseLoginStore((state) => state)
+
     console.log('familles', familles)
     const getRoutes = (routes) => {
         return routes.map((prop, key) => {
@@ -102,12 +103,7 @@ function PdfLayout() {
         { name: 'Couleur', count: Couleur, countLastYear: CouleurLastYear },
         { name: 'Noir et Blanc', count: NoireBlanc, countLastYear: NoireBlancLastYear },
         { name: 'Durée Pub Totale', count: DureeTotal, countLastYear: DureeTotalLastYear },
-        { name: 'Durée moyenne par spot', count: DureeMoyenne,countLastYear: DureeMoyenneLastYear }
-        // { name: 'Param 11', count: 70, countLastYear: 60 },
-        // { name: 'Param 12', count: 55, countLastYear: 45 },
-        // { name: 'Param 13', count: 105, countLastYear: 95 },
-        // { name: 'Param 14', count: 135, countLastYear: 120 },
-        // { name: 'Param 15', count: 50, countLastYear: 40 },
+        { name: 'Durée moyenne par spot', count: DureeMoyenne, countLastYear: DureeMoyenneLastYear }
     ];
     //   React.useEffect(() => {
     // //this is to ensure a login after each page reloaging
@@ -139,30 +135,14 @@ function PdfLayout() {
                 flexDirection: "column",
                 height: "100%",
             }}>
-                {/* <AdminNavbar />
-        <Container fluid>
-          <Row className="h-auto justify-content-center">
-            <Col style={{ height: "100%", padding:padding}}>
-              <div className="content h-auto">
-                <Switch>{getRoutes(routes)}</Switch>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-        <FixedPlugin
-          hasImage={hasImage}
-          setHasImage={() => setHasImage(!hasImage)}
-          color={color}
-          setColor={(color) => setColor(color)}
-          image={image}
-          setImage={(image) => setImage(image)}
-          routes={routes}
-        /> */}
-                <PDFPage date1={date1} date2={date2}
+                <PDFPage
+                    date1={date1 ? formatDateToFrench(date1) : ""}
+                    date2={date2 ? formatDateToFrench(date2) : ""}
                     familles={familles}
                     count={count}
                     countLastYear={countLastYear}
                     parameters={parameters}
+                    unifiedGraphStructure={unifiedGraphStructure}
                 />
             </div>
             {/* <Footer /> */}

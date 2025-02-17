@@ -5,7 +5,6 @@ import ColorCheckboxes from './BaseCheckBoxGroupe';
 import CircularProgress from '@mui/material/CircularProgress';
 import './style.css';
 import { DownloadIcon } from "lucide-react";
-
 import { UseGraphStore } from "store/GraphStore";
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -14,6 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import html2canvas from "html2canvas";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 import {
   ListSubheader,
   IconButton,

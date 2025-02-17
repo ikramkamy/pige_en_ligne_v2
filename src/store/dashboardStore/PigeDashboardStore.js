@@ -67,6 +67,20 @@ export const UsePigeDashboardStore = create((set, get) => ({
   errorSendingLink: "",
   ExportExcelPending: false,
   DisplayEmailSent: false,
+  unifiedGraphStructure:{
+    top20familleModified: 0,
+    Top20AnnonceursModified: 0,
+    top20marquemodified: 0,
+    Top20produitsmodified: 0,
+    AnnonceurParSupportModified: 0,
+    CreationParAnnonceurModified: 0,
+    PartMarcheModified: 0,
+    FormatRepartitionModified: 0,
+    RepartitionParTypeModified: [],
+  },
+  setunifiedGraphStructure :(data)=>{
+      set({unifiedGraphStructure:data})
+  },
   CloseEmailExcel: () => {
     set({ DisplayEmailSent: false })
   },
