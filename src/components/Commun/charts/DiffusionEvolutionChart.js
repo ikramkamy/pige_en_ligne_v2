@@ -203,7 +203,7 @@ let maxheure=[]
       color: localColor,
       total: EvolutionData?.jour?.length,
       max: EvolutionDataJour[0]?.total,
-      min: getMinvalue(EvolutionDataJour),
+      min: EvolutionDataJour? getMinvalue(EvolutionDataJour):0,
 
     },
     mois: {

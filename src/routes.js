@@ -8,7 +8,6 @@ import Reinitialiser from "views/ReinitialiserMotdepasse";
 import VeillePub from "views/VeillePub";
 import Privacy from 'views/Privacy';
 import CGV from 'views/Termes';
-import ExportPPT from "views/PptFile";
 import PowerBiDashbord from "views/PowerBiDashboard";
 const dashboardRoutes = [
   {
@@ -73,13 +72,6 @@ const dashboardRoutes = [
     icon: "nc-icon nc-circle-09",
     component: CGV,
     layout: "/main"
-  },
-  {
-    path: "/ppt",
-    name: "Conditions générales de vente",
-    icon: "nc-icon nc-circle-09",
-    component: ExportPPT,
-    layout: "/admin"
   },
    {
     path: "/pige_en_ligne",
