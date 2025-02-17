@@ -185,9 +185,9 @@ const EvolutionDataMois=EvolutionDataMois2
 
 const maxarray=EvolutionDataHeure?.map((e)=>Number(e.total))
 let maxheure=[]
-if(media !=="presse"){
-  maxheure=findMax(maxarray)
-}
+// if(media !=="presse"){
+//   maxheure=findMax(maxarray)
+// }
 
   const chartConfig = {
     heure: {
@@ -195,7 +195,7 @@ if(media !=="presse"){
       //color: "#d81b60",
       color: localColor,
       total: EvolutionData?.heure?.length,
-      max: maxheure? maxheure :0,
+      max: maxarray ? findMax(maxarray) :0,
       min: media!=="presse"? getMinvalue(EvolutionDataHeure):0,
     },
     jour: {

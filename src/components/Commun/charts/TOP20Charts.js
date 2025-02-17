@@ -25,8 +25,6 @@ export default function GridDemo({ date1, date2, media, base }) {
     getEvolutionData,
     MarcheOptions,
     FormatOptions,
-    setBaseGraphs,
-    baseGraphs,
     loadingEvolution,
   } = UseGraphStore((state) => state)
   const {
@@ -220,10 +218,8 @@ export default function GridDemo({ date1, date2, media, base }) {
       isloading={loadingFormat}
     />
   </Col>
- 
-</Row>
-{media !== "presse" && ( /* Ensure proper condition syntax */
-    <Col md={6}> {/* Each graph takes 1/3 of the width */}
+  {media !== "presse" && ( 
+    <Col md={6}> 
       <PieChartVelson
         title="Répartition par Type"
         date1={date1}
@@ -238,6 +234,7 @@ export default function GridDemo({ date1, date2, media, base }) {
       />
     </Col>
   )}
+</Row>
     </div>
 
   );

@@ -35,7 +35,7 @@ import {
 } from '../components/Commun/charts/BarCharts';
 import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
-import { PieChartVelson} from '../components/Commun/charts/PieChart';
+import { PieChartVelson } from '../components/Commun/charts/PieChart';
 import { CircularProgress } from '@mui/material';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
@@ -509,23 +509,23 @@ function Dashboard() {
         media,
         email,
         "piccommunication")
-        getRepartitionParType && getRepartitionParType(
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2,
-          media,
-          email, 
-          "type", 
-          base,
-         
-        )
+      getRepartitionParType && getRepartitionParType(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "type",
+        base,
+
+      )
     }
     //pour tout types de media
     await Promise.all([
@@ -774,7 +774,7 @@ function Dashboard() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
- 
+
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
   const exportToPDF = () => {
@@ -871,7 +871,7 @@ function Dashboard() {
     pdf.text('Marque(s)', leftMargin + 5, currentY + 6);
     pdf.setTextColor("black");
     currentY = drawText(pdf, `${Filtermarques.length}`,
-      leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
+    leftMargin + columnWidth[0] + 5, currentY + 6, columnWidth[1]);
 
     // Support(s)
     let supportText = supportnames?.join(', ') || '';
@@ -884,6 +884,7 @@ function Dashboard() {
     pdf.text('Support(s):', leftMargin + 5, currentY + 6);
     pdf.setFontSize(10);
     pdf.setTextColor("black");
+    pdf.setFillColor('#020b42');
     currentY = drawText(pdf, supportText, leftMargin + columnWidth[0] + 5, currentY + 3, 200);
 
     pdf.setFontSize(18);
@@ -893,7 +894,7 @@ function Dashboard() {
     pdf.setTextColor("black");
     currentY = drawText(pdf, familleText,
       leftMargin + columnWidth[0] + 5, currentY - 30, 200);
-    html2canvas(container0).then((canvas) => {
+    html2canvas(container0, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
@@ -902,63 +903,70 @@ function Dashboard() {
       const imageTopMargin = topMargin + headerHeight + 10;
 
       pdf.addPage();
+      pdf.setFillColor("#020b42");
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
       pdf.setFontSize(18);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor("#00a6e0");
+
       pdf.text('Vue d\'ensembre-indicateurs de pige', pageWidth / 2, topMargin + 10, { align: 'center' });
 
       pdf.addImage(imgData, 'PNG', 20, 30, 250, 150);
       let heightLeft = currentImgHeight - pageHeight;
     })
-    html2canvas(container1).then((canvas) => {
+    html2canvas(container1,{ scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.backgroundColor('yellow')
+      // pdf.setFillColor('#020b42');
+      // pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
       pdf.setFontSize(18);
       pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#00a6e0");
+      pdf.setTextColor("white");
       pdf.text('Top 20 familles sectorielles', pageWidth / 2, topMargin + 10, { align: 'center' });
-
+    
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
     })
-    html2canvas(container2).then((canvas) => {
+    html2canvas(container2, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.setFillColor('#020b42');
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
       pdf.setFontSize(18);
       pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor("#00a6e0");
+      pdf.setTextColor("white");
       pdf.text('Top 20 annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
-
+      pdf.setFillColor('#020b42');
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
 
     })
-    html2canvas(container3).then((canvas) => {
+    html2canvas(container3, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.setFillColor('#020b42');
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
@@ -966,18 +974,19 @@ function Dashboard() {
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor("#00a6e0");
       pdf.text('Top 20 des marques', pageWidth / 2, topMargin + 10, { align: 'center' });
-
+      pdf.setFillColor('#020b42');
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
     })
-    html2canvas(container4).then((canvas) => {
+    html2canvas(container4, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.setFillColor('#020b42');
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
@@ -985,18 +994,19 @@ function Dashboard() {
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor("#00a6e0");
       pdf.text('Top 20 des produits', pageWidth / 2, topMargin + 10, { align: 'center' });
-
+      pdf.setFillColor('#020b42');
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
     })
-    html2canvas(container5).then((canvas) => {
+    html2canvas(container5, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.setFillColor('#020b42');
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
@@ -1004,18 +1014,19 @@ function Dashboard() {
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor("#00a6e0");
       pdf.text('Part de Marché', pageWidth / 2, topMargin + 10, { align: 'center' });
-
+      pdf.setFillColor('#020b42');
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
     })
-    html2canvas(container6).then((canvas) => {
+    html2canvas(container6, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.setFillColor('#020b42');
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
@@ -1023,18 +1034,19 @@ function Dashboard() {
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor("#00a6e0");
       pdf.text('Répartition par Format', pageWidth / 2, topMargin + 10, { align: 'center' });
-
+      pdf.setFillColor('#020b42');
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
     })
-    html2canvas(container7).then((canvas) => {
+    html2canvas(container7, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.setFillColor('#020b42');
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
@@ -1042,18 +1054,19 @@ function Dashboard() {
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor("#00a6e0");
       pdf.text('Nombre d’annonceurs actifs par support', pageWidth / 2, topMargin + 10, { align: 'center' });
-
+      pdf.setFillColor('#020b42');
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
     })
-    html2canvas(container8).then((canvas) => {
+    html2canvas(container8, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const imgHeight = canvas.height * usableWidth / canvas.width;
       let currentImgWidth = imgWidth;
       let currentImgHeight = imgHeight;
       const headerHeight = 20;
       const imageTopMargin = topMargin + headerHeight + 10;
-
+      pdf.setFillColor('#020b42');
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       pdf.addPage();
       const verticalOffset = topMargin + (usableHeight - currentImgHeight) / 2;
       const horizontalOffset = leftMargin + (usableWidth - currentImgWidth) / 2;
@@ -1062,13 +1075,14 @@ function Dashboard() {
       pdf.setTextColor("#00a6e0");
       pdf.text('Nombre de créations uniques par annonceurs', pageWidth / 2, topMargin + 10, { align: 'center' });
 
-
+      pdf.setFillColor('#020b42');
       pdf.addImage(imgData, 'PNG', 20, 30, 200, 150);
       let heightLeft = currentImgHeight - pageHeight;
 
       setPdfIsCreated(false)
       pdf.save(`media_review_${date1}_${date2}.pdf`);
     })
+    
     // components.forEach((component, index) => {
     //   html2canvas(component).then((canvas) => {
     //     const imgData = canvas.toDataURL('image/png');
@@ -1141,8 +1155,9 @@ function Dashboard() {
     //   });
     // });
   };
+
   const test = () => {
-getRepartitionParType && getRepartitionParType(
+    getRepartitionParType && getRepartitionParType(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -1154,10 +1169,10 @@ getRepartitionParType && getRepartitionParType(
       date1,
       date2,
       media,
-      email, 
-      "type", 
+      email,
+      "type",
       base,
-     
+
     )
   }
 
