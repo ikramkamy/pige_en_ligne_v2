@@ -364,7 +364,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   }
   useEffect(()=>{
-    handleDownloadChartPDF()
+   // handleDownloadChartPDF()
   },[data])
   return (
     <div className='m-2' style={{ color: "white" }}>

@@ -390,7 +390,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   }
   useEffect(() => {
-    handleDownloadChartPDF()
+    //handleDownloadChartPDF()
   }, [EvolutionData])
   // Function to retrieve the image by its ID
   function getImageById(imageId) {

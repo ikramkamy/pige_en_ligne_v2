@@ -1,5 +1,5 @@
-import { Document, Page, Text, View, StyleSheet, PDFViewer, Image } from '@react-pdf/renderer';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Document,Svg,Path, Page, Text, View, StyleSheet, PDFViewer, Image } from '@react-pdf/renderer';
+import { Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 const logo = require('assets/Logo adtrics.png');
 const logoWhite = require("assets/logo transparent adtrics.png")
 // Create styles
@@ -150,7 +150,31 @@ const data = [
   { name: "Mar", value: 80 },
   { name: "Apr", value: 120 },
 ];
+const LineChart = () => (
+  <Svg width="300" height="200">
+  {/* Line Graph Path */}
+  <Path d="M40,150 L80,100 L120,120 L160,80 L200,90 L240,50" stroke="blue" strokeWidth="2" fill="none" />
 
+  {/* X-Axis */}
+  <Line x1="40" y1="160" x2="360" y2="160" stroke="black" strokeWidth="7" />
+  {/* X-Axis Labels */}
+  <Text x="40" y="172" fontSize="8" fill="white">Jan</Text>
+  <Text x="80" y="172" fontSize="8" fill="white">Feb</Text>
+  <Text x="120" y="172" fontSize="8" fill="white">Mar</Text>
+  <Text x="160" y="172" fontSize="8" fill="white">Apr</Text>
+  <Text x="200" y="172" fontSize="8" fill="white">May</Text>
+  <Text x="240" y="172" fontSize="8" fill="white">Jun</Text>
+
+  {/* Y-Axis */}
+  <Line x1="40" y1="20" x2="40" y2="160" stroke="black" strokeWidth="7" />
+  {/* Y-Axis Labels */}
+  <Text x="15" y="150" fontSize="8" fill="white" style={styles.title}>10</Text>
+  <Text x="15" y="120" fontSize="8" fill="white">20</Text>
+  <Text x="15" y="90" fontSize="8" fill="white">30</Text>
+  <Text x="15" y="60" fontSize="8" fill="white">40</Text>
+  <Text x="15" y="30" fontSize="8" fill="white">50</Text>
+</Svg>
+);
 const dataImage = sessionStorage.getItem('dataimage')
 const dataImage2 = sessionStorage.getItem('.top20famille')
 const dataImage3 = sessionStorage.getItem('.top20annonceur')
@@ -240,8 +264,8 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
             <Text style={styles.title}>Evolution</Text>
           </View>
           <View style={styles.sectionGraph}>
-            <Image src={dataImage} style={styles.ChartImage} />
-
+            {/* <Image src={dataImage} style={styles.ChartImage} /> */}
+            <LineChart style={styles.ChartImage}/>
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>

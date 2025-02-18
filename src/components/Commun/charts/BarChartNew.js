@@ -13,6 +13,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import html2canvas from "html2canvas";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Select from '@mui/material/Select';
 
 import {
   ListSubheader,
@@ -198,7 +200,7 @@ export const BarchartShadcn = ({
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   }
   useEffect(()=>{
-    handleDownloadChartPDF()
+    //handleDownloadChartPDF()
   },[data])
   
   
@@ -342,124 +344,230 @@ export const BarchartShadcn = ({
   );
 };
 
+// const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, filters }) => {
+//   const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state);
+//   const {
+//     Top20famillesSectorielles,
+//     Top20produits,
+//     Top20Annonceurs,
+//     Top20marques,
+//     CreationParAnnonceur,
+//     AnnonceurParSupport,
+//   } = UsePigeDashboardStore((state) => state);
+//   const [selectedList, setSelectedList] = useState(options.slice(0, 5));
+//   const [dynamicList, setDynamicList] = useState([]);
+//   const [selectedItems, setSelectedItems] = useState([]);
+//   const [anchorEl, setAnchorEl] = useState(null); // For Menu anchor
+//   const isOpen = Boolean(anchorEl);
+
+//   let optionList = options;
+
+//   useEffect(() => {
+//     setSelectedItems(optionList.slice(0, 10).map((e) => e.name));
+//   }, [
+//     Top20famillesSectorielles,
+//     Top20produits,
+//     Top20Annonceurs,
+//     Top20marques,
+//     CreationParAnnonceur,
+//     AnnonceurParSupport,
+//   ]);
+
+//   const ModifyList = () => {
+//     var autresList = options.filter((e) => !options.includes(e));
+
+//   };
+
+//   const handleToggleDropdown = (event) => {
+//     setAnchorEl(event.currentTarget);
+//   };
+
+//   const handleCloseDropdown = () => {
+//     setAnchorEl(null);
+//   };
+
+//   const handleChange = (event) => {
+//     const selected = event.target.value;
+//     const elem = options.find((elem) => elem.name === selected);
+
+//     setSelectedItems((prevSelectedItems) => {
+//       //console.log("elem to add", elem, prevSelectedItems);
+//       if (prevSelectedItems.includes(selected)) {
+//         return prevSelectedItems.filter((item) => item !== selected);
+//       } else {
+//         if (prevSelectedItems.length >= 10) {
+//           return [...prevSelectedItems.slice(1), selected];
+//         } else {
+//           return [...prevSelectedItems, selected];
+//         }
+//       }
+//     });
+//   };
+
+//   useEffect(() => {
+//     const newSelectedList = options.filter((e) => selectedItems.includes(e.name));
+//     setSelectedList(newSelectedList);
+//     SetOptionFunction && SetOptionFunction(newSelectedList);
+//   }, [selectedItems]);
+
+//   useEffect(() => {
+//     ModifyList();
+//   }, []);
+
+
+//   return (
+//     <FormControl sx={{ m: 0, width: "50", margin: "0px", marginRight: "0px" }}>
+//       {/* Trigger Button (Three-Dot Icon) */}
+//       <IconButton
+//         size="small"
+//         aria-label="more"
+//         aria-controls={isOpen ? "long-menu" : undefined}
+//         aria-expanded={isOpen ? "true" : undefined}
+//         aria-haspopup="true"
+//         onClick={handleToggleDropdown}
+//         sx={{ backgroundColor: "#010A41E6", color: "white" }}
+//       >
+//         <MoreVertIcon />
+//       </IconButton>
+
+//       {/* Dropdown Menu */}
+//       <Menu
+//         id="long-menu"
+//         anchorEl={anchorEl}
+//         open={isOpen}
+//         onClose={handleCloseDropdown}
+//         PaperProps={{
+//           style: {
+//             maxHeight: 300,
+//             width: "200px",
+//           },
+//         }}
+//       >
+//         <ListSubheader>{`Top ${selectedItems.length} ${filters}`}</ListSubheader>
+//         {options.map((elem) => (
+//           <MenuItem
+//             key={options.indexOf(elem)}
+//             value={elem.name}
+//             onClick={(event) => {
+//               handleChange(event);
+//               handleCloseDropdown(); // Close menu after selection
+//             }}
+//           >
+//             <Checkbox checked={selectedItems.includes(elem.name)} />
+//             <ListItemText primary={elem.name} />
+//           </MenuItem>
+//         ))}
+//       </Menu>
+//     </FormControl>
+//   );
+// };
+
 const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, filters }) => {
-  const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state);
+  const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state)
   const {
-    Top20famillesSectorielles,
-    Top20produits,
-    Top20Annonceurs,
-    Top20marques,
-    CreationParAnnonceur,
-    AnnonceurParSupport,
-  } = UsePigeDashboardStore((state) => state);
+      Top20famillesSectorielles,
+      Top20produits,
+      Top20Annonceurs,
+      Top20marques,
+      CreationParAnnonceur,
+      AnnonceurParSupport,
+
+  } = UsePigeDashboardStore((state) => state)
+  console.log('FamillesOptions', FamillesOptions, options.slice(0, 5))
   const [selectedList, setSelectedList] = useState(options.slice(0, 5));
-  const [dynamicList, setDynamicList] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null); // For Menu anchor
-  const isOpen = Boolean(anchorEl);
-
-  let optionList = options;
-
+  const [dynamicList, setDynamicList] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
+  let optionList = options
   useEffect(() => {
-    setSelectedItems(optionList.slice(0, 10).map((e) => e.name));
-  }, [
-    Top20famillesSectorielles,
-    Top20produits,
-    Top20Annonceurs,
-    Top20marques,
-    CreationParAnnonceur,
-    AnnonceurParSupport,
-  ]);
+      setSelectedItems(optionList.slice(0, 10).map((e) => e.name));
+  }, [Top20famillesSectorielles, 
+      Top20produits, Top20Annonceurs,
+       Top20marques,CreationParAnnonceur,
+       AnnonceurParSupport]);
 
   const ModifyList = () => {
-    var autresList = options.filter((e) => !options.includes(e));
+      var autresList = options.filter((e) => !options.includes(e))
 
-  };
-
-  const handleToggleDropdown = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseDropdown = () => {
-    setAnchorEl(null);
-  };
+      // var autresList = AnnonceurParSupport 
+      // var valueAutre = autresList.map((e) => Number(e.annonceur_count))
+      // var PourcentageAutre = autresList.map((e) => Number(e.proportion))
+      // const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      // const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      // var listWithAutre = options;
+      // var autre = {
+      //     annonceur_count: totalSum.toFixed(2).toString(),
+      //     proportion: totalSumPourcentage.toFixed(2),
+      //     Chaine_Lib: `autres`,
+      //     Titre_Lib: "autre"
+      // }
+      // listWithAutre.push(autre)
+      //setDynamicList([...listWithAutre])
+      // console.log("dynamic list", dynamicList, AnnonceurParSupport)
+  }
+  // if(media!=="presse"){
+  //     optionList = options.map((e) => e.Chaine_Lib);
+  // }else{
+  //    optionList = options.map((e) => e.Titre_Lib);
+  // }
 
   const handleChange = (event) => {
-    const selected = event.target.value;
-    const elem = options.find((elem) => elem.name === selected);
+      const selected = event.target.value;
+      const elem = options.filter((elem) => elem.name == selected)
 
-    setSelectedItems((prevSelectedItems) => {
-      //console.log("elem to add", elem, prevSelectedItems);
-      if (prevSelectedItems.includes(selected)) {
-        return prevSelectedItems.filter((item) => item !== selected);
-      } else {
-        if (prevSelectedItems.length >= 10) {
-          return [...prevSelectedItems.slice(1), selected];
-        } else {
-          return [...prevSelectedItems, selected];
-        }
-      }
-    });
+      setSelectedItems((prevSelectedItems) => {
+          console.log('elem to add', elem, prevSelectedItems)
+          if (prevSelectedItems.includes(selected)) {
+              return prevSelectedItems.filter((item) => item !== selected);
+          } else {
+              if (prevSelectedItems.length >= 10) {
+                  return [...prevSelectedItems.slice(1), selected];
+              } else {
+                  return [...prevSelectedItems, selected];
+              }
+          }
+      });
   };
 
   useEffect(() => {
-    const newSelectedList = options.filter((e) => selectedItems.includes(e.name));
-    setSelectedList(newSelectedList);
-    SetOptionFunction && SetOptionFunction(newSelectedList);
+      const newSelectedList = options.filter((e) =>
+          selectedItems.includes(e.name)
+      );
+      setSelectedList(newSelectedList);
+      SetOptionFunction && SetOptionFunction(newSelectedList);
   }, [selectedItems]);
-
   useEffect(() => {
-    ModifyList();
-  }, []);
-
-
+      ModifyList()
+  }, [])
+  console.log("baseGraphs", baseGraphs)
+  const [isOpen, setIsOpen] = useState(false)
   return (
-    <FormControl sx={{ m: 0, width: "50", margin: "0px", marginRight: "0px" }}>
-      {/* Trigger Button (Three-Dot Icon) */}
-      <IconButton
-        size="small"
-        aria-label="more"
-        aria-controls={isOpen ? "long-menu" : undefined}
-        aria-expanded={isOpen ? "true" : undefined}
-        aria-haspopup="true"
-        onClick={handleToggleDropdown}
-        sx={{ backgroundColor: "#010A41E6", color: "white" }}
-      >
-        <MoreVertIcon />
-      </IconButton>
+      <FormControl sx={{
+          m: 0,
+          width: "50",
+          marginTop: "-5px",
+          margin: "0px",
+          marginRight:"0px"
 
-      {/* Dropdown Menu */}
-      <Menu
-        id="long-menu"
-        anchorEl={anchorEl}
-        open={isOpen}
-        onClose={handleCloseDropdown}
-        PaperProps={{
-          style: {
-            maxHeight: 300,
-            width: "200px",
-          },
-        }}
-      >
-        <ListSubheader>{`Top ${selectedItems.length} ${filters}`}</ListSubheader>
-        {options.map((elem) => (
-          <MenuItem
-            key={options.indexOf(elem)}
-            value={elem.name}
-            onClick={(event) => {
-              handleChange(event);
-              handleCloseDropdown(); // Close menu after selection
-            }}
+      }}>
+          <Select
+              sx={{ height: "35px", backgroundColor: "010A41E6", color: "white" }}
+              labelId="demo-multiple-checkbox-label"
+              input={<OutlinedInput label={`${filters}`} />}
+              value={selectedItems}
+              onChange={handleChange}
+              //renderValue={() => `Top ${selectedItems.length} ${filters}`}
+              renderValue={() => `+`}
           >
-            <Checkbox checked={selectedItems.includes(elem.name)} />
-            <ListItemText primary={elem.name} />
-          </MenuItem>
-        ))}
-      </Menu>
-    </FormControl>
-  );
-};
+              {options.map((elem) => (
+                  <MenuItem key={options.indexOf(elem)} value={elem.name} >
+                      <Checkbox checked={selectedItems.includes(elem.name)} />
+                      <ListItemText primary={elem.name} />
+                  </MenuItem>
+              ))}
+          </Select>
+      </FormControl>
 
-
+  )
+}
 
 
