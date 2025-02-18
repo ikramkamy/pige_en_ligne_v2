@@ -41,39 +41,39 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
 
   const arrTosort = EvolutionData?.heure?.map((e) => {
     return ({
-        date: e.Date,
-        name: e.interval_start?.split(':')[0] + ":" + e.interval_end?.split(':')[1],
-        //heure:e.interval_end?.split(':')[0]+":"+ e.interval_end?.split(':')[1],
-        total: e.total,
-        jour: e.Jour,
-      })
-    
-   
+      date: e.Date,
+      name: e.interval_start?.split(':')[0] + ":" + e.interval_end?.split(':')[1],
+      //heure:e.interval_end?.split(':')[0]+":"+ e.interval_end?.split(':')[1],
+      total: e.total,
+      jour: e.Jour,
+    })
+
+
   })
 
   let EvolutionDataHeure = arrTosort
-const sortDatesAscending =(dataArray)=>{
+  const sortDatesAscending = (dataArray) => {
     if (!Array.isArray(dataArray)) {
       throw new Error("Input must be an array of objects with a 'date' property.");
     }
-  
+
     return dataArray.sort((a, b) => {
-      console.log("a sort",a,"b",b)
+      console.log("a sort", a, "b", b)
       // Ensure both objects have a 'date' property
       if (!a.name || !b.name) {
         throw new Error("Each object in the array must have a 'date' property.");
       }
-  
+
       // Convert the 'date' property to Date objects for accurate comparison
       const dateA = new Date(a.name);
       const dateB = new Date(b.name);
-  
+
       // Subtracting Date objects compares their timestamps
-      return dateA- dateB;
+      return dateA - dateB;
     });
   }
 
-  
+
   // if (media !== "presse" ) {
   //   const sortByHeure = (arr) => {
   //     return arr.sort((a, b) => {
@@ -85,7 +85,7 @@ const sortDatesAscending =(dataArray)=>{
   //       return toMinutes(a.heure) - toMinutes(b.heure);
   //     });
   //   }
-    
+
   //   EvolutionDataHeure = sortByHeure(arrTosort).map((e) => {
   //     return ({
   //       name: e.heure,
@@ -97,7 +97,7 @@ const sortDatesAscending =(dataArray)=>{
   // } else {
   //   EvolutionDataHeure = []
   // }
-  
+
 
   const EvolutionDataJour2 = EvolutionData?.jour?.map((e) => ({
     date: e.Jour,
@@ -105,14 +105,14 @@ const sortDatesAscending =(dataArray)=>{
     total: Number(e.total),
     name: e.Date,
   })) || [];
-  const EvolutionDataJour=sortDatesAscending(EvolutionDataJour2)
-  
+  const EvolutionDataJour = sortDatesAscending(EvolutionDataJour2)
+
   const EvolutionDataMois2 = EvolutionData?.mois?.map((e) => ({
     date: e.Date,
     name: e.Mois,
     total: Number(e.total),
     jour: e.Jour,
-    Année:e.Année? e.Année : "" 
+    Année: e.Année ? e.Année : ""
   })) || [];
   const sortMonthsAscending = (dataArray) => {
     if (!Array.isArray(dataArray)) {
@@ -133,35 +133,35 @@ const sortDatesAscending =(dataArray)=>{
       novembre: 11,
       décembre: 12,
     };
-  
+
     return dataArray.sort((a, b) => {
       // Ensure both objects have 'name' and 'Année' properties
       if (!a.name || !b.name || !a.Année || !b.Année) {
         throw new Error("Each object in the array must have 'name' (month) and 'Année' (year) properties.");
       }
-  
+
       const yearA = Number(a.Année);
       const yearB = Number(b.Année);
-  
+
       // Compare years first
       if (yearA !== yearB) {
         return yearA - yearB; // Sort by year in ascending order
       }
-  
+
       // If years are the same, compare months using the monthMap
       const monthA = monthMap[a.name.trim().toLowerCase()];
       const monthB = monthMap[b.name.trim().toLowerCase()];
-  
+
       if (monthA === undefined || monthB === undefined) {
         throw new Error(`Invalid month name: ${a.name} or ${b.name}`);
       }
-  
+
       return monthA - monthB; // Sort by month in ascending order
     });
   };
-  
-const EvolutionDataMois=EvolutionDataMois2 
- console.log("EvolutionDataMois2",sortMonthsAscending(EvolutionDataMois2))
+
+  const EvolutionDataMois = EvolutionDataMois2
+  //  console.log("EvolutionDataMois2",sortMonthsAscending(EvolutionDataMois2))
   const dataMapping = {
     heure: EvolutionDataHeure,
     jour: EvolutionDataJour,
@@ -169,25 +169,23 @@ const EvolutionDataMois=EvolutionDataMois2
   };
   const [localColor, setLocalColor] = useState('red')
   const currentData = dataMapping[activeChart] || [];
-
-
   const getMinvalue = (currentData) => {
     const min = currentData?.reduce((acc, current) => Math.min(acc, current.total),
       Infinity);
     return min
   }
-  const findMax =(numbers)=> {
+  const findMax = (numbers) => {
     if (!Array.isArray(numbers) || numbers.length === 0) {
-        throw new Error("Input must be a non-empty array of numbers.");
+      throw new Error("Input must be a non-empty array of numbers.");
     }
     return numbers.reduce((max, current) => (current > max ? current : max), numbers[0]);
-}
+  }
 
-const maxarray=EvolutionDataHeure?.map((e)=>Number(e.total))
-let maxheure=[]
-// if(media !=="presse"){
-//   maxheure=findMax(maxarray)
-// }
+  const maxarray = EvolutionDataHeure?.map((e) => Number(e.total))
+  let maxheure = []
+  // if(media !=="presse"){
+  //   maxheure=findMax(maxarray)
+  // }
 
   const chartConfig = {
     heure: {
@@ -195,15 +193,15 @@ let maxheure=[]
       //color: "#d81b60",
       color: localColor,
       total: EvolutionData?.heure?.length,
-      max: maxarray ? findMax(maxarray) :0,
-      min: media !=="presse" ? getMinvalue(EvolutionDataHeure):0,
+      max: maxarray ? findMax(maxarray) : 0,
+      min: media !== "presse" ? getMinvalue(EvolutionDataHeure) : 0,
     },
     jour: {
       label: "Jour",
       color: localColor,
       total: EvolutionData?.jour?.length,
       max: EvolutionDataJour[0]?.total,
-      min: EvolutionDataJour? getMinvalue(EvolutionDataJour):0,
+      min: EvolutionDataJour ? getMinvalue(EvolutionDataJour) : 0,
 
     },
     mois: {
@@ -222,7 +220,6 @@ let maxheure=[]
     };
   }, [EvolutionDataHeure, EvolutionDataJour, EvolutionDataMois]);
 
-console.log("maxarray",maxheure)
   // Custom Tooltip Content Function
   const LocalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
   const colorMapping = [
@@ -276,6 +273,7 @@ console.log("maxarray",maxheure)
     }
     return null;
   };
+
 
   //Download SVG PNG
   const handleDownloadSVG = () => {
@@ -345,6 +343,69 @@ console.log("maxarray",maxheure)
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleDownloadChartPDF = async () => {
+    console.log("Generating chart image...");
+
+    // Step 1: Capture the chart container
+    const chartContainer = document.querySelector(".line-chart-container");
+    if (!chartContainer) {
+      console.error("Chart container not found!");
+      return;
+    }
+
+    try {
+      // Step 2: Generate the canvas from the chart container
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const canvas = await html2canvas(chartContainer, {
+        onclone: (clonedDoc) => {
+          // Modify the cloned container's background color
+          const clonedContainer = clonedDoc.querySelector(".line-chart-container");
+          if (clonedContainer) {
+            clonedContainer.style.backgroundColor = "#020b42";
+          }
+        },
+      });
+
+      // Step 3: Convert the canvas to a PNG image
+      const imgData = canvas.toDataURL("image/png");
+
+      // Step 4: Store the image data in sessionStorage or localStorage
+      const imageId = generateUniqueId(); // Generate a unique ID for the image
+      sessionStorage.setItem('dataimage', imgData); // Use sessionStorage for temporary storage
+      sessionStorage.setItem('imageId', imageId)
+      console.log(`Image saved temporarily with ID: ${imageId}`);
+
+      // Optionally, notify the user or proceed with further actions
+      //alert("Chart image generated and stored temporarily. Use the provided ID to retrieve it.");
+
+      // You can now use the `imageId` to retrieve the image later when generating the PDF
+      return imageId;
+    } catch (error) {
+      console.error("Error generating or saving the chart image:", error);
+    }
+  };
+
+  // Helper function to generate a unique ID
+  function generateUniqueId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+  }
+  useEffect(() => {
+    handleDownloadChartPDF()
+  }, [EvolutionData])
+  // Function to retrieve the image by its ID
+  function getImageById(imageId) {
+    const imgData = sessionStorage.getItem(imageId);
+    if (!imgData) {
+      console.error(`Image with ID ${imageId} not found in storage.`);
+      return null;
+    }
+    return imgData; // Returns the base64 image data
+  }
+
+
+
+
+
   // Usage in LineChart
   <LineChart data={currentData} margin={{ left: 12, right: 12, top: 10, bottom: 10 }}>
     {/* Other components */}
@@ -365,7 +426,7 @@ console.log("maxarray",maxheure)
         border: "1px solid lightgrey",
         borderRadius: "5px",
         color: "white",
-        position: "relative",     
+        position: "relative",
       }}
     >
       {isloading && (
@@ -385,7 +446,7 @@ console.log("maxarray",maxheure)
         justifyContent: "space-between",
         alignItems: "start",
         borderBottom: "1px solid #4D5479",
-        marginBottom:"5px",
+        marginBottom: "5px",
         //paddingTop: "5px"
       }}>
         <div className="px- " style={{
@@ -465,12 +526,12 @@ console.log("maxarray",maxheure)
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom:"20px"
+          marginBottom: "20px"
         }}>
         <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
         <IconButton onClick={handleDownloadClick} style={{ cursor: "pointer", color: "white" }}>
           {/* <DownloadIcon /> */}
-        <DownloadIcon style={{ cursor: "pointer" }} />
+          <DownloadIcon style={{ cursor: "pointer" }} />
         </IconButton>
         <Menu
           anchorEl={anchorEl}
@@ -485,7 +546,7 @@ console.log("maxarray",maxheure)
       </div>
       <ResponsiveContainer width="100%" minHeight={300}
         className="line-chart-container"
-        style={{marginBottom: "20px", padding: "20px" }} >
+        style={{ marginBottom: "20px", padding: "20px" }} >
         <LineChart
           data={currentData}
           margin={{

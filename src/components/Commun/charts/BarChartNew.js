@@ -55,7 +55,10 @@ export const BarchartShadcn = ({
     setLocalColor(LocalColor)
   }, [baseGraphs])
   //const [average, setAverage] = useState(data[0]?.average || 0);
-  const average = data[0]?.average;
+  //const average = data[0]?.average;
+ const list2 = data.map((e) => Number(e.total));
+  const sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+  const average=sum/data?.length
   const max = Number(data[0]?.total);
 
   const colorMap = {
@@ -151,6 +154,53 @@ export const BarchartShadcn = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleDownloadChartPDF = async () => {
+    console.log("Generating chart image...");
+  
+    // Step 1: Capture the chart container
+    const chartContainer = document.querySelector(`.${parametre}`);
+    if (!chartContainer) {
+      console.error("Chart container not found!");
+      return;
+    }
+  
+    try {
+      // Step 2: Generate the canvas from the chart container
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      const canvas = await html2canvas(chartContainer, {
+        onclone: (clonedDoc) => {
+          // Modify the cloned container's background color
+          const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
+          if (clonedContainer) {
+            clonedContainer.style.backgroundColor = "#020b42";
+          }
+        },
+      });
+  
+      // Step 3: Convert the canvas to a PNG image
+      const imgData = canvas.toDataURL("image/png");
+  
+      // Step 4: Store the image data in sessionStorage or localStorage
+      const imageId = generateUniqueId(); // Generate a unique ID for the image
+      sessionStorage.setItem(`.${parametre}`, imgData); // Use sessionStorage for temporary storage
+      sessionStorage.setItem('imageId',imageId)
+      console.log(`Image saved temporarily with ID: ${imageId}`);
+  
+      return imageId;
+    } catch (error) {
+      console.error("Error generating or saving the chart image:", error);
+    }
+  };
+  
+  // Helper function to generate a unique ID
+  function generateUniqueId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+  }
+  useEffect(()=>{
+    handleDownloadChartPDF()
+  },[data])
+  
   
   return (
     <div style={{

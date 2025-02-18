@@ -315,6 +315,57 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     setAnchorEl(event.currentTarget);
   };
   console.log("dynamic list", dynamicList)
+
+  
+  const handleDownloadChartPDF = async () => {
+    console.log("Generating chart image...");
+  
+    // Step 1: Capture the chart container
+    const chartContainer = document.querySelector(`.${parametre}`);
+    if (!chartContainer) {
+      console.error("Chart container not found!");
+      return;
+    }
+  
+    try {
+      // Step 2: Generate the canvas from the chart container
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const canvas = await html2canvas(chartContainer, {
+        onclone: (clonedDoc) => {
+          // Modify the cloned container's background color
+          const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
+          if (clonedContainer) {
+            clonedContainer.style.backgroundColor = "#020b42";
+          }
+        },
+      });
+  
+      // Step 3: Convert the canvas to a PNG image
+      const imgData = canvas.toDataURL("image/png");
+  
+      // Step 4: Store the image data in sessionStorage or localStorage
+      const imageId = generateUniqueId(); // Generate a unique ID for the image
+      sessionStorage.setItem(`.${parametre}`, imgData); // Use sessionStorage for temporary storage
+      sessionStorage.setItem('imageId',imageId)
+      console.log(`Image saved temporarily with ID: ${imageId}`);
+  
+      // Optionally, notify the user or proceed with further actions
+      //alert("Chart image generated and stored temporarily. Use the provided ID to retrieve it.");
+  
+      // You can now use the `imageId` to retrieve the image later when generating the PDF
+      return imageId;
+    } catch (error) {
+      console.error("Error generating or saving the chart image:", error);
+    }
+  };
+  
+  // Helper function to generate a unique ID
+  function generateUniqueId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+  }
+  useEffect(()=>{
+    handleDownloadChartPDF()
+  },[data])
   return (
     <div className='m-2' style={{ color: "white" }}>
       <Card style={{

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import axios from 'axios';
+import dayjs from "dayjs";
 const PORT = "https://pige-dev.immar-media.com/api/index.php"
 export const UseFiltersStore = create((set, get) => ({
   ErrorFetchFilter: false,
@@ -42,8 +43,8 @@ export const UseFiltersStore = create((set, get) => ({
   rangs: [],
   media: '',
   typeVeille: '',
-  date1: "",
-  date2: "",
+  date1: dayjs().format('DD/MM/YYYY'),
+  date2: dayjs().format('DD/MM/YYYY'),
 
   SideBarFilterPosition: "-100%",
 

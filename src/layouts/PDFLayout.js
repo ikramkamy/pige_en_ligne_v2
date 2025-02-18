@@ -13,6 +13,11 @@ import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
 function PdfLayout() {
+
+    const imageId = sessionStorage.getItem('imageId')
+    const imgData = sessionStorage.getItem(imageId);
+
+
     const {
         formatDateToFrench,
         AnnonceursActif,
@@ -39,8 +44,10 @@ function PdfLayout() {
     const [color, setColor] = React.useState("black");
     const [hasImage, setHasImage] = React.useState(true);
     const { count, countLastYear } = UseCountStore((state) => state)
-    const { date1, date2,
+    const {
+        date1, date2,
         supports,
+        media,
         familles,
         annonceurs,
         marques } = UseFiltersStore((state) => state)
@@ -105,6 +112,14 @@ function PdfLayout() {
         { name: 'Durée Pub Totale', count: DureeTotal, countLastYear: DureeTotalLastYear },
         { name: 'Durée moyenne par spot', count: DureeMoyenne, countLastYear: DureeMoyenneLastYear }
     ];
+    const tableData = [
+        { title: "Media", value: media },
+        { title: "Date", value: formatDateToFrench(date1)-formatDateToFrench(date2) },
+        { title: "familles", value: familles.join(', ') },
+        { title: "supports", value: supports.join(', ') },
+        { title: "marques", value: marques.join(', ') },
+        { title: "annonceurs", value: annonceurs.join(', ') },
+      ];
     //   React.useEffect(() => {
     // //this is to ensure a login after each page reloaging
     //   if (usePrevilegesFamilles.length===0) { 
@@ -143,6 +158,12 @@ function PdfLayout() {
                     countLastYear={countLastYear}
                     parameters={parameters}
                     unifiedGraphStructure={unifiedGraphStructure}
+                    evolutionImageDate={imgData}
+                    supports={supports}
+                    media={media =="television"? "Télévision" :media =="presse"? "Presse":media =="radio"? "Radio" :"" }
+                    annonceurs={annonceurs}
+                    marques={marques}
+                    tableData={tableData}
                 />
             </div>
             {/* <Footer /> */}

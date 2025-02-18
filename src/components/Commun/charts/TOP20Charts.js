@@ -91,23 +91,23 @@ export default function GridDemo({ date1, date2, media, base }) {
   useEffect(() => {
     setunifiedGraphStructure && setunifiedGraphStructure(
       {
-        top20familleModified: top20familleModified?.[0].total,
+        top20familleModified: Number(top20familleModified?.[0].total).toFixed(2),
         top20familleModifiedaverage: Number(top20familleModified[0]?.average).toFixed(2),
-        Top20AnnonceursModified: Top20AnnonceursModified,
+        Top20AnnonceursModified: Number(Top20AnnonceursModified[0].total).toFixed(2),
         Top20AnnonceursModifiedaverage: Number(Top20AnnonceursModified[0]?.average).toFixed(2),
-        top20marquemodified: top20marquemodified,
+        top20marquemodified: Number(top20marquemodified[0].total).toFixed(2),
         top20marquemodifiedaverage: Number(top20marquemodified[0]?.average).toFixed(2),
-        Top20produitsmodified: Top20produitsmodified,
+        Top20produitsmodified: Number(Top20produitsmodified[0].total).toFixed(2),
         Top20produitsmodifiedaverage: Number([0]?.average).toFixed(2),
-        AnnonceurParSupportModified: AnnonceurParSupportModified,
+        AnnonceurParSupportModified: Number(AnnonceurParSupportModified[0].total).toFixed(2),
         AnnonceurParSupportModifiedaverage: Number(AnnonceurParSupportModified[0]?.average).toFixed(2),
-        CreationParAnnonceurModified: CreationParAnnonceurModified,
+        CreationParAnnonceurModified: Number(CreationParAnnonceurModified[0].total).toFixed(2),
         CreationParAnnonceurModifiedaverage: Number(CreationParAnnonceurModified[0]?.average).toFixed(2),
-        PartMarcheModified: PartMarcheModified,
+        PartMarcheModified: Number(PartMarcheModified[0].total).toFixed(2),
         PartMarcheModifiedaverage: Number(PartMarcheModified[0]?.average).toFixed(2),
-        FormatRepartitionModified: FormatRepartitionModified,
+        FormatRepartitionModified: Number(FormatRepartitionModified[0].total).toFixed(2),
         FormatRepartitionModifiedaverage: Number(FormatRepartitionModified[0]?.average).toFixed(2),
-        RepartitionParTypeModified: RepartitionParTypeModified,
+        RepartitionParTypeModified: Number(RepartitionParTypeModified[0].total).toFixed(2),
         RepartitionParTypeModifiedaverage: Number(RepartitionParTypeModified[0]?.average).toFixed(2),
       })
   }, [])

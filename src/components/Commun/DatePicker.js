@@ -30,7 +30,7 @@ dayjs.locale("fr"); // Set French locale globally for dayjs
 export default function SingleInputDateRangePicker() {
   const date_debut=window.localStorage.getItem('date_debut')
   const date_fin=window.localStorage.getItem('date_fin')
-  console.log('date debut', date_debut)
+
   const { setDateRang ,
     setShowDataGridIfNotEmpty,
     setShowDataGrid,

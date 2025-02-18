@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   pageChart: {
-    flexDirection: "row", // Use row layout to split the page into sections
+    flexDirection: "column", // Use row layout to split the page into sections
     backgroundColor: '#020b42',
     padding: 20,
   },
@@ -19,6 +19,13 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     flexGrow: 1,
+  },
+  sectionGraph: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "100%",
+    width: "100%"
   },
   sectionPage: {
     margin: 1,
@@ -30,6 +37,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: "white",
+    width: "100%",
+
   },
   firstPageTitle: {
     width: "100%",
@@ -42,7 +51,7 @@ const styles = StyleSheet.create({
     width: "100%",
     fontSize: "14px",
     fontSize: "normal",
-    color:"lightgrey",
+    color: "lightgrey",
     display: "flex",
     justifyContent: "flex-end",
     textAlign: "right"
@@ -52,6 +61,11 @@ const styles = StyleSheet.create({
     width: 100,
     height: 50,
   },
+  ChartImage: {
+    width: "50%",
+    height: "50%",
+    marginTop: 10
+  },
   /** New Styles for Parameter Grid **/
   parametersContainer: {
     display: 'flex',
@@ -60,9 +74,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
   },
+  parametersContainerTable: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid #000",
+  },
   parametersGraph: {
     display: 'flex',
-    width:"20%",
+    width: "20%",
     flexDirection: 'column',
     marginTop: 10,
   },
@@ -77,7 +97,7 @@ const styles = StyleSheet.create({
   parameterBoxGraph: {
     width: '100%', // Each box takes 30% of row width
     padding: 10,
-    flexDirection:"column",
+    flexDirection: "column",
     margin: 5,
     borderRadius: 5,
     backgroundColor: '#ffffff10', // Slight transparency for styling
@@ -99,6 +119,28 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "right",
   },
+  titleCell: {
+    width: "30%", // Smaller width for title column
+    padding: 4,
+    // backgroundColor: "#f0f0f0",
+    fontSize: "12px",
+    color: "white",
+    borderRight:"1px solid lightgrey",
+    borderLeft:"1px solid lightgrey"
+  
+  },
+  valueCell: {
+    width: "70%", // Larger width for values
+    padding: 4,
+    color: "white",
+    fontSize: "10px",
+    borderRight:"1px solid lightgrey"
+  },
+  row: {
+    flexDirection: "row",
+    borderBottom: "1px solid lightgrey",
+    borderTop:"1px solid lightgrey"
+  },
 });
 
 const pages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -109,8 +151,19 @@ const data = [
   { name: "Apr", value: 120 },
 ];
 
+const dataImage = sessionStorage.getItem('dataimage')
+const dataImage2 = sessionStorage.getItem('.top20famille')
+const dataImage3 = sessionStorage.getItem('.top20annonceur')
+const dataImage4 = sessionStorage.getItem('.top20marque')
+const dataImage5 = sessionStorage.getItem('.top20produit')
+const dataImage6 = sessionStorage.getItem('.repartitionmarche')
+const dataImage7 = sessionStorage.getItem('.repartitionformat')
+const dataImage8 = sessionStorage.getItem('.annonceurparsupport')
+const dataImage9 = sessionStorage.getItem('.creationparannonceur')
+const dataImage10 = sessionStorage.getItem('.type')
 // Create Document Component
-export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure }) => (
+export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
+  tableData }) => (
 
   <div>
     <PDFViewer width="100%" height={1000}>
@@ -128,6 +181,29 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure }) => 
             <Text style={styles.PiedPage}>{date1}-{date2}</Text>
             {/* <PieChartVelson pageNumber={index + 1} /> */}
           </View>
+          {/* Display an image */}
+
+        </Page>
+        <Page size="A4" orientation="landscape" style={styles.page}>
+          {/* <View style={styles.section}>
+            <Image src={logoWhite} style={styles.image} />
+          </View> */}
+          <View style={styles.sectionPage}>
+            <Text style={styles.firstPageTitle}>Informations</Text>
+          </View>
+          <View style={styles.parametersContainerTable}>
+            {tableData.map((row, index) => (
+              <View style={styles.row} key={index}>
+                <Text style={styles.titleCell}>{row.title}</Text>
+                <Text style={styles.valueCell}>{row.value}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.PiedPage}>{date1}-{date2}</Text>
+            {/* <PieChartVelson pageNumber={index + 1} /> */}
+          </View>
+
           {/* Display an image */}
 
         </Page>
@@ -155,179 +231,181 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure }) => 
             <Text style={styles.PiedPage}>{date1}-{date2}</Text>
             {/* <PieChartVelson pageNumber={index + 1} /> */}
           </View>
+
           {/* Display an image */}
 
         </Page>
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
+            <Text style={styles.title}>Evolution</Text>
+          </View>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage} style={styles.ChartImage} />
+
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.top20familleModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.top20familleModifiedaverage}</Text>
+
+              </View>
+
+            </View>
+
+
+          </View>
+
+        </Page>
+        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+          <View style={styles.section}>
             <Text style={styles.title}>Top Familles </Text>
-            <Text>
-
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
           </View>
-          <View style={styles.parametersGraph}>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage2} style={styles.ChartImage} />
 
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.top20familleModified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.top20familleModifiedaverage}</Text>
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.top20familleModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.top20familleModifiedaverage}</Text>
+
+              </View>
 
             </View>
+
 
           </View>
+
         </Page>
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Top annonceurs </Text>
-            <Text>
-
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
-          </View>
-          <View style={styles.parametersGraph}>
-
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20AnnonceursModified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20AnnonceursModifiedaverage}</Text>
-
-            </View>
 
           </View>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage3} style={styles.ChartImage} />
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20AnnonceursModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20AnnonceursModifiedaverage}</Text>
+
+              </View>
+
+            </View>
+          </View>
+
         </Page>
 
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Top marques </Text>
-            <Text>
-
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
           </View>
-          <View style={styles.parametersGraph}>
 
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.top20marquemodified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.top20marquemodifiedaverage}</Text>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage4} style={styles.ChartImage} />
+
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.top20marquemodified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.top20marquemodifiedaverage}</Text>
+
+              </View>
 
             </View>
-
           </View>
+
         </Page>
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Top produits </Text>
-            <Text>
-
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
           </View>
-          <View style={styles.parametersGraph}>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage5} style={styles.ChartImage} />
+            <View style={styles.parametersGraph}>
 
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20produitsmodified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20produitsmodifiedaverage}</Text>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20produitsmodified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.Top20produitsmodifiedaverage}</Text>
+
+              </View>
 
             </View>
-
           </View>
+
         </Page>
 
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Annonceurs par support</Text>
-            <Text>
-
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
-          </View>
-          <View style={styles.parametersGraph}>
-
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.AnnonceurParSupportModified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.AnnonceurParSupportModifiedaverage}</Text>
+            <View style={styles.sectionGraph}>
+              <Image src={dataImage6} style={styles.ChartImage} />
 
             </View>
+            <View style={styles.parametersGraph}>
 
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.AnnonceurParSupportModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.AnnonceurParSupportModifiedaverage}</Text>
+
+              </View>
+
+            </View>
           </View>
         </Page>
 
@@ -335,162 +413,152 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure }) => 
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Création unique par annonceur</Text>
-            <Text>
 
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
           </View>
-          <View style={styles.parametersGraph}>
 
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.CreationParAnnonceurModified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.CreationParAnnonceurModifiedaverage}</Text>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage7} style={styles.ChartImage} />
+
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.CreationParAnnonceurModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.CreationParAnnonceurModifiedaverage}</Text>
+
+              </View>
 
             </View>
-
           </View>
         </Page>
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Parts marché</Text>
-            <Text>
-
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
-          </View>
-          <View style={styles.parametersGraph}>
-
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.PartMarcheModified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.PartMarcheModifiedaverage}</Text>
-
-            </View>
 
           </View>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage7} style={styles.ChartImage} />
+
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.PartMarcheModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.PartMarcheModifiedaverage}</Text>
+
+              </View>
+
+            </View>
+          </View>
+
         </Page>
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Répartition par format</Text>
-            <Text>
+            <View style={styles.sectionGraph}>
+              <Image src={dataImage8} style={styles.ChartImage} />
 
-            </Text>
 
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
-          </View>
-          <View style={styles.parametersGraph}>
 
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.FormatRepartitionModified}</Text>
-         
+              <View style={styles.parametersGraph}>
+
+                <View style={styles.parameterBoxGraph}>
+                  <Text style={styles.paramTitle}>Top valeur</Text>
+                  <Text style={styles.paramValue}>{unifiedGraphStructure?.FormatRepartitionModified}</Text>
+
+                </View>
+                <View style={styles.parameterBoxGraph}>
+                  <Text style={styles.paramTitle}>Total %</Text>
+                  <Text style={styles.paramValue}>100%</Text>
+                </View>
+                <View style={styles.parameterBoxGraph}>
+                  <Text style={styles.paramTitle}>AVG</Text>
+                  <Text style={styles.paramValue}>{unifiedGraphStructure?.FormatRepartitionModifiedaverage}</Text>
+
+                </View>
+
+              </View>
             </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.FormatRepartitionModifiedaverage}</Text>
-
-            </View>
-
           </View>
         </Page>
 
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Répartition par Type</Text>
-            <Text>
 
-            </Text>
-
-            {/* <LineChart width={400} height={200} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-          </LineChart> */}
           </View>
-          <View style={styles.parametersGraph}>
 
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Top valeur</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.RepartitionParTypeModified}</Text>
-         
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>Total %</Text>
-              <Text style={styles.paramValue}>100%</Text>
-            </View>
-            <View style={styles.parameterBoxGraph}>
-              <Text style={styles.paramTitle}>AVG</Text>
-              <Text style={styles.paramValue}>{unifiedGraphStructure?.RepartitionParTypeModifiedaverage}</Text>
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage9} style={styles.ChartImage} />
+
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.RepartitionParTypeModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.RepartitionParTypeModifiedaverage}</Text>
+
+              </View>
 
             </View>
-
           </View>
         </Page>
-       
+        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+          <View style={styles.section}>
+            <Text style={styles.title}>Répartition par Type</Text>
+
+          </View>
+
+          <View style={styles.sectionGraph}>
+            <Image src={dataImage10} style={styles.ChartImage} />
+
+            <View style={styles.parametersGraph}>
+
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Top valeur</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.RepartitionParTypeModified}</Text>
+
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>Total %</Text>
+                <Text style={styles.paramValue}>100%</Text>
+              </View>
+              <View style={styles.parameterBoxGraph}>
+                <Text style={styles.paramTitle}>AVG</Text>
+                <Text style={styles.paramValue}>{unifiedGraphStructure?.RepartitionParTypeModifiedaverage}</Text>
+
+              </View>
+
+            </View>
+          </View>
+        </Page>
       </Document>
     </PDFViewer>
   </div>
 );
 
 
-// {pages.map((_, index) => (
-//   <Page key={index} size="A4" orientation="landscape" style={styles.page}>
-//     <View style={styles.section}>
-//       <Text style={styles.title}>{date1}-{date2}</Text>
-//       <Text style={styles.title}>page</Text>
-//       {/* Charts need to be recreated with @react-pdf/renderer */}
-//       {/* <PieChartVelsonpageNumber={index + 1} /> */}
-//     </View>
-//     <View style={styles.section}>
-//       <Text style={styles.title}>contenue</Text>
-//       {/* <PieChartVelson pageNumber={index + 1} /> */}
-//     </View>
-//     {/* Display an image */}
-//     <View style={styles.section}>
-//       <Image src={logoWhite} style={styles.image} />
-//     </View>
-//   </Page>
-// ))}
