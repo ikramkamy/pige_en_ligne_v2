@@ -16,6 +16,7 @@ import html2canvas from "html2canvas";
 import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
 import './style.css';
+
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   ListSubheader,
@@ -314,9 +315,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   const handleToggleDropdown = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  console.log("dynamic list", dynamicList)
-
-  
+  //console.log("dynamic list", dynamicList)
   const handleDownloadChartPDF = async () => {
     console.log("Generating chart image...");
   
@@ -358,7 +357,6 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       console.error("Error generating or saving the chart image:", error);
     }
   };
-  
   // Helper function to generate a unique ID
   function generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
@@ -431,7 +429,6 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
                 SetOptionFunction={SetOptionFunction}
               />
             </div>
-
           </div>
           <div style={{
             width: "100%", display: "flex",
@@ -440,20 +437,17 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             paddingTop: "5px",
             marginBottom: "10px"
           }}>
-            <div style={{ fontWeight: "400", fontSize: "14px" }}>
-              
+            <div style={{ fontWeight: "400", fontSize: "14px" }}>             
               <p>{title}</p>
               <p>{formatDateToFrench(date1)}-{formatDateToFrench(date2)}</p>
-              </div>
-           
+              </div>          
             <div>AVG ={Number(average).toFixed(2)}</div>
           </div>
           <div className="chart-container" style={{ width: '100%', height: '500px' }}>
           <ReactEcharts
             className={`${parametre}`}
             style={{
-              height: '500px',
-             
+              height: '500px',            
               display: "flex",
               justifyContent: "center"
             }}

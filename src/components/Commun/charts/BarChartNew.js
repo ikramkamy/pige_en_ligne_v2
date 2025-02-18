@@ -15,7 +15,7 @@ import html2canvas from "html2canvas";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
-
+import { styled } from "@mui/system";
 import {
   ListSubheader,
   IconButton,
@@ -344,124 +344,6 @@ export const BarchartShadcn = ({
   );
 };
 
-// const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, filters }) => {
-//   const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state);
-//   const {
-//     Top20famillesSectorielles,
-//     Top20produits,
-//     Top20Annonceurs,
-//     Top20marques,
-//     CreationParAnnonceur,
-//     AnnonceurParSupport,
-//   } = UsePigeDashboardStore((state) => state);
-//   const [selectedList, setSelectedList] = useState(options.slice(0, 5));
-//   const [dynamicList, setDynamicList] = useState([]);
-//   const [selectedItems, setSelectedItems] = useState([]);
-//   const [anchorEl, setAnchorEl] = useState(null); // For Menu anchor
-//   const isOpen = Boolean(anchorEl);
-
-//   let optionList = options;
-
-//   useEffect(() => {
-//     setSelectedItems(optionList.slice(0, 10).map((e) => e.name));
-//   }, [
-//     Top20famillesSectorielles,
-//     Top20produits,
-//     Top20Annonceurs,
-//     Top20marques,
-//     CreationParAnnonceur,
-//     AnnonceurParSupport,
-//   ]);
-
-//   const ModifyList = () => {
-//     var autresList = options.filter((e) => !options.includes(e));
-
-//   };
-
-//   const handleToggleDropdown = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handleCloseDropdown = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const handleChange = (event) => {
-//     const selected = event.target.value;
-//     const elem = options.find((elem) => elem.name === selected);
-
-//     setSelectedItems((prevSelectedItems) => {
-//       //console.log("elem to add", elem, prevSelectedItems);
-//       if (prevSelectedItems.includes(selected)) {
-//         return prevSelectedItems.filter((item) => item !== selected);
-//       } else {
-//         if (prevSelectedItems.length >= 10) {
-//           return [...prevSelectedItems.slice(1), selected];
-//         } else {
-//           return [...prevSelectedItems, selected];
-//         }
-//       }
-//     });
-//   };
-
-//   useEffect(() => {
-//     const newSelectedList = options.filter((e) => selectedItems.includes(e.name));
-//     setSelectedList(newSelectedList);
-//     SetOptionFunction && SetOptionFunction(newSelectedList);
-//   }, [selectedItems]);
-
-//   useEffect(() => {
-//     ModifyList();
-//   }, []);
-
-
-//   return (
-//     <FormControl sx={{ m: 0, width: "50", margin: "0px", marginRight: "0px" }}>
-//       {/* Trigger Button (Three-Dot Icon) */}
-//       <IconButton
-//         size="small"
-//         aria-label="more"
-//         aria-controls={isOpen ? "long-menu" : undefined}
-//         aria-expanded={isOpen ? "true" : undefined}
-//         aria-haspopup="true"
-//         onClick={handleToggleDropdown}
-//         sx={{ backgroundColor: "#010A41E6", color: "white" }}
-//       >
-//         <MoreVertIcon />
-//       </IconButton>
-
-//       {/* Dropdown Menu */}
-//       <Menu
-//         id="long-menu"
-//         anchorEl={anchorEl}
-//         open={isOpen}
-//         onClose={handleCloseDropdown}
-//         PaperProps={{
-//           style: {
-//             maxHeight: 300,
-//             width: "200px",
-//           },
-//         }}
-//       >
-//         <ListSubheader>{`Top ${selectedItems.length} ${filters}`}</ListSubheader>
-//         {options.map((elem) => (
-//           <MenuItem
-//             key={options.indexOf(elem)}
-//             value={elem.name}
-//             onClick={(event) => {
-//               handleChange(event);
-//               handleCloseDropdown(); // Close menu after selection
-//             }}
-//           >
-//             <Checkbox checked={selectedItems.includes(elem.name)} />
-//             <ListItemText primary={elem.name} />
-//           </MenuItem>
-//         ))}
-//       </Menu>
-//     </FormControl>
-//   );
-// };
-
 const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, filters }) => {
   const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state)
   const {
@@ -540,6 +422,21 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
   }, [])
   console.log("baseGraphs", baseGraphs)
   const [isOpen, setIsOpen] = useState(false)
+  const StyledSelect = styled(Select)(({ theme }) => ({
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: "none", // Remove the default border
+    },
+    "& .MuiSvgIcon-root": {
+      display: "none", // Hide the dropdown arrow icon
+    },
+    "&:focus": {
+      outline: "none", // Remove focus outline
+      boxShadow: "none", // Remove focus shadow
+    },
+    backgroundColor: "#010A41E6", // Set background color
+    color: "white", // Set text color
+    height: "35px", // Set custom height
+  }));
   return (
       <FormControl sx={{
           m: 0,
@@ -549,14 +446,19 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
           marginRight:"0px"
 
       }}>
-          <Select
-              sx={{ height: "35px", backgroundColor: "010A41E6", color: "white" }}
+          <StyledSelect
+              sx={{ height: "10px", backgroundColor: "010A41E6", color: "white" }}
               labelId="demo-multiple-checkbox-label"
               input={<OutlinedInput label={`${filters}`} />}
               value={selectedItems}
               onChange={handleChange}
               //renderValue={() => `Top ${selectedItems.length} ${filters}`}
-              renderValue={() => `+`}
+              // renderValue={() => `+`}
+              renderValue={() => <div style={{ color: "white",
+                transform: "rotate(90deg)", fontWeight:"900" }}>
+                   <span style={{ transform: "rotate(90deg)", 
+                       fontWeight:"900"}}>...</span>
+                   </div>}
           >
               {options.map((elem) => (
                   <MenuItem key={options.indexOf(elem)} value={elem.name} >
@@ -564,7 +466,7 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
                       <ListItemText primary={elem.name} />
                   </MenuItem>
               ))}
-          </Select>
+          </StyledSelect>
       </FormControl>
 
   )

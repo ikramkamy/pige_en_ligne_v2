@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { UseGraphStore } from 'store/GraphStore';
+import { styled } from "@mui/system";
 import {
     ListSubheader,
     ClickAwayListener,
@@ -61,6 +62,21 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,S
     useEffect(() => {
         UpdatedGraphDisplay()
     }, [selectedList])
+    const StyledSelect = styled(Select)(({ theme }) => ({
+        "& .MuiOutlinedInput-notchedOutline": {
+          border: "none", // Remove the default border
+        },
+        "& .MuiSvgIcon-root": {
+          display: "none", // Hide the dropdown arrow icon
+        },
+        "&:focus": {
+          outline: "none", // Remove focus outline
+          boxShadow: "none", // Remove focus shadow
+        },
+        backgroundColor: "#010A41E6", // Set background color
+        color: "white", // Set text color
+        height: "35px", // Set custom height
+      }));
     return (
             <FormControl
                 sx={{
@@ -70,14 +86,15 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,S
                     marginRight: { xs: 0, sm: "0px" },
                     height:"15px"               
                 }}>
-                <Select
+                <StyledSelect
                     labelId="demo-multiple-checkbox-label"
                     value={selectedItems}
                     onChange={handleChange}
                     input={<OutlinedInput label="" />}
                     renderValue={() => <div style={{ color: "white",
                          transform: "rotate(90deg)", fontWeight:"900" }}>
-                            <span style={{ transform: "rotate(90deg)", fontWeight:"900"}}>...</span>
+                            <span style={{ transform: "rotate(90deg)", 
+                                fontWeight:"900"}}>...</span>
                             </div>}
                     MenuProps={MenuProps}
                     sx={{ backgroundColor: "010A41E6", height: "" ,color:"white", }}
@@ -88,7 +105,7 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay,filter,S
                             <ListItemText primary={elem} />
                         </MenuItem>
                     ))}
-                </Select>
+                </StyledSelect>
             </FormControl>
           
     );
