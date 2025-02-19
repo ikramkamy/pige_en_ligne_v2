@@ -512,10 +512,13 @@ export default function VeillePub() {
         </Row>
       </Container>)
   }
-  if (!client) {
-    history.push('/login')
-    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
-  }
+  useEffect(()=>{
+    if (!client) {
+      history.push('/login')
+      LougoutRestErrorMessages && LougoutRestErrorMessages(email)
+    }
+  },[client])
+
   return (
     <div style={{
       height: "auto", width: "100%", padding: "2%",

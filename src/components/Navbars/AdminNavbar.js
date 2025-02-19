@@ -9,10 +9,8 @@ import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon } from '@h
 import './navbar.css';
 import Navback from 'assets/navbar.png'
 function Header() {
-  const user_name = window.localStorage.getItem("user_name")
-  const location = useLocation();
-  const {
-    LougoutRestErrorMessages } = UseLoginStore((state) => state)
+  const TokenParam = window.localStorage.getItem('token')
+  const { LougoutRestErrorMessages,email } = UseLoginStore((state) => state)
 
   // const mobileSidebarToggle = (e) => {
   //   e.preventDefault();
@@ -44,14 +42,9 @@ function Header() {
   // const history=useHistory()
 
   const handelLogout = () => {
-    // console.log("call logout function")
-    // window.localStorage.clear()
-    localStorage.removeItem('user_email');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('user_name');
-    LougoutRestErrorMessages && LougoutRestErrorMessages()
+    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
-  const TokenParam = window.localStorage.getItem('token')
+ 
  
   return (
     <div className="navbar_back" style={{

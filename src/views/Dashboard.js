@@ -39,11 +39,12 @@ import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon,FilterIcon } from "lucide-react";
 
 function Dashboard() {
-  const { getEvolutionData } = UseGraphStore((state) => state)
   document.title = 'Tableau de bord'
+  const { getEvolutionData } = UseGraphStore((state) => state)
+  
   const history = useHistory()
   const {
     Top20produits,
@@ -136,12 +137,12 @@ function Dashboard() {
 
   } = UsePigeDashboardStore((state) => state)
 
-  const { countLastYear, count, getPigeCount,
-    getPigeCountLastYear } = UseCountStore((state) => state)
+  const { countLastYear, count, getPigeCount,getPigeCountLastYear } = UseCountStore((state) => state)
   const { autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
-    StoreParamToken
+    StoreParamToken,
+    ExpirationToken
   } = UseLoginStore((state) => state)
   const {
     Filtersupports,
@@ -773,6 +774,9 @@ function Dashboard() {
     LoginWithParamToken && LoginWithParamToken(ParamToken.token)
     StoreParamToken && StoreParamToken(ParamToken.token)
     window.localStorage.setItem('token', ParamToken.token)
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    const isExpired = ExpirationToken < currentTime; // Compare with current time
+    console.log('isExpired',isExpired)
   }, [])
   const styles = StyleSheet.create({
     page: {
@@ -787,59 +791,6 @@ function Dashboard() {
   });
 
 
-  // const exportToPDF = () => {
-  //   const dashboardElement = document.getElementById("dashboard");
-
-  //   if (!dashboardElement) {
-  //     console.error("Dashboard element not found");
-  //     return;
-  //   }
-
-  //   // Get the dimensions of the dashboard element
-  //   const dashboardRect = dashboardElement.getBoundingClientRect();
-  //   const totalHeight = dashboardElement.scrollHeight;
-  //   const totalWidth = dashboardElement.scrollWidth;
-
-  //   // Use html2canvas with custom options to capture the full dashboard
-  //   html2canvas(dashboardElement, {
-  //     scale: 2, // Increase resolution for better quality
-  //     useCORS: true, // Enable CORS for external images
-  //     scrollY: -window.scrollY, // Adjust for scrolling
-  //     scrollX: -window.scrollX,
-  //     height: totalHeight, // Capture the full height
-  //     width: totalWidth, // Capture the full width
-  //   }).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-
-  //     // Initialize jsPDF
-  //     const pdf = new jsPDF({
-  //       orientation: "landscape", // Set orientation to landscape for better fit
-  //       unit: "mm",
-  //       format: "a4",
-  //     });
-
-  //     // Add image to PDF
-  //     const imgProps = pdf.getImageProperties(imgData);
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-  //     // If the content exceeds the page size, split it into multiple pages
-  //     let heightLeft = pdfHeight;
-  //     let position = 0;
-
-  //     while (heightLeft >= 0) {
-  //       pdf.addImage(imgData, "PNG", 0, position, pdfWidth, Math.min(pdfHeight, heightLeft));
-  //       heightLeft -= pdf.internal.pageSize.getHeight();
-  //       position -= pdf.internal.pageSize.getHeight();
-  //       if (heightLeft > 0) {
-  //         pdf.addPage(); // Add a new page if content overflows
-  //       }
-  //     }
-
-  //     // Save the PDF
-  //     pdf.save(`Media_Review_${date1}_${date2}.pdf`);
-  //   });
-  // };
   const exportToPDF = () => {
     const dashboardElement = document.getElementById("dashboard");
   
@@ -924,10 +875,13 @@ function Dashboard() {
 
     )
   }
-  if (!client) {
-    //history.push('/login')
-    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
-  }
+  useEffect(()=>{
+    if (!client) {
+      //history.push('/login')
+      LougoutRestErrorMessages && LougoutRestErrorMessages(email)
+    }
+  },[client])
+ 
   if (!autoriseDash && client) {
     return (
       <Container
@@ -1048,10 +1002,11 @@ function Dashboard() {
                   title={window.innerWidth < 900 ? <div style={{
                     transform: "rotate(90deg)", fontWeight: "bold"
                   }}>
-                    |||</div> : <div
+                    <FilterIcon/>
+                    </div> : <div
                       style={{ fontWeight: "400" }}>
-                    Recherche avancée
-
+                    {/* Recherche avancée */}
+                    <FilterIcon/>
                   </div>}
                   mr="0px"
                   disablebtn={(media == "" || base == "")}

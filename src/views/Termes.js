@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import {
   Container,
@@ -7,10 +7,14 @@ import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 function CGV() {
   const { client, email,LougoutRestErrorMessages } = UseLoginStore((state) => state)
   const history = useHistory()
-  if (!client) {
-    history.push('/login')
-    LougoutRestErrorMessages && LougoutRestErrorMessages(email)
-  }
+
+  useEffect(()=>{
+    if (!client) {
+      history.push('/login')
+      LougoutRestErrorMessages && LougoutRestErrorMessages(email)
+    }
+  },[client])
+ 
   return (
     <>
       <Container fluid style={{ marginTop: '10%', }}>

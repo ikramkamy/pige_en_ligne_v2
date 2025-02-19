@@ -40,7 +40,7 @@ export const UseLoginStore = create((set, get) => ({
   autoriseVeilleRadio: false,
   autoriseVeilleTv: false,
   autoriseDash: false,
-
+  ExpirationToken:0,
   ReseAlertShwing: () => {
     set({
       showAlert1: false,
@@ -60,18 +60,20 @@ export const UseLoginStore = create((set, get) => ({
       userIdentifications: user
     })
   },
-  LougoutRestErrorMessages: async (user) => {
+  LougoutRestErrorMessages: async (email) => {
+    try {
+      let response = await axios.post(`${PORT}/logout`, {
+        email: email
+      })
+    
+     
+    // console.log(response)
     set({
       showAlert1: false,
       showAlert2: false,
       client: "",
       email: "",
     })
-    try {
-      let response = await axios.post(`${PORT}/logout`, {
-        email: "ikramzerkout13@gmail.com"
-      })
-      // //console.log(response)
     } catch (error) {
     }
   },
@@ -88,7 +90,7 @@ export const UseLoginStore = create((set, get) => ({
         var decoded = jwtDecode(response.data.payload);
         //console.log("response.data.payload", response.data.payload)
         set({
-
+          ExpirationToken:decoded.exp,
           client: decoded.user_id.utilisateur,
           email: decoded.user_id.email,
           date_debut: decoded.user_id.date_debut,
@@ -215,11 +217,12 @@ export const UseLoginStore = create((set, get) => ({
       window.location.href = '/#/login/motdepasseoublier';
     }
   },
+
   LoginWithParamToken: async (ParamToken) => {
     var decoded = jwtDecode(ParamToken);
-
+    
     set({
-
+      ExpirationToken:decoded.exp,
       client: decoded.user_id.utilisateur,
       email: decoded.user_id.email,
       date_debut: decoded.user_id.date_debut,
@@ -241,7 +244,6 @@ export const UseLoginStore = create((set, get) => ({
       autoriseDash: decoded.user_id.autorisations.dashboard === 1 ? true : false,
 
     })
-
 
   },
   TokenParam: "",
