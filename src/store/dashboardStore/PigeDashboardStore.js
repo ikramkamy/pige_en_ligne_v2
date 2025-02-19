@@ -180,7 +180,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       set({ VolumePresse: Number(response.data.data[0].count) });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   getVolumePresseLastYear: async (
@@ -261,10 +261,10 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log("response ann actif", response)
+      //console.log("response ann actif", response)
       set({ AnnonceursActif: Number(response.data[0].total) });
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   getAnnonceursActifLastYear: async (
@@ -420,7 +420,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       }
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   getBudgetBrutLastYear: async (
@@ -459,7 +459,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         set({ BudgetBrutLastYear: (Number(response.data[0].total)/1000).toFixed(2)+" Mrd" });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   getSupportDiffusion: async (
@@ -496,7 +496,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       set({ SupportDiffusion: Number(response.data[0].total) });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
 
@@ -535,7 +535,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       set({ SupportDiffusionLastYear: Number(response.data[0].total) });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
 
@@ -565,12 +565,12 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2
       });
-      console.log("response couleur", response)
+      //console.log("response couleur", response)
       set({ Couleur: response.data.data1[0].total });
       set({ NoireBlanc:response.data.data2[0].total });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   CouleurLastYear:0,
@@ -601,12 +601,12 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      console.log("response couleur", response)
+      //console.log("response couleur", response)
       set({ CouleurLastYear: Number(response.data.data1[0].total) });
       set({ NoireBlancLastYear: Number(response.data.data2[0].total) });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
 
@@ -626,7 +626,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
     date2,
 
   ) => {
-    //console.log("link to volume calculation",`${PORT2}/getfilters2.php`)
+    ////console.log("link to volume calculation",`${PORT2}/getfilters2.php`)
     try {
 
       let response = await axios.post(`${PORT2}/getfilters2.php`, {
@@ -654,7 +654,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   getVolumelastyear: async (
@@ -672,8 +672,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
     date2,
 
   ) => {
-    // console.log("date1",dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'))
-    // console.log("link to volume calculation",`${PORT}/getfilters2.php`)
+    // //console.log("date1",dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'))
+    // //console.log("link to volume calculation",`${PORT}/getfilters2.php`)
     try {
       let response = await axios.post(`${PORT2}/getfilters2.php`, {
         supports: supports,
@@ -697,7 +697,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         set({ VolumeMediaLastyear: Number(response.data.data[0].count) });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   loadingFamille: false,
@@ -734,7 +734,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
   //       annonceursactifs: "annonceursactifs",
 
   //     });
-  //     //console.log('response', response)
+  //     ////console.log('response', response)
   //     set({ AnnonceursActifMedia: Number(response.data.data[0].count) });
   //   } catch (error) {
   //     console.log(error);
@@ -796,9 +796,6 @@ export const UsePigeDashboardStore = create((set, get) => ({
     parametre,
     base
   ) => {
-    console.log('resposne top 20', email,
-      parametre,
-      base)
     set({ loadingFamille: true })
     try {
       set({ isloading: true })
@@ -824,7 +821,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   loadingAnnonceur: false,
@@ -861,7 +858,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log('reponse', response)
+      //console.log('reponse', response)
       set({
         Top20Annonceurs: response.data,
         loadingAnnonceur: false
@@ -870,7 +867,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       set({ Top20Annonceurs: [] });
     }
 
@@ -911,14 +908,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       });
 
-      console.log('response marché', response)
+      //console.log('response marché', response)
       set({
         PartMarche: response.data,
         loadingMarche: false,
       });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
 
@@ -970,7 +967,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       // console.log('rangs',rangs)
       // console.log('media',media)
       // console.log('base',base)
-      console.log('response', response)
+     // console.log('response', response)
       set({
         Top20marques: response.data,
         loadingMarque: false,
@@ -979,7 +976,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   loadingProduit: false,
@@ -1018,7 +1015,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log('response 20 produits', response)
+      //console.log('response 20 produits', response)
       set({
         Top20produits: response.data,
         loadingProduit: false
@@ -1027,7 +1024,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   loadingFormat: false,
@@ -1066,7 +1063,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log('response marché', response)
+      //console.log('response marché', response)
       set({
         FormatRepartition: response.data,
         loadingFormat: false,
@@ -1074,7 +1071,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       set({ isloading: false })
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   loadingAnnonceurSupport: false,
@@ -1121,7 +1118,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   loagingCreationAnnonceur: false,
@@ -1169,7 +1166,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
   getDureeTotalDiffusion: async (
@@ -1204,14 +1201,14 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log('response duree', response)
+      //console.log('response duree', response)
       if (Number(response.data[0].total) > 3600) {
         set({ DureeTotal: (Number(response.data[0].total) / 3600).toFixed(2) + " H" });
       } else {
         set({ DureeTotal: Number(response.data[0].total) + " s" });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
   },
@@ -1253,7 +1250,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       }
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
   },
@@ -1288,7 +1285,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      console.log('duree moyenne', (Number(response.data[0].proportion)) + "s")
+      //console.log('duree moyenne', (Number(response.data[0].proportion)) + "s")
       if(Number(response.data[0].proportion) > 3600){
         
         set({ DureeMoyenne:(Number(response.data[0].proportion) / 3600).toFixed(2) + " H" });
@@ -1297,7 +1294,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
        }
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
   },
@@ -1331,7 +1328,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      console.log('duree moyenne last', response)
+      //console.log('duree moyenne last', response)
       if(Number(response.data[0].proportion) >3600){
         
        set({ DureeMoyenneLastYear:(Number(response.data[0].proportion) / 3600).toFixed(2) + " H" });
@@ -1341,7 +1338,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       //set({ DureeMoyenneLastYear: Number(response.data[0].proportion).toFixed(2) });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
 
@@ -1375,11 +1372,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log("pic", response.data[0].interval_start)
+      //console.log("pic", response.data[0].interval_start)
       set({ PicCommunication: response.data[0] });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
 
@@ -1415,7 +1412,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
         date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
       });
-      console.log("pic", response)
+      //console.log("pic", response)
       if(response.data[0]){
         set({ PicCommunicationLastYear: response.data[0] });
       }else{
@@ -1427,7 +1424,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
      
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
 
@@ -1465,11 +1462,11 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log("response",response.data)
+      //console.log("response",response.data)
      set({ DiffusionParCreation: Number(response.data[0].average).toFixed(2) });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
 
@@ -1511,7 +1508,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       set({ DiffusionParCreationLastYear: Number(response.data[0].average).toFixed(2) });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
 
@@ -1552,7 +1549,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log("response",response)
+      //console.log("response",response)
       
       set({ 
         RepartitionParType:response.data,
@@ -1560,7 +1557,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
        });
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
 
 

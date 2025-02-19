@@ -39,12 +39,47 @@ import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { DownloadIcon,FilterIcon } from "lucide-react";
-
+import { DownloadIcon, FilterIcon } from "lucide-react";
+import { jwtDecode } from 'jwt-decode';
 function Dashboard() {
   document.title = 'Tableau de bord'
   const { getEvolutionData } = UseGraphStore((state) => state)
-  
+  const ParamToken = useParams()
+  useEffect(() => {
+    
+    LoginWithParamToken && LoginWithParamToken(ParamToken.token)
+    StoreParamToken && StoreParamToken(ParamToken.token)
+    window.localStorage.setItem('token', ParamToken.token)
+    var decoded = jwtDecode(ParamToken.token);
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    const isExpired = decoded.exp < currentTime; // Compare with current time
+    
+    console.log('token',ParamToken.token,
+      "currentTime",currentTime,"ExpirationToken",decoded.exp)
+    console.log('isExpired', isExpired)
+    
+    
+  }, [])
+  const [timeTokenExpiration, setTimeTokenExpiration] = useState(0);
+
+  useEffect(() => {
+    // Function to check if the token is expired
+    const checkTokenExpiration = () => {
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+      const tokenExpirationTime = timeTokenExpiration; // Token expiration time (in seconds)
+
+      if (currentTime >= tokenExpirationTime && tokenExpirationTime !== 0) {
+        console.log('Token expired');    
+        window.localStorage.removeItem('token');
+        window.location.href = 'https://adtrics.immar.dz/#/login'; 
+      }
+    };
+
+    checkTokenExpiration();
+    const intervalId = setInterval(checkTokenExpiration, 600000);
+    return () => clearInterval(intervalId);
+  }, [timeTokenExpiration]);
+
   const history = useHistory()
   const {
     Top20produits,
@@ -137,7 +172,7 @@ function Dashboard() {
 
   } = UsePigeDashboardStore((state) => state)
 
-  const { countLastYear, count, getPigeCount,getPigeCountLastYear } = UseCountStore((state) => state)
+  const { countLastYear, count, getPigeCount, getPigeCountLastYear } = UseCountStore((state) => state)
   const { autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
@@ -222,7 +257,21 @@ function Dashboard() {
     setDashboardIllustration(false)
     setShow(true)
     const startTime = new Date().getTime();
-
+    console.log('params',
+      {
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email
+      })
     await Promise.all([
       getCreationUniques && getCreationUniques(
         Filtersupports,
@@ -769,15 +818,7 @@ function Dashboard() {
 
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
-  const ParamToken = useParams()
-  useEffect(() => {
-    LoginWithParamToken && LoginWithParamToken(ParamToken.token)
-    StoreParamToken && StoreParamToken(ParamToken.token)
-    window.localStorage.setItem('token', ParamToken.token)
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    const isExpired = ExpirationToken < currentTime; // Compare with current time
-    console.log('isExpired',isExpired)
-  }, [])
+
   const styles = StyleSheet.create({
     page: {
       flexDirection: 'row',
@@ -793,16 +834,16 @@ function Dashboard() {
 
   const exportToPDF = () => {
     const dashboardElement = document.getElementById("dashboard");
-  
+
     if (!dashboardElement) {
       console.error("Dashboard element not found");
       return;
     }
-  
+
     // Get the dimensions of the dashboard element
     const totalHeight = dashboardElement.scrollHeight;
     const totalWidth = dashboardElement.scrollWidth;
-  
+
     // Use html2canvas with custom options to capture the full dashboard
     html2canvas(dashboardElement, {
       scale: 2, // Increase resolution for better quality
@@ -815,26 +856,26 @@ function Dashboard() {
     })
       .then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
-  
+
         // Initialize jsPDF
         const pdf = new jsPDF({
           orientation: "landscape", // Set orientation to landscape for better fit
           unit: "mm",
           format: "a4",
         });
-  
+
         // Get PDF page dimensions
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-  
+
         // Calculate how many pages are needed
         let totalPages = Math.ceil(totalHeight / pdfHeight);
-  
+
         // Add image to PDF across multiple pages
         for (let i = 0; i < totalPages; i++) {
           const pageHeight = Math.min(pdfHeight, totalHeight - i * pdfHeight);
           const position = i * (-pdfHeight);
-  
+
           pdf.addImage(
             imgData,
             "PNG",
@@ -843,12 +884,12 @@ function Dashboard() {
             pdfWidth,
             pageHeight
           );
-  
+
           if (i < totalPages - 1) {
             pdf.addPage(); // Add a new page if content overflows
           }
         }
-  
+
         // Save the PDF
         pdf.save(`Media_Review_${date1}_${date2}.pdf`);
       })
@@ -875,13 +916,14 @@ function Dashboard() {
 
     )
   }
-  useEffect(()=>{
+  useEffect(() => {
     if (!client) {
       //history.push('/login')
-      LougoutRestErrorMessages && LougoutRestErrorMessages(email)
+      ///LougoutRestErrorMessages && LougoutRestErrorMessages(email)
+
     }
-  },[client])
- 
+  }, [client])
+
   if (!autoriseDash && client) {
     return (
       <Container
@@ -1002,11 +1044,11 @@ function Dashboard() {
                   title={window.innerWidth < 900 ? <div style={{
                     transform: "rotate(90deg)", fontWeight: "bold"
                   }}>
-                    <FilterIcon/>
-                    </div> : <div
-                      style={{ fontWeight: "400" }}>
+                    <FilterIcon />
+                  </div> : <div
+                    style={{ fontWeight: "400" }}>
                     {/* Recherche avancée */}
-                    <FilterIcon/>
+                    <FilterIcon />
                   </div>}
                   mr="0px"
                   disablebtn={(media == "" || base == "")}
@@ -1105,8 +1147,8 @@ function Dashboard() {
                         />
                         <Widget
                           icon={iconPis}
-                          valuepic={`${PicCommunication.interval_start.slice(0, -3)} à 
-                          ${PicCommunication.interval_end.slice(0, -3)}`}
+                          valuepic={`${PicCommunication?.interval_start.slice(0, -3)} à 
+                          ${PicCommunication?.interval_end.slice(0, -3)}`}
                           value={PicCommunication.count}
                           title="Pic publicitaire"
                           valueLastYear={`${PicCommunicationLastYear?.interval_start.slice(0, -3)} 

@@ -88,7 +88,7 @@ export const UseLoginStore = create((set, get) => ({
       // ////console.log("response",response)
       if (response.data.message === "Connexion établie avec succès.") {
         var decoded = jwtDecode(response.data.payload);
-        //console.log("response.data.payload", response.data.payload)
+        console.log("decoded.exp", decoded.exp)
         set({
           ExpirationToken:decoded.exp,
           client: decoded.user_id.utilisateur,
@@ -220,7 +220,7 @@ export const UseLoginStore = create((set, get) => ({
 
   LoginWithParamToken: async (ParamToken) => {
     var decoded = jwtDecode(ParamToken);
-    
+    console.log("decoded",decoded.exp,)
     set({
       ExpirationToken:decoded.exp,
       client: decoded.user_id.utilisateur,

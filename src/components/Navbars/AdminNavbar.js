@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { useLocation } from "react-router-dom";
 import { Link, useParams } from "react-router-dom/cjs/react-router-dom";
 
-import logoImmar from "assets/logo (2).png";
+import logoImmar from "assets/logo transparent adtrics.png";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import powerbi from "assets/img/icons/PowerBI.webp"
-import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon } from '@heroicons/react/outline';
+import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon, HomeIcon } from '@heroicons/react/outline';
 import './navbar.css';
 import Navback from 'assets/navbar.png'
 function Header() {
   const TokenParam = window.localStorage.getItem('token')
-  const { LougoutRestErrorMessages,email } = UseLoginStore((state) => state)
+  const { LougoutRestErrorMessages, email } = UseLoginStore((state) => state)
 
   // const mobileSidebarToggle = (e) => {
   //   e.preventDefault();
@@ -44,8 +44,8 @@ function Header() {
   const handelLogout = () => {
     LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
- 
- 
+
+
   return (
     <div className="navbar_back" style={{
       display: "flex", width: "100%",
@@ -54,7 +54,8 @@ function Header() {
       backgroundPosition: 'center',
       position: "fixed",
       top: '0px',
-      zIndex: "10"
+      zIndex: "10",
+     
     }}>
       <div style={{
         width: "90%", display: "flex",
@@ -62,7 +63,9 @@ function Header() {
         alignItems: "start", paddingTop: '0px',
 
       }}>
-        <div style={{ paddingTop: "0px" }} >
+
+        <div style={{ paddingTop: "5px", height: "80px",
+          display:"flex",justifyContent:"center",alignContent:"center"}} >
           {/* <Link to="https://adtrics.immar.dz/#/home"> */}
           <a href="https://adtrics.immar.dz/#/home">
             <img src={logoImmar} alt="immar media" className="logo-immar" />
@@ -81,16 +84,35 @@ function Header() {
             height: "80px",
             color: "white"
           }}>
-            {/* <Link
-              to="/pige/pige_en_ligne"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            > */}
+            <a href="https://adtrics.immar.dz/#/home" style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+              <HomeIcon className="icon_nav" style={{
+                // width: "35px",
 
+                color: "white",
+                // "&:hover": {
+                //   color: "#1DC7EA", 
+                // },
+
+              }} />
+            </a>
+            {/* </Link> */}
+            <p style={{ textTransform: "", fontSize: "10px" }}>Accueil</p>
+          </span>
+
+
+          <span className="no-icon" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
+            color: "white"
+          }}>
             <a href="https://adtrics.immar.dz/#/advertising" style={{
               display: "flex",
               flexDirection: "column",
@@ -107,8 +129,6 @@ function Header() {
 
               }} />
             </a>
-
-
             {/* </Link> */}
             <p style={{ textTransform: "", fontSize: "10px" }}>pige</p>
           </span>

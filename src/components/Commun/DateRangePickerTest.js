@@ -18,14 +18,16 @@ export default function DateRangeTest() {
   // const date_debut = window.localStorage.getItem('date_debut');
   // const date_fin = window.localStorage.getItem('date_fin');
   const {date_debut,date_fin}=UseLoginStore((state)=>state)
+  
   let today =moment().utc().subtract(1, 'days').startOf("day").toDate();
   const [dateRange, setDateRange] = useState([today, today]);
   const [startDate, endDate] = dateRange;
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => {
-  const formattedValue = value ? value.split(" - ").map(date => moment(date).format("DD/MM/YYYY")).join(" - ") : "";
-    
-    return (
+  const formattedValue = value ? value.split(" - ").map(date => moment(date).format("DD/MM/YYYY")).join(" - ") : ""; 
+   
+ // console.log(new Date(today) < new Date(date_fin))
+  return (
       <input
         id="pickInput"
         className="date-picker-input"
@@ -36,7 +38,6 @@ export default function DateRangeTest() {
       />
     );
   });
-
   const handleDateChange = (update) => {
     setDateRange(update);
     const newStartDate = update[0];
@@ -77,7 +78,7 @@ export default function DateRangeTest() {
         onChange={handleDateChange}
         locale={fr}
         monthsShown={2}
-        maxDate={today <date_fin? today: date_fin} 
+        maxDate={new Date(today) < new Date(date_fin) ? today: date_fin} 
         minDate={date_debut}
         customInput={<CustomInput />}
       />

@@ -260,7 +260,8 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
           <strong style={{ color: "#d81b60" }} >{(payload[0]?.payload.date)}</strong>
           <br />
           <strong style={{ color: "#d81b60" }} >{(payload[0]?.payload.total)}</strong>
-
+          <br />
+          <strong style={{ color: "#d81b60" }} >{(payload[0]?.payload.Année)}</strong>
           {/* <p><strong style={{ color: "#d81b60" }} >Date:</strong> </p>
           <p><strong style={{ color: "#d81b60" }}>Mois:</strong> {payload[0]?.payload.name}</p>
           <p><strong style={{ color: "#d81b60" }}>Total:</strong> {payload[0]?.payload.total}</p> */}
