@@ -22,21 +22,21 @@ export default function SignIn() {
   const history = useHistory()
   const { Loginuser, errormessage, showAlert2, showAlert1,
     setLoginInputs, setTestvalue, test,
-    ReseAlertShwing,client,email,LougoutRestErrorMessages } = UseLoginStore((state) => state)
-    console.log('email ',email,"client",client)
-const handleChange = (event) => {
+    ReseAlertShwing, client, email, LougoutRestErrorMessages } = UseLoginStore((state) => state)
+  ////console.log('email ', email, "client", client)
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: value 
+      [name]: value
     }));
-    // console.log("user",user)
+    // //console.log("user",user)
   };
   const handleSubmit = (user) => {
     //login && login(user.email,user.pass)
     // event.preventDefault();
     // const data = new FormData(event.currentTarget);
-    // console.log({
+    // //console.log({
     //   email: data.get('email'),
     //   password: data.get('password'),
     // });
@@ -50,126 +50,128 @@ const handleChange = (event) => {
 
   React.useEffect(() => {
     if (email) {
-     history.push("/main/accueil")
-  
+      history.push("/main/accueil")
+
     } else {
-      //console.log('notallowed')
+      //////console.log('notallowed')
       LougoutRestErrorMessages && LougoutRestErrorMessages(email)
     }
   }, [email])
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     ReseAlertShwing && ReseAlertShwing()
-  },[])
-  const logout=()=>{
+  }, [])
+  const logout = () => {
     LougoutRestErrorMessages && LougoutRestErrorMessages("ikramzerkout13@gmail.com")
   }
 
   return (
-   
-      <Container component="main" maxWidth="xs" style={{
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center"
-        ,flexDirection:"column"
-      }}>
-        <Button onClick={logout}>Logout</Button>
-        <CssBaseline />
-        <img src={logoImmar} alt="immar" width="150px" />
-        <Box
-          sx={{
-            p: 3,
-            backgroundColor: "rgba(255, 255, 255, 1)", 
-            borderRadius: "8px", // Coins arrondis
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", 
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
 
-          }}
-        >
-          
-          {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+    <Container component="main" maxWidth="xs" style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+      , flexDirection: "column"
+    }}>
+      <Button onClick={logout}>Logout</Button>
+      <CssBaseline />
+      <img src={logoImmar} alt="immar" width="150px" />
+      <Box
+        sx={{
+          p: 3,
+          backgroundColor: "rgba(255, 255, 255, 1)",
+          borderRadius: "8px", // Coins arrondis
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+
+        }}
+      >
+
+        {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar> */}
-          <Typography component="h1"  onClick={handellogin} sx={{fontWeight:"600",
-               
+        <Typography component="h1" onClick={handellogin} sx={{
+          fontWeight: "600",
 
-          }}>
-            Connexion
-          </Typography>
-          <Typography sx={{marginBottom:"20px"}}>connectez-vous pour continuer</Typography>
-          <Stack sx={{ width: '100%' }} spacing={2}>
-            {showAlert1 && <Alert severity="success">Vous êtes connectés.</Alert>}
-            {showAlert2 && <Alert severity="error">{errormessage}
-              {/* Une erreur s'est produite, veuillez réessayer plus tard. */}
-            </Alert>}
 
-          </Stack>
-          <Box component="form"  >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email"
-              name="email"
-              autoComplete=""
-              placeholder='client@gmail.com'
-              value={user.email}
-              autoFocus
-              onChange={handleChange}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="pass"
-              label="Mot de passe"
-              type="password"
-              id="password"
-              value={user.pass}
-              autoComplete="current-password"
-              onChange={handleChange}
-            />
-            {/* <FormControlLabel
+        }}>
+          Connexion
+        </Typography>
+        <Typography sx={{ marginBottom: "20px" }}>connectez-vous pour continuer</Typography>
+        <Stack sx={{ width: '100%' }} spacing={2}>
+          {showAlert1 && <Alert severity="success">Vous êtes connectés.</Alert>}
+          {showAlert2 && <Alert severity="error">{errormessage}
+            {/* Une erreur s'est produite, veuillez réessayer plus tard. */}
+          </Alert>}
+
+        </Stack>
+        <Box component="form"  >
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete=""
+            placeholder='client@gmail.com'
+            value={user.email}
+            autoFocus
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="pass"
+            label="Mot de passe"
+            type="password"
+            id="password"
+            value={user.pass}
+            autoComplete="current-password"
+            onChange={handleChange}
+          />
+          {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Enregistrer"
             /> */}
-              <Link to="/login/motdepasseoublier" 
-              style={{textTransforme:"none", cursor: "pointer", marginTop: "10px",
-              textDecoration:"none",
-              width:"100%",
-              display:"flex",
-              justifyContent:"flex-end",
-              color:"#1976d2",
-              }}>
-              Mot de passe oublié?
-            </Link>
-            <Button
+          <Link to="/login/motdepasseoublier"
+            style={{
+              textTransforme: "none", cursor: "pointer", marginTop: "10px",
+              textDecoration: "none",
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+              color: "#1976d2",
+            }}>
+            Mot de passe oublié?
+          </Link>
+          <Button
 
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 , textTransform:"none"}}
-              onClick={handellogin}
-            >
-             
-              Connexion
-            </Button>
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2, textTransform: "none" }}
+            onClick={handellogin}
+          >
 
-           
+            Connexion
+          </Button>
 
-            {/* <Grid item>
+
+
+          {/* <Grid item>
                 <Link href="/login/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid> */}
 
-          </Box>
         </Box>
+      </Box>
 
-      </Container>
-   
+    </Container>
+
   );
 }

@@ -27,32 +27,32 @@ font-style: normal;
     display:hidden;
 }
 .light-blue-row { 
-  background-color: #85b0db !important; 
-  color: white;
+  /* background-color: #85b0db !important;  */
+  /* color: white; */
 }
 .light-blue-row:hover{ 
-  background-color: #00a6e0  !important; 
+  /* background-color: #00a6e0  !important; 
   color: black;
-  cursor: pointer;
+  cursor: pointer; */
 }
 .normal-row {
-  background-color: white !important; 
-  cursor: pointer;
+  /* background-color: white !important; 
+  cursor: pointer; */
 }
 .css-1nnh8nx-MuiDataGrid-root 
 .MuiDataGrid-virtualScrollerContent .MuiDataGrid-row.Mui-selected:hover{
-  background-color: #008fc4 !important; 
+  /* background-color: #008fc4 !important;  */
   color: white;
 }
 
 .custom_tool_bar {
-    text-transform: none;
-    background-color: black;
+    /* text-transform: none;
+    background-color: black; */
 }
 
 .react-datepicker__input-container input {
     width: 100%;
-    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity))
+    /* background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) */
   }
   /* DatePickerStyles.css */
 .react-datepicker {
@@ -61,36 +61,36 @@ font-style: normal;
   }
   
   .react-datepicker__day--highlighted {
-    background-color: #1DC7EA !important; /* Highlighted dates background color */
+    background-color: #1DC7EA !important; 
     color: white; /* Change text color for better contrast */
   }
   
   .react-datepicker__day--in-range {
-    background-color: #1DC7EA !important; /* Background color for in-range dates */
+    /* background-color: #1DC7EA !important;  */
     color: white; /* Change text color for better contrast */
   }
   
   .react-datepicker__day--selected {
-    background-color: #1DC7EA !important; /* Background color for selected dates */
+    /* background-color: #1DC7EA !important;  */
     color: white; /* Change text color for better contrast */
   }
   
   .react-datepicker__header {
-    background-color: white !important; /* Set the header background color */
+    /* background-color: white !important;  */
   }
   
   .react-datepicker__day--highlighted {
-    background-color: #1DC7EA !important; /* Highlighted dates background color */
-    color: white; /* Change text color for better contrast */
+    /* background-color: #1DC7EA !important;  */
+    color: white;
   }
   
   .react-datepicker__day--in-range {
-    background-color: #1DC7EA !important; /* Background color for in-range dates */
+    /* background-color: #1DC7EA !important;  */
     color: white; /* Change text color for better contrast */
   }
   
   .react-datepicker__day--selected {
-    background-color: #1DC7EA !important; /* Background color for selected dates */
+    /* background-color: #1DC7EA !important;  */
     color: white; /* Change text color for better contrast */
   }
   .react-datepicker__month {

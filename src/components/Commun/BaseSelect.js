@@ -94,7 +94,7 @@ export default function MultipleSelectBase() {
         <InputLabel id="demo-multiple-checkbox-label"
           sx={{
             top: "-10px",
-            color: "black",
+            color: "#020b42",
             '&.Mui-focused': {
               color: 'transparent',
             },

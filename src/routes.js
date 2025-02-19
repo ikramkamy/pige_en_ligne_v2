@@ -40,7 +40,7 @@ const dashboardRoutes = [
     layout: "/login"
   },
   {
-    path: "/tableau_de_bord",
+    path: "/tableau_de_bord/:token",
     name: "Dashboard",
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,

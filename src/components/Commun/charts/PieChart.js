@@ -1,25 +1,17 @@
 import * as React from 'react';
-import { PieChart } from '@mui/x-charts/PieChart';
 import { UsePigeDashboardStore } from '../../../store/dashboardStore/PigeDashboardStore';
-import { Card, Col, Row } from 'react-bootstrap';
-import CardHeader from 'react-bootstrap/esm/CardHeader';
+import { Card} from 'react-bootstrap';
 import ReactEcharts from "echarts-for-react";
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { useEffect, useState } from "react";
-import BaseDialog from '../DialogueBox';
-import WatingChart from 'assets/img/loading3.gif';
-import { SelectGraphOptions, SelectGraphOptionsMarche } from './SelectGraphOptions';
+import {SelectGraphOptionsMarche } from './SelectGraphOptions';
 import { UseGraphStore } from 'store/GraphStore';
 import ColorCheckboxes from './BaseCheckBoxGroupe';
-import { BarChartIcon, PieChartIcon } from "lucide-react";
 import html2canvas from "html2canvas";
 import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
 import './style.css';
-
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
-  ListSubheader,
   IconButton,
   Menu,
 } from "@mui/material";

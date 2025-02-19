@@ -65,59 +65,73 @@ export default function MultipleSelectMedia() {
   const [selectedMedia, setSelectedMedia] = useState('')
   const [previousSelection, setPreviousSelection] = useState([]);
   const [showSpinner, setShowSpinner] = useState(false)
-  const [mediaList, setMediaList] = useState([])
+ 
+  const media_array = [
+    {
+      label: "Presse",
+      value: "presse",
+      auth: autorisePigePresse,
+    },
+    {
+      label: "Radio",
+      value: "radio",
+      auth: autorisePigeRadio,
+    },
+    {
+      label: "Télèvision",
+      value: "television",
+      auth: autorisePigeTv,
+    }
+  ]
+  const [mediaList, setMediaList] = useState(media_array.filter((elem) => elem.auth == true))
   useEffect(() => {
+    
     ResetAllFilters && ResetAllFilters()
     setMediaValue && setMediaValue('')
-    if (location.hash.includes('/veille/veille_creations_publicitaires')) {
-      var media_array = [
-        {
-          label: "Presse",
-          value: "presse",
-          auth: autoriseVeillePresse,
-        },
-        {
-          label: "Radio",
-          value: "radio",
-          auth: autoriseVeilleRadio,
-        },
-        {
-          label: "Télèvision",
-          value: "television",
-          auth: autoriseVeilleTv,
-        }
-      ]
-      setMediaList(media_array.filter((elem) => elem.auth == true))
-    } else {
-      var media_array = [
-        {
-          label: "Presse",
-          value: "presse",
-          auth: autorisePigePresse,
-        },
-        {
-          label: "Radio",
-          value: "radio",
-          auth: autorisePigeRadio,
-        },
-        {
-          label: "Télèvision",
-          value: "television",
-          auth: autorisePigeTv,
-        }
-      ]
-      setMediaList(media_array.filter((elem) => elem.auth == true))
+    // if (location.hash.includes('/veille/veille_creations_publicitaires')) {
+    //   var media_array = [
+    //     {
+    //       label: "Presse",
+    //       value: "presse",
+    //       auth: autoriseVeillePresse,
+    //     },
+    //     {
+    //       label: "Radio",
+    //       value: "radio",
+    //       auth: autoriseVeilleRadio,
+    //     },
+    //     {
+    //       label: "Télèvision",
+    //       value: "television",
+    //       auth: autoriseVeilleTv,
+    //     }
+    //   ]
+    //   setMediaList(media_array.filter((elem) => elem.auth == true))
+    // } else {
+      // var media_array = [
+      //   {
+      //     label: "Presse",
+      //     value: "presse",
+      //     auth: autorisePigePresse,
+      //   },
+      //   {
+      //     label: "Radio",
+      //     value: "radio",
+      //     auth: autorisePigeRadio,
+      //   },
+      //   {
+      //     label: "Télèvision",
+      //     value: "television",
+      //     auth: autorisePigeTv,
+      //   }
+      // ]
+      // setMediaList(media_array.filter((elem) => elem.auth == true))
 
 
-    }
-  }, [location.hash])
+    // }
+    setMediaList(media_array.filter((elem) => elem.auth == true))
+  }, [autorisePigeRadio,autorisePigePresse,autorisePigeTv])
 
-  useEffect(() => {
-
-    //setMediaList(mediaList.filter((elem) => elem.auth == true))
-  }, [])
-
-  //console.log("medialist", mediaList)
 
   useEffect(() => {
     setShowSpinner(true)
@@ -172,7 +186,7 @@ export default function MultipleSelectMedia() {
         <InputLabel id="demo-multiple-checkbox-label"
           sx={{
             //bottom: "10px",
-            color: "black",
+            color: "#020b42",
             position:"absolute",
             top:"-10px",
             '&.Mui-focused': {

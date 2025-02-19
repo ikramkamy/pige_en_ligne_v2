@@ -9,6 +9,8 @@ import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
+
+
 export default function DateRangeTest() {
   const { setDateRang, setShowDataGridIfNotEmpty, setShowDataGrid, setDataTableShow, setLoadingshow } = UseFiltersStore((state) => state);
   const { ResetBasedeCalucule, ResetDataArrays } = UsePigeDashboardStore((state) => state);
@@ -66,7 +68,6 @@ export default function DateRangeTest() {
 
     setDateRang(formattedStart, formattedEnd);
   }, [dateRange]);
-  console.log('date')
   return (
     <div className="date-picker-container" style={{width:"100%"}}>
       <DatePicker     

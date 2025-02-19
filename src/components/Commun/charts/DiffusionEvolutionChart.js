@@ -58,7 +58,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     }
 
     return dataArray.sort((a, b) => {
-      console.log("a sort", a, "b", b)
+      //console.logle.log("a sort", a, "b", b)
       // Ensure both objects have a 'date' property
       if (!a.name || !b.name) {
         throw new Error("Each object in the array must have a 'date' property.");
@@ -161,7 +161,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   };
 
   const EvolutionDataMois = EvolutionDataMois2
-  //  console.log("EvolutionDataMois2",sortMonthsAscending(EvolutionDataMois2))
+  //  //console.logle.log("EvolutionDataMois2",sortMonthsAscending(EvolutionDataMois2))
   const dataMapping = {
     heure: EvolutionDataHeure,
     jour: EvolutionDataJour,
@@ -238,12 +238,12 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
 
   useEffect(() => {
     setBaseGraphs && setBaseGraphs(parametre, base)
-    console.log("baseGraphs", baseGraphs)
+    //console.logle.log("baseGraphs", baseGraphs)
   }, [])
   const max = Number(chartConfig[activeChart]?.max)
   const min = Number(chartConfig[activeChart]?.min)
   const CustomTooltip = ({ active, payload, label }) => {
-    console.log("payload", payload[0]?.payload)
+    //console.logle.log("payload", payload[0]?.payload)
     if (active && payload && payload.length) {
 
       return (
@@ -319,7 +319,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     handleClose();
   };
   const handleDownloadChart = () => {
-    console.log('download')
+    //console.logle.log('download')
     const chartContainer = document.querySelector(".line-chart-container");
     if (!chartContainer) return;
 
@@ -344,12 +344,12 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     setAnchorEl(null);
   };
   const handleDownloadChartPDF = async () => {
-    console.log("Generating chart image...");
+    //console.logle.log("Generating chart image...");
 
     // Step 1: Capture the chart container
     const chartContainer = document.querySelector(".line-chart-container");
     if (!chartContainer) {
-      console.error("Chart container not found!");
+      //console.logle.error("Chart container not found!");
       return;
     }
 
@@ -373,7 +373,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       const imageId = generateUniqueId(); // Generate a unique ID for the image
       sessionStorage.setItem('dataimage', imgData); // Use sessionStorage for temporary storage
       sessionStorage.setItem('imageId', imageId)
-      console.log(`Image saved temporarily with ID: ${imageId}`);
+      //console.logle.log(`Image saved temporarily with ID: ${imageId}`);
 
       // Optionally, notify the user or proceed with further actions
       //alert("Chart image generated and stored temporarily. Use the provided ID to retrieve it.");
@@ -381,7 +381,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       // You can now use the `imageId` to retrieve the image later when generating the PDF
       return imageId;
     } catch (error) {
-      console.error("Error generating or saving the chart image:", error);
+      //console.logle.error("Error generating or saving the chart image:", error);
     }
   };
 
@@ -396,7 +396,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   function getImageById(imageId) {
     const imgData = sessionStorage.getItem(imageId);
     if (!imgData) {
-      console.error(`Image with ID ${imageId} not found in storage.`);
+      //console.logle.error(`Image with ID ${imageId} not found in storage.`);
       return null;
     }
     return imgData; // Returns the base64 image data

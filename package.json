@@ -1,8 +1,8 @@
 {
   "name": "pige_veille",
   "version": "2.0.1",
-  "homepage": "/",
-  "proxy": "https://pige.immar-media.com",
+  "homepage": "/dashboard",
+  "proxy": "https://adtrics.immar.dz",
   "dependencies": {
     "@azure/msal-browser": "^4.0.2",
     "@coreui/icons": "^3.0.1",
@@ -72,7 +72,7 @@
     "react-windowed-select": "^5.2.0",
     "reactstrap": "8.8.1",
     "recharts": "^2.15.1",
-    "rsuite": "^5.77.0",
+    "rsuite": "^5.77.1",
     "rsuite-daterangepicker": "^3.0.5",
     "sass": "1.53.0",
     "xlsx": "^0.18.5",

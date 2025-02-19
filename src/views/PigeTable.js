@@ -360,7 +360,7 @@ export default function DataTablePige() {
       //setLoadingshow(true)
 
     }
-  }, [media, date1, date2,]);
+  }, [media, date1, date2]);
   const [increment, setIncrement] = React.useState(0)
   const [callGetData, setCallGetData] = React.useState(-3)
   const [loadingWithCount, setLoadingWithCount] = React.useState(false)
@@ -681,7 +681,7 @@ export default function DataTablePige() {
               <LoadingButtonData
                 getData={getData}
                 //isloading={loadingshow && (!showDataGrid && showDataGridIfNotEmpty)}
-                isloading={IsCounting || IsDataPigeLoading}
+                isloading={IsCounting && IsDataPigeLoading}
                 //isSucces={(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)}
                 isSucces={false}
                 //disablebtn={!(showDataGridIfNotEmpty && showDataGrid && filteredData2.length > 0)} 

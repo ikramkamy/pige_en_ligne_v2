@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+import { Link, useParams } from "react-router-dom/cjs/react-router-dom";
+
 import logoImmar from "assets/logo (2).png";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import powerbi from "assets/img/icons/PowerBI.webp"
@@ -10,9 +11,8 @@ import Navback from 'assets/navbar.png'
 function Header() {
   const user_name = window.localStorage.getItem("user_name")
   const location = useLocation();
-  const { Loginuser, errormessage, showAlert2, showAlert1,
-    email, client, test, setTestvalue, setLoginInputs,
-    userIdentifications, LougoutRestErrorMessages } = UseLoginStore((state) => state)
+  const {
+    LougoutRestErrorMessages } = UseLoginStore((state) => state)
 
   // const mobileSidebarToggle = (e) => {
   //   e.preventDefault();
@@ -44,13 +44,15 @@ function Header() {
   // const history=useHistory()
 
   const handelLogout = () => {
-    console.log("call logout function")
+    // console.log("call logout function")
     // window.localStorage.clear()
     localStorage.removeItem('user_email');
     localStorage.removeItem('user_id');
     localStorage.removeItem('user_name');
     LougoutRestErrorMessages && LougoutRestErrorMessages()
   }
+  const TokenParam = window.localStorage.getItem('token')
+ 
   return (
     <div className="navbar_back" style={{
       display: "flex", width: "100%",
@@ -68,9 +70,11 @@ function Header() {
 
       }}>
         <div style={{ paddingTop: "0px" }} >
-          <Link to="/main/accueil">
+          {/* <Link to="https://adtrics.immar.dz/#/home"> */}
+          <a href="https://adtrics.immar.dz/#/home">
             <img src={logoImmar} alt="immar media" className="logo-immar" />
-          </Link>
+          </a>
+          {/* </Link> */}
         </div>
         <div style={{
           display: "flex", width: "100%",
@@ -84,7 +88,7 @@ function Header() {
             height: "80px",
             color: "white"
           }}>
-            <Link
+            {/* <Link
               to="/pige/pige_en_ligne"
               style={{
                 display: "flex",
@@ -92,7 +96,14 @@ function Header() {
                 alignItems: "center",
                 justifyContent: "center"
               }}
-            >
+            > */}
+
+            <a href="https://adtrics.immar.dz/#/advertising" style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
               <SearchCircleIcon className="icon_nav" style={{
                 // width: "35px",
 
@@ -102,8 +113,10 @@ function Header() {
                 // },
 
               }} />
+            </a>
 
-            </Link>
+
+            {/* </Link> */}
             <p style={{ textTransform: "", fontSize: "10px" }}>pige</p>
           </span>
 
@@ -116,7 +129,7 @@ function Header() {
             height: "80px",
 
           }}>
-            <Link
+            {/* <Link
               to="/veille/veille_creations_publicitaires"
               style={{
                 display: "flex",
@@ -124,12 +137,19 @@ function Header() {
                 alignItems: "center",
                 justifyContent: "center"
               }}
-            >
+            > */}
+            <a href="https://adtrics.immar.dz/#/monitoring" style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
               <SpeakerphoneIcon className="icon_nav"
                 style={{ color: "white", }}
-              />
+              /></a>
 
-            </Link>
+
+            {/* </Link> */}
             <p style={{ textTransform: "", fontSize: "10px" }}>veille</p>
           </span>
 
@@ -143,12 +163,24 @@ function Header() {
             height: "80px",
 
           }} >
-            <Link to="/media/tableau_de_bord" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            {/* <Link to="/media/tableau_de_bord" 
+            style={{ display: "flex", flexDirection: "column", 
+            alignItems: "center", 
+            justifyContent: "center" 
+            }}> */}
+            <a href={`https://adtrics.immar.dz/#/dashboard/#/media/tableau_de_bord/${TokenParam}`} style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
               <ChartBarIcon
                 className="icon_nav"
                 style={{ color: "white", }}
               />
-            </Link>
+            </a>
+
+            {/* </Link> */}
             <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
           </span>
 
@@ -175,16 +207,24 @@ function Header() {
             flexDirection: "column",
             height: "80px",
           }}>
-            <Link to="/login"
+            {/* <Link to="/login"
               style={{
                 display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center"
-              }}>
+              }}> */}
+            <a href={`https://adtrics.immar.dz/#/dashboard/media/tableau_de_bord/${TokenParam}`} style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
               <LogoutIcon onClick={handelLogout}
                 className="icon_nav"
                 style={{ color: "white" }}
               />
-            </Link>
+            </a>
+
+            {/* </Link> */}
             <p style={{ textTransform: "", fontSize: "10px" }}>déconnexion</p>
           </span>
 

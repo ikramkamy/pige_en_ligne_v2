@@ -38,9 +38,11 @@ import { UseCountStore } from "store/dashboardStore/UseCounts";
 import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets";
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { DownloadIcon } from "lucide-react";
 
 function Dashboard() {
-  const { getEvolutionData, EvolutionData } = UseGraphStore((state) => state)
+  const { getEvolutionData } = UseGraphStore((state) => state)
   document.title = 'Tableau de bord'
   const history = useHistory()
   const {
@@ -136,7 +138,11 @@ function Dashboard() {
 
   const { countLastYear, count, getPigeCount,
     getPigeCountLastYear } = UseCountStore((state) => state)
-  const { autoriseDash, client, email, LougoutRestErrorMessages } = UseLoginStore((state) => state)
+  const { autoriseDash, client, email,
+    LougoutRestErrorMessages,
+    LoginWithParamToken,
+    StoreParamToken
+  } = UseLoginStore((state) => state)
   const {
     Filtersupports,
     Filterclassesids,
@@ -739,6 +745,7 @@ function Dashboard() {
     const handleResize = () => {
       setResStyle({
         FlexDirection: window.innerWidth < 900 ? 'column' : 'row',
+        FlexDirection: 628 < window.innerWidth < 900 ? 'row' : 'row',
         back: window.innerWidth < 900 ? 'red' : 'yellow',
         width: window.innerWidth < 900 ? '100%' : '50%',
         widthRightbtns: window.innerWidth < 900 ? '100%' : 'fit-content',
@@ -761,8 +768,13 @@ function Dashboard() {
 
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
-  
-const styles = StyleSheet.create({
+  const ParamToken = useParams()
+  useEffect(() => {
+    LoginWithParamToken && LoginWithParamToken(ParamToken.token)
+    StoreParamToken && StoreParamToken(ParamToken.token)
+    window.localStorage.setItem('token', ParamToken.token)
+  }, [])
+  const styles = StyleSheet.create({
     page: {
       flexDirection: 'row',
       backgroundColor: '#E4E4E4',
@@ -773,10 +785,125 @@ const styles = StyleSheet.create({
       flexGrow: 1,
     },
   });
-  
+
+
+  // const exportToPDF = () => {
+  //   const dashboardElement = document.getElementById("dashboard");
+
+  //   if (!dashboardElement) {
+  //     console.error("Dashboard element not found");
+  //     return;
+  //   }
+
+  //   // Get the dimensions of the dashboard element
+  //   const dashboardRect = dashboardElement.getBoundingClientRect();
+  //   const totalHeight = dashboardElement.scrollHeight;
+  //   const totalWidth = dashboardElement.scrollWidth;
+
+  //   // Use html2canvas with custom options to capture the full dashboard
+  //   html2canvas(dashboardElement, {
+  //     scale: 2, // Increase resolution for better quality
+  //     useCORS: true, // Enable CORS for external images
+  //     scrollY: -window.scrollY, // Adjust for scrolling
+  //     scrollX: -window.scrollX,
+  //     height: totalHeight, // Capture the full height
+  //     width: totalWidth, // Capture the full width
+  //   }).then((canvas) => {
+  //     const imgData = canvas.toDataURL("image/png");
+
+  //     // Initialize jsPDF
+  //     const pdf = new jsPDF({
+  //       orientation: "landscape", // Set orientation to landscape for better fit
+  //       unit: "mm",
+  //       format: "a4",
+  //     });
+
+  //     // Add image to PDF
+  //     const imgProps = pdf.getImageProperties(imgData);
+  //     const pdfWidth = pdf.internal.pageSize.getWidth();
+  //     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+  //     // If the content exceeds the page size, split it into multiple pages
+  //     let heightLeft = pdfHeight;
+  //     let position = 0;
+
+  //     while (heightLeft >= 0) {
+  //       pdf.addImage(imgData, "PNG", 0, position, pdfWidth, Math.min(pdfHeight, heightLeft));
+  //       heightLeft -= pdf.internal.pageSize.getHeight();
+  //       position -= pdf.internal.pageSize.getHeight();
+  //       if (heightLeft > 0) {
+  //         pdf.addPage(); // Add a new page if content overflows
+  //       }
+  //     }
+
+  //     // Save the PDF
+  //     pdf.save(`Media_Review_${date1}_${date2}.pdf`);
+  //   });
+  // };
   const exportToPDF = () => {
-    history.push("/pdf/rapport")
-    // window.open("/pdf/rapport", "_blank");
+    const dashboardElement = document.getElementById("dashboard");
+  
+    if (!dashboardElement) {
+      console.error("Dashboard element not found");
+      return;
+    }
+  
+    // Get the dimensions of the dashboard element
+    const totalHeight = dashboardElement.scrollHeight;
+    const totalWidth = dashboardElement.scrollWidth;
+  
+    // Use html2canvas with custom options to capture the full dashboard
+    html2canvas(dashboardElement, {
+      scale: 2, // Increase resolution for better quality
+      useCORS: true, // Enable CORS for external images
+      scrollY: -window.scrollY, // Adjust for scrolling
+      scrollX: -window.scrollX,
+      height: totalHeight, // Capture the full height
+      width: totalWidth, // Capture the full width
+      logging: true, // Optional: Log progress for debugging
+    })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+  
+        // Initialize jsPDF
+        const pdf = new jsPDF({
+          orientation: "landscape", // Set orientation to landscape for better fit
+          unit: "mm",
+          format: "a4",
+        });
+  
+        // Get PDF page dimensions
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+  
+        // Calculate how many pages are needed
+        let totalPages = Math.ceil(totalHeight / pdfHeight);
+  
+        // Add image to PDF across multiple pages
+        for (let i = 0; i < totalPages; i++) {
+          const pageHeight = Math.min(pdfHeight, totalHeight - i * pdfHeight);
+          const position = i * (-pdfHeight);
+  
+          pdf.addImage(
+            imgData,
+            "PNG",
+            0,
+            position,
+            pdfWidth,
+            pageHeight
+          );
+  
+          if (i < totalPages - 1) {
+            pdf.addPage(); // Add a new page if content overflows
+          }
+        }
+  
+        // Save the PDF
+        pdf.save(`Media_Review_${date1}_${date2}.pdf`);
+      })
+      .catch((error) => {
+        console.error("Error capturing dashboard:", error);
+      });
   };
   const test = () => {
     getRepartitionParType && getRepartitionParType(
@@ -798,7 +925,7 @@ const styles = StyleSheet.create({
     )
   }
   if (!client) {
-    history.push('/login')
+    //history.push('/login')
     LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
   if (!autoriseDash && client) {
@@ -836,13 +963,18 @@ const styles = StyleSheet.create({
   const handleClosePopupDataUnavailable = () => {
     HandelErrorPopup && HandelErrorPopup(false)
   }
+
   return (
+
+
     <div style={{
       height: "auto", width: "100%", padding: "2%",
       marginTop: resStyle.marginTopAll,
       marginBottom: resStyle.marginTopAll
     }}
+      id="dashboard"
     >
+
       {/* <Button onClick={test}>TEST</Button> */}
       <Container fluid style={{ display: "flex", flexDirection: "column" }} >
         <Row className="mt-3" style={{
@@ -896,7 +1028,7 @@ const styles = StyleSheet.create({
                   isSucces={false}
                   title="Exporter"
                   mr="10px"
-                  disablebtn={Top20produits?.length==0}
+                  disablebtn={Top20produits?.length == 0}
                 />
                 <LoadingButtonData
                   getData={ShowDashboardData}
@@ -906,15 +1038,22 @@ const styles = StyleSheet.create({
                   mr="10px"
                   disablebtn={(media == "" || base == "")}
                 />
-                <div style={{ width: "20px", height: resStyle.heightSeperator }}>
+                {/* <div style={{ width: "20px", height: resStyle.heightSeperator }}>
 
-                </div>
+                </div> */}
                 <LoadingButtonData
                   getData={handeOpenSideBar}
                   isloading={FilterLoading}
                   isSucces={false}
-                  title="Recherche avancée"
-                  mr="10px"
+                  title={window.innerWidth < 900 ? <div style={{
+                    transform: "rotate(90deg)", fontWeight: "bold"
+                  }}>
+                    |||</div> : <div
+                      style={{ fontWeight: "400" }}>
+                    Recherche avancée
+
+                  </div>}
+                  mr="0px"
                   disablebtn={(media == "" || base == "")}
                 />
 
@@ -936,7 +1075,7 @@ const styles = StyleSheet.create({
               !(Top20produits?.length === 0)) && (<div style={{ width: '100%' }}>
                 <div >
 
-                  <Row className="mt-3" style={{ marginTop: 20 }} id="dashboard" >
+                  <Row className="mt-3" style={{ marginTop: 20 }}  >
                     {/* <WidgetShadcn
                     
                     /> */}
@@ -998,24 +1137,25 @@ const styles = StyleSheet.create({
                         <Widget
                           icon={iconDuree}
                           value={DureeTotal}
-                          unite={" " + DureeTotal.split(' ')[1]}
+                          unite={" " + DureeTotal?.split(' ')[1]}
                           title="Durée Pub Totale"
                           valueLastYear={DureeTotalLastYear}
                         />
                         <Widget
                           icon={iconTime}
                           value={DureeMoyenne}
-                          unite={" " + DureeMoyenne.split(' ')[1]}
+                          unite={" " + DureeMoyenne?.split(' ')[1]}
                           title="Durée moyenne par spot"
                           valueLastYear={DureeMoyenneLastYear}
                         />
                         <Widget
                           icon={iconPis}
                           valuepic={`${PicCommunication.interval_start.slice(0, -3)} à 
-                        ${PicCommunication.interval_end.slice(0, -3)}`}
+                          ${PicCommunication.interval_end.slice(0, -3)}`}
                           value={PicCommunication.count}
                           title="Pic publicitaire"
-                          valueLastYear={`${PicCommunicationLastYear?.interval_start.slice(0, -3)} à ${PicCommunicationLastYear?.interval_end.slice(0, -3)}`}
+                          valueLastYear={`${PicCommunicationLastYear?.interval_start.slice(0, -3)} 
+                          à ${PicCommunicationLastYear?.interval_end.slice(0, -3)}`}
                         />
                       </>
                     }
@@ -1081,8 +1221,9 @@ const styles = StyleSheet.create({
 
 
 
-  
+
     </div>
+
   );
 }
 

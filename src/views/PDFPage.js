@@ -1,5 +1,5 @@
-import { Document,Svg,Path, Page, Text, View, StyleSheet, PDFViewer, Image } from '@react-pdf/renderer';
-import { Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Document, Svg, Path, Page, Text, View, StyleSheet, PDFViewer, Image } from '@react-pdf/renderer';
+import {Line,} from "recharts";
 const logo = require('assets/Logo adtrics.png');
 const logoWhite = require("assets/logo transparent adtrics.png")
 // Create styles
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   pageChart: {
-    flexDirection: "column", // Use row layout to split the page into sections
+    flexDirection: "column",
     backgroundColor: '#020b42',
     padding: 20,
   },
@@ -32,30 +32,33 @@ const styles = StyleSheet.create({
     padding: 1,
     flexGrow: 1,
   },
+  sectionPageFirst: {
+    margin: 1,
+    padding: 1,
+    flexGrow: 1,
+    height: "50%",
+    justifyContent: "space-between",
+    flexDirection: "column",
+
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
     color: "white",
     width: "100%",
-
   },
   firstPageTitle: {
     width: "100%",
     margin: 0,
-    fontSize: 24,
+    fontSize: 34,
     textAlign: "center",
     color: "white",
   },
   PiedPage: {
-    width: "100%",
     fontSize: "14px",
-    fontSize: "normal",
-    color: "lightgrey",
-    display: "flex",
-    justifyContent: "flex-end",
-    textAlign: "right"
-
+    textAlign: "right",
+    color: "white",
   },
   image: {
     width: 100,
@@ -70,15 +73,16 @@ const styles = StyleSheet.create({
   parametersContainer: {
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap', // Allow wrapping to fit all parameters
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
     marginTop: 10,
   },
   parametersContainerTable: {
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    border: "1px solid #000",
+    justifyContent: "flex-start"
+
   },
   parametersGraph: {
     display: 'flex',
@@ -107,11 +111,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#f9c400',
     fontWeight: 'bold',
+
   },
   paramValue: {
     fontSize: 16,
     color: 'white', // Highlighting color for values
     marginTop: 2,
+
+
   },
   paramValueLast: {
     fontSize: 12,
@@ -125,69 +132,158 @@ const styles = StyleSheet.create({
     // backgroundColor: "#f0f0f0",
     fontSize: "12px",
     color: "white",
-    borderRight:"1px solid lightgrey",
-    borderLeft:"1px solid lightgrey"
-  
+    borderRight: "0.5px solid #4c5479",
+    borderLeft: "0.5px solid #4c5479"
+
   },
   valueCell: {
     width: "70%", // Larger width for values
     padding: 4,
     color: "white",
     fontSize: "10px",
-    borderRight:"1px solid lightgrey"
+    borderRight: "1px solid #4c5479"
   },
   row: {
     flexDirection: "row",
-    borderBottom: "1px solid lightgrey",
-    borderTop:"1px solid lightgrey"
+    borderBottom: "1px solid #4c5479",
+    borderTop: "1px solid #4c5479",
+    marginTop: "10px"
   },
+  svgChart: {
+    width: 800,
+    height: 400,
+    backgroundColor: "red"
+  }
 });
 
-const pages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const data = [
   { name: "Jan", value: 30 },
   { name: "Feb", value: 50 },
   { name: "Mar", value: 80 },
   { name: "Apr", value: 120 },
+  { name: "Mai", value: 120 },
+  { name: "Juin", value: 120 },
+  { name: "Juillet", value: 120 },
+  { name: "Août", value: 120 },
+  { name: "Sep", value: 120 },
+  { name: "Oct", value: 120 },
+  { name: "Nov", value: 120 },
+  { name: "Déc", value: 80 },
 ];
+const width = 400;
+const height = 300;
+const barWidth = (width - 20) / data.length;
+const maxValue = Math.max(...data.map((d) => d.value));
+const scale = (value) => (height - 40) * (value / maxValue);
 const LineChart = () => (
-  <Svg width="300" height="200">
-  {/* Line Graph Path */}
-  <Path d="M40,150 L80,100 L120,120 L160,80 L200,90 L240,50" stroke="blue" strokeWidth="2" fill="none" />
+  <Svg width="600" height="400">
+    {/* Line Graph Path */}
+    <Path
+      d="M50,350 L120,300 L190,270 L260,240 L330,220 L400,200 L470,180 L540,160 L610,150 L680,140 L750,120"
+      stroke="#fec800"
+      strokeWidth="3"
+      fill="none"
+    />
 
-  {/* X-Axis */}
-  <Line x1="40" y1="160" x2="360" y2="160" stroke="black" strokeWidth="7" />
-  {/* X-Axis Labels */}
-  <Text x="40" y="172" fontSize="8" fill="white">Jan</Text>
-  <Text x="80" y="172" fontSize="8" fill="white">Feb</Text>
-  <Text x="120" y="172" fontSize="8" fill="white">Mar</Text>
-  <Text x="160" y="172" fontSize="8" fill="white">Apr</Text>
-  <Text x="200" y="172" fontSize="8" fill="white">May</Text>
-  <Text x="240" y="172" fontSize="8" fill="white">Jun</Text>
+    {/* X-Axis */}
+    <Line
+      x1="50"
+      y1="370"
+      x2="750"
+      y2="370"
+      stroke="black"
+      strokeWidth="2"
+    />
 
-  {/* Y-Axis */}
-  <Line x1="40" y1="20" x2="40" y2="160" stroke="black" strokeWidth="7" />
-  {/* Y-Axis Labels */}
-  <Text x="15" y="150" fontSize="8" fill="white" style={styles.title}>10</Text>
-  <Text x="15" y="120" fontSize="8" fill="white">20</Text>
-  <Text x="15" y="90" fontSize="8" fill="white">30</Text>
-  <Text x="15" y="60" fontSize="8" fill="white">40</Text>
-  <Text x="15" y="30" fontSize="8" fill="white">50</Text>
-</Svg>
+    {/* X-Axis Labels */}
+    <Text x="50" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Jan</Text>
+    <Text x="120" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Feb</Text>
+    <Text x="190" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Mar</Text>
+    <Text x="260" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Apr</Text>
+    <Text x="330" y="385" fontSize="" fill="#4c5479" textAnchor="middle">May</Text>
+    <Text x="400" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Jun</Text>
+    <Text x="470" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Jul</Text>
+    <Text x="540" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Aug</Text>
+    <Text x="610" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Sep</Text>
+    <Text x="680" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Oct</Text>
+    <Text x="750" y="385" fontSize="" fill="#4c5479" textAnchor="middle">Nov</Text>
+
+    {/* Y-Axis */}
+    <Line
+      x1="50"
+      y1="50"
+      x2="50"
+      y2="370"
+      stroke="black"
+      strokeWidth="2"
+    />
+
+    {/* Y-Axis Labels */}
+    <Text x="30" y="350" fontSize="" fill="white" textAnchor="end">4259</Text>
+    <Text x="30" y="300" fontSize="" fill="white" textAnchor="end">2359</Text>
+    <Text x="30" y="250" fontSize="" fill="white" textAnchor="end">2350</Text>
+    <Text x="30" y="200" fontSize="" fill="white" textAnchor="end">3359</Text>
+    <Text x="30" y="150" fontSize="" fill="white" textAnchor="end">3340</Text>
+    <Text x="30" y="100" fontSize="" fill="white" textAnchor="end">3350</Text>
+    <Text x="30" y="50" fontSize="" fill="white" textAnchor="end">3259</Text>
+    <Text x="30" y="300" fontSize="" fill="white" textAnchor="end">2359</Text>
+    <Text x="30" y="250" fontSize="" fill="white" textAnchor="end">1359</Text>
+    <Text x="30" y="200" fontSize="" fill="white" textAnchor="end">1359</Text>
+    <Text x="30" y="150" fontSize="" fill="white" textAnchor="end" >1359</Text>
+
+    {/* Title */}
+
+  </Svg>
 );
-const dataImage = sessionStorage.getItem('dataimage')
-const dataImage2 = sessionStorage.getItem('.top20famille')
-const dataImage3 = sessionStorage.getItem('.top20annonceur')
-const dataImage4 = sessionStorage.getItem('.top20marque')
-const dataImage5 = sessionStorage.getItem('.top20produit')
-const dataImage6 = sessionStorage.getItem('.repartitionmarche')
-const dataImage7 = sessionStorage.getItem('.repartitionformat')
-const dataImage8 = sessionStorage.getItem('.annonceurparsupport')
-const dataImage9 = sessionStorage.getItem('.creationparannonceur')
-const dataImage10 = sessionStorage.getItem('.type')
+
 // Create Document Component
+const BarChart = () => (
+  <svg width="800" height="400">
+    {/* Y-Axis */}
+    <line x1="50" y1="50" x2="50" y2="370" stroke="black" strokeWidth="2" />
+    {/* Y-Axis Labels */}
+    <text x="30" y="350" fontSize="10" fill="black" textAnchor="end">0</text>
+    <text x="30" y="300" fontSize="10" fill="black" textAnchor="end">500</text>
+    <text x="30" y="250" fontSize="10" fill="black" textAnchor="end">1000</text>
+    <text x="30" y="200" fontSize="10" fill="black" textAnchor="end">1500</text>
+    <text x="30" y="150" fontSize="10" fill="black" textAnchor="end">2000</text>
+    <text x="30" y="100" fontSize="10" fill="black" textAnchor="end">2500</text>
+    <text x="30" y="50" fontSize="10" fill="black" textAnchor="end">3000</text>
+
+    {/* X-Axis */}
+    <line x1="50" y1="370" x2="750" y2="370" stroke="black" strokeWidth="2" />
+    {/* X-Axis Labels */}
+    <text x="50" y="385" fontSize="10" fill="black" textAnchor="middle">Jan</text>
+    <text x="120" y="385" fontSize="10" fill="black" textAnchor="middle">Feb</text>
+    <text x="190" y="385" fontSize="10" fill="black" textAnchor="middle">Mar</text>
+    <text x="260" y="385" fontSize="10" fill="black" textAnchor="middle">Apr</text>
+    <text x="330" y="385" fontSize="10" fill="black" textAnchor="middle">May</text>
+    <text x="400" y="385" fontSize="10" fill="black" textAnchor="middle">Jun</text>
+    <text x="470" y="385" fontSize="10" fill="black" textAnchor="middle">Jul</text>
+    <text x="540" y="385" fontSize="10" fill="black" textAnchor="middle">Aug</text>
+    <text x="610" y="385" fontSize="10" fill="black" textAnchor="middle">Sep</text>
+    <text x="680" y="385" fontSize="10" fill="black" textAnchor="middle">Oct</text>
+    <text x="750" y="385" fontSize="10" fill="black" textAnchor="middle">Nov</text>
+
+    {/* Bars */}
+    <rect x="50" y="370" width="40" height="-120" fill="#fec800" /> {/* Jan: Value = 120 */}
+    <rect x="120" y="370" width="40" height="-200" fill="#fec800" /> {/* Feb: Value = 200 */}
+    <rect x="190" y="370" width="40" height="-180" fill="#fec800" /> {/* Mar: Value = 180 */}
+    <rect x="260" y="370" width="40" height="-250" fill="#fec800" /> {/* Apr: Value = 250 */}
+    <rect x="330" y="370" width="40" height="-220" fill="#fec800" /> {/* May: Value = 220 */}
+    <rect x="400" y="370" width="40" height="-280" fill="#fec800" /> {/* Jun: Value = 280 */}
+    <rect x="470" y="370" width="40" height="-300" fill="#fec800" /> {/* Jul: Value = 300 */}
+    <rect x="540" y="370" width="40" height="-270" fill="#fec800" /> {/* Aug: Value = 270 */}
+    <rect x="610" y="370" width="40" height="-240" fill="#fec800" /> {/* Sep: Value = 240 */}
+    <rect x="680" y="370" width="40" height="-210" fill="#fec800" /> {/* Oct: Value = 210 */}
+    <rect x="750" y="370" width="40" height="-150" fill="#fec800" /> {/* Nov: Value = 150 */}
+
+    {/* Title */}
+    <text x="400" y="30" fontSize="14" fill="black" textAnchor="middle">Monthly Sales Report</text>
+  </svg>
+);
 export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
-  tableData }) => (
+  tableData, media }) => (
 
   <div>
     <PDFViewer width="100%" height={1000}>
@@ -196,16 +292,11 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
           <View style={styles.section}>
             <Image src={logo} style={styles.image} />
           </View>
-          <View style={styles.sectionPage}>
-            <Text style={styles.firstPageTitle}>Media Review</Text>
-            {/* Charts need to be recreated with @react-pdf/renderer */}
-            {/* <PieChartVelsonpageNumber={index + 1} /> */}
+          <View style={styles.sectionPageFirst}>
+            <Text style={styles.firstPageTitle}>Adtrics Review</Text>
+            <Text style={styles.PiedPage}>Du {date1} au {date2}</Text>
           </View>
-          <View style={styles.section}>
-            <Text style={styles.PiedPage}>{date1}-{date2}</Text>
-            {/* <PieChartVelson pageNumber={index + 1} /> */}
-          </View>
-          {/* Display an image */}
+
 
         </Page>
         <Page size="A4" orientation="landscape" style={styles.page}>
@@ -214,18 +305,15 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
           </View> */}
           <View style={styles.sectionPage}>
             <Text style={styles.firstPageTitle}>Informations</Text>
-          </View>
-          <View style={styles.parametersContainerTable}>
-            {tableData.map((row, index) => (
-              <View style={styles.row} key={index}>
-                <Text style={styles.titleCell}>{row.title}</Text>
-                <Text style={styles.valueCell}>{row.value}</Text>
-              </View>
-            ))}
-          </View>
-          <View style={styles.section}>
-            <Text style={styles.PiedPage}>{date1}-{date2}</Text>
-            {/* <PieChartVelson pageNumber={index + 1} /> */}
+
+            <View style={styles.parametersContainerTable}>
+              {tableData.map((row, index) => (
+                <View style={styles.row} key={index}>
+                  <Text style={styles.titleCell}>{row.title}</Text>
+                  <Text style={styles.valueCell}>{row.value}</Text>
+                </View>
+              ))}
+            </View>
           </View>
 
           {/* Display an image */}
@@ -237,8 +325,6 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
           </View>
           <View style={styles.sectionPage}>
             <Text style={styles.firstPageTitle}>Vue d'ensemble</Text>
-            {/* Charts need to be recreated with @react-pdf/renderer */}
-            {/* <PieChartVelsonpageNumber={index + 1} /> */}
           </View>
           {/* Grid for Parameters */}
           <View style={styles.parametersContainer}>
@@ -247,7 +333,7 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
               <View key={index} style={styles.parameterBox}>
                 <Text style={styles.paramTitle}>{param.name}</Text>
                 <Text style={styles.paramValue}>{param.count}</Text>
-                <Text style={styles.paramValueLast}>VS: {param.countLastYear}</Text>
+                <Text style={styles.paramValueLast}>{param.countLastYear}</Text>
               </View>
             ))}
           </View>
@@ -265,7 +351,7 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
           </View>
           <View style={styles.sectionGraph}>
             {/* <Image src={dataImage} style={styles.ChartImage} /> */}
-            <LineChart style={styles.ChartImage}/>
+            <LineChart style={styles.ChartImage} />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -294,8 +380,10 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
             <Text style={styles.title}>Top Familles </Text>
           </View>
           <View style={styles.sectionGraph}>
-            <Image src={dataImage2} style={styles.ChartImage} />
+            {/* <Image src={dataImage2} style={styles.ChartImage} /> */}
+            <LineChart style={styles.ChartImage} />
 
+            <BarChart />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -319,13 +407,14 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
           </View>
 
         </Page>
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Top annonceurs </Text>
 
           </View>
           <View style={styles.sectionGraph}>
-            <Image src={dataImage3} style={styles.ChartImage} />
+            
+            <LineChart style={styles.ChartImage} />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -346,16 +435,16 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
             </View>
           </View>
 
-        </Page>
-
+        </Page> */}
+        {/* 
         <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Top marques </Text>
           </View>
 
           <View style={styles.sectionGraph}>
-            <Image src={dataImage4} style={styles.ChartImage} />
-
+          
+            <LineChart style={styles.ChartImage} />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -376,13 +465,14 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
             </View>
           </View>
 
-        </Page>
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        </Page> */}
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Top produits </Text>
           </View>
           <View style={styles.sectionGraph}>
-            <Image src={dataImage5} style={styles.ChartImage} />
+          
+            <LineChart style={styles.ChartImage} />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -403,13 +493,14 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
             </View>
           </View>
 
-        </Page>
+        </Page> */}
 
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Annonceurs par support</Text>
             <View style={styles.sectionGraph}>
-              <Image src={dataImage6} style={styles.ChartImage} />
+             
+              <LineChart style={styles.ChartImage} />
 
             </View>
             <View style={styles.parametersGraph}>
@@ -431,18 +522,17 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
 
             </View>
           </View>
-        </Page>
+        </Page> */}
 
-
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Création unique par annonceur</Text>
 
           </View>
 
           <View style={styles.sectionGraph}>
-            <Image src={dataImage7} style={styles.ChartImage} />
-
+           
+            <LineChart style={styles.ChartImage} />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -462,15 +552,15 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
 
             </View>
           </View>
-        </Page>
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        </Page> */}
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Parts marché</Text>
 
           </View>
           <View style={styles.sectionGraph}>
-            <Image src={dataImage7} style={styles.ChartImage} />
-
+         
+            <LineChart style={styles.ChartImage} />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -491,20 +581,18 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
             </View>
           </View>
 
-        </Page>
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        </Page> */}
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Répartition par format</Text>
             <View style={styles.sectionGraph}>
-              <Image src={dataImage8} style={styles.ChartImage} />
-
-
-
+            
+              <LineChart style={styles.ChartImage} />
               <View style={styles.parametersGraph}>
-
                 <View style={styles.parameterBoxGraph}>
                   <Text style={styles.paramTitle}>Top valeur</Text>
-                  <Text style={styles.paramValue}>{unifiedGraphStructure?.FormatRepartitionModified}</Text>
+                  <Text style={styles.paramValue}>
+                    {unifiedGraphStructure?.FormatRepartitionModified}</Text>
 
                 </View>
                 <View style={styles.parameterBoxGraph}>
@@ -520,17 +608,16 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
               </View>
             </View>
           </View>
-        </Page>
+        </Page> */}
 
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Répartition par Type</Text>
 
           </View>
 
           <View style={styles.sectionGraph}>
-            <Image src={dataImage9} style={styles.ChartImage} />
-
+    
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -550,16 +637,16 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
 
             </View>
           </View>
-        </Page>
-        <Page size="A4" orientation="landscape" style={styles.pageChart}>
+        </Page> */}
+        {/* <Page size="A4" orientation="landscape" style={styles.pageChart}>
           <View style={styles.section}>
             <Text style={styles.title}>Répartition par Type</Text>
 
           </View>
 
           <View style={styles.sectionGraph}>
-            <Image src={dataImage10} style={styles.ChartImage} />
-
+           
+            <LineChart style={styles.ChartImage} />
             <View style={styles.parametersGraph}>
 
               <View style={styles.parameterBoxGraph}>
@@ -579,7 +666,7 @@ export const PDFPage = ({ date1, date2, parameters, unifiedGraphStructure,
 
             </View>
           </View>
-        </Page>
+        </Page> */}
       </Document>
     </PDFViewer>
   </div>
