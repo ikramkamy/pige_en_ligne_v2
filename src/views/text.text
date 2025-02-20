@@ -1,0 +1,89 @@
+import React from "react";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+
+const exportToPDF = () => {
+  const dashboardElement = document.getElementById("dashboard");
+
+  if (!dashboardElement) {
+    console.error("Dashboard element not found");
+    return;
+  }
+
+  // Get the dimensions of the dashboard element
+  const totalHeight = dashboardElement.scrollHeight;
+  const viewportHeight = window.innerHeight; // Height of the visible area
+  const scrollStep = 120 * viewportHeight / 100; // Scroll by 120% of viewport height
+
+  // Initialize jsPDF
+  const pdf = new jsPDF({
+    orientation: "portrait", // Set orientation to portrait for better fit
+    unit: "mm",
+    format: "a4",
+  });
+
+  // Get PDF page dimensions
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
+
+  let yPosition = 0; // Starting position for scrolling
+  let pageNumber = 1;
+
+  const captureSection = async () => {
+    return new Promise((resolve) => {
+      // Scroll to the current position
+      dashboardElement.scrollTop = yPosition;
+
+      // Use html2canvas to capture the visible section
+      html2canvas(dashboardElement, {
+        scale: 2, // Increase resolution for better quality
+        useCORS: true, // Enable CORS for external images
+        scrollY: -yPosition, // Adjust for scrolling
+        scrollX: -window.scrollX,
+        height: Math.min(scrollStep, totalHeight - yPosition), // Capture only the visible section
+        width: dashboardElement.scrollWidth,
+      })
+        .then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+
+          // Add the captured section to the PDF
+          const imgProps = pdf.getImageProperties(imgData);
+          const pageWidthRatio = pdfWidth / imgProps.width;
+          const pageHeightRatio = (imgProps.height * pageWidthRatio);
+
+          pdf.addImage(
+            imgData,
+            "PNG",
+            0,
+            0,
+            pdfWidth,
+            pageHeightRatio
+          );
+
+          // Add a new page if there's more content to capture
+          if (yPosition + scrollStep < totalHeight) {
+            pdf.addPage(); // Add a new page
+            pageNumber++;
+            yPosition += scrollStep;
+            resolve(captureSection()); // Recursively capture the next section
+          } else {
+            resolve(); // Finish capturing
+          }
+        })
+        .catch((error) => {
+          console.error("Error capturing section:", error);
+          resolve(); // Stop capturing on error
+        });
+    });
+  };
+
+  // Start capturing sections
+  captureSection()
+    .then(() => {
+      // Save the PDF after all sections are captured
+      pdf.save(`Media_Review_${date1}_${date2}.pdf`);
+    })
+    .catch((error) => {
+      console.error("Error during PDF generation:", error);
+    });
+};

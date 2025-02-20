@@ -197,7 +197,20 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             fontWeight: 'normal',
             color: 'white',
             fontFamily: 'Arial, sans-serif',
-            formatter: '{d}%'
+            // formatter: '{d}%',
+            formatter: function (params) {
+              console.log('params',params)
+              const item = dynamicList.find((entry) => entry.name === params.data.name);
+              console.log("item",item, item.namelegend)
+              if (item) {
+               
+                // Return the percentage from the nameLegend property
+                return item.namelegend;
+              }
+              // Fallback to default percentage if nameLegend is not found
+              return `${params.percent.toFixed(2)}%`;
+            },
+
           },
           formatter: function (params) {
             const item = dynamicList.find((entry) => entry.name === params.name);

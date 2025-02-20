@@ -7,7 +7,8 @@ import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import powerbi from "assets/img/icons/PowerBI.webp"
 import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon, HomeIcon } from '@heroicons/react/outline';
 import './navbar.css';
-import Navback from 'assets/navbar.png'
+import Navback from 'assets/navbar.png';
+import { FaBullhorn, FaSearch, FaSignOutAlt, FaTachometerAlt, FaHome } from 'react-icons/fa';
 function Header() {
   const TokenParam = window.localStorage.getItem('token')
   const { LougoutRestErrorMessages, email } = UseLoginStore((state) => state)
@@ -47,25 +48,34 @@ function Header() {
 
 
   return (
-    <div className="navbar_back" style={{
-      display: "flex", width: "100%",
-      justifyContent: "center", alignItems: "center",
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      position: "fixed",
-      top: '0px',
-      zIndex: "10",
-     
-    }}>
+    <div
+      className="navbar_back"
+      style={{
+        display: "flex", width: "100%",
+        justifyContent: "center", alignItems: "center",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        position: "fixed",
+        top: '0px',
+        zIndex: "10",
+        //backgroundColor:"#e5f9ff",
+        borderBottom: "3px solid #00a2db"
+
+      }}>
       <div style={{
         width: "90%", display: "flex",
         justifyContent: "space-between",
-        alignItems: "start", paddingTop: '0px',
-
+        alignItems: "center", paddingTop: '0px',
+    
       }}>
 
-        <div style={{ paddingTop: "5px", height: "80px",
-          display:"flex",justifyContent:"center",alignContent:"center"}} >
+        <div style={{
+          paddingTop: "0px",
+          height: "50px",
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center"
+        }} >
           {/* <Link to="https://adtrics.immar.dz/#/home"> */}
           <a href="https://adtrics.immar.dz/#/home">
             <img src={logoImmar} alt="immar media" className="logo-immar" />
@@ -75,6 +85,7 @@ function Header() {
         <div style={{
           display: "flex", width: "100%",
           display: "flex", justifyContent: "flex-end", alignItems: "center",
+          
         }}>
           <span className="no-icon" style={{
             display: "flex",
@@ -82,7 +93,8 @@ function Header() {
             alignItems: "center",
             flexDirection: "column",
             height: "80px",
-            color: "white"
+            color: "white",
+          
           }}>
             <a href="https://adtrics.immar.dz/#/home" style={{
               display: "flex",
@@ -90,9 +102,9 @@ function Header() {
               alignItems: "center",
               justifyContent: "center"
             }}>
-              <HomeIcon className="icon_nav" style={{
+              <FaHome className="icon_nav" style={{
                 // width: "35px",
-
+                fontSize: "30px",
                 color: "white",
                 // "&:hover": {
                 //   color: "#1DC7EA", 
@@ -101,7 +113,7 @@ function Header() {
               }} />
             </a>
             {/* </Link> */}
-            <p style={{ textTransform: "", fontSize: "10px" }}>Accueil</p>
+            <span style={{ textTransform: "", fontSize: "10px" }}>Accueil</span>
           </span>
 
 
@@ -119,9 +131,9 @@ function Header() {
               alignItems: "center",
               justifyContent: "center"
             }}>
-              <SearchCircleIcon className="icon_nav" style={{
+              <FaSearch className="icon_nav" style={{
                 // width: "35px",
-
+                fontSize: "30px",
                 color: "white",
                 // "&:hover": {
                 //   color: "#1DC7EA", 
@@ -130,7 +142,7 @@ function Header() {
               }} />
             </a>
             {/* </Link> */}
-            <p style={{ textTransform: "", fontSize: "10px" }}>pige</p>
+            <span style={{ textTransform: "", fontSize: "10px" }}>pige</span>
           </span>
 
 
@@ -157,13 +169,13 @@ function Header() {
               alignItems: "center",
               justifyContent: "center"
             }}>
-              <SpeakerphoneIcon className="icon_nav"
-                style={{ color: "white", }}
+              <FaBullhorn className="icon_nav"
+                style={{ color: "white", fontSize: "30px", }}
               /></a>
 
 
             {/* </Link> */}
-            <p style={{ textTransform: "", fontSize: "10px" }}>veille</p>
+            <span style={{ textTransform: "", fontSize: "10px" }}>veille</span>
           </span>
 
 
@@ -187,14 +199,14 @@ function Header() {
               alignItems: "center",
               justifyContent: "center"
             }}>
-              <ChartBarIcon
+              <FaTachometerAlt
                 className="icon_nav"
-                style={{ color: "white", }}
+                style={{ color: "white", fontSize: "30px", }}
               />
             </a>
 
             {/* </Link> */}
-            <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
+            <span style={{ textTransform: "lowercase", fontSize: "10px" }}>stats</span>
           </span>
 
           {/* <span className="no-icon" style={{
@@ -231,14 +243,14 @@ function Header() {
               alignItems: "center",
               justifyContent: "center"
             }}>
-              <LogoutIcon onClick={handelLogout}
+              <FaSignOutAlt onClick={handelLogout}
                 className="icon_nav"
-                style={{ color: "white" }}
+                style={{ color: "white", fontSize: "30px", }}
               />
             </a>
 
             {/* </Link> */}
-            <p style={{ textTransform: "", fontSize: "10px" }}>déconnexion</p>
+            <span style={{ textTransform: "", fontSize: "10px" }}>déconnexion</span>
           </span>
 
 

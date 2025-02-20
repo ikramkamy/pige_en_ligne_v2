@@ -39,26 +39,22 @@ import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { DownloadIcon, FilterIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon, } from "lucide-react";
 import { jwtDecode } from 'jwt-decode';
 function Dashboard() {
   document.title = 'Tableau de bord'
   const { getEvolutionData } = UseGraphStore((state) => state)
   const ParamToken = useParams()
-  useEffect(() => {
-    
+  useEffect(() => {  
     LoginWithParamToken && LoginWithParamToken(ParamToken.token)
     StoreParamToken && StoreParamToken(ParamToken.token)
     window.localStorage.setItem('token', ParamToken.token)
     var decoded = jwtDecode(ParamToken.token);
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
     const isExpired = decoded.exp < currentTime; // Compare with current time
-    
     console.log('token',ParamToken.token,
       "currentTime",currentTime,"ExpirationToken",decoded.exp)
     console.log('isExpired', isExpired)
-    
-    
   }, [])
   const [timeTokenExpiration, setTimeTokenExpiration] = useState(0);
 
@@ -71,6 +67,7 @@ function Dashboard() {
       if (currentTime >= tokenExpirationTime && tokenExpirationTime !== 0) {
         console.log('Token expired');    
         window.localStorage.removeItem('token');
+        LougoutRestErrorMessages && LougoutRestErrorMessages(email)
         window.location.href = 'https://adtrics.immar.dz/#/login'; 
       }
     };
@@ -169,10 +166,13 @@ function Dashboard() {
     RepartitionParType,
     isloadingRepatitionType,
     getRepartitionParType,
+    
 
   } = UsePigeDashboardStore((state) => state)
 
-  const { countLastYear, count, getPigeCount, getPigeCountLastYear } = UseCountStore((state) => state)
+  const { countLastYear, count, getPigeCount,
+    getPigeCountLastYear,CountInK, CountInKLastYear } = UseCountStore((state) => state)
+  
   const { autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
@@ -831,72 +831,118 @@ function Dashboard() {
     },
   });
 
-
-  const exportToPDF = () => {
+  const [loadingPDF,setLoadingPDF]=useState(false)
+  const exportToPDF = async () => {
+    setLoadingPDF(true)
     const dashboardElement = document.getElementById("dashboard");
-
+  
     if (!dashboardElement) {
       console.error("Dashboard element not found");
+      
       return;
+    }else{
+      dashboardElement.style.backgroundColor = "#020b42";
     }
-
+  
     // Get the dimensions of the dashboard element
     const totalHeight = dashboardElement.scrollHeight;
-    const totalWidth = dashboardElement.scrollWidth;
-
-    // Use html2canvas with custom options to capture the full dashboard
-    html2canvas(dashboardElement, {
-      scale: 2, // Increase resolution for better quality
-      useCORS: true, // Enable CORS for external images
-      scrollY: -window.scrollY, // Adjust for scrolling
-      scrollX: -window.scrollX,
-      height: totalHeight, // Capture the full height
-      width: totalWidth, // Capture the full width
-      logging: true, // Optional: Log progress for debugging
-    })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-
-        // Initialize jsPDF
-        const pdf = new jsPDF({
-          orientation: "landscape", // Set orientation to landscape for better fit
-          unit: "mm",
-          format: "a4",
-        });
-
-        // Get PDF page dimensions
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        // Calculate how many pages are needed
-        let totalPages = Math.ceil(totalHeight / pdfHeight);
-
-        // Add image to PDF across multiple pages
-        for (let i = 0; i < totalPages; i++) {
-          const pageHeight = Math.min(pdfHeight, totalHeight - i * pdfHeight);
-          const position = i * (-pdfHeight);
-
-          pdf.addImage(
-            imgData,
-            "PNG",
-            0,
-            position,
-            pdfWidth,
-            pageHeight
-          );
-
-          if (i < totalPages - 1) {
-            pdf.addPage(); // Add a new page if content overflows
-          }
-        }
-
-        // Save the PDF
+    const viewportHeight = window.innerHeight; // Height of the visible area
+    const scrollStep = 120 * viewportHeight / 100; // Scroll by 120% of viewport height
+  
+    // Initialize jsPDF
+    const pdf = new jsPDF({
+      orientation: "landscape", // Set orientation to portrait for better fit
+      unit: "mm",
+      format: "a4",
+    });
+  
+    // Get PDF page dimensions
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+  
+    let yPosition = 0; // Starting position for scrolling
+    let pageNumber = 1;
+  
+    const captureSection = async () => {
+      return new Promise((resolve) => {
+        // Scroll to the current position
+        dashboardElement.scrollTop = yPosition;
+  
+        // Create a temporary container to isolate the current section
+        const tempContainer = document.createElement("div");
+        tempContainer.style.position = "relative";
+        tempContainer.style.width = `${dashboardElement.scrollWidth}px`;
+        tempContainer.style.height = `${Math.min(scrollStep, totalHeight - yPosition)}px`;
+  
+        // Clone the dashboard content and clip it to the current section
+        const clonedContent = dashboardElement.cloneNode(true);
+        clonedContent.style.transform = `translateY(-${yPosition}px)`;
+        clonedContent.style.clipPath = `inset(${yPosition}px 0px ${totalHeight - yPosition - Math.min(scrollStep, totalHeight - yPosition)}px 0px)`;
+  
+        tempContainer.appendChild(clonedContent);
+  
+        // Append the temporary container to the body (hidden)
+        document.body.appendChild(tempContainer);
+  
+        // Use html2canvas to capture the isolated section
+        html2canvas(tempContainer, {
+          scale: 2, // Increase resolution for better quality
+          useCORS: true, // Enable CORS for external images
+          logging: false, // Optional: Log progress for debugging
+        })
+          .then((canvas) => {
+            // Remove the temporary container
+            document.body.removeChild(tempContainer);
+  
+            const imgData = canvas.toDataURL("image/png");
+  
+            // Set the background color for the current page
+            // pdf.setFillColor(2, 11, 66); // RGB values for #020b42
+            // pdf.rect(0, 0, pdfWidth, pdfHeight, "F"); // Fill the entire page with the background color
+  
+            // Add the captured section to the PDF
+            const imgProps = pdf.getImageProperties(imgData);
+            const pageWidthRatio = pdfWidth / imgProps.width;
+            const pageHeightRatio = (imgProps.height * pageWidthRatio);
+  
+            pdf.addImage(
+              imgData,
+              "PNG",
+              0,
+              0,
+              pdfWidth,
+              pageHeightRatio
+            );
+  
+            // Add a new page if there's more content to capture
+            if (yPosition + scrollStep < totalHeight) {
+              pdf.addPage(); // Add a new page
+              pageNumber++;
+              yPosition += scrollStep;
+              resolve(captureSection()); // Recursively capture the next section
+            } else {
+              resolve(); // Finish capturing
+            }
+          })
+          .catch((error) => {
+            console.error("Error capturing section:", error);
+            resolve(); // Stop capturing on error
+          });
+      });
+    };
+  
+    // Start capturing sections
+    captureSection()
+      .then(() => {
+        // Save the PDF after all sections are captured
         pdf.save(`Media_Review_${date1}_${date2}.pdf`);
+        setLoadingPDF(false)
       })
       .catch((error) => {
-        console.error("Error capturing dashboard:", error);
+        console.error("Error during PDF generation:", error);
       });
   };
+  
   const test = () => {
     getRepartitionParType && getRepartitionParType(
       Filtersupports,
@@ -1020,7 +1066,7 @@ function Dashboard() {
               }}>
                 <LoadingButtonData
                   getData={exportToPDF}
-                  isloading={false}
+                  isloading={loadingPDF}
                   isSucces={false}
                   title="Exporter"
                   mr="10px"
@@ -1069,7 +1115,7 @@ function Dashboard() {
           </Row>
           <div id="all">
             {(dashDisplay && !isCalculating &&
-              !(Top20produits?.length === 0)) && (<div style={{ width: '100%' }}>
+              !(Top20produits?.length === 0)) && (<div style={{width: '100%' }}>
                 <div >
 
                   <Row className="mt-3" style={{ marginTop: 20 }}  >
@@ -1078,16 +1124,17 @@ function Dashboard() {
                     /> */}
                     <Widget
                       icon={iconVolume}
-                      value={count}
+                      value={CountInK}
                       title="Volume publicitaire"
-                      valueLastYear={countLastYear}
+                      valueLastYear={CountInKLastYear}
+                      unite={" "+ CountInK.split(' ')[1]}
                     />
                     <Widget
                       icon={iconAnnonceur}
                       value={AnnonceursActif}
                       title="Annonceurs actifs"
                       valueLastYear={AnnonceursActifLastYear}
-
+                     
                     />
                     <Widget
                       icon={iconCreation}
@@ -1200,7 +1247,7 @@ function Dashboard() {
             width: "100%", alignItems: "center"
           }}>
 
-            <img src={dash} alt="IMMAR DASHBOARD" style={{ width: "50%" }} />
+            <img src={dash} alt="IMMAR DASHBOARD" style={{ width: "30%" }} />
           </div>)}
 
       </Container>

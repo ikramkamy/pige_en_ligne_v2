@@ -65,8 +65,6 @@ export const UseLoginStore = create((set, get) => ({
       let response = await axios.post(`${PORT}/logout`, {
         email: email
       })
-    
-     
     // console.log(response)
     set({
       showAlert1: false,

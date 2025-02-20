@@ -215,7 +215,7 @@ export default function GridDemo({ date1, date2, media, base }) {
       </Row>
 
       <Row className="mt-4"> {/* Add g-2 for spacing */}
-        <Col md={6}> {/* Each graph takes 1/3 of the width */}
+        <Col md={4}> {/* Each graph takes 1/3 of the width */}
           <PieChartVelson
             title="Part Marché"
             date1={date1}
@@ -229,7 +229,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             isloading={loadingMarche}
           />
         </Col>
-        <Col md={6}> {/* Each graph takes 1/3 of the width */}
+        <Col md={4}> {/* Each graph takes 1/3 of the width */}
           <PieChartVelson
             title="Répartition par Format"
             date1={date1}
@@ -244,7 +244,7 @@ export default function GridDemo({ date1, date2, media, base }) {
           />
         </Col>
         {media !== "presse" && (
-          <Col md={6}>
+          <Col md={4}>
             <PieChartVelson
               title="Répartition par Type"
               date1={date1}

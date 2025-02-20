@@ -1,12 +1,9 @@
-/* .no-icon {
-    position: relative; 
-  } */
-  
-  .no-icon p {
+
+  .no-icon span {
       opacity: 0;
       color: white;  
   }
-  .no-icon:hover p{
+  .no-icon:hover span{
     display: block; 
     opacity: 1;
   }
@@ -15,16 +12,23 @@
     flex-direction: row; /* Default direction */
 }
 .navbar_back{
-  background-image: url('assets/navbar.png');
+  /* background-image: url('assets/navbar.png'); */
+  /*#4351aa71 color degradation transparent*/
   background-size: cover;
   background-repeat: no-repeat;
+  /* //background-color: #4351aa71; */
+  background-color: #020b42;
+  border-bottom: "1px solid #ffffff";
+ 
 }
 .logo-immar{
-  width: 150px;
+  width: 120px;
 }
 .icon_nav{
   color: red;
-  width: 35px;
+  font-size:"35px";
+  /* width: 35px; */
+
 }
 .no-icon{
   margin-right: 15px;

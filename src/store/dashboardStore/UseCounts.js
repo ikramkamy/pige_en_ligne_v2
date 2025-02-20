@@ -2,12 +2,14 @@ import { create } from 'zustand'
 import axios from 'axios';
 import dayjs from "dayjs";
 const PORT = "https://pige.immar-media.com/api/index.php"
-const Limit_Data_Allowed = 200000
+const Limit_Data_Allowed = 1000
 export const UseCountStore = create((set, get) => ({
   PigeCount: 0,
   count: -2,
   VeilleCount: 0,
   count_v: -2,
+  CountInK:"",
+  CountInKLastYear:"",
   IsCounting: false,
   getPigeCount: async (email, media, supports, familles, classes,
     secteurs, varieties, annonceurs, marques, produits, date1, date2) => {
@@ -29,24 +31,24 @@ export const UseCountStore = create((set, get) => ({
         date_fin: date2,
       });
       var dataLength = Number(response.data.total)
-
       if (dataLength > Limit_Data_Allowed) {
-
         set({
           PigeCount: 0,
-          count: response.data.total
+          count: response.data.total,
+          CountInK:Number(response.data.total)/1000 +" K" ,
+        
         });
       } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
-
         set({
           PigeCount: 1,
-          count: response.data.total
+          count: response.data.total,
+          CountInK:Number(response.data.total) +" " 
         });
       } else if (dataLength === 0) {
-
         set({
           PigeCount: 2,
-          count: 0
+          count: 0,
+          CountInK:Number(response.data.total) +" " 
         });
       }
       set({ IsCounting: false })
@@ -61,8 +63,7 @@ export const UseCountStore = create((set, get) => ({
     }
   },
   getPigeCountLastYear: async (email, media, supports, familles, classes,
-    secteurs, varieties, annonceurs, marques, produits, date1, date2) => {
-      
+    secteurs, varieties, annonceurs, marques, produits, date1, date2) => {    
     try {
       set({ IsCounting: true })
       var media_type = media == "" ? "presse" : media;    
@@ -84,16 +85,19 @@ export const UseCountStore = create((set, get) => ({
       var dataLength = Number(response.data.total)
       if (dataLength > Limit_Data_Allowed) {
         set({         
-          countLastYear: response.data.total
+          countLastYear: response.data.total,
+          CountInKLastYear:Number(response.data.total)/1000 +" K",
         });
       } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
         set({        
-          countLastYear: response.data.total
+          countLastYear: response.data.total,
+          CountInKLastYear:Number(response.data.total) +" " ,
         });
       } else if (dataLength === 0) {
 
         set({ 
-          countLastYear: 0
+          countLastYear: 0,
+          CountInKLastYear:Number(response.data.total) +" " 
         });
       }
       set({ IsCounting: false })

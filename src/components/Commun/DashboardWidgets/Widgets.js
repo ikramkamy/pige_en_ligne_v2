@@ -17,7 +17,9 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) =>
     <Col lg="4" sm="6">
       <Card className="card-stats" style={{
         cursor: "pointer",
-        backgroundColor: "#010A41E6", color: "white",
+        backgroundColor: "#010A41E6", 
+      
+        color: "white",
         border: "1px solid lightgrey"
       }}>
         <Card.Body>

@@ -77,6 +77,7 @@ function DashboardLayout() {
       
       // backgroundImage: `url(${bgimage})`,
       backgroundColor: `#020b42`,
+    
       overflowX: "hidden",
       display: 'flex',
       justifyContent: "space-between",

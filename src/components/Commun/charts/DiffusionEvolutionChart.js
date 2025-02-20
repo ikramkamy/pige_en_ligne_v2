@@ -34,6 +34,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   const { EvolutionData, secondsToHoursObject, baseGraphs, setBaseGraphs } = UseGraphStore((state) => state);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  console.log("EvolutionData",EvolutionData)
   // Function to handle menu opening
   const handleDownloadClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -176,7 +177,8 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   }
   const findMax = (numbers) => {
     if (!Array.isArray(numbers) || numbers.length === 0) {
-      throw new Error("Input must be a non-empty array of numbers.");
+      //throw new Error("Input must be a non-empty array of numbers.");
+      return numbers[0]
     }
     return numbers.reduce((max, current) => (current > max ? current : max), numbers[0]);
   }
