@@ -874,13 +874,10 @@ function Dashboard() {
       }
 
       if (sectionId == "sectionwidget") {
-        console.log("width sections",
-          section.offsetHeight,
-          "prev value 515", section.offsetWidth, "prev value 1287")
         // Create a new div
         const tempDiv = document.createElement("div");
         const newDiv = document.getElementById("empty_to_inject_pdf_home_page");
-
+        tempDiv.id = `temp-div-${sectionId}`; 
         newDiv.innerHTML = `
         <div style="background-color: #020b42; color: white;
          padding: 10px; text-align: center ; height:1000px;
@@ -934,6 +931,7 @@ function Dashboard() {
         const tempDiv = document.createElement("div");
         // Set the width, height, and background color for the div
         tempDiv.style.width = "1000px"; // Fixed width of 1000px
+        tempDiv.id = `temp-div-${sectionId}`; 
         tempDiv.style.height = "525px"; // Fixed height of 500px
         tempDiv.style.backgroundColor = "#020b42"; // Red background color
 
@@ -947,7 +945,7 @@ function Dashboard() {
         //back to section 5 and 6 to remoove decalage
       } else if (sectionId == "section5" || sectionId == "section6") {
         const tempDiv = document.createElement("div");
-
+        tempDiv.id = `temp-div-${sectionId}`; 
         // Set the width, height, and background color for the div
         section.height = section.offsetHeight - 503
         section.height = section.offsetHeight
@@ -962,7 +960,7 @@ function Dashboard() {
 
       }else if (sectionId == "section6") {
         const tempDiv = document.createElement("div");
-
+        tempDiv.id = `temp-div-${sectionId}`;    
         // Set the width, height, and background color for the div
         section.height = section.offsetHeight - 503
         section.height = section.offsetHeight
@@ -997,6 +995,7 @@ function Dashboard() {
         // Set the width, height, and background color for the div
         tempDiv.style.width = "1000px"; // Fixed width of 1000px
         tempDiv.style.height = "500px"; // Fixed height of 500px
+        tempDiv.id = "standard_id";
         tempDiv.style.backgroundColor = "#020b42"; // Red background color
         // Optionally, add some additional styling for visibility
         tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
@@ -1118,8 +1117,30 @@ function Dashboard() {
     captureSection()
       .then(() => {
         // Save the PDF after all sections are captured
-        pdf.save(`Media_Review_${date1}_${date2}.pdf`);
+        pdf.save(`Media_Review_${date1}_${date2}.pdf`)
         setLoadingPDF(false);
+        const removeDiv=document.getElementById('temp-div-sectionwidget')
+        const remove2=document.getElementById('empty_to_inject_pdf_home_page')
+        const remove3=document.getElementById('temp-div-section2')
+        const remove5=document.getElementById('temp-div-section5')
+        const remove6=document.getElementById('temp-div-section6')
+        const remove7=document.getElementById('standard_id')
+        const remove8=document.getElementById('repartitionmarche')
+        const remove9=document.getElementById('repartitionformat')
+        const remove10=document.getElementById('type')
+        const remove11=document.getElementById('version')
+        console.log("removes",remove3,remove3,remove5,
+          remove6,remove7,remove8,remove9,remove10,remove11)
+        removeDiv.remove()
+        remove2.innerHTML=""
+        remove3.remove()
+        remove5.remove()
+        remove6.remove()
+        remove7.remove()
+        remove8.style.backgroundImage("")
+        remove9.style.backgroundImage("")
+        remove10.style.backgroundImage("")
+        remove11.style.backgroundImage("")        
       })
       .catch((error) => {
         console.error("Error during PDF generation:", error);
@@ -1199,7 +1220,7 @@ function Dashboard() {
       id="dashboard"
     >
       <div id="empty_to_inject_pdf_home_page"></div>
-      <Button onClick={test}>TEST</Button>
+      {/* <Button onClick={test}>TEST</Button> */}
       <Container fluid style={{ display: "flex", flexDirection: "column" }} id="section0" >
         <Row className="mt-3" style={{
           display: "flex",

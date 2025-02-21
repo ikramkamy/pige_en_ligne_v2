@@ -229,10 +229,8 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
 
       </Row>
-
-      <Row id="section6" className="mt-4">
-
-        {media !== "presse" && (
+      {media !== "presse" && (
+      <Row id="section6" className="mt-4">   
           <Col md={6}>
             <PieChartVelson
               title="Répartition par Type"
@@ -247,7 +245,7 @@ export default function GridDemo({ date1, date2, media, base }) {
               isloading={isloadingRepatitionType}
             />
           </Col>
-        )}
+        
         <Col md={6}>
           <PieChartVelson
             title="Répartition par Version"
@@ -259,12 +257,12 @@ export default function GridDemo({ date1, date2, media, base }) {
             parametre="version"
             filter="version"
             initialOptions={VersionOptions}
-            isloading={isloadingRepatitionType}
+            isloading={isloadingRepartitionParVersion}
           />
         </Col>
 
       </Row>
-
+    )}
     </div>
 
   );

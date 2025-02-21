@@ -110,7 +110,6 @@ export const UseGraphStore = create((set, get) => ({
     seCodeColor: (colorbase) => {
         set({ graphColor: colorbase })
     },
-
     secondsToHoursObject(seconds) {
         if (typeof seconds !== 'number' || seconds < 0) {
             throw new Error("Input must be a non-negative number.");

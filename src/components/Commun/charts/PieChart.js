@@ -19,7 +19,7 @@ import { DownloadIcon } from "lucide-react";
 export const PieChartVelson = ({ date1, date2, data, title, isloading,
   ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
   const { base } = UseFiltersStore((state) => state)
-  const { PartMarche, FormatRepartition, RepartitionParType,formatDateToFrench} = UsePigeDashboardStore((state) => state);
+  const { PartMarche, FormatRepartition, RepartitionParType,formatDateToFrench,RepartitionParVersion} = UsePigeDashboardStore((state) => state);
   const { MarcheOptions, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
   //const chartDatalabelsBarColors = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c']
   const [chartDatalabelsBarColors, setChartDatalabelsBarColors] = useState([])
@@ -132,7 +132,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       const average20 = sum / list.length;
       setAverage(average20.toFixed(2));
     }
-  }, [PartMarche, FormatRepartition, RepartitionParType]);
+  }, [PartMarche, FormatRepartition, RepartitionParType,RepartitionParVersion]);
 
 
   const ModifyList = () => {
