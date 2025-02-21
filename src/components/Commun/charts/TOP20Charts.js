@@ -16,6 +16,8 @@ export default function GridDemo({ date1, date2, media, base }) {
     setFormatOptions,
     setTypeOptions,
     TypeOptions,
+    VersionOptions,
+    setVersionOptions,
     ProduitsOptions,
     setMarcheOptions,
     setAnnonceurSupportOptions,
@@ -55,6 +57,9 @@ export default function GridDemo({ date1, date2, media, base }) {
     getRepartitionParType,
     isloadingRepatitionType,
     setunifiedGraphStructure,
+    RepartitionParVersion,
+    isloadingRepartitionParVersion,
+    getRepartitionParVersion,
   } = UsePigeDashboardStore((state) => state)
   const top20familleModified = Top20famillesSectorielles?.map((e) => {
     return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
@@ -87,30 +92,10 @@ export default function GridDemo({ date1, date2, media, base }) {
   const RepartitionParTypeModified = RepartitionParType?.map((e) => {
     return { name: e.Type, proportion: e.proportion, total: e.total, average: e.average }
   })
+  const RepartitionParVersionModified = RepartitionParVersion?.map((e) => {
+    return { name: e.Version, proportion: e.proportion, total: e.total, average: e.average }
+  })
 
-  useEffect(() => {
-    // setunifiedGraphStructure && setunifiedGraphStructure(
-    //   {
-    //     top20familleModified: Number(top20familleModified?.[0].total).toFixed(2),
-    //     top20familleModifiedaverage: Number(top20familleModified[0]?.average).toFixed(2),
-    //     Top20AnnonceursModified: Number(Top20AnnonceursModified[0].total).toFixed(2),
-    //     Top20AnnonceursModifiedaverage: Number(Top20AnnonceursModified[0]?.average).toFixed(2),
-    //     top20marquemodified: Number(top20marquemodified[0].total).toFixed(2),
-    //     top20marquemodifiedaverage: Number(top20marquemodified[0]?.average).toFixed(2),
-    //     Top20produitsmodified: Number(Top20produitsmodified[0].total).toFixed(2),
-    //     Top20produitsmodifiedaverage: Number([0]?.average).toFixed(2),
-    //     AnnonceurParSupportModified: Number(AnnonceurParSupportModified[0].total).toFixed(2),
-    //     AnnonceurParSupportModifiedaverage: Number(AnnonceurParSupportModified[0]?.average).toFixed(2),
-    //     CreationParAnnonceurModified: Number(CreationParAnnonceurModified[0].total).toFixed(2),
-    //     CreationParAnnonceurModifiedaverage: Number(CreationParAnnonceurModified[0]?.average).toFixed(2),
-    //     PartMarcheModified: Number(PartMarcheModified[0].total).toFixed(2),
-    //     PartMarcheModifiedaverage: Number(PartMarcheModified[0]?.average).toFixed(2),
-    //     FormatRepartitionModified: Number(FormatRepartitionModified[0].total).toFixed(2),
-    //     FormatRepartitionModifiedaverage: Number(FormatRepartitionModified[0]?.average).toFixed(2),
-    //     RepartitionParTypeModified: Number(RepartitionParTypeModified[0].total).toFixed(2),
-    //     RepartitionParTypeModifiedaverage: Number(RepartitionParTypeModified[0]?.average).toFixed(2),
-    //   })
-  }, [])
   return (
     <div>
       <InteractiveLineChart
@@ -268,12 +253,12 @@ export default function GridDemo({ date1, date2, media, base }) {
             title="Répartition par Version"
             date1={date1}
             date2={date2}
-            data={RepartitionParTypeModified}
-            SetOptionFunction={setTypeOptions}
-            ChangeBaseFunction={getRepartitionParType}
+            data={RepartitionParVersionModified}
+            SetOptionFunction={setVersionOptions}
+            ChangeBaseFunction={getRepartitionParVersion}
             parametre="version"
             filter="version"
-            initialOptions={TypeOptions}
+            initialOptions={VersionOptions}
             isloading={isloadingRepatitionType}
           />
         </Col>
