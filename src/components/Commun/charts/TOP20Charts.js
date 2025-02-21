@@ -254,7 +254,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             data={RepartitionParVersionModified}
             SetOptionFunction={setVersionOptions}
             ChangeBaseFunction={getRepartitionParVersion}
-            parametre="version"
+            parametre="repartitionversion"
             filter="version"
             initialOptions={VersionOptions}
             isloading={isloadingRepartitionParVersion}

@@ -729,23 +729,23 @@ function Dashboard() {
         email,
         "creationparannonceur",
         base),
-        getRepartitionParVersion && getRepartitionParVersion(
-          Filtersupports,
-          Filterfamilles,
-          Filterclassesids,
-          Filtersecteursids,
-          Filtervarietiesids,
-          Filterannonceursids,
-          Filtermarquesids,
-          Filterproduitsids,
-          date1,
-          date2,
-          media,
-          email,
-          "repartitionversion",
-          base,
-    
-        )
+      getRepartitionParVersion && getRepartitionParVersion(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        "repartitionversion",
+        base,
+
+      )
     ])
     setIsCalculating(false)
     const endTime = new Date().getTime();
@@ -861,9 +861,9 @@ function Dashboard() {
     let temporaryElement = dashboardElement;
     const sectionIds = ["evolution", "sectionwidget", "section2",
       "section3", "section4", "section5", "repartitionmarche",
-     "repartitionformat",
+      "repartitionformat",
       "type",
-     "version",
+      "repartitionversion",
     ];
     // Loop through each section ID
     sectionIds.forEach((sectionId) => {
@@ -877,43 +877,49 @@ function Dashboard() {
         // Create a new div
         const tempDiv = document.createElement("div");
         const newDiv = document.getElementById("empty_to_inject_pdf_home_page");
-        tempDiv.id = `temp-div-${sectionId}`; 
+        tempDiv.id = `temp-div-${sectionId}`;
         newDiv.innerHTML = `
-        <div style="background-color: #020b42; color: white;
-         padding: 10px; text-align: center ; height:1000px;
-          display:flex; flex-direction:column;justify-content:center;align-items:center;
-          font-family: "Figtree", serif !important;
-         ">
-          <img src="${logo}" style="width: 120px; height: 120px;" />
-          <h1>Adtrics Review</h1>
-          <h3>${date1} / ${date2}</h3>
-          <table style="margin: 20px auto; border-collapse: collapse; width: 80%; text-align: left; font-family: Arial, sans-serif; font-size: 14px;">
-  <tbody>
+       <div style="background-color: #020b42; color: white;
+         padding: 20px; text-align: center; height: 1000px;
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+         font-family: 'Figtree', serif !important;width: 1423px;">
   
-    <tr style="">
-      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Media:</strong></td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${media == "television" ? "Télévision" :
+  <!-- Logo -->
+  <img src="${logo}" style="width: 140px; height: 100px; margin-bottom: 10px;" />
+
+  <!-- Title -->
+  <h1 style="font-size: 32px; margin-bottom: 5px;">Adtrics Review</h1>
+  <h3 style="font-size: 20px; font-weight: normal; margin-bottom: 20px;">${date1} / ${date2}</h3>
+
+  <!-- Table -->
+  <table style="margin: 20px auto; border-collapse: collapse; width: 85%;
+                text-align: left; font-family: Arial, sans-serif; font-size: 18px;
+                background-color: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden;">
+    <tbody>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold; width: 30%;">Media:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${media == "television" ? "Télévision" :
             media == "presse" ? "Presse" : media == "radio" ? "Radio" : ""}</td>
-    </tr>
-    <tr style="">
-      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Famille:</strong></td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${familles.length === 0 ? "tout" : familles.map((e) => e.Famille_Lib).join(", ")}</td>
-    </tr>
-    <tr style="">
-      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Supports:</strong></td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${supports.length === 0 ? "tout" : supports.map((e) => e.Support_Lib).join(", ")}</td>
-    </tr>
-    <tr style="">
-      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Marque:</strong></td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${marques.length === 0 ? "tout " : marques.length}</td>
-    </tr>
-    <tr style="">
-      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Annonceurs:</strong></td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${annonceurs.length === 0 ? "tout" : annonceurs.length}</td>
-    </tr>
-  </tbody>
-</table>
-        </div>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Famille:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${familles.length === 0 ? "tout" : familles.map((e) => e.Famille_Lib).join(", ")}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Supports:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${supports.length === 0 ? "tout" : supports.map((e) => e.Support_Lib).join(", ")}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Marque:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${marques.length === 0 ? "tout " : marques.length}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Annonceurs:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${annonceurs.length === 0 ? "tout" : annonceurs.length}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
       `;
         // Set the width, height, and background color for the div
         tempDiv.style.width = "1000px"; // Fixed width of 1000px
@@ -931,7 +937,7 @@ function Dashboard() {
         const tempDiv = document.createElement("div");
         // Set the width, height, and background color for the div
         tempDiv.style.width = "1000px"; // Fixed width of 1000px
-        tempDiv.id = `temp-div-${sectionId}`; 
+        tempDiv.id = `temp-div-${sectionId}`;
         tempDiv.style.height = "525px"; // Fixed height of 500px
         tempDiv.style.backgroundColor = "#020b42"; // Red background color
 
@@ -945,12 +951,12 @@ function Dashboard() {
         //back to section 5 and 6 to remoove decalage
       } else if (sectionId == "section5" || sectionId == "section6") {
         const tempDiv = document.createElement("div");
-        tempDiv.id = `temp-div-${sectionId}`; 
+        tempDiv.id = `temp-div-${sectionId}`;
         // Set the width, height, and background color for the div
         section.height = section.offsetHeight - 503
         section.height = section.offsetHeight
         tempDiv.style.width = "1000px"; // Fixed width of 1000px
-        tempDiv.style.height = "100px"; 
+        tempDiv.style.height = "100px";
         tempDiv.style.backgroundColor = "#020b42"; // Red background color
         tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
         tempDiv.style.border = "1px solid #020b42"; // Optional border
@@ -958,14 +964,14 @@ function Dashboard() {
         section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
         //section.innerHTML=`<h1>IKRAM IS HEARE</h1>`
 
-      }else if (sectionId == "section6") {
+      } else if (sectionId == "section6") {
         const tempDiv = document.createElement("div");
-        tempDiv.id = `temp-div-${sectionId}`;    
+        tempDiv.id = `temp-div-${sectionId}`;
         // Set the width, height, and background color for the div
         section.height = section.offsetHeight - 503
         section.height = section.offsetHeight
         tempDiv.style.width = "1000px"; // Fixed width of 1000px
-        tempDiv.style.height = "200px"; 
+        tempDiv.style.height = "200px";
         tempDiv.style.backgroundColor = "#020b42"; // Red background color
         tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
         tempDiv.style.border = "1px solid #020b42"; // Optional border
@@ -976,19 +982,31 @@ function Dashboard() {
       } else if (sectionId == "repartitionmarche") {
         const imageurl = sessionStorage.getItem('repartitionmarche')
         section.height = section.offsetHeight
-        section.style.backgroundImage=`url(${imageurl})`
-      }else if (sectionId == "repartitionformat") {
+        section.style.backgroundImage = `url(${imageurl})`
+        section.style.backgroundSize='cover'
+        section.style.backgroundRepeat="no-repeat"
+        section.style.backgroundPosition="center"
+      } else if (sectionId == "repartitionformat") {
         const imageurl = sessionStorage.getItem('repartitionformat')
         section.height = section.offsetHeight
-        section.style.backgroundImage=`url(${imageurl})`
-      }else if (sectionId == "type") {
+        section.style.backgroundImage = `url(${imageurl})`
+        section.style.backgroundSize='cover'
+        section.style.backgroundRepeat="no-repeat"
+        section.style.backgroundPosition="center"
+      } else if (sectionId == "type") {
         const imageurl = sessionStorage.getItem('type')
         section.height = section.offsetHeight
-        section.style.backgroundImage=`url(${imageurl})`
-      }else if (sectionId == "version") {
-        const imageurl = sessionStorage.getItem('version')
+        section.style.backgroundImage = `url(${imageurl})`
+        section.style.backgroundSize='cover'
+        section.style.backgroundRepeat="no-repeat"
+        section.style.backgroundPosition="center"
+      } else if (sectionId == "repartitionversion") {
+        const imageurl = sessionStorage.getItem('repartitionversion')
         section.height = section.offsetHeight
-        section.style.backgroundImage=`url(${imageurl})`
+        section.style.backgroundImage = `url(${imageurl})`
+        section.style.backgroundSize='cover'
+        section.style.backgroundRepeat="no-repeat"
+        section.style.backgroundPosition="center"
       }
       else {
         const tempDiv = document.createElement("div");
@@ -1119,28 +1137,28 @@ function Dashboard() {
         // Save the PDF after all sections are captured
         pdf.save(`Media_Review_${date1}_${date2}.pdf`)
         setLoadingPDF(false);
-        const removeDiv=document.getElementById('temp-div-sectionwidget')
-        const remove2=document.getElementById('empty_to_inject_pdf_home_page')
-        const remove3=document.getElementById('temp-div-section2')
-        const remove5=document.getElementById('temp-div-section5')
-        const remove6=document.getElementById('temp-div-section6')
-        const remove7=document.getElementById('standard_id')
-        const remove8=document.getElementById('repartitionmarche')
-        const remove9=document.getElementById('repartitionformat')
-        const remove10=document.getElementById('type')
-        const remove11=document.getElementById('version')
-        console.log("removes",remove3,remove3,remove5,
-          remove6,remove7,remove8,remove9,remove10,remove11)
+        const removeDiv = document.getElementById('temp-div-sectionwidget')
+        const remove2 = document.getElementById('empty_to_inject_pdf_home_page')
+        const remove3 = document.getElementById('temp-div-section2')
+        const remove5 = document.getElementById('temp-div-section5')
+        const remove6 = document.getElementById('temp-div-section6')
+        const remove7 = document.getElementById('standard_id')
+        const remove8 = document.getElementById('repartitionmarche')
+        const remove9 = document.getElementById('repartitionformat')
+        const remove10 = document.getElementById('type')
+        const remove11 = document.getElementById('repartitionversion')
+        console.log("repartitionversion",remove11)
         removeDiv.remove()
-        remove2.innerHTML=""
-        remove3.remove()
-        remove5.remove()
-        remove6.remove()
-        remove7.remove()
-        remove8.style.backgroundImage("")
-        remove9.style.backgroundImage("")
-        remove10.style.backgroundImage("")
-        remove11.style.backgroundImage("")        
+        remove2.innerHTML = ""
+        window.location.reload()
+        // remove3.remove()
+        // remove5.remove()
+        // remove6.remove()
+        // remove7.remove()
+        // remove8.style.backgroundImage("")
+        // remove9.style.backgroundImage("")
+        // remove10.style.backgroundImage("")
+        // remove11.style.backgroundImage("")
       })
       .catch((error) => {
         console.error("Error during PDF generation:", error);

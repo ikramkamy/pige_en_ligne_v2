@@ -19,7 +19,9 @@ const PdfCreationPopup = ({
     message
 }) => {
 
-    return (<Dialog open={OpenNetworkPopup} onClose={handleCloseNetworkPopup}>
+    return (<Dialog open={OpenNetworkPopup} onClose={handleCloseNetworkPopup}
+    sx={{backgroundColor:"#4c5479"}}
+    >
         <Container
             fluid
             style={{
@@ -38,12 +40,7 @@ const PdfCreationPopup = ({
                     display: 'flex', flexDirection: "column",
                     alignItems: 'center', justifyContent: 'center'
                 }}>
-                    {/* <WarningIcon style={{
-            marginRight: '18px',
-            marginBottom: "18px", fontSize: '54px', color: 'eba4a8'
-          }} /> */}
-                   
-                        <CircularProgress />
+                            <CircularProgress />
                   
                     <span style={{ textAlign: "center", width: "300px" }}>
                         {/* Vérifiez votre connexion internet  */}
@@ -59,23 +56,6 @@ const PdfCreationPopup = ({
                 alignItems: "center",
                 marginTop: "20px",
             }}>
-                {/* <Button
-                    onClick={handleCloseNetworkPopup}
-                    sx={{
-                        textTransform: "none",
-                        width: "150px",
-                        textTransform: "none",
-                        margin: "0px",
-                        backgroundColor: '#020b42',
-                        textTransform: "none",
-                        width: "fit-content",
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: '#020b42',
-                        }
-                    }}>
-                    Fermer
-                </Button> */}
             </DialogActions>
         </Container>
 
