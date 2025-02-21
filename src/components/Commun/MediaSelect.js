@@ -78,7 +78,7 @@ export default function MultipleSelectMedia() {
       auth: autorisePigeRadio,
     },
     {
-      label: "Télèvision",
+      label: "Télévision",
       value: "television",
       auth: autorisePigeTv,
     }

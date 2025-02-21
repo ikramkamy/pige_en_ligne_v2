@@ -240,8 +240,6 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
 
   };
 
-  //console.log('dynamiclist',dynamicList)
-  //Download SVG PNG
   const [anchorEl, setAnchorEl] = useState(null); // For Menu anchor
   const open = Boolean(anchorEl);
   const handleDownloadClick = (event) => {
@@ -349,7 +347,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   
       // Step 4: Store the image data in sessionStorage or localStorage
       const imageId = generateUniqueId(); // Generate a unique ID for the image
-      sessionStorage.setItem(`.${parametre}`, imgData); // Use sessionStorage for temporary storage
+      sessionStorage.setItem(`${parametre}`, imgData); // Use sessionStorage for temporary storage
       sessionStorage.setItem('imageId',imageId)
       console.log(`Image saved temporarily with ID: ${imageId}`);
   
@@ -367,10 +365,10 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   }
   useEffect(()=>{
-   // handleDownloadChartPDF()
-  },[data])
+    handleDownloadChartPDF()
+  },[isloading,data])
   return (
-    <div className='m-2' style={{ color: "white" }}>
+    <div className='m-2' style={{ color: "white" }} >
       <Card style={{
         borderRadius: 10,
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
@@ -448,13 +446,17 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
               </div>          
             <div>AVG ={Number(average).toFixed(2)}</div>
           </div>
-          <div className="chart-container" style={{ width: '100%', height: '500px' }}>
+          <div className="chart-container" 
+          style={{ width: '100%', height: '500px' }} id={parametre}>
           <ReactEcharts
+            
             className={`${parametre}`}
             style={{
               height: '500px',            
               display: "flex",
-              justifyContent: "center"
+              justifyContent: "center",
+             position:"static"
+             
             }}
             option={option} />
             </div>

@@ -38,7 +38,7 @@ const NetworkErrorPopup = ({
             marginRight: '18px',
             marginBottom: "18px", fontSize: '54px', color: 'eba4a8'
           }} />
-          <span style={{ textAlign: "center",width:"500px" }}>
+          <span style={{ textAlign: "center",width:"500px", }}>
          {/* Vérifiez votre connexion internet  */}
          {message}
             

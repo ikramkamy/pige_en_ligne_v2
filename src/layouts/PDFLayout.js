@@ -203,7 +203,8 @@ function PdfLayout() {
                     unifiedGraphStructure={unifiedGraphStructure}
                     evolutionImageDate={imgData}
                     supports={supports}
-                    media={media == "television" ? "Télévision" : media == "presse" ? "Presse" : media == "radio" ? "Radio" : ""}
+                    media={media == "television" ? "Télévision" : 
+                      media == "presse" ? "Presse" : media == "radio" ? "Radio" : ""}
                     annonceurs={annonceurs}
                     marques={marques}
                     tableData={tableData}

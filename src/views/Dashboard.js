@@ -39,21 +39,23 @@ import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { DownloadIcon, FilterIcon, } from "lucide-react";
+import { DownloadIcon, FilterIcon, FileDownIcon } from "lucide-react";
 import { jwtDecode } from 'jwt-decode';
+import PdfCreationPopup from "components/Commun/popups/PdfCreationPopUp";
+import logo from "assets/Logo adtrics.png"
 function Dashboard() {
-  document.title = 'Tableau de bord'
+  document.title = 'Adtrics Stats'
   const { getEvolutionData } = UseGraphStore((state) => state)
   const ParamToken = useParams()
-  useEffect(() => {  
+  useEffect(() => {
     LoginWithParamToken && LoginWithParamToken(ParamToken.token)
     StoreParamToken && StoreParamToken(ParamToken.token)
     window.localStorage.setItem('token', ParamToken.token)
     var decoded = jwtDecode(ParamToken.token);
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
     const isExpired = decoded.exp < currentTime; // Compare with current time
-    console.log('token',ParamToken.token,
-      "currentTime",currentTime,"ExpirationToken",decoded.exp)
+    console.log('token', ParamToken.token,
+      "currentTime", currentTime, "ExpirationToken", decoded.exp)
     console.log('isExpired', isExpired)
   }, [])
   const [timeTokenExpiration, setTimeTokenExpiration] = useState(0);
@@ -65,10 +67,10 @@ function Dashboard() {
       const tokenExpirationTime = timeTokenExpiration; // Token expiration time (in seconds)
 
       if (currentTime >= tokenExpirationTime && tokenExpirationTime !== 0) {
-        console.log('Token expired');    
+        console.log('Token expired');
         window.localStorage.removeItem('token');
         LougoutRestErrorMessages && LougoutRestErrorMessages(email)
-        window.location.href = 'https://adtrics.immar.dz/#/login'; 
+        window.location.href = 'https://adtrics.immar.dz/#/login';
       }
     };
 
@@ -163,16 +165,14 @@ function Dashboard() {
     getDiffusionParCreation,
     DiffusionParCreationLastYear,
     getDiffusionParCreationLastYear,
-    RepartitionParType,
-    isloadingRepatitionType,
     getRepartitionParType,
-    
+    getRepartitionParVersion,
 
   } = UsePigeDashboardStore((state) => state)
 
   const { countLastYear, count, getPigeCount,
-    getPigeCountLastYear,CountInK, CountInKLastYear } = UseCountStore((state) => state)
-  
+    getPigeCountLastYear, CountInK, CountInKLastYear } = UseCountStore((state) => state)
+
   const { autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
@@ -728,7 +728,24 @@ function Dashboard() {
         media,
         email,
         "creationparannonceur",
-        base)
+        base),
+        getRepartitionParVersion && getRepartitionParVersion(
+          Filtersupports,
+          Filterfamilles,
+          Filterclassesids,
+          Filtersecteursids,
+          Filtervarietiesids,
+          Filterannonceursids,
+          Filtermarquesids,
+          Filterproduitsids,
+          date1,
+          date2,
+          media,
+          email,
+          "repartitionversion",
+          base,
+    
+        )
     ])
     setIsCalculating(false)
     const endTime = new Date().getTime();
@@ -831,59 +848,215 @@ function Dashboard() {
     },
   });
 
-  const [loadingPDF,setLoadingPDF]=useState(false)
+  const [loadingPDF, setLoadingPDF] = useState(false)
   const exportToPDF = async () => {
-    setLoadingPDF(true)
+    setLoadingPDF(true);
     const dashboardElement = document.getElementById("dashboard");
-  
+    // Get the dashboard element
     if (!dashboardElement) {
       console.error("Dashboard element not found");
-      
       return;
-    }else{
-      dashboardElement.style.backgroundColor = "#020b42";
     }
+    // Define the sections by their IDs
+    let temporaryElement = dashboardElement;
+    const sectionIds = ["evolution", "sectionwidget", "section2",
+      "section3", "section4", "section5", "repartitionmarche",
+     "repartitionformat",
+      "type",
+     "version",
+    ];
+    // Loop through each section ID
+    sectionIds.forEach((sectionId) => {
+      const section = document.getElementById(sectionId);
+      if (!section) {
+        console.warn(`Section ${sectionId} not found. Skipping...`);
+        return;
+      }
+
+      if (sectionId == "sectionwidget") {
+        console.log("width sections",
+          section.offsetHeight,
+          "prev value 515", section.offsetWidth, "prev value 1287")
+        // Create a new div
+        const tempDiv = document.createElement("div");
+        const newDiv = document.getElementById("empty_to_inject_pdf_home_page");
+
+        newDiv.innerHTML = `
+        <div style="background-color: #020b42; color: white;
+         padding: 10px; text-align: center ; height:1000px;
+          display:flex; flex-direction:column;justify-content:center;align-items:center;
+          font-family: "Figtree", serif !important;
+         ">
+          <img src="${logo}" style="width: 120px; height: 120px;" />
+          <h1>Adtrics Review</h1>
+          <h3>${date1} / ${date2}</h3>
+          <table style="margin: 20px auto; border-collapse: collapse; width: 80%; text-align: left; font-family: Arial, sans-serif; font-size: 14px;">
+  <tbody>
   
-    // Get the dimensions of the dashboard element
-    const totalHeight = dashboardElement.scrollHeight;
-    const viewportHeight = window.innerHeight; // Height of the visible area
-    const scrollStep = 120 * viewportHeight / 100; // Scroll by 120% of viewport height
-  
+    <tr style="">
+      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Media:</strong></td>
+      <td style="padding: 10px; border: 1px solid #ddd;">${media == "television" ? "Télévision" :
+            media == "presse" ? "Presse" : media == "radio" ? "Radio" : ""}</td>
+    </tr>
+    <tr style="">
+      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Famille:</strong></td>
+      <td style="padding: 10px; border: 1px solid #ddd;">${familles.length === 0 ? "tout" : familles.map((e) => e.Famille_Lib).join(", ")}</td>
+    </tr>
+    <tr style="">
+      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Supports:</strong></td>
+      <td style="padding: 10px; border: 1px solid #ddd;">${supports.length === 0 ? "tout" : supports.map((e) => e.Support_Lib).join(", ")}</td>
+    </tr>
+    <tr style="">
+      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Marque:</strong></td>
+      <td style="padding: 10px; border: 1px solid #ddd;">${marques.length === 0 ? "tout " : marques.length}</td>
+    </tr>
+    <tr style="">
+      <td style="padding: 10px; border: 1px solid #ddd;"><strong>Annonceurs:</strong></td>
+      <td style="padding: 10px; border: 1px solid #ddd;">${annonceurs.length === 0 ? "tout" : annonceurs.length}</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+      `;
+        // Set the width, height, and background color for the div
+        tempDiv.style.width = "1000px"; // Fixed width of 1000px
+        tempDiv.style.height = "500px"; // Fixed height of 500px
+        tempDiv.style.backgroundColor = "020b42"; // Red background color
+
+        // Optionally, add some additional styling for visibility
+        tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
+        tempDiv.style.border = "1px solid #020b42"; // Optional border
+
+        // Insert the div after the current section
+        section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
+        //section.parentNode.insertBefore(newDiv, section.nextElementSibling);
+      } else if (sectionId == "section2") {
+        const tempDiv = document.createElement("div");
+        // Set the width, height, and background color for the div
+        tempDiv.style.width = "1000px"; // Fixed width of 1000px
+        tempDiv.style.height = "525px"; // Fixed height of 500px
+        tempDiv.style.backgroundColor = "#020b42"; // Red background color
+
+        // Optionally, add some additional styling for visibility
+        tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
+        tempDiv.style.border = "1px solid #020b42"; // Optional border
+
+        // Insert the div after the current section
+        section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
+
+        //back to section 5 and 6 to remoove decalage
+      } else if (sectionId == "section5" || sectionId == "section6") {
+        const tempDiv = document.createElement("div");
+
+        // Set the width, height, and background color for the div
+        section.height = section.offsetHeight - 503
+        section.height = section.offsetHeight
+        tempDiv.style.width = "1000px"; // Fixed width of 1000px
+        tempDiv.style.height = "100px"; 
+        tempDiv.style.backgroundColor = "#020b42"; // Red background color
+        tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
+        tempDiv.style.border = "1px solid #020b42"; // Optional border
+        // Insert the div after the current section
+        section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
+        //section.innerHTML=`<h1>IKRAM IS HEARE</h1>`
+
+      }else if (sectionId == "section6") {
+        const tempDiv = document.createElement("div");
+
+        // Set the width, height, and background color for the div
+        section.height = section.offsetHeight - 503
+        section.height = section.offsetHeight
+        tempDiv.style.width = "1000px"; // Fixed width of 1000px
+        tempDiv.style.height = "200px"; 
+        tempDiv.style.backgroundColor = "#020b42"; // Red background color
+        tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
+        tempDiv.style.border = "1px solid #020b42"; // Optional border
+        // Insert the div after the current section
+        section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
+        //section.innerHTML=`<h1>IKRAM IS HEARE</h1>`
+
+      } else if (sectionId == "repartitionmarche") {
+        const imageurl = sessionStorage.getItem('repartitionmarche')
+        section.height = section.offsetHeight
+        section.style.backgroundImage=`url(${imageurl})`
+      }else if (sectionId == "repartitionformat") {
+        const imageurl = sessionStorage.getItem('repartitionformat')
+        section.height = section.offsetHeight
+        section.style.backgroundImage=`url(${imageurl})`
+      }else if (sectionId == "type") {
+        const imageurl = sessionStorage.getItem('type')
+        section.height = section.offsetHeight
+        section.style.backgroundImage=`url(${imageurl})`
+      }else if (sectionId == "version") {
+        const imageurl = sessionStorage.getItem('version')
+        section.height = section.offsetHeight
+        section.style.backgroundImage=`url(${imageurl})`
+      }
+      else {
+        const tempDiv = document.createElement("div");
+        // Set the width, height, and background color for the div
+        tempDiv.style.width = "1000px"; // Fixed width of 1000px
+        tempDiv.style.height = "500px"; // Fixed height of 500px
+        tempDiv.style.backgroundColor = "#020b42"; // Red background color
+        // Optionally, add some additional styling for visibility
+        tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
+        // Insert the div after the current section
+        section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
+      }
+    });
+
+    if (!dashboardElement) {
+      console.error("Dashboard element not found");
+      return;
+    } else {
+      dashboardElement.style.backgroundColor = "#020b42";
+      console.log("temporaryElement", temporaryElement,
+        "dashboardElement", dashboardElement,)
+    }
+
     // Initialize jsPDF
     const pdf = new jsPDF({
-      orientation: "landscape", // Set orientation to portrait for better fit
+      orientation: "landscape", // Set orientation to landscape
       unit: "mm",
       format: "a4",
     });
-  
+
     // Get PDF page dimensions
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-  
+    console.log("width pdfWidth", pdfWidth, "pdfHeight", pdfHeight)
+
+    const viewportHeight = window.innerHeight;
+    console.log("viewportHeight", viewportHeight)
+
+    const scrollStep = pdfHeight * 3.78 + 200;
+    const totalHeight = dashboardElement.scrollHeight;
+
+    console.log("totalHeight", totalHeight)
     let yPosition = 0; // Starting position for scrolling
     let pageNumber = 1;
-  
+
     const captureSection = async () => {
       return new Promise((resolve) => {
         // Scroll to the current position
         dashboardElement.scrollTop = yPosition;
-  
+
         // Create a temporary container to isolate the current section
         const tempContainer = document.createElement("div");
         tempContainer.style.position = "relative";
         tempContainer.style.width = `${dashboardElement.scrollWidth}px`;
         tempContainer.style.height = `${Math.min(scrollStep, totalHeight - yPosition)}px`;
-  
+
         // Clone the dashboard content and clip it to the current section
         const clonedContent = dashboardElement.cloneNode(true);
         clonedContent.style.transform = `translateY(-${yPosition}px)`;
         clonedContent.style.clipPath = `inset(${yPosition}px 0px ${totalHeight - yPosition - Math.min(scrollStep, totalHeight - yPosition)}px 0px)`;
-  
+
         tempContainer.appendChild(clonedContent);
-  
+
         // Append the temporary container to the body (hidden)
         document.body.appendChild(tempContainer);
-  
+
         // Use html2canvas to capture the isolated section
         html2canvas(tempContainer, {
           scale: 2, // Increase resolution for better quality
@@ -893,27 +1066,37 @@ function Dashboard() {
           .then((canvas) => {
             // Remove the temporary container
             document.body.removeChild(tempContainer);
-  
+
             const imgData = canvas.toDataURL("image/png");
-  
-            // Set the background color for the current page
-            // pdf.setFillColor(2, 11, 66); // RGB values for #020b42
-            // pdf.rect(0, 0, pdfWidth, pdfHeight, "F"); // Fill the entire page with the background color
-  
+            pdf.setFillColor(2, 11, 66); // RGB values for #020b42
+            pdf.rect(0, 0, pdfWidth, pdfHeight, "F");
             // Add the captured section to the PDF
             const imgProps = pdf.getImageProperties(imgData);
             const pageWidthRatio = pdfWidth / imgProps.width;
-            const pageHeightRatio = (imgProps.height * pageWidthRatio);
-  
-            pdf.addImage(
-              imgData,
-              "PNG",
-              0,
-              0,
-              pdfWidth,
-              pageHeightRatio
-            );
-  
+            const pageHeightRatio = imgProps.height * pageWidthRatio;
+
+            // If the section height exceeds the PDF page height, scale it down
+            if (pageHeightRatio > pdfHeight) {
+              const scaleFactor = pdfHeight / pageHeightRatio;
+              pdf.addImage(
+                imgData,
+                "PNG",
+                0,
+                0,
+                pdfWidth * scaleFactor,
+                pdfHeight
+              );
+            } else {
+              pdf.addImage(
+                imgData,
+                "PNG",
+                0,
+                0,
+                pdfWidth,
+                pageHeightRatio
+              );
+            }
+
             // Add a new page if there's more content to capture
             if (yPosition + scrollStep < totalHeight) {
               pdf.addPage(); // Add a new page
@@ -930,21 +1113,20 @@ function Dashboard() {
           });
       });
     };
-  
+
     // Start capturing sections
     captureSection()
       .then(() => {
         // Save the PDF after all sections are captured
         pdf.save(`Media_Review_${date1}_${date2}.pdf`);
-        setLoadingPDF(false)
+        setLoadingPDF(false);
       })
       .catch((error) => {
         console.error("Error during PDF generation:", error);
       });
   };
-  
   const test = () => {
-    getRepartitionParType && getRepartitionParType(
+    getRepartitionParVersion && getRepartitionParVersion(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -957,7 +1139,7 @@ function Dashboard() {
       date2,
       media,
       email,
-      "type",
+      "repartitionversion",
       base,
 
     )
@@ -1016,9 +1198,9 @@ function Dashboard() {
     }}
       id="dashboard"
     >
-
-      {/* <Button onClick={test}>TEST</Button> */}
-      <Container fluid style={{ display: "flex", flexDirection: "column" }} >
+      <div id="empty_to_inject_pdf_home_page"></div>
+      <Button onClick={test}>TEST</Button>
+      <Container fluid style={{ display: "flex", flexDirection: "column" }} id="section0" >
         <Row className="mt-3" style={{
           display: "flex",
           alignItems: "center", width: '100%',
@@ -1065,14 +1247,6 @@ function Dashboard() {
 
               }}>
                 <LoadingButtonData
-                  getData={exportToPDF}
-                  isloading={loadingPDF}
-                  isSucces={false}
-                  title="Exporter"
-                  mr="10px"
-                  disablebtn={Top20produits?.length == 0}
-                />
-                <LoadingButtonData
                   getData={ShowDashboardData}
                   isloading={isCalculating}
                   isSucces={false}
@@ -1080,6 +1254,17 @@ function Dashboard() {
                   mr="10px"
                   disablebtn={(media == "" || base == "")}
                 />
+                <LoadingButtonData
+                  getData={exportToPDF}
+                  isloading={loadingPDF}
+                  isSucces={false}
+                  title={<div>
+                    <FileDownIcon />
+                  </div>}
+                  mr="10px"
+                  disablebtn={Top20produits?.length == 0}
+                />
+
                 {/* <div style={{ width: "20px", height: resStyle.heightSeperator }}>
 
                 </div> */}
@@ -1115,10 +1300,10 @@ function Dashboard() {
           </Row>
           <div id="all">
             {(dashDisplay && !isCalculating &&
-              !(Top20produits?.length === 0)) && (<div style={{width: '100%' }}>
+              !(Top20produits?.length === 0)) && (<div style={{ width: '100%' }}>
                 <div >
 
-                  <Row className="mt-3" style={{ marginTop: 20 }}  >
+                  <Row className="mt-3" id="sectionwidget" style={{ marginTop: 20 }}  >
                     {/* <WidgetShadcn
                     
                     /> */}
@@ -1127,14 +1312,14 @@ function Dashboard() {
                       value={CountInK}
                       title="Volume publicitaire"
                       valueLastYear={CountInKLastYear}
-                      unite={" "+ CountInK.split(' ')[1]}
+                      unite={" " + CountInK.split(' ')[1]}
                     />
                     <Widget
                       icon={iconAnnonceur}
                       value={AnnonceursActif}
                       title="Annonceurs actifs"
                       valueLastYear={AnnonceursActifLastYear}
-                     
+
                     />
                     <Widget
                       icon={iconCreation}
@@ -1263,7 +1448,11 @@ function Dashboard() {
         message={messageFilterError}
       />
 
-
+      <PdfCreationPopup
+        OpenNetworkPopup={loadingPDF}
+        message='Veuillez patienter, la création de votre rapport sera effectuée 
+          dans quelques instants'
+      />
 
 
     </div>

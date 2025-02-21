@@ -1,0 +1,121 @@
+const exportToPDF = async () => {
+  setLoadingPDF(true);
+
+  const dashboardElement = document.getElementById("dashboard");
+
+  if (!dashboardElement) {
+    console.error("Dashboard element not found");
+    return;
+  } else {
+    dashboardElement.style.backgroundColor = "#020b42";
+  }
+
+  // Initialize jsPDF
+  const pdf = new jsPDF({
+    orientation: "landscape", // Set orientation to landscape
+    unit: "mm",
+    format: "a4",
+  });
+
+  // Get PDF page dimensions
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
+
+  // Define the viewport height as 100vh
+  const viewportHeight = window.innerHeight; // Height of the visible area (100vh)
+  const scrollStep = viewportHeight; // Capture exactly 100vh at a time
+
+  // Get the total height of the dashboard
+  const totalHeight = dashboardElement.scrollHeight;
+
+  let yPosition = 0; // Starting position for scrolling
+  let pageNumber = 1;
+
+  const captureSection = async () => {
+    return new Promise((resolve) => {
+      // Scroll to the current position
+      dashboardElement.scrollTop = yPosition;
+
+      // Create a temporary container to isolate the current section
+      const tempContainer = document.createElement("div");
+      tempContainer.style.position = "relative";
+      tempContainer.style.width = `${dashboardElement.scrollWidth}px`;
+      tempContainer.style.height = `${Math.min(scrollStep, totalHeight - yPosition)}px`;
+
+      // Clone the dashboard content and clip it to the current section
+      const clonedContent = dashboardElement.cloneNode(true);
+      clonedContent.style.transform = `translateY(-${yPosition}px)`;
+      clonedContent.style.clipPath = `inset(${yPosition}px 0px ${totalHeight - yPosition - Math.min(scrollStep, totalHeight - yPosition)}px 0px)`;
+
+      tempContainer.appendChild(clonedContent);
+
+      // Append the temporary container to the body (hidden)
+      document.body.appendChild(tempContainer);
+
+      // Use html2canvas to capture the isolated section
+      html2canvas(tempContainer, {
+        scale: 2, // Increase resolution for better quality
+        useCORS: true, // Enable CORS for external images
+        logging: false, // Optional: Log progress for debugging
+      })
+        .then((canvas) => {
+          // Remove the temporary container
+          document.body.removeChild(tempContainer);
+
+          const imgData = canvas.toDataURL("image/png");
+
+          // Add the captured section to the PDF
+          const imgProps = pdf.getImageProperties(imgData);
+          const pageWidthRatio = pdfWidth / imgProps.width;
+          const pageHeightRatio = imgProps.height * pageWidthRatio;
+
+          // If the section height exceeds the PDF page height, scale it down
+          if (pageHeightRatio > pdfHeight) {
+            const scaleFactor = pdfHeight / pageHeightRatio;
+            pdf.addImage(
+              imgData,
+              "PNG",
+              0,
+              0,
+              pdfWidth * scaleFactor,
+              pdfHeight
+            );
+          } else {
+            pdf.addImage(
+              imgData,
+              "PNG",
+              0,
+              0,
+              pdfWidth,
+              pageHeightRatio
+            );
+          }
+
+          // Add a new page if there's more content to capture
+          if (yPosition + scrollStep < totalHeight) {
+            pdf.addPage(); // Add a new page
+            pageNumber++;
+            yPosition += scrollStep;
+            resolve(captureSection()); // Recursively capture the next section
+          } else {
+            resolve(); // Finish capturing
+          }
+        })
+        .catch((error) => {
+          console.error("Error capturing section:", error);
+          resolve(); // Stop capturing on error
+        });
+    });
+  };
+
+  // Start capturing sections
+  captureSection()
+    .then(() => {
+      // Save the PDF after all sections are captured
+      pdf.save(`Media_Review_${date1}_${date2}.pdf`);
+      setLoadingPDF(false);
+    })
+    .catch((error) => {
+      console.error("Error during PDF generation:", error);
+    });
+};

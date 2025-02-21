@@ -1549,7 +1549,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      //console.log("response",response)
+      console.log("response",response)
       
       set({ 
         RepartitionParType:response.data,
@@ -1564,6 +1564,55 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
 
   },
+  RepartitionParVersion:[],
+  isloadingRepartitionParVersion:false,
+ getRepartitionParVersion: async (
+   supports,
+   familles,
+   classes,
+   secteurs,
+   varieties,
+   annonceurs,
+   marques,
+   produits,
+   date1,
+   date2,
+   media,
+   email,
+   parametre,
+   base
+ ) => {
+   set({isloadingRepartitionParVersion:true})
+   try {
+     let response = await axios.post(`${PORT3}/${media}/dashboard/${base}/${parametre}`, {
+       supports: supports,
+       email: email,
+       familles: familles,
+       classes: classes,
+       secteurs: secteurs,
+       varieties: varieties,
+       annonceurs: annonceurs,
+       marques: marques,
+       produits: produits,
+       date_debut:date1,
+       date_fin: date2,
+
+     });
+     console.log("response version",response)
+     
+     set({ 
+      RepartitionParVersion:response.data,
+      isloadingRepartitionParVersion:false
+      });
+
+   } catch (error) {
+     //console.log(error);
+   }
+
+
+
+
+ },
   sendDownloadLink: async (
     email,
     date1,

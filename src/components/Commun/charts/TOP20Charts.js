@@ -118,9 +118,8 @@ export default function GridDemo({ date1, date2, media, base }) {
         ChangeBaseFunction={getEvolutionData}
         parametre="evolution"
         isloading={loadingEvolution}
-
       />
-      <Row>
+      <Row id="section2">
         <Col md={6}>
           <BarchartShadcn date1={date1} date2={date2}
             title={`Top ${FamillesOptions.length} Familles Sectorielles`}
@@ -154,7 +153,7 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
       </Row>
 
-      <Row className='mt-4'>
+      <Row id="section3" className='mt-4'>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
             title={`Top ${MarqueOptions.length} marques`}
@@ -183,7 +182,7 @@ export default function GridDemo({ date1, date2, media, base }) {
           />
         </Col>
       </Row>
-      <Row className='mt-4'>
+      <Row id="section4" className='mt-4'>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
             title="Annonceurs actifs par support"
@@ -214,8 +213,8 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
       </Row>
 
-      <Row className="mt-4"> {/* Add g-2 for spacing */}
-        <Col md={4}> {/* Each graph takes 1/3 of the width */}
+      <Row id="section5" className="mt-4"> {/* Add g-2 for spacing */}
+        <Col md={6}> {/* Each graph takes 1/3 of the width */}
           <PieChartVelson
             title="Part Marché"
             date1={date1}
@@ -229,7 +228,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             isloading={loadingMarche}
           />
         </Col>
-        <Col md={4}> {/* Each graph takes 1/3 of the width */}
+        <Col md={6}> {/* Each graph takes 1/3 of the width */}
           <PieChartVelson
             title="Répartition par Format"
             date1={date1}
@@ -243,8 +242,13 @@ export default function GridDemo({ date1, date2, media, base }) {
             isloading={loadingFormat}
           />
         </Col>
+
+      </Row>
+
+      <Row id="section6" className="mt-4">
+
         {media !== "presse" && (
-          <Col md={4}>
+          <Col md={6}>
             <PieChartVelson
               title="Répartition par Type"
               date1={date1}
@@ -259,7 +263,23 @@ export default function GridDemo({ date1, date2, media, base }) {
             />
           </Col>
         )}
+        <Col md={6}>
+          <PieChartVelson
+            title="Répartition par Version"
+            date1={date1}
+            date2={date2}
+            data={RepartitionParTypeModified}
+            SetOptionFunction={setTypeOptions}
+            ChangeBaseFunction={getRepartitionParType}
+            parametre="version"
+            filter="version"
+            initialOptions={TypeOptions}
+            isloading={isloadingRepatitionType}
+          />
+        </Col>
+
       </Row>
+
     </div>
 
   );
