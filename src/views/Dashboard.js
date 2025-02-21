@@ -1489,6 +1489,7 @@ function Dashboard() {
 
       <PdfCreationPopup
         OpenNetworkPopup={loadingPDF}
+       
         message='Veuillez patienter, la création de votre rapport sera effectuée 
           dans quelques instants'
       />

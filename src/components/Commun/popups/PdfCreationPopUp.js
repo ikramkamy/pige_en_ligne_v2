@@ -3,7 +3,8 @@ import * as React from "react";
 import WarningIcon from '@mui/icons-material/Warning';
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 import CircularProgress from '@mui/material/CircularProgress';
-
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 import {
     Dialog,
     DialogActions,
@@ -20,8 +21,11 @@ const PdfCreationPopup = ({
 }) => {
 
     return (<Dialog open={OpenNetworkPopup} onClose={handleCloseNetworkPopup}
-    sx={{backgroundColor:"#4c5479"}}
+        sx={{ backgroundColor: "#020b42" }}
     >
+        <Box sx={{ width: '100%' }}>
+            <LinearProgress />
+        </Box>
         <Container
             fluid
             style={{
@@ -32,7 +36,7 @@ const PdfCreationPopup = ({
                 height: "40vh",
                 padding: "20%",
                 width: "500px",
-                
+
             }}
         >
             <Row >
@@ -40,15 +44,16 @@ const PdfCreationPopup = ({
                     display: 'flex', flexDirection: "column",
                     alignItems: 'center', justifyContent: 'center'
                 }}>
-                            <CircularProgress />
-                  
-                    <span style={{ textAlign: "center", width: "300px" }}>
+                    {/* <CircularProgress /> */}
+
+                    <span style={{ textAlign: "center", width: "300px", fontWeight:"400" }}>
                         {/* Vérifiez votre connexion internet  */}
                         {message}
 
                     </span>
                 </div>
             </Row>
+
             <DialogActions sx={{
                 width: "100%",
                 display: "flex",
@@ -58,7 +63,9 @@ const PdfCreationPopup = ({
             }}>
             </DialogActions>
         </Container>
-
+        <Box sx={{ width: '100%' }}>
+            <LinearProgress />
+        </Box>
     </Dialog>
     )
 }

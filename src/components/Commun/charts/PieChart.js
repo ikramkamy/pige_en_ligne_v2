@@ -366,7 +366,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   }
   useEffect(()=>{
     handleDownloadChartPDF()
-  },[isloading,data])
+  },[isloading])
   return (
     <div className='m-2' style={{ color: "white" }} >
       <Card style={{
