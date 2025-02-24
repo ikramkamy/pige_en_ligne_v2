@@ -414,9 +414,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
       });
       if (Number(response.data[0].total) < 1000) {
-        set({ BudgetBrut: Number(response.data[0].total).toFixed(2)+" M" });
+        set({ BudgetBrut: Number(response.data[0].total).toFixed(1)+" M" });
       } else {
-        set({ BudgetBrut: (Number(response.data[0].total)/1000).toFixed(2)+" Mrd" });
+        set({ BudgetBrut: (Number(response.data[0].total)/1000).toFixed(1)+" Mrd" });
       }
 
     } catch (error) {
@@ -454,9 +454,9 @@ export const UsePigeDashboardStore = create((set, get) => ({
       });
       // console.log('response',response)
       if (Number(response.data[0].total) < 1000) {
-        set({ BudgetBrutLastYear: Number(response.data[0].total).toFixed(2)+" M" });
+        set({ BudgetBrutLastYear: Number(response.data[0].total).toFixed(1)+" M" });
       } else {
-        set({ BudgetBrutLastYear: (Number(response.data[0].total)/1000).toFixed(2)+" Mrd" });
+        set({ BudgetBrutLastYear: (Number(response.data[0].total)/1000).toFixed(1)+" Mrd" });
       }
     } catch (error) {
       //console.log(error);
@@ -1463,7 +1463,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       });
       //console.log("response",response.data)
-     set({ DiffusionParCreation: Number(response.data[0].average).toFixed(2) });
+     set({ DiffusionParCreation: Number(response.data[0].average).toFixed(0) });
 
     } catch (error) {
       //console.log(error);
@@ -1505,7 +1505,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       });
       
-      set({ DiffusionParCreationLastYear: Number(response.data[0].average).toFixed(2) });
+      set({ DiffusionParCreationLastYear: Number(response.data[0].average).toFixed(0) });
 
     } catch (error) {
       //console.log(error);

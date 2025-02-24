@@ -81,7 +81,7 @@ const LoadingIndicator = ({progressControled,totalDuration}) => {
     return (
         <div>
             <h4 style={{color:"white", textAlign:"center"}}>
-                Les paramètres sont en cours de calcul.</h4>
+                Les résultats sont en cours de calcul.</h4>
             <Chart options={options} series={[progress]} type="radialBar" height={200} />
         </div>
     );

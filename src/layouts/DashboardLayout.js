@@ -49,7 +49,7 @@ function DashboardLayout() {
 
   React.useEffect(() => {
     const handleResize = () => {
-      setPadding(window.innerWidth < 768 ? '0px' : '40px'); 
+      setPadding(window.innerWidth < 768 ? '0px' : '5px'); 
     };
 
     handleResize(); 

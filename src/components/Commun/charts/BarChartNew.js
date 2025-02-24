@@ -20,6 +20,7 @@ import {
   ListSubheader,
   IconButton,
   Menu,
+  Input,
 } from "@mui/material";
 export const BarchartShadcn = ({
   title,
@@ -58,9 +59,9 @@ export const BarchartShadcn = ({
   }, [baseGraphs])
   //const [average, setAverage] = useState(data[0]?.average || 0);
   //const average = data[0]?.average;
- const list2 = data.map((e) => Number(e.total));
+  const list2 = data.map((e) => Number(e.total));
   const sum = list2.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-  const average=sum/data?.length
+  const average = sum / data?.length
   const max = Number(data[0]?.total);
 
   const colorMap = {
@@ -87,10 +88,10 @@ export const BarchartShadcn = ({
     setAnchorEl(event.currentTarget);
   };
   const handleDownloadChart = () => {
-   
+
     const chartContainer = document.querySelector(`.${parametre}`);
-    const AxisLabel=document.querySelector(".recharts-layer recharts-cartesian-axis-tick")
-    console.log("AxisLabel",chartContainer,AxisLabel)
+    const AxisLabel = document.querySelector(".recharts-layer recharts-cartesian-axis-tick")
+    console.log("AxisLabel", chartContainer, AxisLabel)
     if (!chartContainer) return;
 
     html2canvas(chartContainer, {
@@ -99,7 +100,7 @@ export const BarchartShadcn = ({
         const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
         if (clonedContainer) {
           clonedContainer.style.backgroundColor = "black";
-          
+
         }
       },
     }).then((canvas) => {
@@ -159,14 +160,14 @@ export const BarchartShadcn = ({
 
   const handleDownloadChartPDF = async () => {
     console.log("Generating chart image...");
-  
+
     // Step 1: Capture the chart container
     const chartContainer = document.querySelector(`.${parametre}`);
     if (!chartContainer) {
       console.error("Chart container not found!");
       return;
     }
-  
+
     try {
       // Step 2: Generate the canvas from the chart container
       await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -179,36 +180,38 @@ export const BarchartShadcn = ({
           }
         },
       });
-  
+
       // Step 3: Convert the canvas to a PNG image
       const imgData = canvas.toDataURL("image/png");
-  
+
       // Step 4: Store the image data in sessionStorage or localStorage
       const imageId = generateUniqueId(); // Generate a unique ID for the image
       sessionStorage.setItem(`.${parametre}`, imgData); // Use sessionStorage for temporary storage
-      sessionStorage.setItem('imageId',imageId)
+      sessionStorage.setItem('imageId', imageId)
       console.log(`Image saved temporarily with ID: ${imageId}`);
-  
+
       return imageId;
     } catch (error) {
       console.error("Error generating or saving the chart image:", error);
     }
   };
-  
+
   // Helper function to generate a unique ID
   function generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   }
-  useEffect(()=>{
+  useEffect(() => {
     //handleDownloadChartPDF()
-  },[data])
-  
-  
+  }, [data])
+
+
   return (
     <div style={{
       backgroundColor: "transparent",
       color: "white",
-      borderRadius: "10px", padding: "15px",
+      borderRadius: "10px",
+      padding: "15px",
+      margin: "15px",
       border: "1px solid white",
       position: "relative"
     }} className="bar-chart-container">
@@ -228,11 +231,12 @@ export const BarchartShadcn = ({
           width: "100%",
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center"
+          alignItems: "center",
+
         }}>
         <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
 
-        <div style={{display:"flex", justifyContent:"center",alignItems:"center"}}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           {/* <DownloadIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} /> */}
           <IconButton onClick={handleDownloadClick} style={{ cursor: "pointer", color: "white" }}>
             {/* <DownloadIcon /> */}
@@ -248,7 +252,15 @@ export const BarchartShadcn = ({
             <MenuItem onClick={handleDownloadSVG}>SVG</MenuItem>
           </Menu>
 
-          <MultiselectForGraph
+          {/* <MultiselectForGraph
+            options={options}
+            UpdatedGraphDisplay={UpdatedGraphDisplay}
+            media={media}
+            SetOptionFunction={SetOptionFunction}
+            filters={filters}
+          /> */}
+          <TopOption
+
             options={options}
             UpdatedGraphDisplay={UpdatedGraphDisplay}
             media={media}
@@ -267,43 +279,59 @@ export const BarchartShadcn = ({
 
 
         <div style={{ fontWeight: "400", fontSize: "22px" }}>{title}</div>
-        <div>AVG ={Number(average).toFixed(2)}</div>
+        <div >AVG ={Number(average).toFixed(2)}</div>
       </div>
+      <div className="custom-scrollbar" style={{
+        width: "100%",
+        height: "300px",
+        overflowY: "scroll",
+      }}>
+        <ResponsiveContainer width="100%"
+          height={700}
+          overflowY={scroll}
+          className={`px-2 ${parametre}`}
+          style={{
+            padding: "10px",
 
-      <ResponsiveContainer width="100%" minHeight={300}
-        className={`px-2 ${parametre}`}>
-        <BarChart
-          data={chartData}
-          layout="vertical"
-          margin={{
-            top: 5,
-            right: 30,
-            left: 0,
-            bottom: 5,
+            // overflowY:"scroll",
           }}
         >
-          {/* <CartesianGrid horizontal={false} /> */}
-          <YAxis dataKey="name" type="category"
-            fontSize={14}
-            fontWeight="500"
-            //fill="#4B5563"
-            fill="white"
-            tickLine={false} axisLine={false} width={250}
-            tick={{
-              dx: -230, // Adjust horizontal alignment (negative value moves labels to the left)
-              textAnchor: "start", // Align text to the start (left)
-              dominantBaseline: "middle", // Center vertically
-              fill: "white"
+          <BarChart
+            data={chartData}
+            layout="vertical"
+            // height={800}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 0,
+              bottom: 5,
             }}
-          />
-          <XAxis type="number"
-            fill="white"
-            domain={[0, max]}
-            hide
-            tick={{ fill: "white" }}
 
-          />
-          {/* <Tooltip
+          >
+            {/* <CartesianGrid horizontal={false} /> */}
+            <YAxis dataKey="name" type="category"
+              fontSize={14}
+              fontWeight="500"
+              //fill="#4B5563"
+              fill="white"
+              tickLine={false} axisLine={false}
+              width={250}
+
+              tick={{
+                dx: -230, // Adjust horizontal alignment (negative value moves labels to the left)
+                textAnchor: "start", // Align text to the start (left)
+                dominantBaseline: "middle", // Center vertically
+                fill: "white"
+              }}
+            />
+            <XAxis type="number"
+              fill="white"
+              domain={[0, max]}
+              hide
+              tick={{ fill: "white" }}
+
+            />
+            {/* <Tooltip
               contentStyle={{
                 backgroundColor: "hsl(var(--background))",
                 border: "1px solid hsl(var(--border))",
@@ -311,30 +339,29 @@ export const BarchartShadcn = ({
               labelStyle={{ color: "hsl(var(--foreground))" }}
             /> */}
 
-          <Bar dataKey="total"
+            <Bar dataKey="total"
 
-            fill={localColor}
+              fill={localColor}
+              radius={[10, 10, 10, 10]} >
+              <LabelList dataKey="total"
+                position="right"
+                fill="white"
+                fontSize={10}
+                fontWeight="500"
+              />
+              <LabelList
+                dataKey="proportion" // Use the 'proportion' data key
+                position="inside" // Position labels inside the bar
+                fill="white" // Set label color to white for visibility
+                fontSize={10} // Adjust font size for better readability
+                formatter={(value) => `${parseFloat(value).toFixed(2)}%`} // Format proportion as percentage
+              />
+            </Bar>
+          </BarChart>
 
-            radius={[10, 10, 10, 10]} >
-            <LabelList dataKey="total"
-              position="right"
-              fill="white"
-              fontSize={10}
-              fontWeight="500"
+        </ResponsiveContainer>
 
-
-            />
-            <LabelList
-              dataKey="proportion" // Use the 'proportion' data key
-              position="inside" // Position labels inside the bar
-              fill="white" // Set label color to white for visibility
-              fontSize={10} // Adjust font size for better readability
-              formatter={(value) => `${parseFloat(value).toFixed(2)}%`} // Format proportion as percentage
-            />
-          </Bar>
-        </BarChart>
-
-      </ResponsiveContainer>
+      </div>
 
 
       {/* <div className="text-gray-600">Showing total
@@ -347,44 +374,44 @@ export const BarchartShadcn = ({
 const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, filters }) => {
   const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state)
   const {
-      Top20famillesSectorielles,
-      Top20produits,
-      Top20Annonceurs,
-      Top20marques,
-      CreationParAnnonceur,
-      AnnonceurParSupport,
+    Top20famillesSectorielles,
+    Top20produits,
+    Top20Annonceurs,
+    Top20marques,
+    CreationParAnnonceur,
+    AnnonceurParSupport,
 
   } = UsePigeDashboardStore((state) => state)
-  console.log('FamillesOptions', FamillesOptions, options.slice(0, 5))
+
   const [selectedList, setSelectedList] = useState(options.slice(0, 5));
   const [dynamicList, setDynamicList] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
   let optionList = options
   useEffect(() => {
-      setSelectedItems(optionList.slice(0, 10).map((e) => e.name));
-  }, [Top20famillesSectorielles, 
-      Top20produits, Top20Annonceurs,
-       Top20marques,CreationParAnnonceur,
-       AnnonceurParSupport]);
+    setSelectedItems(optionList.slice(0, 20).map((e) => e.name));
+  }, [Top20famillesSectorielles,
+    Top20produits, Top20Annonceurs,
+    Top20marques, CreationParAnnonceur,
+    AnnonceurParSupport]);
 
   const ModifyList = () => {
-      var autresList = options.filter((e) => !options.includes(e))
+    var autresList = options.filter((e) => !options.includes(e))
 
-      // var autresList = AnnonceurParSupport 
-      // var valueAutre = autresList.map((e) => Number(e.annonceur_count))
-      // var PourcentageAutre = autresList.map((e) => Number(e.proportion))
-      // const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-      // const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-      // var listWithAutre = options;
-      // var autre = {
-      //     annonceur_count: totalSum.toFixed(2).toString(),
-      //     proportion: totalSumPourcentage.toFixed(2),
-      //     Chaine_Lib: `autres`,
-      //     Titre_Lib: "autre"
-      // }
-      // listWithAutre.push(autre)
-      //setDynamicList([...listWithAutre])
-      // console.log("dynamic list", dynamicList, AnnonceurParSupport)
+    // var autresList = AnnonceurParSupport 
+    // var valueAutre = autresList.map((e) => Number(e.annonceur_count))
+    // var PourcentageAutre = autresList.map((e) => Number(e.proportion))
+    // const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    // const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    // var listWithAutre = options;
+    // var autre = {
+    //     annonceur_count: totalSum.toFixed(2).toString(),
+    //     proportion: totalSumPourcentage.toFixed(2),
+    //     Chaine_Lib: `autres`,
+    //     Titre_Lib: "autre"
+    // }
+    // listWithAutre.push(autre)
+    //setDynamicList([...listWithAutre])
+    // console.log("dynamic list", dynamicList, AnnonceurParSupport)
   }
   // if(media!=="presse"){
   //     optionList = options.map((e) => e.Chaine_Lib);
@@ -393,35 +420,34 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
   // }
 
   const handleChange = (event) => {
-      const selected = event.target.value;
-      const elem = options.filter((elem) => elem.name == selected)
+    const selected = event.target.value;
+    const elem = options.filter((elem) => elem.name == selected)
 
-      setSelectedItems((prevSelectedItems) => {
-          console.log('elem to add', elem, prevSelectedItems)
-          if (prevSelectedItems.includes(selected)) {
-              return prevSelectedItems.filter((item) => item !== selected);
-          } else {
-              if (prevSelectedItems.length >= 10) {
-                  return [...prevSelectedItems.slice(1), selected];
-              } else {
-                  return [...prevSelectedItems, selected];
-              }
-          }
-      });
+    setSelectedItems((prevSelectedItems) => {
+      console.log('elem to add', elem, prevSelectedItems)
+      if (prevSelectedItems.includes(selected)) {
+        return prevSelectedItems.filter((item) => item !== selected);
+      } else {
+        if (prevSelectedItems.length >= 20) {
+          return [...prevSelectedItems.slice(1), selected];
+        } else {
+          return [...prevSelectedItems, selected];
+        }
+      }
+    });
   };
 
   useEffect(() => {
-      const newSelectedList = options.filter((e) =>
-          selectedItems.includes(e.name)
-      );
-      setSelectedList(newSelectedList);
-      SetOptionFunction && SetOptionFunction(newSelectedList);
+    const newSelectedList = options.filter((e) =>
+      selectedItems.includes(e.name)
+    );
+    setSelectedList(newSelectedList);
+    SetOptionFunction && SetOptionFunction(newSelectedList);
   }, [selectedItems]);
   useEffect(() => {
-      ModifyList()
+    ModifyList()
   }, [])
-  console.log("baseGraphs", baseGraphs)
-  const [isOpen, setIsOpen] = useState(false)
+  
   const StyledSelect = styled(Select)(({ theme }) => ({
     "& .MuiOutlinedInput-notchedOutline": {
       border: "none", // Remove the default border
@@ -438,36 +464,124 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
     height: "35px", // Set custom height
   }));
   return (
-      <FormControl sx={{
-          m: 0,
-          width: "50",
-          marginTop: "-5px",
-          margin: "0px",
-          marginRight:"0px"
+    <FormControl sx={{
+      m: 0,
+      width: "50",
+      marginTop: "-5px",
+      margin: "0px",
+      marginRight: "0px"
 
-      }}>
-          <StyledSelect
-              sx={{ height: "10px", backgroundColor: "010A41E6", color: "white" }}
-              labelId="demo-multiple-checkbox-label"
-              input={<OutlinedInput label={`${filters}`} />}
-              value={selectedItems}
-              onChange={handleChange}
-              //renderValue={() => `Top ${selectedItems.length} ${filters}`}
-              // renderValue={() => `+`}
-              renderValue={() => <div style={{ color: "white",
-                transform: "rotate(90deg)", fontWeight:"900" }}>
-                   <span style={{ transform: "rotate(90deg)", 
-                       fontWeight:"900"}}>...</span>
-                   </div>}
-          >
-              {options.map((elem) => (
-                  <MenuItem key={options.indexOf(elem)} value={elem.name} >
-                      <Checkbox checked={selectedItems.includes(elem.name)} />
-                      <ListItemText primary={elem.name} />
-                  </MenuItem>
-              ))}
-          </StyledSelect>
-      </FormControl>
+    }}>
+      <StyledSelect
+        sx={{ height: "10px", backgroundColor: "010A41E6", color: "white" }}
+        labelId="demo-multiple-checkbox-label"
+        input={<OutlinedInput label={`${filters}`} />}
+        value={selectedItems}
+        onChange={handleChange}
+        //renderValue={() => `Top ${selectedItems.length} ${filters}`}
+        // renderValue={() => `+`}
+        renderValue={() => <div style={{
+          color: "white",
+          transform: "rotate(90deg)", fontWeight: "900"
+        }}>
+          <span style={{
+            transform: "rotate(90deg)",
+            fontWeight: "900"
+          }}>...</span>
+        </div>}
+      >
+        {options.map((elem) => (
+          <MenuItem key={options.indexOf(elem)} value={elem.name} >
+            <Checkbox checked={selectedItems.includes(elem.name)} />
+            <ListItemText primary={elem.name} />
+          </MenuItem>
+        ))}
+      </StyledSelect>
+    </FormControl>
+
+  )
+}
+const TopOption = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, filters }) => {
+  const { FamillesOptions, graphColor, baseGraphs } = UseGraphStore((state) => state)
+  const {
+    Top20famillesSectorielles,
+    Top20produits,
+    Top20Annonceurs,
+    Top20marques,
+    CreationParAnnonceur,
+    AnnonceurParSupport,
+
+  } = UsePigeDashboardStore((state) => state)
+  const [optionNumber, setOptionNumber] = useState(10)
+  const [selectedList, setSelectedList] = useState(options.slice(0, 5));
+  const [dynamicList, setDynamicList] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
+  let optionList = options
+  useEffect(() => {
+    setSelectedItems(optionList.slice(0, 10));
+  }, [Top20famillesSectorielles,
+    Top20produits, Top20Annonceurs,
+    Top20marques, CreationParAnnonceur,
+    AnnonceurParSupport]);
+
+  const ModifyList = (e) => {
+    console.log("e?.target?.value",e?.target?.value)
+    const newValue = Math.max(1, Math.min(20, parseInt(e?.target?.value, 10))); 
+    // Clamp value between 1 and 100
+    setOptionNumber(e?.target?.value);
+    console.log("newValue",newValue)
+  };
+
+  useEffect(() => {
+    const newSelectedList = options.slice(0,optionNumber);
+    setSelectedList(newSelectedList);
+    SetOptionFunction && SetOptionFunction(newSelectedList);
+  }, [optionNumber]);
+  useEffect(() => {
+    ModifyList()
+  }, [options])
+  // console.log("baseGraphs", baseGraphs)
+  const [isOpen, setIsOpen] = useState(false)
+  const StyledSelect = styled(Select)(({ theme }) => ({
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: "none", // Remove the default border
+    },
+    "& .MuiSvgIcon-root": {
+      display: "none", // Hide the dropdown arrow icon
+    },
+    "&:focus": {
+      outline: "none", // Remove focus outline
+      boxShadow: "none", // Remove focus shadow
+    },
+    backgroundColor: "#010A41E6", // Set background color
+    color: "white", // Set text color
+    height: "35px", // Set custom height
+  }));
+
+
+  return (
+    <FormControl sx={{
+      m: 0,
+      width: "50",
+      marginTop: "-5px",
+      margin: "0px",
+      marginRight: "0px"
+
+    }}>
+      <Input
+        type='number'
+        value={optionNumber}
+        inputProps={{ min: 1, max: 20 }}
+        onChange={ModifyList}
+        sx={{
+          color: "white",
+          width: "50px",
+          border: "1px solid white",
+          borderRadius: "5px",
+          paddingLeft: "5px"
+        }}
+      />
+    </FormControl>
 
   )
 }

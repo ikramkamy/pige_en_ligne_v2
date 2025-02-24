@@ -1,51 +1,36 @@
 import React, { Component } from "react";
 import { useLocation } from "react-router-dom";
 import { Link, useParams } from "react-router-dom/cjs/react-router-dom";
-
-import logoImmar from "assets/logo transparent adtrics.png";
+import logoImmar from "assets/logo.png";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
-import powerbi from "assets/img/icons/PowerBI.webp"
-import { LogoutIcon, ChartBarIcon, SpeakerphoneIcon, SearchCircleIcon, HomeIcon } from '@heroicons/react/outline';
+import {
+  LogoutIcon, ChartBarIcon,
+  SpeakerphoneIcon,
+  SearchCircleIcon, HomeIcon
+} from '@heroicons/react/outline';
 import './navbar.css';
 import Navback from 'assets/navbar.png';
-import { FaBullhorn, FaSearch, FaSignOutAlt, FaTachometerAlt, FaHome } from 'react-icons/fa';
+import { FaBullhorn, FaSearch, FaSignOutAlt, FaTachometerAlt, FaHome, FaLock } from 'react-icons/fa';
 function Header() {
   const TokenParam = window.localStorage.getItem('token')
-  const { LougoutRestErrorMessages, email } = UseLoginStore((state) => state)
+  const { LougoutRestErrorMessages,
+    email,
+    autorisePigePresse,
+    autoriseVeillePresse,
+    autorisePigeRadio,
+    autoriseVeilleRadio,
+    autorisePigeTv,
+    autoriseVeilleTv,
+    autoriseDash,
 
-  // const mobileSidebarToggle = (e) => {
-  //   e.preventDefault();
-  //   document.documentElement.classList.toggle("nav-open");
-  //   // var node = document.createElement("div");
-  //   // node.id = "bodyClick";
-  //   // node.onclick = function () {
-  //   //   this.parentElement.removeChild(this);
-  //   //   document.documentElement.classList.toggle("nav-open");
-  //   // };
-  //   document.body.appendChild(node);
-  // };
-
-  // const getBrandText = () => {
-  //   for (let i = 0; i < routes.length; i++) {
-  //     if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
-  //       return routes[i].name;
-  //     }
-  //   }
-  //   return "Brand";
-  // };
-
-  //  const handelClick=()=>{
-  //    console.log("userIdentifications",userIdentifications)
-  //     setTestvalue && setTestvalue(15)
-  //     //Loginuser && Loginuser()
-  //     setLoginInputs && setLoginInputs(userIdentifications)
-  //   }
-  // const history=useHistory()
+  } = UseLoginStore((state) => state)
 
   const handelLogout = () => {
     LougoutRestErrorMessages && LougoutRestErrorMessages(email)
   }
-
+  const handelAlert = () => {
+    alert("Ce service n'est pas inclus dans votre abonnement. Veuillez contacter votre chargé de compte pour demander un accès")
+  }
 
   return (
     <div
@@ -59,22 +44,23 @@ function Header() {
         top: '0px',
         zIndex: "10",
         //backgroundColor:"#e5f9ff",
-        borderBottom: "3px solid #00a2db"
-
-      }}>
-      <div style={{
-        width: "90%", display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center", paddingTop: '0px',
+        borderBottom: "3px solid #00a2db",
+        paddingTop:"0.5rem",
+        paddingBottom:"0.8rem",
     
       }}>
-
+      <div style={{
+        width: "100%", 
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center", 
+        paddingRight: '0.75rem',
+        paddingLeft: '0.75rem',    
+      }}>
         <div style={{
-          paddingTop: "0px",
-          height: "50px",
           display: "flex",
           justifyContent: "center",
-          alignContent: "center"
+          alignContent: "center",   
         }} >
           {/* <Link to="https://adtrics.immar.dz/#/home"> */}
           <a href="https://adtrics.immar.dz/#/home">
@@ -83,18 +69,23 @@ function Header() {
           {/* </Link> */}
         </div>
         <div style={{
-          display: "flex", width: "100%",
-          display: "flex", justifyContent: "flex-end", alignItems: "center",
-          
+          display: "flex",
+          display: "flex", 
+          justifyContent: "flex-end",
+           alignItems: "center",
+    
         }}>
+
           <span className="no-icon" style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-            height: "80px",
+            // height: "80px",
             color: "white",
-          
+            // paddingLeft: "0.75rem",
+            paddingRight: "0.75rem",
+
           }}>
             <a href="https://adtrics.immar.dz/#/home" style={{
               display: "flex",
@@ -104,7 +95,7 @@ function Header() {
             }}>
               <FaHome className="icon_nav" style={{
                 // width: "35px",
-                fontSize: "30px",
+                fontSize: "28px",
                 color: "white",
                 // "&:hover": {
                 //   color: "#1DC7EA", 
@@ -113,17 +104,18 @@ function Header() {
               }} />
             </a>
             {/* </Link> */}
-            <span style={{ textTransform: "", fontSize: "10px" }}>Accueil</span>
+            {/* <span style={{ textTransform: "", fontSize: "10px" }}>Accueil</span> */}
           </span>
 
-
-          <span className="no-icon" style={{
+          {(autorisePigePresse || autorisePigeRadio || autorisePigeTv) && (<span className="no-icon" style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
             height: "80px",
-            color: "white"
+            color: "white",
+            // paddingLeft: "0.75rem",
+            paddingRight: "0.75rem",
           }}>
             <a href="https://adtrics.immar.dz/#/advertising" style={{
               display: "flex",
@@ -133,8 +125,9 @@ function Header() {
             }}>
               <FaSearch className="icon_nav" style={{
                 // width: "35px",
-                fontSize: "30px",
+               fontSize:"28px",
                 color: "white",
+               
                 // "&:hover": {
                 //   color: "#1DC7EA", 
                 // },
@@ -142,27 +135,42 @@ function Header() {
               }} />
             </a>
             {/* </Link> */}
-            <span style={{ textTransform: "", fontSize: "10px" }}>pige</span>
-          </span>
+            {/* <span style={{ textTransform: "", fontSize: "10px" }}>pige</span> */}
+          </span>)}
 
-
-          <span className="no-icon " style={{
+          {(!autorisePigePresse && !autorisePigeRadio && !autorisePigeTv) && (<span className="no-icon" style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
             height: "80px",
+            color: "white",
+            // paddingLeft: "0.75rem",
+            paddingRight: "0.75rem",
+        
+          }}
+            onClick={handelAlert}
+          >
+            <FaSearch className="icon_nav" style={{
+             fontSize:"28px",
+              color: "white",
+          
+             
 
+            }} />
+
+
+            {/* <span style={{ textTransform: "", fontSize: "10px" }}>pige</span> */}
+          </span>)}
+          {(autoriseVeillePresse || autoriseVeilleRadio || autoriseVeilleTv) && (<span className="no-icon " style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
+            // paddingLeft: "0.75rem",
+            paddingRight: "0.75rem",
           }}>
-            {/* <Link
-              to="/veille/veille_creations_publicitaires"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            > */}
             <a href="https://adtrics.immar.dz/#/monitoring" style={{
               display: "flex",
               flexDirection: "column",
@@ -170,30 +178,40 @@ function Header() {
               justifyContent: "center"
             }}>
               <FaBullhorn className="icon_nav"
-                style={{ color: "white", fontSize: "30px", }}
-              /></a>
-
-
-            {/* </Link> */}
-            <span style={{ textTransform: "", fontSize: "10px" }}>veille</span>
-          </span>
-
-
-
-          <span className="no-icon" style={{
+                style={{ color: "white",fontSize:"28px" }}
+              />
+            </a>
+            {/* <span style={{ textTransform: "", fontSize: "10px" }}>veille</span> */}
+          </span>)}
+          {(!autoriseVeillePresse && !autoriseVeilleRadio && !autoriseVeilleTv) && (<span className="no-icon " style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
             height: "80px",
+            // paddingLeft: "0.75rem",
+            paddingRight: "0.75rem",
+          }}
+            onClick={handelAlert}
+          >
+
+            <FaBullhorn className="icon_nav"
+              style={{ color: "white",fontSize:"28px" }}
+            />
+
+            {/* <span style={{ textTransform: "", fontSize: "10px" }}>veille</span> */}
+          </span>)}
+          {autoriseDash && (<span className="no-icon" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
+            // paddingLeft: "0.75rem",
+            paddingRight: "0.75rem",
 
           }} >
-            {/* <Link to="/media/tableau_de_bord" 
-            style={{ display: "flex", flexDirection: "column", 
-            alignItems: "center", 
-            justifyContent: "center" 
-            }}> */}
-            <a href={`https://adtrics.immar.dz/#/dashboard/#/media/tableau_de_bord/${TokenParam}`} style={{
+            <a href={`https://adtrics.immar.dz/dashboard/#/media/tableau_de_bord/${TokenParam}`} style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -201,29 +219,32 @@ function Header() {
             }}>
               <FaTachometerAlt
                 className="icon_nav"
-                style={{ color: "white", fontSize: "30px", }}
+                style={{ color: "white",fontSize:"28px" }}
               />
             </a>
+            {/* <span style={{ textTransform: "lowercase", fontSize: "10px" }}>stats</span> */}
+          </span>)}
 
-            {/* </Link> */}
-            <span style={{ textTransform: "lowercase", fontSize: "10px" }}>stats</span>
-          </span>
+          {!autoriseDash && (<span className="no-icon" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "80px",
+            // paddingLeft: "0.75rem",
+            paddingRight: "0.75rem",
 
-          {/* <span className="no-icon" style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "80px",
-         
-        }} >
-          <Link to="/media/tableau_de_bord_powerbi" 
-          style={{ display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center" }}>
-            <img src={powerbi} className="" alt="powerbi" width="30px"/>
-          </Link>
-          <p style={{ textTransform: "lowercase", fontSize: "10px" }}>dashboard</p>
-        </span> */}
+          }}
+            onClick={handelAlert}
+          >
+            <FaTachometerAlt
+              className="icon_nav"
+              style={{ color: "white",fontSize:"28px" }}
+            />
+
+            {/* <span style={{ textTransform: "lowercase", fontSize: "10px" }}>stats</span> */}
+          </span>)}
+
 
           <span className="no-icon" style={{
             display: "flex",
@@ -231,13 +252,11 @@ function Header() {
             alignItems: "center",
             flexDirection: "column",
             height: "80px",
+            paddingLeft: "0.75rem",
+            //paddingRight: "0.75rem",
+           
           }}>
-            {/* <Link to="/login"
-              style={{
-                display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center"
-              }}> */}
-            <a href={`https://adtrics.immar.dz/#/dashboard/media/tableau_de_bord/${TokenParam}`} style={{
+            <a href={`https://adtrics.immar.dz/#/login`} style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -245,12 +264,12 @@ function Header() {
             }}>
               <FaSignOutAlt onClick={handelLogout}
                 className="icon_nav"
-                style={{ color: "white", fontSize: "30px", }}
+                style={{ color: "white",fontSize:"28px",
+
+                 }}
               />
             </a>
-
-            {/* </Link> */}
-            <span style={{ textTransform: "", fontSize: "10px" }}>déconnexion</span>
+            {/* <span style={{ textTransform: "", fontSize: "10px" }}>déconnexion</span> */}
           </span>
 
 

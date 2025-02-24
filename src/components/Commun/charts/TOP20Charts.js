@@ -64,36 +64,36 @@ export default function GridDemo({ date1, date2, media, base }) {
   const top20familleModified = Top20famillesSectorielles?.map((e) => {
     return { name: e.Famille_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   })
-  const Top20AnnonceursModified = Top20Annonceurs?.map((e) => { return { name: e.Annonceur_Lib, proportion: e.proportion, total: e.total, average: e.average } })
+  const Top20AnnonceursModified = Top20Annonceurs?.map((e) => { return { name: e.Annonceur_Lib, proportion: e.proportion, total:Number(e.total).toFixed(1), average: e.average } })
 
   const top20marquemodified = Top20marques?.map((e) => {
-    return { name: e.Marque_Lib, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Marque_Lib, proportion: e.proportion, total:Number(e.total).toFixed(2), average: e.average }
   }
   )
   const Top20produitsmodified = Top20produits?.map((e) => {
-    return { name: e.Produit_Lib, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Produit_Lib, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   }
   )
   const AnnonceurParSupportModified = AnnonceurParSupport?.map((e) => {
-    return { name: e.Support_Lib, proportion: e.proportion, total: e.annonceur_count, average: e.average_ratio }
+    return { name: e.Support_Lib, proportion: e.proportion, total:Number(e.annonceur_count).toFixed(2) , average: e.average_ratio }
   })
   const CreationParAnnonceurModified = CreationParAnnonceur?.map((e) => {
-    return { name: e.Annonceur_Lib, proportion: e.proportion, total: e.count, average: e.average_ratio }
+    return { name: e.Annonceur_Lib, proportion: e.proportion, total:Number(e.count).toFixed(2), average: e.average_ratio }
   })
   const PartMarcheModified = PartMarche?.map((e) => {
-    return { name: e.Support_Lib, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Support_Lib, proportion: e.proportion, total:Number(e.total).toFixed(2), average: e.average }
   })
 
   const FormatRepartitionModified = FormatRepartition?.map((e) => {
-    return { name: e.Format, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Format, proportion: e.proportion, total:Number(e.total).toFixed(2), average: e.average }
   })
   // console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
 
   const RepartitionParTypeModified = RepartitionParType?.map((e) => {
-    return { name: e.Type, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Type, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   })
   const RepartitionParVersionModified = RepartitionParVersion?.map((e) => {
-    return { name: e.Version, proportion: e.proportion, total: e.total, average: e.average }
+    return { name: e.Version, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   })
 
   return (
@@ -109,7 +109,7 @@ export default function GridDemo({ date1, date2, media, base }) {
           <BarchartShadcn date1={date1} date2={date2}
             title={`Top ${FamillesOptions.length} Familles Sectorielles`}
 
-            data={FamillesOptions.length > 0 ? FamillesOptions : top20familleModified.slice(0, 5)}
+            data={FamillesOptions}
             media={media}
             options={top20familleModified}
             SetOptionFunction={setFamillesOptions}
@@ -138,7 +138,7 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
       </Row>
 
-      <Row id="section3" className='mt-4'>
+      <Row id="section3" className='mt-4 mb-4 '>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
             title={`Top ${MarqueOptions.length} marques`}
@@ -167,7 +167,7 @@ export default function GridDemo({ date1, date2, media, base }) {
           />
         </Col>
       </Row>
-      <Row id="section4" className='mt-4'>
+      <Row id="section4" className='mb-4'>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
             title="Annonceurs actifs par support"
@@ -198,7 +198,7 @@ export default function GridDemo({ date1, date2, media, base }) {
         </Col>
       </Row>
 
-      <Row id="section5" className="mt-4"> {/* Add g-2 for spacing */}
+      <Row id="section5" className="mt-4 mb-4"> {/* Add g-2 for spacing */}
         <Col md={6}> {/* Each graph takes 1/3 of the width */}
           <PieChartVelson
             title="Part Marché"

@@ -270,48 +270,95 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     });
 
   };
+  // const handleDownloadSVG = () => {
+  //   const chartContainer = document.querySelector(`.${parametre}`);
+  //   if (!chartContainer) return;
+
+  //   // Find the SVG element within the container
+  //   const svgElement = chartContainer.querySelector("canvas");
+  //   if (!svgElement) return;
+
+  //   // Serialize the original SVG content
+  //   const serializer = new XMLSerializer();
+  //   let svgString = serializer.serializeToString(svgElement);
+
+  //   // Extract the viewBox attributes to determine the dimensions
+  //   const viewBox = svgElement.getAttribute("viewBox")?.split(" ").map(Number);
+  //   // const width = viewBox[2];
+  //   // const height = viewBox[3];
+  //   const width = 150;
+  //   const height = 150;
+
+  //   // Wrap the original SVG content with a black background rectangle
+  //   const modifiedSvgString = `
+  //     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
+  //       <!-- Black background rectangle -->
+  //       <rect width="${width}" height="${height}" fill="" />
+  //       <!-- Original SVG content -->
+  //       ${svgString}
+  //     </svg>
+  //   `;
+
+  //   // Create a Blob and download the modified SVG
+  //   const blob = new Blob([modifiedSvgString], { type: "image/svg+xml;charset=utf-8" });
+  //   const url = URL.createObjectURL(blob);
+
+  //   const link = document.createElement("a");
+  //   link.href = url;
+  //   link.download = "chart.svg";
+  //   link.click();
+
+  //   // Clean up the URL object
+  //   URL.revokeObjectURL(url);
+
+  //   // Close the menu after download
+  //   handleClose();
+  // };
+
   const handleDownloadSVG = () => {
     const chartContainer = document.querySelector(`.${parametre}`);
-    if (!chartContainer) return;
+    if (!chartContainer) {
+        console.error("Chart container not found!");
+        return;
+    }
 
-    // Find the SVG element within the container
-    const svgElement = chartContainer.querySelector("svg");
-    if (!svgElement) return;
+    // Find the <canvas> element inside the container
+    const canvas = chartContainer.querySelector("canvas");
+    if (!canvas) {
+        console.error("Canvas element not found!");
+        return;
+    }
 
-    // Serialize the original SVG content
-    const serializer = new XMLSerializer();
-    let svgString = serializer.serializeToString(svgElement);
+    // Get canvas as a Data URL (PNG format)
+    const imgData = canvas.toDataURL("image/png");
 
-    // Extract the viewBox attributes to determine the dimensions
-    const viewBox = svgElement.getAttribute("viewBox").split(" ").map(Number);
-    const width = viewBox[2];
-    const height = viewBox[3];
-
-    // Wrap the original SVG content with a black background rectangle
-    const modifiedSvgString = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
-        <!-- Black background rectangle -->
+    // Create an SVG wrapper
+    const width = canvas.width;
+    const height = canvas.height;
+    const svgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
         <rect width="${width}" height="${height}" fill="black" />
-        <!-- Original SVG content -->
-        ${svgString}
+        <image href="${imgData}" width="${width}" height="${height}" />
       </svg>
     `;
 
-    // Create a Blob and download the modified SVG
-    const blob = new Blob([modifiedSvgString], { type: "image/svg+xml;charset=utf-8" });
+    // Convert SVG string to Blob
+    const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
     const url = URL.createObjectURL(blob);
 
+    // Create download link
     const link = document.createElement("a");
     link.href = url;
     link.download = "chart.svg";
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
 
-    // Clean up the URL object
+    // Cleanup
     URL.revokeObjectURL(url);
+    console.log("Canvas converted to SVG and downloaded!");
+};
 
-    // Close the menu after download
-    handleClose();
-  };
   const handleClose = () => {
     setAnchorEl(null);
   };

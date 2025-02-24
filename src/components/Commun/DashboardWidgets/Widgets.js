@@ -12,7 +12,7 @@ import {
   Col
 } from "react-bootstrap";
 
-export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) => {
+export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite,exactvalue }) => {
   return (
     <Col lg="4" sm="6">
       <Card className="card-stats" style={{
@@ -31,7 +31,7 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) =>
               </div>
             </Col>
             <Col xs="7">
-              <div className="numbers">
+              <div className="numbers" >
 
                 {/* <Card.Title as="h3" style={{
                   color: "white",
@@ -52,6 +52,7 @@ export const Widget = ({ icon, title, value, valueLastYear, valuepic,unite }) =>
                   duration={4}
 
                 />
+                <p style={{color:"#4c5479"}}>{exactvalue}</p>
                 <p className="text-grey-200 text-sm">{valuepic}</p>
               </div>
             </Col>

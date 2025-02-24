@@ -22,12 +22,11 @@
  
 }
 .logo-immar{
-  width: 120px;
+  /* //width: 120px; */
+  height: 70px;
 }
 .icon_nav{
-  color: red;
-  font-size:"35px";
-  /* width: 35px; */
+
 
 }
 .no-icon{

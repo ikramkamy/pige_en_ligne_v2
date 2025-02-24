@@ -44,8 +44,9 @@ import { jwtDecode } from 'jwt-decode';
 import PdfCreationPopup from "components/Commun/popups/PdfCreationPopUp";
 import logo from "assets/Logo adtrics.png"
 function Dashboard() {
-  document.title = 'Adtrics Stats'
-  const { getEvolutionData } = UseGraphStore((state) => state)
+  document.title = 'ADTRICS - BY IMMAR'
+  const { getEvolutionData,MarcheOptions } = UseGraphStore((state) => state)
+  const [loadingPDF30sec, setLoadingPDF30sec] = useState(true)
   const ParamToken = useParams()
   useEffect(() => {
     LoginWithParamToken && LoginWithParamToken(ParamToken.token)
@@ -54,8 +55,7 @@ function Dashboard() {
     var decoded = jwtDecode(ParamToken.token);
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
     const isExpired = decoded.exp < currentTime; // Compare with current time
-    console.log('token', ParamToken.token,
-      "currentTime", currentTime, "ExpirationToken", decoded.exp)
+    console.log("currentTime", currentTime, "ExpirationToken", decoded.exp)
     console.log('isExpired', isExpired)
   }, [])
   const [timeTokenExpiration, setTimeTokenExpiration] = useState(0);
@@ -75,49 +75,30 @@ function Dashboard() {
     };
 
     checkTokenExpiration();
-    const intervalId = setInterval(checkTokenExpiration, 600000);
+    const intervalId = setInterval(checkTokenExpiration, 6000);
     return () => clearInterval(intervalId);
   }, [timeTokenExpiration]);
-
+  console.log('timeTokenExpiration', timeTokenExpiration)
   const history = useHistory()
   const {
     Top20produits,
-    VolumePresse,
-    VolumePresseLastYear,
-    VolumeMedia,
-    VolumeMediaLastyear,
     BudgetBrutLastYear,
     DureeTotalLastYear,
     DureeMoyenneLastYear,
     PicCommunicationLastYear,
-
     getVolumePresseLastYear,
     getBudgetBrutLastYear,
-
-
-    getAnnonceursActifPresseLastYear,
-
     SupportDiffusion,
     SupportDiffusionLastYear,
     getSupportDiffusion,
     getSupportDiffusionLastYear,
-    SupportDiffusionMediaLastYear,
-
     AnnonceursActif,
     AnnonceursActifLastYear,
-    AnnonceursActifMediaLastYear,
     getAnnonceursActifLastYear,
-    AnnonceursActifMedia,
-
-
     CreationUniques,
     getCreationUniquesLastYear,
     CreationUniquesLastYear,
-    CreationUniquesMedia,
-
-    CreationUniquesMediaLastYear,
     BudgetBrut,
-
     SupportDiffusionMedia,
     Couleur,
     NoireBlanc,
@@ -167,13 +148,14 @@ function Dashboard() {
     getDiffusionParCreationLastYear,
     getRepartitionParType,
     getRepartitionParVersion,
+    loadingMarche,
 
   } = UsePigeDashboardStore((state) => state)
 
-  const { countLastYear, count, getPigeCount,
-    getPigeCountLastYear, CountInK, CountInKLastYear } = UseCountStore((state) => state)
+  const {countLastYear, count, getPigeCount,
+  getPigeCountLastYear, CountInK, CountInKLastYear } = UseCountStore((state) => state)
 
-  const { autoriseDash, client, email,
+  const {autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
     StoreParamToken,
@@ -256,6 +238,10 @@ function Dashboard() {
     setIsCalculating(true)
     setDashboardIllustration(false)
     setShow(true)
+    setLoadingPDF30sec(true)
+    setTimeout(() => {
+      setLoadingPDF30sec(false);
+    }, 70000); // 30 seconds
     const startTime = new Date().getTime();
     console.log('params',
       {
@@ -760,6 +746,16 @@ function Dashboard() {
       setLoadingStep(fetchDataTime / 100)
     }, fetchDataTime);
   }
+useEffect(()=>{
+setLoadingPDF30sec(true)
+if(dashDisplay){
+  setTimeout(() => {
+    setLoadingPDF30sec(false);
+  }, 70000);
+}
+
+},[loadingMarche,MarcheOptions])
+
 
   useEffect(() => {
     if (Number(count) === 0) {
@@ -804,7 +800,7 @@ function Dashboard() {
     paddingLeftBtn: "0px",
     widthLefbtnWrapper: '',
     justifyContentRightBtnWrapper: '',
-    marginTopAll: '2%',
+    marginTopAll: '15vh',
     flexWrap: "nowrap",
     marginBtm: "0px"
   });
@@ -820,7 +816,7 @@ function Dashboard() {
         paddingLeftBtn: window.innerWidth < 900 ? '10px' : '0px',
         widthLefbtnWrapper: window.innerWidth < 900 ? '100%' : '',
         justifyContentRightBtnWrapper: window.innerWidth < 900 ? 'space-between' : 'center',
-        marginTopAll: window.innerWidth < 900 ? '12vh' : '2%',
+        marginTopAll: window.innerWidth < 900 ? '16vh' : '15vh',
         marginBtm: window.innerWidth < 900 ? '10px' : '0px',
         heightSeperator: window.innerWidth < 900 ? '20px' : '0px',
         alignItems: window.innerWidth < 900 ? 'end' : '',
@@ -849,8 +845,11 @@ function Dashboard() {
   });
 
   const [loadingPDF, setLoadingPDF] = useState(false)
+ 
   const exportToPDF = async () => {
     setLoadingPDF(true);
+ 
+
     const dashboardElement = document.getElementById("dashboard");
     // Get the dashboard element
     if (!dashboardElement) {
@@ -983,30 +982,30 @@ function Dashboard() {
         const imageurl = sessionStorage.getItem('repartitionmarche')
         section.height = section.offsetHeight
         section.style.backgroundImage = `url(${imageurl})`
-        section.style.backgroundSize='cover'
-        section.style.backgroundRepeat="no-repeat"
-        section.style.backgroundPosition="center"
+        section.style.backgroundSize = 'cover'
+        section.style.backgroundRepeat = "no-repeat"
+        section.style.backgroundPosition = "center"
       } else if (sectionId == "repartitionformat") {
         const imageurl = sessionStorage.getItem('repartitionformat')
         section.height = section.offsetHeight
         section.style.backgroundImage = `url(${imageurl})`
-        section.style.backgroundSize='cover'
-        section.style.backgroundRepeat="no-repeat"
-        section.style.backgroundPosition="center"
+        section.style.backgroundSize = 'cover'
+        section.style.backgroundRepeat = "no-repeat"
+        section.style.backgroundPosition = "center"
       } else if (sectionId == "type") {
         const imageurl = sessionStorage.getItem('type')
         section.height = section.offsetHeight
         section.style.backgroundImage = `url(${imageurl})`
-        section.style.backgroundSize='cover'
-        section.style.backgroundRepeat="no-repeat"
-        section.style.backgroundPosition="center"
+        section.style.backgroundSize = 'cover'
+        section.style.backgroundRepeat = "no-repeat"
+        section.style.backgroundPosition = "center"
       } else if (sectionId == "repartitionversion") {
         const imageurl = sessionStorage.getItem('repartitionversion')
         section.height = section.offsetHeight
         section.style.backgroundImage = `url(${imageurl})`
-        section.style.backgroundSize='cover'
-        section.style.backgroundRepeat="no-repeat"
-        section.style.backgroundPosition="center"
+        section.style.backgroundSize = 'cover'
+        section.style.backgroundRepeat = "no-repeat"
+        section.style.backgroundPosition = "center"
       }
       else {
         const tempDiv = document.createElement("div");
@@ -1136,7 +1135,7 @@ function Dashboard() {
       .then(() => {
         // Save the PDF after all sections are captured
         pdf.save(`Media_Review_${date1}_${date2}.pdf`)
-        setLoadingPDF(false);
+        setLoadingPDF(false);      
         const removeDiv = document.getElementById('temp-div-sectionwidget')
         const remove2 = document.getElementById('empty_to_inject_pdf_home_page')
         const remove3 = document.getElementById('temp-div-section2')
@@ -1147,7 +1146,7 @@ function Dashboard() {
         const remove9 = document.getElementById('repartitionformat')
         const remove10 = document.getElementById('type')
         const remove11 = document.getElementById('repartitionversion')
-        console.log("repartitionversion",remove11)
+        console.log("repartitionversion", remove11)
         removeDiv.remove()
         remove2.innerHTML = ""
         window.location.reload()
@@ -1184,12 +1183,26 @@ function Dashboard() {
     )
   }
   useEffect(() => {
-    if (!client) {
-      //history.push('/login')
-      ///LougoutRestErrorMessages && LougoutRestErrorMessages(email)
+    var decoded = jwtDecode(ParamToken.token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isExpired = decoded.exp < currentTime;
 
+    if (isExpired) {
+      //alert('Token expiré')
+      console.log('Token expiré')
+      window.location.href = 'https://adtrics.immar.dz/#/login';
+      LougoutRestErrorMessages && LougoutRestErrorMessages(email)
+    } else {
+      console.log("token is valide")
+    }
+  }, [date1, date2, media, base,
+
+  ])
+  useEffect(() => {
+    if (!client) {
     }
   }, [client])
+
 
   if (!autoriseDash && client) {
     return (
@@ -1231,9 +1244,11 @@ function Dashboard() {
 
 
     <div style={{
-      height: "auto", width: "100%", padding: "2%",
+      height: "auto", width: "100%", 
+      paddingTop: "1%",
       marginTop: resStyle.marginTopAll,
-      marginBottom: resStyle.marginTopAll
+      marginBottom: resStyle.marginTopAll,
+      
     }}
       id="dashboard"
     >
@@ -1301,7 +1316,7 @@ function Dashboard() {
                     <FileDownIcon />
                   </div>}
                   mr="10px"
-                  disablebtn={Top20produits?.length == 0}
+                  disablebtn={loadingPDF30sec}
                 />
 
                 {/* <div style={{ width: "20px", height: resStyle.heightSeperator }}>
@@ -1312,7 +1327,8 @@ function Dashboard() {
                   isloading={FilterLoading}
                   isSucces={false}
                   title={window.innerWidth < 900 ? <div style={{
-                    transform: "rotate(90deg)", fontWeight: "bold"
+                    // transform: "rotate(90deg)", 
+                    fontWeight: "bold"
                   }}>
                     <FilterIcon />
                   </div> : <div
@@ -1351,7 +1367,9 @@ function Dashboard() {
                       value={CountInK}
                       title="Volume publicitaire"
                       valueLastYear={CountInKLastYear}
+                      exactvalue={CountInK}
                       unite={" " + CountInK.split(' ')[1]}
+
                     />
                     <Widget
                       icon={iconAnnonceur}
@@ -1371,6 +1389,7 @@ function Dashboard() {
                       icon={iconBudget}
                       value={BudgetBrut}
                       unite={" " + BudgetBrut.split(' ')[1]}
+                      exactvalue={BudgetBrut}
                       title="Budget Brut"
                       valueLastYear={BudgetBrutLastYear}
                     />
@@ -1405,7 +1424,8 @@ function Dashboard() {
                         <Widget
                           icon={iconDuree}
                           value={DureeTotal}
-                          unite={" " + DureeTotal?.split(' ')[1]}
+                          // unite={" " + DureeTotal?.split(' ')[1]}
+                          unite="H"
                           title="Durée Pub Totale"
                           valueLastYear={DureeTotalLastYear}
                         />
@@ -1489,7 +1509,7 @@ function Dashboard() {
 
       <PdfCreationPopup
         OpenNetworkPopup={loadingPDF}
-       
+
         message='Veuillez patienter, la création de votre rapport sera effectuée 
           dans quelques instants'
       />

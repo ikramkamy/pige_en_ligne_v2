@@ -35,7 +35,7 @@ export const UseCountStore = create((set, get) => ({
         set({
           PigeCount: 0,
           count: response.data.total,
-          CountInK:Number(response.data.total)/1000 +" K" ,
+          CountInK:(Number(response.data.total)/1000).toFixed(1) +" K" ,
         
         });
       } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
@@ -86,7 +86,7 @@ export const UseCountStore = create((set, get) => ({
       if (dataLength > Limit_Data_Allowed) {
         set({         
           countLastYear: response.data.total,
-          CountInKLastYear:Number(response.data.total)/1000 +" K",
+          CountInKLastYear:(Number(response.data.total)/1000).toFixed(1) +" K",
         });
       } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
         set({        
