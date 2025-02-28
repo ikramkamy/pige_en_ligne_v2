@@ -416,6 +416,12 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   },[isloading])
   return (
     <div className='m-2' style={{ color: "white" }} >
+       {/* <SelectGraphOptionsMarche
+                UpdatedGraphDisplay={ModifyList}
+                options={array}
+                filter={filter}
+                SetOptionFunction={SetOptionFunction}
+              /> */}
       <Card style={{
         borderRadius: 10,
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
@@ -480,6 +486,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
               />
             </div>
           </div>
+         
           <div style={{
             width: "100%", display: "flex",
             justifyContent: "space-between",

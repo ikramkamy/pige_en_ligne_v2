@@ -43,7 +43,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   const arrTosort = EvolutionData?.heure?.map((e) => {
     return ({
       date: e.Date,
-      name: e.interval_start?.split(':')[0] + ":" + e.interval_end?.split(':')[1],
+      name:e.interval_end.split(':')[0]+ ":"+ e.interval_end.split(':')[1],
       //heure:e.interval_end?.split(':')[0]+":"+ e.interval_end?.split(':')[1],
       total: e.total,
       jour: e.Jour,
@@ -246,6 +246,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   const min = Number(chartConfig[activeChart]?.min)
   const CustomTooltip = ({ active, payload, label }) => {
     //console.logle.log("payload", payload[0]?.payload)
+    console.log('evolution heure',EvolutionDataHeure )
     if (active && payload && payload.length) {
 
       return (

@@ -19,7 +19,7 @@ import iconPresse from 'assets/img/icons/press-release.png';
 import LoadingIndicator from "components/Commun/LoadingIndcator";
 import LoadingButtonData from "components/Commun/LoadingBtnData";
 import AutomaticSideFilterBar from 'components/FixedPlugin/AutomatiSideFilterBar';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import {StyleSheet } from '@react-pdf/renderer';
 import {
   Container,
   Row,
@@ -1164,23 +1164,24 @@ if(dashDisplay){
       });
   };
   const test = () => {
-    getRepartitionParVersion && getRepartitionParVersion(
-      Filtersupports,
-      Filterfamilles,
-      Filterclassesids,
-      Filtersecteursids,
-      Filtervarietiesids,
-      Filterannonceursids,
-      Filtermarquesids,
-      Filterproduitsids,
-      date1,
-      date2,
-      media,
-      email,
-      "repartitionversion",
-      base,
+    console.log("filters creationparannonceur",Filtersupports,Filterfamilles,)
+    // getCreationParAnnonceur &&  getCreationParAnnonceur(
+    //   Filtersupports,
+    //   Filterfamilles,
+    //   Filterclassesids,
+    //   Filtersecteursids,
+    //   Filtervarietiesids,
+    //   Filterannonceursids,
+    //   Filtermarquesids,
+    //   Filterproduitsids,
+    //   date1,
+    //   date2,
+    //   media,
+    //   email,
+    //   "creationparannonceur",
+    //   base,
 
-    )
+    // )
   }
   useEffect(() => {
     var decoded = jwtDecode(ParamToken.token);
@@ -1253,7 +1254,7 @@ if(dashDisplay){
       id="dashboard"
     >
       <div id="empty_to_inject_pdf_home_page"></div>
-      {/* <Button onClick={test}>TEST</Button> */}
+      <Button onClick={test}>TEST</Button>
       <Container fluid style={{ display: "flex", flexDirection: "column" }} id="section0" >
         <Row className="mt-3" style={{
           display: "flex",

@@ -812,7 +812,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-
+       console.log("familles",response)
       set({
         Top20famillesSectorielles: response.data,
         loadingFamille: false
@@ -1063,7 +1063,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      //console.log('response marché', response)
+      console.log('response format', response)
       set({
         FormatRepartition: response.data,
         loadingFormat: false,

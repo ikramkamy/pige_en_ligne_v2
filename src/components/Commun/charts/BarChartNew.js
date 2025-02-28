@@ -366,7 +366,13 @@ export const BarchartShadcn = ({
 
       {/* <div className="text-gray-600">Showing total
              visitors for the last 6 months</div> */}
-
+<div style={{color:"#4c5479"}}>
+  {media === "budget"
+    ? "les valeurs affichées en Million"
+    : media === "duree"
+    ? "les valeurs affichées en Heures"
+    : ""}
+</div>
     </div>
   );
 };
@@ -519,10 +525,12 @@ const TopOption = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, fil
   let optionList = options
   useEffect(() => {
     setSelectedItems(optionList.slice(0, 10));
+    SetOptionFunction && SetOptionFunction(optionList.slice(0, 10));
+    console.log("selectedItems",selectedItems,"baseGraphs",baseGraphs)
   }, [Top20famillesSectorielles,
     Top20produits, Top20Annonceurs,
     Top20marques, CreationParAnnonceur,
-    AnnonceurParSupport]);
+    AnnonceurParSupport,baseGraphs]);
 
   const ModifyList = (e) => {
     console.log("e?.target?.value",e?.target?.value)
@@ -535,11 +543,13 @@ const TopOption = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, fil
   useEffect(() => {
     const newSelectedList = options.slice(0,optionNumber);
     setSelectedList(newSelectedList);
+    
     SetOptionFunction && SetOptionFunction(newSelectedList);
   }, [optionNumber]);
+
   useEffect(() => {
-    ModifyList()
-  }, [options])
+    //ModifyList()
+  }, [])
   // console.log("baseGraphs", baseGraphs)
   const [isOpen, setIsOpen] = useState(false)
   const StyledSelect = styled(Select)(({ theme }) => ({

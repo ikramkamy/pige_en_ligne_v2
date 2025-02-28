@@ -96,7 +96,7 @@ export const UseGraphStore = create((set, get) => ({
                 date_debut: date1,
                 date_fin: date2,
             })
-            console.log('resposne', response)
+            console.log('resposne evolu', response)
 
             set({ EvolutionData: response.data,
                 loadingEvolution:false,
