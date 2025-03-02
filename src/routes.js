@@ -9,7 +9,6 @@ import VeillePub from "views/VeillePub";
 import Privacy from 'views/Privacy';
 import CGV from 'views/Termes';
 import PowerBiDashbord from "views/PowerBiDashboard";
-import {PDFPage} from "views/PDFPage"
 const dashboardRoutes = [
   {
     path: "/accueil",
@@ -45,13 +44,6 @@ const dashboardRoutes = [
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,
     layout: "/media"
-  },
-  {
-    path: "/rapport",
-    name: "PDF",
-    icon: "nc-icon nc-chart-pie-35",
-    component: PDFPage,
-    layout: "/pdf"
   },
   {
     path: "/tableau_de_bord_powerbi",

@@ -908,7 +908,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
       });
 
-      //console.log('response marché', response)
+      console.log('response marché', response)
       set({
         PartMarche: response.data,
         loadingMarche: false,
@@ -1157,7 +1157,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log("response", response)
+      console.log("response CreationParAnnonceur", response)
       set({
         CreationParAnnonceur: response.data,
         loagingCreationAnnonceur: false
@@ -1167,6 +1167,10 @@ export const UsePigeDashboardStore = create((set, get) => ({
 
     } catch (error) {
       //console.log(error);
+      set({
+        CreationParAnnonceur: [],
+        loagingCreationAnnonceur: false
+      });
     }
   },
   getDureeTotalDiffusion: async (
@@ -1549,7 +1553,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_fin: date2,
 
       });
-      console.log("response",response)
+      console.log("response type",response)
       
       set({ 
         RepartitionParType:response.data,

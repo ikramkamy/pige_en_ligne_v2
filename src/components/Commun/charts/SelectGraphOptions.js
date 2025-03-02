@@ -209,16 +209,15 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay, filter,
                 marginTop: "0px",
                 marginRight: { xs: 0, sm: "0px" },
                 height: "15px",
-            }}
-        >
-            <StyledSelect
+            }}           
+        > <StyledSelect
                 labelId="demo-multiple-checkbox-label"
                 value={selectedItems}
-                onChange={handleChange}
+                onChange={handleChange}               
                 input={<OutlinedInput label="" />}
                 renderValue={() => (
                     <div style={{ color: "white", transform: "rotate(90deg)", fontWeight: "900" }}>
-                        <span style={{ transform: "rotate(90deg)", fontWeight: "900" }}>...</span>
+                        <span style={{transform: "rotate(90deg)", fontWeight: "900" }}>...</span>
                     </div>
                 )}
                 MenuProps={MenuProps}
@@ -229,7 +228,7 @@ export function SelectGraphOptionsMarche({ options, UpdatedGraphDisplay, filter,
                     <Checkbox
                         checked={selectedItems.length === optionList.length}
                         indeterminate={
-                            selectedItems.length > 0 && selectedItems.length < optionList.length
+                        selectedItems.length > 0 && selectedItems.length < optionList.length
                         }
                     />
                     <ListItemText primary="Select All" />

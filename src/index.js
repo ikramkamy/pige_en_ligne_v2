@@ -16,7 +16,6 @@ import VeilleLayout from "layouts/VeilleLayout";
 import DashboardLayout from "layouts/DashboardLayout";
 import LogsLayout from "layouts/LogsLayout";
 import AccueilLayout from "layouts/AccueilLayout";
-import PdfLayout from "layouts/PDFLayout";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <HashRouter>
@@ -28,7 +27,6 @@ root.render(
       <Route path="/pige" render={(props) => <DataLayout {...props} />}/>
       <Route path="/veille" render={(props) => <VeilleLayout  {...props} />}/>
       <Route path="/media" render={(props) => <DashboardLayout  {...props} />}/>
-      <Route path="/pdf" render={(props) => <PdfLayout  {...props} />}/>
        <Redirect from="/" to="/login" />
     </Switch>
     </HashRouter>

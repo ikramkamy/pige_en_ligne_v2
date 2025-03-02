@@ -165,6 +165,7 @@ export const UseFiltersStore = create((set, get) => ({
   ) => {
     try {
       set({ FilterLoading: true })
+   
       let response = await axios.post(`${PORT}/${media}/filters`, {
         email: email,
         date_debut: date1,
@@ -194,17 +195,19 @@ export const UseFiltersStore = create((set, get) => ({
           Filtermarquesids: response.data.marques.map((e) => e.Marque_Id),
           produits: response.data.produits,
           Filterproduits: response.data.produits,
-          Filterproduitsids: response.data.produits.map((e) => e.Produit_Id)
+          Filterproduitsids: response.data.produits.map((e) => e.Produit_Id),
+          FilterLoading: false,
         });
-        set({
-          FilterLoading: false,       
-        })
+        // set({
+        //   FilterLoading: false,       
+        // })      
       } else {
         set({
           ErrorFetchFilter: true,
           messageFilterError: response.message,
         })
       }
+     
     } catch (error) {
       //console.log(error);
       // les erreurs de connexion 

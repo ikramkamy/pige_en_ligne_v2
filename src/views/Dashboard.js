@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { UsePigeDashboardStore } from '../store/dashboardStore/PigeDashboardStore';
 import { UseFiltersStore } from "../store/dashboardStore/FiltersStore";
 import MultipleSelectMedia from '../components/Commun/MediaSelect';
@@ -19,7 +19,6 @@ import iconPresse from 'assets/img/icons/press-release.png';
 import LoadingIndicator from "components/Commun/LoadingIndcator";
 import LoadingButtonData from "components/Commun/LoadingBtnData";
 import AutomaticSideFilterBar from 'components/FixedPlugin/AutomatiSideFilterBar';
-import {StyleSheet } from '@react-pdf/renderer';
 import {
   Container,
   Row,
@@ -27,19 +26,17 @@ import {
 } from "react-bootstrap";
 import { Button } from "@mui/material";
 import DateRangeTest from 'components/Commun/DateRangePickerTest'
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
-import { CircularProgress } from '@mui/material';
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 import { NetworkErrorPopup } from "components/Commun/popups";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
-import { Widget, WidgetShadcn } from "components/Commun/DashboardWidgets/Widgets";
+import { Widget} from "components/Commun/DashboardWidgets/Widgets";
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { DownloadIcon, FilterIcon, FileDownIcon } from "lucide-react";
+import {FilterIcon, FileDownIcon } from "lucide-react";
 import { jwtDecode } from 'jwt-decode';
 import PdfCreationPopup from "components/Commun/popups/PdfCreationPopUp";
 import logo from "assets/Logo adtrics.png"
@@ -55,8 +52,6 @@ function Dashboard() {
     var decoded = jwtDecode(ParamToken.token);
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
     const isExpired = decoded.exp < currentTime; // Compare with current time
-    console.log("currentTime", currentTime, "ExpirationToken", decoded.exp)
-    console.log('isExpired', isExpired)
   }, [])
   const [timeTokenExpiration, setTimeTokenExpiration] = useState(0);
 
@@ -79,7 +74,6 @@ function Dashboard() {
     return () => clearInterval(intervalId);
   }, [timeTokenExpiration]);
   console.log('timeTokenExpiration', timeTokenExpiration)
-  const history = useHistory()
   const {
     Top20produits,
     BudgetBrutLastYear,
@@ -151,10 +145,8 @@ function Dashboard() {
     loadingMarche,
 
   } = UsePigeDashboardStore((state) => state)
-
   const {countLastYear, count, getPigeCount,
   getPigeCountLastYear, CountInK, CountInKLastYear } = UseCountStore((state) => state)
-
   const {autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
@@ -199,40 +191,7 @@ function Dashboard() {
   const [dashboardIllustration, setDashboardIllustration] = useState(true)
   const [dataExist, setDataExist] = useState(true)
   const [loadingStep, setLoadingStep] = useState(0.5)
-  const [supportnames, setSupportnames] = useState([])
-  const [famillenames, setFamillenames] = useState([])
-  const [annonceurnames, setAnnonceurnames] = useState([])
-  const [marquenames, setMarquenames] = useState([])
   const [fetchFilter, setFetchFilter] = useState(false)
-  useEffect(() => {
-    var selectedSupportnames = []
-    //for ppt file
-    if (media === 'presse') {
-      const selectedSupportnames = []
-      const selectedFamillenames = familles.filter((e) => Filterfamilles.includes(e.CodeFamille))
-      const selectedAnnonceurnames = annonceurs.filter((e) => Filterannonceursids.includes(e.Annonceur_Id))
-      const selectedMarquenames = marques.filter((e) => Filtermarques.includes(e.Marque_id))
-      var selection = selectedSupportnames?.map((e) => e.support_name)
-      setMarquenames(selectedMarquenames.map((e) => e.Marque_Lib))
-      setFamillenames(selectedFamillenames.map((e) => e.Famille))
-      //too large number we do not display it in ppt file
-      setAnnonceurnames(selectedAnnonceurnames.map((e) => e.Annonceur_Nom))
-      setSupportnames(selection)
-    } else {
-      const selectedSupportnames = supports.filter((e) => Filtersupports.includes(e.support_id))
-      const selectedFamillenames = familles.filter((e) => Filterfamilles.includes(e.CodeFamille))
-      const selectedAnnonceurnames = annonceurs.filter((e) => Filterannonceursids.includes(e.Annonceur_Id))
-      const selectedMarquenames = marques.filter((e) => Filtermarques.includes(e.Marque_id))
-      var selection = selectedSupportnames.map((e) => e.support_name)
-      setMarquenames(selectedMarquenames.map((e) => e.Marque_Lib))
-      setFamillenames(selectedFamillenames.map((e) => e.Famille))
-      //too large number we do not display it in ppt file
-      setAnnonceurnames(selectedAnnonceurnames.map((e) => e.Annonceur_Nom))
-      setSupportnames(selection)
-    }
-
-  }, [Filtersupports, Filterfamilles, Filterannonceursids, Filtermarques])
-
 
   const ShowDashboardData = async () => {
     setIsCalculating(true)
@@ -403,7 +362,7 @@ function Dashboard() {
         media,
         email,
         "annonceuractif"),
-      getVolumePresseLastYear && getVolumePresseLastYear(Filtersupports, Filterfamilles, Filterclassesids, Filtersecteursids, Filtervarietiesids, Filterannonceursids, Filtermarquesids, Filterproduitsids, date1, date2)
+      
     ])
     getEvolutionData && getEvolutionData(
       Filtersupports,
@@ -832,18 +791,6 @@ if(dashDisplay){
   const [pdfIsCreated, setPdfIsCreated] = useState(false)
   const [success, setSuccess] = useState(false);
 
-  const styles = StyleSheet.create({
-    page: {
-      flexDirection: 'row',
-      backgroundColor: '#E4E4E4',
-    },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
-    },
-  });
-
   const [loadingPDF, setLoadingPDF] = useState(false)
  
   const exportToPDF = async () => {
@@ -1164,24 +1111,23 @@ if(dashDisplay){
       });
   };
   const test = () => {
-    console.log("filters creationparannonceur",Filtersupports,Filterfamilles,)
-    // getCreationParAnnonceur &&  getCreationParAnnonceur(
-    //   Filtersupports,
-    //   Filterfamilles,
-    //   Filterclassesids,
-    //   Filtersecteursids,
-    //   Filtervarietiesids,
-    //   Filterannonceursids,
-    //   Filtermarquesids,
-    //   Filterproduitsids,
-    //   date1,
-    //   date2,
-    //   media,
-    //   email,
-    //   "creationparannonceur",
-    //   base,
-
-    // )
+   getRepartitionParType &&  getRepartitionParType(
+      Filtersupports,
+      Filterfamilles,
+      Filterclassesids,
+      Filtersecteursids,
+      Filtervarietiesids,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      date1,
+      date2,
+      media,
+      email,
+      "type",
+      base,
+    )
+    console.log("getDiffusionParCreation",DiffusionParCreation,)
   }
   useEffect(() => {
     var decoded = jwtDecode(ParamToken.token);
@@ -1348,9 +1294,9 @@ if(dashDisplay){
           </Col>
         </Row>
 
-        {show && (<div >
+        {show && (<div onClick={() => handeToggleSideBar()}>
 
-          <Row className="" onClick={() => handeToggleSideBar()}>
+          <Row className="" >
             {isCalculating && (<LoadingIndicator step={loadingStep}
               totalDuration={fetchDataTime} />)}
           </Row>
