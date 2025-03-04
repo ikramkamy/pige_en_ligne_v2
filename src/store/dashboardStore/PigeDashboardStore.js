@@ -1205,7 +1205,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-      //console.log('response duree', response)
+      console.log('response duree', response)
       if (Number(response.data[0].total) > 3600) {
         set({ DureeTotal: (Number(response.data[0].total) / 3600).toFixed(2) + " H" });
       } else {

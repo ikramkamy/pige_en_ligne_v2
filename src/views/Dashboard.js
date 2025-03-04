@@ -32,17 +32,17 @@ import { UseLoginStore } from "store/dashboardStore/useLoginStore";
 import DataUnavailablePopup from "components/Commun/popups/DataUnavailable";
 import { NetworkErrorPopup } from "components/Commun/popups";
 import { UseCountStore } from "store/dashboardStore/UseCounts";
-import { Widget} from "components/Commun/DashboardWidgets/Widgets";
+import { Widget } from "components/Commun/DashboardWidgets/Widgets";
 import { WidgetPresse } from "components/Commun/DashboardWidgets/WidgetPresse";
 import { UseGraphStore } from "store/GraphStore";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import {FilterIcon, FileDownIcon } from "lucide-react";
+import { FilterIcon, FileDownIcon } from "lucide-react";
 import { jwtDecode } from 'jwt-decode';
 import PdfCreationPopup from "components/Commun/popups/PdfCreationPopUp";
 import logo from "assets/Logo adtrics.png"
 function Dashboard() {
   document.title = 'ADTRICS - BY IMMAR'
-  const { getEvolutionData,MarcheOptions } = UseGraphStore((state) => state)
+  const { getEvolutionData, MarcheOptions } = UseGraphStore((state) => state)
   const [loadingPDF30sec, setLoadingPDF30sec] = useState(true)
   const ParamToken = useParams()
   useEffect(() => {
@@ -62,7 +62,7 @@ function Dashboard() {
       const tokenExpirationTime = timeTokenExpiration; // Token expiration time (in seconds)
 
       if (currentTime >= tokenExpirationTime && tokenExpirationTime !== 0) {
-        console.log('Token expired');
+        //console.log('Token expired');
         window.localStorage.removeItem('token');
         LougoutRestErrorMessages && LougoutRestErrorMessages(email)
         window.location.href = 'https://adtrics.immar.dz/#/login';
@@ -73,7 +73,7 @@ function Dashboard() {
     const intervalId = setInterval(checkTokenExpiration, 6000);
     return () => clearInterval(intervalId);
   }, [timeTokenExpiration]);
-  console.log('timeTokenExpiration', timeTokenExpiration)
+  //console.log('timeTokenExpiration', timeTokenExpiration)
   const {
     Top20produits,
     BudgetBrutLastYear,
@@ -145,9 +145,9 @@ function Dashboard() {
     loadingMarche,
 
   } = UsePigeDashboardStore((state) => state)
-  const {countLastYear, count, getPigeCount,
-  getPigeCountLastYear, CountInK, CountInKLastYear } = UseCountStore((state) => state)
-  const {autoriseDash, client, email,
+  const { countLastYear, count, getPigeCount,
+    getPigeCountLastYear, CountInK, CountInKLastYear } = UseCountStore((state) => state)
+  const { autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
     StoreParamToken,
@@ -202,21 +202,7 @@ function Dashboard() {
       setLoadingPDF30sec(false);
     }, 70000); // 30 seconds
     const startTime = new Date().getTime();
-    console.log('params',
-      {
-        Filtersupports,
-        Filterfamilles,
-        Filterclassesids,
-        Filtersecteursids,
-        Filtervarietiesids,
-        Filterannonceursids,
-        Filtermarquesids,
-        Filterproduitsids,
-        date1,
-        date2,
-        media,
-        email
-      })
+    
     await Promise.all([
       getCreationUniques && getCreationUniques(
         Filtersupports,
@@ -362,7 +348,7 @@ function Dashboard() {
         media,
         email,
         "annonceuractif"),
-      
+
     ])
     getEvolutionData && getEvolutionData(
       Filtersupports,
@@ -705,15 +691,15 @@ function Dashboard() {
       setLoadingStep(fetchDataTime / 100)
     }, fetchDataTime);
   }
-useEffect(()=>{
-setLoadingPDF30sec(true)
-if(dashDisplay){
-  setTimeout(() => {
-    setLoadingPDF30sec(false);
-  }, 70000);
-}
+  useEffect(() => {
+    setLoadingPDF30sec(true)
+    if (dashDisplay) {
+      setTimeout(() => {
+        setLoadingPDF30sec(false);
+      }, 70000);
+    }
 
-},[loadingMarche,MarcheOptions])
+  }, [loadingMarche, MarcheOptions])
 
 
   useEffect(() => {
@@ -792,10 +778,10 @@ if(dashDisplay){
   const [success, setSuccess] = useState(false);
 
   const [loadingPDF, setLoadingPDF] = useState(false)
- 
+
   const exportToPDF = async () => {
     setLoadingPDF(true);
- 
+
 
     const dashboardElement = document.getElementById("dashboard");
     // Get the dashboard element
@@ -849,19 +835,27 @@ if(dashDisplay){
       </tr>
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Famille:</td>
-        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${familles.length === 0 ? "tout" : familles.map((e) => e.Famille_Lib).join(", ")}</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${Filterfamilles.length === 0
+            ? "tout"
+            : (familles?.filter(e => Filterfamilles.includes(e.Famille_Id)) // Filter matching IDs
+              .map(e => e.Famille_Lib) // Extract the 'Famille_Lib' property
+              .join(", ") || "")}</td>
       </tr>
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Supports:</td>
-        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${supports.length === 0 ? "tout" : supports.map((e) => e.Support_Lib).join(", ")}</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${Filtersupports.length === 0 
+          ? "tout" 
+          : (supports?.filter(e => Filtersupports.includes(e.Support_Id)) // Filter matching IDs
+              .map(e => e.Support_Lib) // Extract the 'Support_Lib' property
+              .join(", ") || "")}</td>
       </tr>
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Marque:</td>
-        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${marques.length === 0 ? "tout " : marques.length}</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${Filtermarques.length === 0 ? "tout " : Filtermarques.length}</td>
       </tr>
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Annonceurs:</td>
-        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${annonceurs.length === 0 ? "tout" : annonceurs.length}</td>
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${Filterannonceursids.length === 0 ? "tout" : Filterannonceursids.length}</td>
       </tr>
     </tbody>
   </table>
@@ -973,8 +967,7 @@ if(dashDisplay){
       return;
     } else {
       dashboardElement.style.backgroundColor = "#020b42";
-      console.log("temporaryElement", temporaryElement,
-        "dashboardElement", dashboardElement,)
+    
     }
 
     // Initialize jsPDF
@@ -987,15 +980,15 @@ if(dashDisplay){
     // Get PDF page dimensions
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-    console.log("width pdfWidth", pdfWidth, "pdfHeight", pdfHeight)
+    //console.log("width pdfWidth", pdfWidth, "pdfHeight", pdfHeight)
 
     const viewportHeight = window.innerHeight;
-    console.log("viewportHeight", viewportHeight)
+    //console.log("viewportHeight", viewportHeight)
 
     const scrollStep = pdfHeight * 3.78 + 200;
     const totalHeight = dashboardElement.scrollHeight;
 
-    console.log("totalHeight", totalHeight)
+    //console.log("totalHeight", totalHeight)
     let yPosition = 0; // Starting position for scrolling
     let pageNumber = 1;
 
@@ -1082,7 +1075,7 @@ if(dashDisplay){
       .then(() => {
         // Save the PDF after all sections are captured
         pdf.save(`Media_Review_${date1}_${date2}.pdf`)
-        setLoadingPDF(false);      
+        setLoadingPDF(false);
         const removeDiv = document.getElementById('temp-div-sectionwidget')
         const remove2 = document.getElementById('empty_to_inject_pdf_home_page')
         const remove3 = document.getElementById('temp-div-section2')
@@ -1093,7 +1086,7 @@ if(dashDisplay){
         const remove9 = document.getElementById('repartitionformat')
         const remove10 = document.getElementById('type')
         const remove11 = document.getElementById('repartitionversion')
-        console.log("repartitionversion", remove11)
+        //console.log("repartitionversion", remove11)
         removeDiv.remove()
         remove2.innerHTML = ""
         window.location.reload()
@@ -1107,11 +1100,12 @@ if(dashDisplay){
         // remove11.style.backgroundImage("")
       })
       .catch((error) => {
-        console.error("Error during PDF generation:", error);
+        //console.error("Error during PDF generation:", error);
       });
   };
+
   const test = () => {
-   getRepartitionParType &&  getRepartitionParType(
+    getRepartitionParType && getRepartitionParType(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -1127,7 +1121,7 @@ if(dashDisplay){
       "type",
       base,
     )
-    console.log("getDiffusionParCreation",DiffusionParCreation,)
+    //console.log("getDiffusionParCreation", DiffusionParCreation,)
   }
   useEffect(() => {
     var decoded = jwtDecode(ParamToken.token);
@@ -1136,11 +1130,11 @@ if(dashDisplay){
 
     if (isExpired) {
       //alert('Token expiré')
-      console.log('Token expiré')
+      //console.log('Token expiré')
       window.location.href = 'https://adtrics.immar.dz/#/login';
       LougoutRestErrorMessages && LougoutRestErrorMessages(email)
     } else {
-      console.log("token is valide")
+      //console.log("token is valide")
     }
   }, [date1, date2, media, base,
 
@@ -1191,16 +1185,16 @@ if(dashDisplay){
 
 
     <div style={{
-      height: "auto", width: "100%", 
+      height: "auto", width: "100%",
       paddingTop: "1%",
       marginTop: resStyle.marginTopAll,
       marginBottom: resStyle.marginTopAll,
-      
+
     }}
       id="dashboard"
     >
       <div id="empty_to_inject_pdf_home_page"></div>
-      <Button onClick={test}>TEST</Button>
+      {/* <Button onClick={test}>TEST</Button> */}
       <Container fluid style={{ display: "flex", flexDirection: "column" }} id="section0" >
         <Row className="mt-3" style={{
           display: "flex",
@@ -1371,8 +1365,8 @@ if(dashDisplay){
                         <Widget
                           icon={iconDuree}
                           value={DureeTotal}
-                          // unite={" " + DureeTotal?.split(' ')[1]}
-                          unite="H"
+                          unite={" " + DureeTotal?.split(' ')[1]}
+                          
                           title="Durée Pub Totale"
                           valueLastYear={DureeTotalLastYear}
                         />

@@ -54,7 +54,7 @@ export default function DateRangeTest() {
     const formattedEnd = newEndDate ? moment(newEndDate).format("YYYY-MM-DD") : "";
     setDateRang(formattedStart, formattedEnd);
   };
-
+  console.log('date debut',date_debut)
   useEffect(() => {
     RestRadioTvData && RestRadioTvData();
     ResetDataArrays && ResetDataArrays();

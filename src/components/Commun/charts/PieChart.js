@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { UsePigeDashboardStore } from '../../../store/dashboardStore/PigeDashboardStore';
-import { Card} from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import ReactEcharts from "echarts-for-react";
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { useEffect, useState } from "react";
-import {SelectGraphOptionsMarche } from './SelectGraphOptions';
+import { SelectGraphOptionsMarche } from './SelectGraphOptions';
 import { UseGraphStore } from 'store/GraphStore';
 import ColorCheckboxes from './BaseCheckBoxGroupe';
 import html2canvas from "html2canvas";
@@ -19,13 +19,11 @@ import { DownloadIcon } from "lucide-react";
 export const PieChartVelson = ({ date1, date2, data, title, isloading,
   ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
   const { base } = UseFiltersStore((state) => state)
-  const { PartMarche, FormatRepartition, RepartitionParType,formatDateToFrench,RepartitionParVersion} = UsePigeDashboardStore((state) => state);
+  const [coloLables, setColoLables] = useState("white")
+  const { PartMarche, FormatRepartition, RepartitionParType, formatDateToFrench, RepartitionParVersion } = UsePigeDashboardStore((state) => state);
   const { MarcheOptions, setBaseGraphs, baseGraphs } = UseGraphStore((state) => state)
   //const chartDatalabelsBarColors = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c']
   const [chartDatalabelsBarColors, setChartDatalabelsBarColors] = useState([])
-  // const chartDatalabelsBarColorsVolume = ['#2E7D32', '#1B5E20', '#154A18', '#0F3812', '#0A270C'];
-  // const chartDatalabelsBarColorsBudget = ['#1565C0', '#0D47A1', '#0B3C91', '#092C6C', '#061E4A'];
-  // const chartDatalabelsBarColorsDuree = ['#bc1854', '#a01542', '#851230', '#6a0f1e', '#4f0c0c'];
   const chartDatalabelsBarColorsVolume = [
     "#e23670", // Vivid Pink
     "#2662da", // Bright Blue
@@ -118,12 +116,12 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     //.log('array',array)
     setChartDatalabelsBarColors(array)
   }, [baseGraphs])
-
+  // console.log('baseGraphs[parametre]', baseGraphs[parametre])
   useEffect(() => {
     if (data && data.length !== 0) {
       const list = data.map((elem) => ({
         value: Number(elem.total),
-        namelegend: `${Number(elem.proportion).toFixed(2)}%`,
+        namelegend: `${elem.name} ${Number(elem.proportion).toFixed(2)}%`,
         name: `${elem.name}`,
       }));
       setArray(list);
@@ -132,7 +130,8 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       const average20 = sum / list.length;
       setAverage(average20.toFixed(2));
     }
-  }, [PartMarche, FormatRepartition, RepartitionParType,RepartitionParVersion]);
+    setDynamicList(array)
+  }, [PartMarche, FormatRepartition, RepartitionParType, RepartitionParVersion]);
 
 
   const ModifyList = () => {
@@ -151,21 +150,106 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     // listWithAutre.push(autre)
     setDynamicList([...listWithAutre])
   }
+
+
   //console.log("array repartition format all",data,array,dynamicList)
+  // var option = {
+  //   tooltip: {
+  //     trigger: 'item',
+
+  //   },
+  //   display: 'flex',
+  //   justifyContent: "center",
+  //   //width:"450px",
+  //   alignItems: 'center',
+  //   color: chartDatalabelsBarColors,
+  //   legend: {
+  //     show: false,
+  //     orient: 'horizontal',
+  //     left: 'center',
+  //     bottom: "-0%",
+  //     postio: "static",
+  //     textStyle: {
+  //       color: 'white', // Set text color for the legend
+  //       fontSize: 10,
+  //     },
+  //     data: dynamicList.map(item => item.name), // Map names from the data to the legend
+  //     align: 'auto', // Align the legend items properly
+  //     itemGap: 5, // Add spacing between legend items
+  //     padding: [20, 20, 20, 20],
+  //   },
+  //   series:
+  //     [{
+  //       name: `${baseGraphs[parametre]} `,
+  //       type: 'pie',
+  //       radius: ['20%', '70%'],
+  //       title: "Part de Marché",
+  //       //data: array,
+  //       data: initialOptions,
+  //       emphasis: {
+  //         itemStyle: {
+  //           shadowBlur: 10,
+  //           shadowOffsetX: 0,
+  //         }
+  //       },
+  //       label: {
+  //         normal: {
+  //           show: true,
+  //           fontSize: 14,
+  //           fontWeight: 'normal',
+  //           color: coloLables,
+  //           fontFamily: 'Arial, sans-serif',
+  //           // formatter: '{d}%',
+  //           position:"inside",
+  //           formatter: function (params) {
+  //             console.log('params', params)
+  //             const item = dynamicList.find((entry) => entry.name === params.data.name);
+
+  //             if (item) {
+
+  //               // Return the percentage from the nameLegend property
+  //               return item.namelegend;
+  //             }
+  //             // Fallback to default percentage if nameLegend is not found
+  //             return `${params.percent.toFixed(2)}%`;
+  //           },
+
+  //         },
+  //         formatter: function (params) {
+  //           const item = dynamicList.find((entry) => entry.name === params.name);
+  //           if (item && item.nameLegend) {
+  //             console.log("item", item)
+  //             // Return the percentage from the nameLegend property
+  //             return item.nameLegend;
+  //           }
+  //           // Fallback to default percentage if nameLegend is not found
+  //           return `${params.percent.toFixed(2)}%`;
+  //         },
+  //       },
+  //       labelLine: {
+  //         normal: {
+  //           show: true,
+
+  //         },
+  //       },
+  //     }],
+
+  //   textStyle: {
+  //     fontFamily: '',
+  //     fontSize: 16,
+  //     color: 'red',
+  //     fontWeight: 100,
+  //   },
+
+  // };
   var option = {
     tooltip: {
       trigger: 'item',
-      
     },
-    display: 'flex',
-    justifyContent: "center",
-    //width:"450px",
-    alignItems: 'center',
-    color: chartDatalabelsBarColors,
     legend: {
-      show: true,
-      orient: 'horizontal', 
-      left: 'center', 
+      show: false,
+      orient: 'horizontal',
+      left: 'center',
       bottom: "-0%",
       textStyle: {
         color: 'white', // Set text color for the legend
@@ -176,70 +260,130 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       itemGap: 5, // Add spacing between legend items
       padding: [20, 20, 20, 20],
     },
-    series:
-      [{
-        name: `${base} `,
+    series: [
+      {
+        name: `${baseGraphs[parametre]}`,
         type: 'pie',
-        radius: ['40%', '70%'],
-        title: "Part de Marché",
-        //data: array,
-        data: dynamicList,
+        radius: ['10%', '70%'], // Inner and outer radius of the pie chart
+        data: initialOptions, // Data for the pie chart
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
             shadowOffsetX: 0,
-          }
+          },
+        },
+        
+        labelLine: {
+          normal: {
+            show: true, // Show the line connecting the outside label to the segment
+          },
         },
         label: {
           normal: {
-            show: true,
-            fontSize: 14,
+            show: true, // Show the outside label
+            position: 'outside', // Position outside the segment
+            fontSize: 12, // Font size of the outside label
             fontWeight: 'normal',
-            color: 'white',
-            fontFamily: 'Arial, sans-serif',
-            // formatter: '{d}%',
+            color: coloLables, // Text color for the outside label
             formatter: function (params) {
-              console.log('params',params)
-              const item = dynamicList.find((entry) => entry.name === params.data.name);
-              console.log("item",item, item.namelegend)
-              if (item) {
-               
-                // Return the percentage from the nameLegend property
-                return item.namelegend;
-              }
-              // Fallback to default percentage if nameLegend is not found
-              return `${params.percent.toFixed(2)}%`;
+              return params.name; // Display the name of the segment outside
             },
-
-          },
-          formatter: function (params) {
-            const item = dynamicList.find((entry) => entry.name === params.name);
-            if (item && item.nameLegend) {
-              console.log("item",item)
-              // Return the percentage from the nameLegend property
-              return item.nameLegend;
-            }
-            // Fallback to default percentage if nameLegend is not found
-            return `${params.percent.toFixed(2)}%`;
           },
         },
-        labelLine: {
+        label: {
           normal: {
-            show: true,
-           
+            show: true, // Show the inside label
+            position: 'inside', // Position inside the segment
+            fontSize: 12, // Font size of the inside label
+            fontWeight: 'normal',
+            color: coloLables, // Text color (ensure it contrasts with the segment color)
+            formatter: function (params) {
+              return ` ${params.name} - ${params.value}
+              (${params.percent})%
+              `; // Display percentage inside the segment
+            },
           },
         },
-      }],
-
-    textStyle: {
-      fontFamily: '',
-      fontSize: 16,
-      color: 'red',
-      fontWeight: 100,
-    },
-
+      },
+    ],
   };
-
+  // var option = {
+  //   tooltip: {
+  //     trigger: 'item',
+  //   },
+  //   legend: {
+  //     show: false,
+  //     orient: 'horizontal',
+  //     left: 'center',
+  //     bottom: "-0%",
+  //     textStyle: {
+  //       color: 'white', // Set text color for the legend
+  //       fontSize: 10,
+  //     },
+  //     data: dynamicList.map(item => item.name), // Map names from the data to the legend
+  //     align: 'auto', // Align the legend items properly
+  //     itemGap: 5, // Add spacing between legend items
+  //     padding: [20, 20, 20, 20],
+  //   },
+  //   series: [
+  //     {
+  //       name: `${baseGraphs[parametre]}`,
+  //       type: 'pie',
+  //       radius: ['40%', '70%'], // Inner and outer radius of the pie chart
+  //       data: initialOptions, // Data for the pie chart
+  //       emphasis: {
+  //         itemStyle: {
+  //           shadowBlur: 10,
+  //           shadowOffsetX: 0,
+  //         },
+  //       },
+  //       label: {
+  //         normal: {
+  //           show: true, // Show the labels
+  //           position: 'inside', // Position inside the segment
+  //           fontSize: 12, // Font size of the inside label
+  //           fontWeight: 'normal',
+  //           color: coloLables, // Text color (ensure it contrasts with the segment color)
+  //           formatter: function (params) {
+  //             return `{percent|${params.percent.toFixed(1)}%}`; // Display percentage inside the segment
+  //           },
+  //           rich: {
+  //             percent: {
+  //               fontSize: 12,
+  //               color: coloLables, // Ensure the text is visible inside the segment
+  //             },
+  //           },
+  //         },
+  //       },
+  //       labelLine: {
+  //         normal: {
+  //           show: true,
+  //           formatter: function (params) {
+  //             return `{name|${params.name}}`; 
+  //           }, 
+  //         },
+  //       },
+  //       label: {
+  //         normal: {
+  //           show: true, // Show the outside label
+  //           position: 'outside', // Position outside the segment
+  //           fontSize: 12, // Font size of the outside label
+  //           fontWeight: 'normal',
+  //           color: coloLables, // Text color for the outside label
+  //           formatter: function (params) {
+  //             return `{name|${params.name}}`; // Display the name of the segment outside
+  //           },
+  //           rich: {
+  //             name: {
+  //               fontSize: 12,
+  //               color: coloLables, // Ensure the text is visible outside the segment
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   ],
+  // };
   const [anchorEl, setAnchorEl] = useState(null); // For Menu anchor
   const open = Boolean(anchorEl);
   const handleDownloadClick = (event) => {
@@ -249,115 +393,80 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
 
     const chartContainer = document.querySelector(`.${parametre}`);
     const AxisLabel = document.querySelector(".recharts-layer recharts-cartesian-axis-tick")
-    console.log("AxisLabel", chartContainer, AxisLabel)
+    // console.log("AxisLabel", chartContainer, AxisLabel)
     if (!chartContainer) return;
+    setColoLables("black")
+    setTimeout(() => {
+      html2canvas(chartContainer, {
+        onclone: (clonedDoc) => {
 
-    html2canvas(chartContainer, {
-      onclone: (clonedDoc) => {
-        // Find the cloned container and set its background to black
-        const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
-        if (clonedContainer) {
-          clonedContainer.style.backgroundColor = "black";
+          // Find the cloned container and set its background to black
+          const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
+          if (clonedContainer) {
+            //clonedContainer.style.backgroundColor = "black";
+            clonedContainer.style.color = "black";
+          }
+        },
+        width: 600, // Set desired width
+        height: 600, // Set desired height
+        scale: 2, // Optional: Increase resolution
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "chart.png"; // Set the filename
+        link.click(); // Trigger the download
+        setColoLables("white")
+      });
+    }, 5000);
 
-        }
-      },
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
-      const link = document.createElement("a");
-      link.href = imgData;
-      link.download = "chart.png"; // Set the filename
-      link.click(); // Trigger the download
-    });
-
+    
   };
-  // const handleDownloadSVG = () => {
-  //   const chartContainer = document.querySelector(`.${parametre}`);
-  //   if (!chartContainer) return;
-
-  //   // Find the SVG element within the container
-  //   const svgElement = chartContainer.querySelector("canvas");
-  //   if (!svgElement) return;
-
-  //   // Serialize the original SVG content
-  //   const serializer = new XMLSerializer();
-  //   let svgString = serializer.serializeToString(svgElement);
-
-  //   // Extract the viewBox attributes to determine the dimensions
-  //   const viewBox = svgElement.getAttribute("viewBox")?.split(" ").map(Number);
-  //   // const width = viewBox[2];
-  //   // const height = viewBox[3];
-  //   const width = 150;
-  //   const height = 150;
-
-  //   // Wrap the original SVG content with a black background rectangle
-  //   const modifiedSvgString = `
-  //     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
-  //       <!-- Black background rectangle -->
-  //       <rect width="${width}" height="${height}" fill="" />
-  //       <!-- Original SVG content -->
-  //       ${svgString}
-  //     </svg>
-  //   `;
-
-  //   // Create a Blob and download the modified SVG
-  //   const blob = new Blob([modifiedSvgString], { type: "image/svg+xml;charset=utf-8" });
-  //   const url = URL.createObjectURL(blob);
-
-  //   const link = document.createElement("a");
-  //   link.href = url;
-  //   link.download = "chart.svg";
-  //   link.click();
-
-  //   // Clean up the URL object
-  //   URL.revokeObjectURL(url);
-
-  //   // Close the menu after download
-  //   handleClose();
-  // };
-
-  const handleDownloadSVG = () => {
+ const handleDownloadSVG = () => {
     const chartContainer = document.querySelector(`.${parametre}`);
     if (!chartContainer) {
-        console.error("Chart container not found!");
-        return;
+      //console.error("Chart container not found!");
+      return;
     }
-
     // Find the <canvas> element inside the container
-    const canvas = chartContainer.querySelector("canvas");
-    if (!canvas) {
-        console.error("Canvas element not found!");
+    setColoLables("black")
+    setTimeout(() => {
+      const canvas = chartContainer.querySelector(`canvas`);
+      if (!canvas) {
+        //console.error("Canvas element not found!");
         return;
-    }
-
-    // Get canvas as a Data URL (PNG format)
-    const imgData = canvas.toDataURL("image/png");
-
-    // Create an SVG wrapper
-    const width = canvas.width;
-    const height = canvas.height;
-    const svgString = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-        <rect width="${width}" height="${height}" fill="black" />
-        <image href="${imgData}" width="${width}" height="${height}" />
-      </svg>
-    `;
-
-    // Convert SVG string to Blob
-    const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    // Create download link
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "chart.svg";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Cleanup
-    URL.revokeObjectURL(url);
-    console.log("Canvas converted to SVG and downloaded!");
-};
+      }
+     //console.log('canvas',canvas,"chartContainer",chartContainer)
+      // Get canvas as a Data URL (PNG format)
+      const imgData = canvas.toDataURL("image/png");
+  
+      // Create an SVG wrapper
+      const width = canvas.width;
+      const height = canvas.height;
+      const svgString = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+          <rect width="${width}" height="${height}" fill="white" />
+          <image href="${imgData}" width="${width}" height="${height}" />
+        </svg>
+      `;
+      // Convert SVG string to Blob
+      const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+  
+      // Create download link
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "chart.svg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  
+      // Cleanup
+      URL.revokeObjectURL(url);
+      console.log("Canvas converted to SVG and downloaded!");
+      setColoLables("white")
+    }, 5000); 
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -367,15 +476,15 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   };
   //console.log("dynamic list", dynamicList)
   const handleDownloadChartPDF = async () => {
-    console.log("Generating chart image...");
-  
+   // console.log("Generating chart image...");
+
     // Step 1: Capture the chart container
     const chartContainer = document.querySelector(`.${parametre}`);
     if (!chartContainer) {
-      console.error("Chart container not found!");
+      //console.error("Chart container not found!");
       return;
     }
-  
+
     try {
       // Step 2: Generate the canvas from the chart container
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -388,19 +497,19 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
           }
         },
       });
-  
+
       // Step 3: Convert the canvas to a PNG image
       const imgData = canvas.toDataURL("image/png");
-  
+
       // Step 4: Store the image data in sessionStorage or localStorage
       const imageId = generateUniqueId(); // Generate a unique ID for the image
       sessionStorage.setItem(`${parametre}`, imgData); // Use sessionStorage for temporary storage
-      sessionStorage.setItem('imageId',imageId)
+      sessionStorage.setItem('imageId', imageId)
       console.log(`Image saved temporarily with ID: ${imageId}`);
-  
+
       // Optionally, notify the user or proceed with further actions
       //alert("Chart image generated and stored temporarily. Use the provided ID to retrieve it.");
-  
+
       // You can now use the `imageId` to retrieve the image later when generating the PDF
       return imageId;
     } catch (error) {
@@ -411,12 +520,12 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   function generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   }
-  useEffect(()=>{
+  useEffect(() => {
     handleDownloadChartPDF()
-  },[isloading])
+  }, [isloading])
   return (
     <div className='m-2' style={{ color: "white" }} >
-       {/* <SelectGraphOptionsMarche
+      {/* <SelectGraphOptionsMarche
                 UpdatedGraphDisplay={ModifyList}
                 options={array}
                 filter={filter}
@@ -454,7 +563,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
               justifyContent: "space-between",
               alignItems: "center"
             }}>
-            <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base}/>
+            <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
             {/* <PieChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} /> */}
             <div style={{
               display: "flex",
@@ -486,7 +595,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
               />
             </div>
           </div>
-         
+
           <div style={{
             width: "100%", display: "flex",
             justifyContent: "space-between",
@@ -494,31 +603,78 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             paddingTop: "5px",
             marginBottom: "10px"
           }}>
-            <div style={{ fontWeight: "400", fontSize: "14px" }}>             
+            <div style={{ fontWeight: "400", fontSize: "14px" }}>
               <p>{title}</p>
               <p>{formatDateToFrench(date1)}-{formatDateToFrench(date2)}</p>
-              </div>          
+            </div>
             <div>AVG ={Number(average).toFixed(2)}</div>
           </div>
-          <div className="chart-container" 
-          style={{ width: '100%', height: '500px' }} id={parametre}>
-          <ReactEcharts
-            
-            className={`${parametre}`}
-            style={{
-              height: '500px',            
-              display: "flex",
-              justifyContent: "center",
-             position:"static"
-             
-            }}
-            option={option} />
-            </div>
+          <div className={`$chart-container ${parametre}`}
+            style={{ width: '100%', height: '500px', color: "red" }} id={parametre}>
+            <ReactEcharts
+              //className={`${parametre}`}
+              style={{
+                //height: '500px',
+                height: '426px',
+                display: "flex",
+                justifyContent: "center",
+                position: "static",
+              }}
+              option={option} />
+            {/* <LegendComponent coloLables={coloLables} legendData={array} 
+            chartDatalabelsBarColors={chartDatalabelsBarColors} /> */}
+          </div>
 
         </div>
       </Card>
     </div>
   )
 }
+const LegendComponent = ({ legendData, chartDatalabelsBarColors, coloLables }) => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: '20px',
+        marginBottom: '20px',
 
+      }}
+    >
+      <ul
+        style={{
+          listStyleType: 'none',
+          padding: 0,
+          display: 'flex',
+          gap: '10px',
+          flexWrap: 'wrap',
+        }}
+      >
+        {legendData.map((item, index) => (
+          <li
+            key={index}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              color: coloLables, // Match the text color of the original legend
+              fontSize: '10px',
+            }}
+          >
+            {/* Color indicator */}
+            <span
+              style={{
+                width: '10px',
+                height: '10px',
+                backgroundColor: chartDatalabelsBarColors[index % chartDatalabelsBarColors.length],
+                marginRight: '5px',
+                display: 'inline-block',
+              }}
+            ></span>
+            {item.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
