@@ -9,6 +9,7 @@ export const UseCountStore = create((set, get) => ({
   VeilleCount: 0,
   count_v: -2,
   CountInK:"",
+  CountBrut:"",
   CountInKLastYear:"",
   IsCounting: false,
   getPigeCount: async (email, media, supports, familles, classes,
@@ -35,25 +36,28 @@ export const UseCountStore = create((set, get) => ({
         set({
           PigeCount: 0,
           count: response.data.total,
-          CountInK:(Number(response.data.total)/1000).toFixed(1) +" K" ,
+          CountInK:(Number(response.data.total)/1000).toFixed(4) +" K" ,
+          CountBrut:(Number(response.data.total)) + " "
         
         });
       } else if (0 < dataLength && dataLength < Limit_Data_Allowed) {
         set({
           PigeCount: 1,
           count: response.data.total,
-          CountInK:Number(response.data.total) +" " 
+          CountInK:Number(response.data.total) +" " ,
+          CountBrut:(Number(response.data.total)) + " "
         });
       } else if (dataLength === 0) {
         set({
           PigeCount: 2,
           count: 0,
-          CountInK:Number(response.data.total) +" " 
+          CountInK:Number(response.data.total) +" " ,
+          CountBrut:(Number(response.data.total)) + " "
         });
       }
       set({ IsCounting: false })
     } catch (error) {
-      console.log('network isssue')
+      // console.log('network isssue')
       set({
         PigeCount: -2,
         count: -2,
@@ -63,7 +67,7 @@ export const UseCountStore = create((set, get) => ({
     }
   },
   getPigeCountLastYear: async (email, media, supports, familles, classes,
-    secteurs, varieties, annonceurs, marques, produits, date1, date2) => {    
+    secteurs, varieties, annonceurs, marques, produits, date3, date4) => {    
     try {
       set({ IsCounting: true })
       var media_type = media == "" ? "presse" : media;    
@@ -78,8 +82,8 @@ export const UseCountStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date3,
+        date_fin: date4,
       });
       console.log('response',response)
       var dataLength = Number(response.data.total)

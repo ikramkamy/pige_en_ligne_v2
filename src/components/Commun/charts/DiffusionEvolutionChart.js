@@ -33,6 +33,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   const { formatDateToFrench } = UsePigeDashboardStore((state) => state)
   const { EvolutionData, secondsToHoursObject, baseGraphs, setBaseGraphs } = UseGraphStore((state) => state);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [cololabels,setCololabels]=React.useState("white")
   const open = Boolean(anchorEl);
   console.log("EvolutionData",EvolutionData)
   // Function to handle menu opening
@@ -283,11 +284,13 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
   const handleDownloadSVG = () => {
     const chartContainer = document.querySelector(".line-chart-container");
     if (!chartContainer) return;
-
+    setCololabels("black")
     // Find the SVG element within the container
     const svgElement = chartContainer.querySelector("svg");
     if (!svgElement) return;
-
+     setTimeout(() => {
+      
+    
     // Serialize the original SVG content
     const serializer = new XMLSerializer();
     let svgString = serializer.serializeToString(svgElement);
@@ -301,7 +304,7 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
     const modifiedSvgString = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
         <!-- Black background rectangle -->
-        <rect width="${width}" height="${height}" fill="black" />
+        <rect width="${width}" height="${height}" fill="white" />
         <!-- Original SVG content -->
         ${svgString}
       </svg>
@@ -321,18 +324,24 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
 
     // Close the menu after download
     handleClose();
+    setCololabels('white')
+  }, 5000);
   };
   const handleDownloadChart = () => {
     //console.logle.log('download')
     const chartContainer = document.querySelector(".line-chart-container");
     if (!chartContainer) return;
+     setCololabels('black')
 
+     setTimeout(() => {
+      
+    
     html2canvas(chartContainer, {
       onclone: (clonedDoc) => {
         // Find the cloned container and set its background to black
         const clonedContainer = clonedDoc.querySelector(".line-chart-container");
         if (clonedContainer) {
-          clonedContainer.style.backgroundColor = "black";
+          //clonedContainer.style.backgroundColor = "black";
         }
       },
     }).then((canvas) => {
@@ -341,8 +350,9 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
       link.href = imgData;
       link.download = "chart.png"; // Set the filename
       link.click(); // Trigger the download
+      setCololabels('white')
     });
-
+  }, 5000);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -555,13 +565,16 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
         <LineChart
           data={currentData}
           margin={{
-            left: 12,
+            left: 14,
             right: 12,
             top: 10,
             bottom: 10,
           }}
         >
-          <CartesianGrid vertical={false} stroke="#FFFFFF4D" />
+          <CartesianGrid vertical={false} 
+          //stroke="#FFFFFF4D"
+          stroke="lightgrey"
+           />
           <XAxis
             dataKey="name"
             tickLine={false}
@@ -569,12 +582,15 @@ export default function InteractiveLineChart({ base, ChangeBaseFunction, paramet
             tickMargin={8}
             minTickGap={32}
             tickFormatter={(value) => value}
-            tick={{ fill: "white" }}
+            tick={{ fill: cololabels }}
             tickCount={24}
           />
           <YAxis
             domain={[min, max]}
-            tick={{ fill: "#FFFFFF4D", fontSize: "12px" }}
+            tick={{ 
+              //fill:"#FFFFFF4D",
+              fill:cololabels,
+                fontSize: "14px" , fontWeight:"bold"}}
           />
           <Tooltip content={<CustomTooltip />} />
           <Line

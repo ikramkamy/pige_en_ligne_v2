@@ -209,8 +209,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         marques: marques,
         produits: produits,
 
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date1: date1,
+        date2: date2,
         dashboard: "dashboard",
         media: "presse",
         countEnteries: "countEnteries",
@@ -294,8 +294,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
 
       });
       console.log("ann acti last", response)
@@ -374,8 +374,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
 
       });
       set({ CreationUniquesLastYear: Number(response.data[0].total) });
@@ -384,6 +384,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
       console.log(error);
     }
   },
+  BudgetExact:"",
   getBudgetBrut: async (
     supports,
     familles,
@@ -413,10 +414,15 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
+
+      
       if (Number(response.data[0].total) < 1000) {
-        set({ BudgetBrut: Number(response.data[0].total).toFixed(1)+" M" });
+        set({ 
+          BudgetBrut: Number(response.data[0].total).toFixed(4)+" M" ,
+          BudgetExact:Number(response.data[0].total)*1000000 +" "
+        });
       } else {
-        set({ BudgetBrut: (Number(response.data[0].total)/1000).toFixed(1)+" Mrd" });
+        set({ BudgetBrut: (Number(response.data[0].total)/1000).toFixed(4)+" Md" });
       }
 
     } catch (error) {
@@ -449,8 +455,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
       });
       // console.log('response',response)
       if (Number(response.data[0].total) < 1000) {
@@ -527,8 +533,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
 
       });
 
@@ -598,8 +604,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
       });
       //console.log("response couleur", response)
       set({ CouleurLastYear: Number(response.data.data1[0].total) });
@@ -684,8 +690,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date1: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date2: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
         rangs: rangs,
         dashboard: "dashboard",
         media: media,
@@ -812,7 +818,7 @@ export const UsePigeDashboardStore = create((set, get) => ({
         date_debut: date1,
         date_fin: date2,
       });
-       console.log("familles",response)
+       //console.log("familles",response)
       set({
         Top20famillesSectorielles: response.data,
         loadingFamille: false
@@ -1243,8 +1249,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
       });
       
       if (Number(response.data[0].total) > 3600) {
@@ -1329,8 +1335,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
       });
       //console.log('duree moyenne last', response)
       if(Number(response.data[0].proportion) >3600){
@@ -1413,8 +1419,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
       });
       //console.log("pic", response)
       if(response.data[0]){
@@ -1504,8 +1510,8 @@ export const UsePigeDashboardStore = create((set, get) => ({
         annonceurs: annonceurs,
         marques: marques,
         produits: produits,
-        date_debut: dayjs(date1).subtract(1, 'year').format('YYYY-MM-DD'),
-        date_fin: dayjs(date2).subtract(1, 'year').format('YYYY-MM-DD'),
+        date_debut: date1,
+        date_fin: date2,
 
       });
       

@@ -10,6 +10,7 @@ import ColorCheckboxes from './BaseCheckBoxGroupe';
 import html2canvas from "html2canvas";
 import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
+import Switch from '@mui/material/Switch';
 import './style.css';
 import {
   IconButton,
@@ -17,7 +18,8 @@ import {
 } from "@mui/material";
 import { DownloadIcon } from "lucide-react";
 export const PieChartVelson = ({ date1, date2, data, title, isloading,
-  ChangeBaseFunction, parametre, SetOptionFunction, filter, initialOptions }) => {
+  ChangeBaseFunction, parametre, SetOptionFunction,
+  filter, initialOptions }) => {
   const { base } = UseFiltersStore((state) => state)
   const [coloLables, setColoLables] = useState("white")
   const { PartMarche, FormatRepartition, RepartitionParType, formatDateToFrench, RepartitionParVersion } = UsePigeDashboardStore((state) => state);
@@ -95,6 +97,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
     { value: 'budget', codeColor: chartDatalabelsBarColorsBudget },
     { value: 'duree', codeColor: chartDatalabelsBarColorsDuree }
   ];
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const LocalBaseGraph = baseGraphs[parametre] == "" ? base : baseGraphs[parametre]
   const getColorByValue = (value) => {
     const item = colorMapping.find(item => item.value === value);
@@ -106,11 +109,9 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   const [average, setAverage] = useState(0);
   const [dynamicList, setDynamicList] = useState([])
   const [array, setArray] = useState([])
-
   useEffect(() => {
     setBaseGraphs && setBaseGraphs(parametre, base)
   }, [])
-
   useEffect(() => {
     let array = getColorByValue(LocalBaseGraph)
     //.log('array',array)
@@ -123,6 +124,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         value: Number(elem.total),
         namelegend: `${elem.name} ${Number(elem.proportion).toFixed(2)}%`,
         name: `${elem.name}`,
+        proportion:elem.proportion
       }));
       setArray(list);
       const list2 = list.map((e) => e.value);
@@ -131,128 +133,108 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       setAverage(average20.toFixed(2));
     }
     setDynamicList(array)
-  }, [PartMarche, FormatRepartition, RepartitionParType, RepartitionParVersion]);
-
-
-  const ModifyList = () => {
-    var autresList = array.filter((e) => !data.includes(e))
-
-    var valueAutre = autresList.map((e) => Number(e.value))
-    var PourcentageAutre = autresList.map((e) => Number(e.name.split('%')[0]))
-
-    const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    var listWithAutre = initialOptions;
-    // var autre = {
-    //   value: totalSum.toFixed(2).toString(),
-    //   name: `autres ${totalSumPourcentage.toFixed(2)}%`
-    // }
-    // listWithAutre.push(autre)
-    setDynamicList([...listWithAutre])
-  }
-
-
-  //console.log("array repartition format all",data,array,dynamicList)
-  // var option = {
-  //   tooltip: {
-  //     trigger: 'item',
-
-  //   },
-  //   display: 'flex',
-  //   justifyContent: "center",
-  //   //width:"450px",
-  //   alignItems: 'center',
-  //   color: chartDatalabelsBarColors,
-  //   legend: {
-  //     show: false,
-  //     orient: 'horizontal',
-  //     left: 'center',
-  //     bottom: "-0%",
-  //     postio: "static",
-  //     textStyle: {
-  //       color: 'white', // Set text color for the legend
-  //       fontSize: 10,
-  //     },
-  //     data: dynamicList.map(item => item.name), // Map names from the data to the legend
-  //     align: 'auto', // Align the legend items properly
-  //     itemGap: 5, // Add spacing between legend items
-  //     padding: [20, 20, 20, 20],
-  //   },
-  //   series:
-  //     [{
-  //       name: `${baseGraphs[parametre]} `,
-  //       type: 'pie',
-  //       radius: ['20%', '70%'],
-  //       title: "Part de Marché",
-  //       //data: array,
-  //       data: initialOptions,
-  //       emphasis: {
-  //         itemStyle: {
-  //           shadowBlur: 10,
-  //           shadowOffsetX: 0,
-  //         }
-  //       },
-  //       label: {
-  //         normal: {
-  //           show: true,
-  //           fontSize: 14,
-  //           fontWeight: 'normal',
-  //           color: coloLables,
-  //           fontFamily: 'Arial, sans-serif',
-  //           // formatter: '{d}%',
-  //           position:"inside",
-  //           formatter: function (params) {
-  //             console.log('params', params)
-  //             const item = dynamicList.find((entry) => entry.name === params.data.name);
-
-  //             if (item) {
-
-  //               // Return the percentage from the nameLegend property
-  //               return item.namelegend;
-  //             }
-  //             // Fallback to default percentage if nameLegend is not found
-  //             return `${params.percent.toFixed(2)}%`;
-  //           },
-
-  //         },
-  //         formatter: function (params) {
-  //           const item = dynamicList.find((entry) => entry.name === params.name);
-  //           if (item && item.nameLegend) {
-  //             console.log("item", item)
-  //             // Return the percentage from the nameLegend property
-  //             return item.nameLegend;
-  //           }
-  //           // Fallback to default percentage if nameLegend is not found
-  //           return `${params.percent.toFixed(2)}%`;
-  //         },
-  //       },
-  //       labelLine: {
-  //         normal: {
-  //           show: true,
-
-  //         },
-  //       },
-  //     }],
-
-  //   textStyle: {
-  //     fontFamily: '',
-  //     fontSize: 16,
-  //     color: 'red',
-  //     fontWeight: 100,
-  //   },
-
-  // };
-  var option = {
+  }, [PartMarche, FormatRepartition, RepartitionParType, 
+    RepartitionParVersion,baseGraphs]);
+  var option2 = {
     tooltip: {
       trigger: 'item',
     },
+    display: 'flex',
+    justifyContent: "center",
+    //width:"450px",
+    alignItems: 'center',
+    color: chartDatalabelsBarColors,
     legend: {
       show: false,
       orient: 'horizontal',
       left: 'center',
       bottom: "-0%",
+      postio: "static",
       textStyle: {
         color: 'white', // Set text color for the legend
+        fontSize: 10,
+      },
+      data: dynamicList.map(item => item.name), // Map names from the data to the legend
+      align: 'auto', // Align the legend items properly
+      itemGap: 5, // Add spacing between legend items
+      padding: [20, 20, 20, 20],
+    },
+    series:
+      [{
+        name: ``,
+        type: 'treemap',
+        radius: ['40%', '70%'],
+        title: "Part de Marché",
+        //data: array,
+        data: initialOptions,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+          }
+        },
+        label: {
+          normal: {
+            show: true,
+            fontSize: 14,
+            fontWeight: 'normal',
+            color: coloLables,
+            fontFamily: 'Arial, sans-serif',
+            // formatter: '{d}%',
+            position: "inside",
+            formatter: function (params) {
+              console.log('params', params)
+              const item = dynamicList.find((entry) => entry.name === params.data.name);
+
+              if (item) {
+
+                // Return the percentage from the nameLegend property
+                return item.namelegend;
+              }
+              // Fallback to default percentage if nameLegend is not found
+              return `${params?.percent?.toFixed(2)}%`;
+            },
+
+          },
+          formatter: function (params) {
+            const item = dynamicList.find((entry) => entry.name === params.name);
+            if (item && item.nameLegend) {
+              console.log("item", item)
+              // Return the percentage from the nameLegend property
+              return item.nameLegend;
+            }
+            // Fallback to default percentage if nameLegend is not found
+            return `${params.percent.toFixed(2)}%`;
+          },
+        },
+        labelLine: {
+          normal: {
+            show: false,
+
+          },
+        },
+      }],
+
+    textStyle: {
+      fontFamily: '',
+      fontSize: 16,
+      color: 'red',
+      fontWeight: 100,
+    },
+
+  };
+  var option = {
+    tooltip: {
+      trigger: 'item',
+    },
+    legend: {
+      show: true,
+      orient: 'horizontal',
+      left: 'center',
+      bottom: "-0%",
+      textStyle: {
+        color: coloLables,
+        // Set text color for the legend
         fontSize: 10,
       },
       data: dynamicList.map(item => item.name), // Map names from the data to the legend
@@ -264,7 +246,8 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       {
         name: `${baseGraphs[parametre]}`,
         type: 'pie',
-        radius: ['10%', '70%'], // Inner and outer radius of the pie chart
+        height: "300px",
+        radius: ['40%', '70%'], // Inner and outer radius of the pie chart
         data: initialOptions, // Data for the pie chart
         emphasis: {
           itemStyle: {
@@ -272,7 +255,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
             shadowOffsetX: 0,
           },
         },
-        
+
         labelLine: {
           normal: {
             show: true, // Show the line connecting the outside label to the segment
@@ -280,134 +263,55 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         },
         label: {
           normal: {
-            show: true, // Show the outside label
-            position: 'outside', // Position outside the segment
-            fontSize: 12, // Font size of the outside label
-            fontWeight: 'normal',
-            color: coloLables, // Text color for the outside label
-            formatter: function (params) {
-              return params.name; // Display the name of the segment outside
-            },
-          },
-        },
-        label: {
-          normal: {
             show: true, // Show the inside label
-            position: 'inside', // Position inside the segment
-            fontSize: 12, // Font size of the inside label
+            position: 'outside', // Position inside the segment
+            fontSize: 14, // Font size of the inside label
             fontWeight: 'normal',
             color: coloLables, // Text color (ensure it contrasts with the segment color)
             formatter: function (params) {
-              return ` ${params.name} - ${params.value}
-              (${params.percent})%
-              `; // Display percentage inside the segment
+              return `${params.percent}%`; // Display percentage inside the segment
             },
           },
         },
       },
     ],
   };
-  // var option = {
-  //   tooltip: {
-  //     trigger: 'item',
-  //   },
-  //   legend: {
-  //     show: false,
-  //     orient: 'horizontal',
-  //     left: 'center',
-  //     bottom: "-0%",
-  //     textStyle: {
-  //       color: 'white', // Set text color for the legend
-  //       fontSize: 10,
-  //     },
-  //     data: dynamicList.map(item => item.name), // Map names from the data to the legend
-  //     align: 'auto', // Align the legend items properly
-  //     itemGap: 5, // Add spacing between legend items
-  //     padding: [20, 20, 20, 20],
-  //   },
-  //   series: [
-  //     {
-  //       name: `${baseGraphs[parametre]}`,
-  //       type: 'pie',
-  //       radius: ['40%', '70%'], // Inner and outer radius of the pie chart
-  //       data: initialOptions, // Data for the pie chart
-  //       emphasis: {
-  //         itemStyle: {
-  //           shadowBlur: 10,
-  //           shadowOffsetX: 0,
-  //         },
-  //       },
-  //       label: {
-  //         normal: {
-  //           show: true, // Show the labels
-  //           position: 'inside', // Position inside the segment
-  //           fontSize: 12, // Font size of the inside label
-  //           fontWeight: 'normal',
-  //           color: coloLables, // Text color (ensure it contrasts with the segment color)
-  //           formatter: function (params) {
-  //             return `{percent|${params.percent.toFixed(1)}%}`; // Display percentage inside the segment
-  //           },
-  //           rich: {
-  //             percent: {
-  //               fontSize: 12,
-  //               color: coloLables, // Ensure the text is visible inside the segment
-  //             },
-  //           },
-  //         },
-  //       },
-  //       labelLine: {
-  //         normal: {
-  //           show: true,
-  //           formatter: function (params) {
-  //             return `{name|${params.name}}`; 
-  //           }, 
-  //         },
-  //       },
-  //       label: {
-  //         normal: {
-  //           show: true, // Show the outside label
-  //           position: 'outside', // Position outside the segment
-  //           fontSize: 12, // Font size of the outside label
-  //           fontWeight: 'normal',
-  //           color: coloLables, // Text color for the outside label
-  //           formatter: function (params) {
-  //             return `{name|${params.name}}`; // Display the name of the segment outside
-  //           },
-  //           rich: {
-  //             name: {
-  //               fontSize: 12,
-  //               color: coloLables, // Ensure the text is visible outside the segment
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   ],
-  // };
+  const ModifyList = () => {
+    var autresList = array.filter((e) => !data.includes(e))
+    var valueAutre = autresList.map((e) => Number(e.value))
+    var PourcentageAutre = autresList.map((e) => Number(e.name.split('%')[0]))
+    const totalSum = valueAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const totalSumPourcentage = PourcentageAutre.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    var listWithAutre = initialOptions;
+    // var autre = {
+    //   value: totalSum.toFixed(2).toString(),
+    //   name: `autres ${totalSumPourcentage.toFixed(2)}%`
+    // }
+    // listWithAutre.push(autre)
+    setDynamicList([...listWithAutre])
+  }
   const [anchorEl, setAnchorEl] = useState(null); // For Menu anchor
   const open = Boolean(anchorEl);
   const handleDownloadClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleDownloadChart = () => {
-
+    setColoLables("black")
     const chartContainer = document.querySelector(`.${parametre}`);
     const AxisLabel = document.querySelector(".recharts-layer recharts-cartesian-axis-tick")
     // console.log("AxisLabel", chartContainer, AxisLabel)
     if (!chartContainer) return;
-    setColoLables("black")
     setTimeout(() => {
       html2canvas(chartContainer, {
         onclone: (clonedDoc) => {
-
           // Find the cloned container and set its background to black
           const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
           if (clonedContainer) {
             //clonedContainer.style.backgroundColor = "black";
-            clonedContainer.style.color = "black";
+            //clonedContainer.style.color = "black";
           }
         },
-        width: 600, // Set desired width
+        width: 1000, // Set desired width
         height: 600, // Set desired height
         scale: 2, // Optional: Increase resolution
       }).then((canvas) => {
@@ -420,9 +324,9 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       });
     }, 5000);
 
-    
+
   };
- const handleDownloadSVG = () => {
+  const handleDownloadSVG = () => {
     const chartContainer = document.querySelector(`.${parametre}`);
     if (!chartContainer) {
       //console.error("Chart container not found!");
@@ -436,10 +340,10 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
         //console.error("Canvas element not found!");
         return;
       }
-     //console.log('canvas',canvas,"chartContainer",chartContainer)
+      //console.log('canvas',canvas,"chartContainer",chartContainer)
       // Get canvas as a Data URL (PNG format)
       const imgData = canvas.toDataURL("image/png");
-  
+
       // Create an SVG wrapper
       const width = canvas.width;
       const height = canvas.height;
@@ -452,7 +356,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       // Convert SVG string to Blob
       const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
       const url = URL.createObjectURL(blob);
-  
+
       // Create download link
       const link = document.createElement("a");
       link.href = url;
@@ -460,12 +364,12 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-  
+
       // Cleanup
       URL.revokeObjectURL(url);
       console.log("Canvas converted to SVG and downloaded!");
       setColoLables("white")
-    }, 5000); 
+    }, 5000);
   };
 
   const handleClose = () => {
@@ -476,7 +380,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   };
   //console.log("dynamic list", dynamicList)
   const handleDownloadChartPDF = async () => {
-   // console.log("Generating chart image...");
+    // console.log("Generating chart image...");
 
     // Step 1: Capture the chart container
     const chartContainer = document.querySelector(`.${parametre}`);
@@ -520,17 +424,57 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
   function generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
   }
+  const [graph, setgraph] = useState({
+    type: 'pie',
+    option: option,
+  })
+
   useEffect(() => {
     handleDownloadChartPDF()
   }, [isloading])
+
+  const [btnSatate, setBtnSatate] = useState(false)
+  const switchDisplay = (e) => {
+    if (e) {
+      var st = (e?.target.checked)
+      setBtnSatate(st)
+      //alert(`switch state${e?.target?.checked}`)
+      if (st === true) {
+        setgraph({
+          type: 'treemap',
+          option: option2,
+        })
+
+      }
+      else {
+        setgraph({
+          type: 'pie',
+          option: option,
+        })
+
+      }
+    }
+    console.log("e switch", e?.target.checked, st)
+    console.log("graph", graph)
+
+  }
+  useEffect(() => {
+    if (btnSatate === true) {
+      setgraph({
+        type: 'treemap',
+        option: option2,
+      })
+    } else {
+      setgraph({
+        type:'pie',
+        option:option,
+      })
+    }
+  
+  }, [data])
   return (
-    <div className='m-2' style={{ color: "white" }} >
-      {/* <SelectGraphOptionsMarche
-                UpdatedGraphDisplay={ModifyList}
-                options={array}
-                filter={filter}
-                SetOptionFunction={SetOptionFunction}
-              /> */}
+    <div className='m-2' style={{ color: "white"}} >
+     
       <Card style={{
         borderRadius: 10,
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
@@ -564,19 +508,48 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
               alignItems: "center"
             }}>
             <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
-            {/* <PieChartIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} /> */}
+            <div style={{ width: "100%" }}>
+              <Switch
+                onChange={switchDisplay}
+                sx={{
+                  "& .MuiSwitch-track": {
+                    backgroundColor: "#08a3e3", // Background color when unchecked
+                    opacity: 1, // Remove default opacity for better visibility
+                  },
+                  "& .Mui-checked + .MuiSwitch-track": {
+                    backgroundColor: "#08a3e3", // Background color when checked
+                  },
+                  "& .MuiSwitch-thumb": {
+                    color: "#08a3e3", // Thumb color when unchecked
+                    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.3)", // Optional: Add shadow for depth
+                  },
+                  "& .Mui-checked .MuiSwitch-thumb": {
+                    color: "#08a3e3", // Thumb color when checked
+                  },
+                }}
+
+                // onChange={handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </div>
+            {/* <PieChartIcon onClick={handleDownloadChart} 
+            style={{ cursor: "pointer" }} /> */}
             <div style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
 
-              width: "50px"
+              // width: "50px"
             }}>
+
               {/* <DownloadIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} /> */}
-              <IconButton onClick={handleDownloadClick} style={{ cursor: "pointer", color: "white" }}>
+              <IconButton onClick={handleDownloadClick} style={{cursor: "pointer",
+                 color: "white" }}>
                 {/* <DownloadIcon /> */}
                 <DownloadIcon style={{ cursor: "pointer" }} />
+
               </IconButton>
+
               <Menu
                 anchorEl={anchorEl}
                 open={open}
@@ -586,13 +559,14 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
                 <MenuItem onClick={handleDownloadChart}>PNG</MenuItem>
                 <MenuItem onClick={handleDownloadSVG}>SVG</MenuItem>
               </Menu>
-
+              <div>
               <SelectGraphOptionsMarche
                 UpdatedGraphDisplay={ModifyList}
                 options={array}
                 filter={filter}
                 SetOptionFunction={SetOptionFunction}
               />
+              </div>
             </div>
           </div>
 
@@ -620,7 +594,7 @@ export const PieChartVelson = ({ date1, date2, data, title, isloading,
                 justifyContent: "center",
                 position: "static",
               }}
-              option={option} />
+              option={graph.option} />
             {/* <LegendComponent coloLables={coloLables} legendData={array} 
             chartDatalabelsBarColors={chartDatalabelsBarColors} /> */}
           </div>

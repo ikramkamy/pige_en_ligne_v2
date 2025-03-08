@@ -26,10 +26,12 @@ const NetworkErrorPopup = ({
         justifyContent: "center",
         alignItems: "center",
         height: "50vh",
-        padding: "20%"
+        padding: "20%",
+        width:"100%",
+        
       }}
     >
-      <Row >
+      <Row  style={{}}>
         <div style={{
           display: 'flex', flexDirection: "column",
           alignItems: 'center', justifyContent: 'center'
@@ -38,7 +40,7 @@ const NetworkErrorPopup = ({
             marginRight: '18px',
             marginBottom: "18px", fontSize: '54px', color: 'eba4a8'
           }} />
-          <span style={{ textAlign: "center",width:"500px", }}>
+          <span style={{ textAlign: "center",width:"100%", }}>
          {/* Vérifiez votre connexion internet  */}
          {message}
             

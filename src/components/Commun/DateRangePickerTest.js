@@ -9,10 +9,11 @@ import { UseFiltersStore } from "store/dashboardStore/FiltersStore";
 import { UsePigeDashboardStore } from "store/dashboardStore/PigeDashboardStore";
 import { UseMediaDashboardStore } from "store/dashboardStore/MediaDashboardStore";
 import { UseLoginStore } from "store/dashboardStore/useLoginStore";
-
+import dayjs from "dayjs";
 
 export default function DateRangeTest() {
-  const { setDateRang, setShowDataGridIfNotEmpty, setShowDataGrid, setDataTableShow, setLoadingshow } = UseFiltersStore((state) => state);
+  const { setDateRang, setShowDataGridIfNotEmpty, setShowDataGrid,
+     setDataTableShow, setLoadingshow ,setDateRangLast} = UseFiltersStore((state) => state);
   const { ResetBasedeCalucule, ResetDataArrays } = UsePigeDashboardStore((state) => state);
   const { RestRadioTvData } = UseMediaDashboardStore((state) => state);
   // const date_debut = window.localStorage.getItem('date_debut');
@@ -53,8 +54,9 @@ export default function DateRangeTest() {
     const formattedStart = newStartDate ? moment(newStartDate).format("YYYY-MM-DD") : "";
     const formattedEnd = newEndDate ? moment(newEndDate).format("YYYY-MM-DD") : "";
     setDateRang(formattedStart, formattedEnd);
+    setDateRangLast
   };
-  console.log('date debut',date_debut)
+ 
   useEffect(() => {
     RestRadioTvData && RestRadioTvData();
     ResetDataArrays && ResetDataArrays();
@@ -68,6 +70,8 @@ export default function DateRangeTest() {
     const formattedEnd = dateRange[1] ? moment(dateRange[1]).format("YYYY-MM-DD") : "";
 
     setDateRang(formattedStart, formattedEnd);
+    setDateRangLast(dayjs(formattedStart).subtract(1, "year").format("YYYY-MM-DD"),
+            dayjs(formattedEnd).subtract(1, "year").format("YYYY-MM-DD"))
   }, [dateRange]);
   return (
     <div className="date-picker-container" style={{width:"100%"}}>

@@ -39,7 +39,8 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { FilterIcon, FileDownIcon } from "lucide-react";
 import { jwtDecode } from 'jwt-decode';
 import PdfCreationPopup from "components/Commun/popups/PdfCreationPopUp";
-import logo from "assets/Logo adtrics.png"
+import logo from "assets/Logo adtrics.png";
+import DateRange2 from "components/Commun/DateRangePicker2";
 function Dashboard() {
   document.title = 'ADTRICS - BY IMMAR'
   const { getEvolutionData, MarcheOptions } = UseGraphStore((state) => state)
@@ -143,10 +144,10 @@ function Dashboard() {
     getRepartitionParType,
     getRepartitionParVersion,
     loadingMarche,
-
+    BudgetExact
   } = UsePigeDashboardStore((state) => state)
   const { countLastYear, count, getPigeCount,
-    getPigeCountLastYear, CountInK, CountInKLastYear } = UseCountStore((state) => state)
+    getPigeCountLastYear, CountInK, CountInKLastYear,CountBrut, } = UseCountStore((state) => state)
   const { autoriseDash, client, email,
     LougoutRestErrorMessages,
     LoginWithParamToken,
@@ -172,6 +173,9 @@ function Dashboard() {
     base,
     date1,
     date2,
+    date3,
+    date4,
+    setDateRangLast,
     setRangFilter,
     setMediaValue,
     getFilters,
@@ -200,9 +204,10 @@ function Dashboard() {
     setLoadingPDF30sec(true)
     setTimeout(() => {
       setLoadingPDF30sec(false);
-    }, 70000); // 30 seconds
+    }, 70000);
+    // 30 seconds
     const startTime = new Date().getTime();
-    
+
     await Promise.all([
       getCreationUniques && getCreationUniques(
         Filtersupports,
@@ -227,8 +232,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "creationunique"),
@@ -255,8 +260,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "budget"),
@@ -283,8 +288,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "supportdiffusion"),
@@ -327,8 +332,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "diffusionparcreation",
@@ -343,8 +348,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "annonceuractif"),
@@ -389,8 +394,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "couleur")
@@ -418,8 +423,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "dureetotal")
@@ -446,8 +451,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "dureemoyenne"
@@ -475,8 +480,8 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2,
+        date3,
+        date4,
         media,
         email,
         "piccommunication")
@@ -523,8 +528,9 @@ function Dashboard() {
         Filterannonceursids,
         Filtermarquesids,
         Filterproduitsids,
-        date1,
-        date2),
+        date3,
+        date4,
+      ),
       getAnnonceursActif && getAnnonceursActif(
         Filtersupports,
         Filterfamilles,
@@ -781,8 +787,6 @@ function Dashboard() {
 
   const exportToPDF = async () => {
     setLoadingPDF(true);
-
-
     const dashboardElement = document.getElementById("dashboard");
     // Get the dashboard element
     if (!dashboardElement) {
@@ -843,9 +847,9 @@ function Dashboard() {
       </tr>
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Supports:</td>
-        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${Filtersupports.length === 0 
-          ? "tout" 
-          : (supports?.filter(e => Filtersupports.includes(e.Support_Id)) // Filter matching IDs
+        <td style="padding: 12px; border-bottom: 1px solid #ddd;">${Filtersupports.length === 0
+            ? "tout"
+            : (supports?.filter(e => Filtersupports.includes(e.Support_Id)) // Filter matching IDs
               .map(e => e.Support_Lib) // Extract the 'Support_Lib' property
               .join(", ") || "")}</td>
       </tr>
@@ -889,14 +893,14 @@ function Dashboard() {
         section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
 
         //back to section 5 and 6 to remoove decalage
-      } else if (sectionId == "section5" || sectionId == "section6") {
+      } else if (sectionId == "section5") {
         const tempDiv = document.createElement("div");
         tempDiv.id = `temp-div-${sectionId}`;
         // Set the width, height, and background color for the div
         section.height = section.offsetHeight - 503
         section.height = section.offsetHeight
         tempDiv.style.width = "1000px"; // Fixed width of 1000px
-        tempDiv.style.height = "100px";
+        tempDiv.style.height = "200px";
         tempDiv.style.backgroundColor = "#020b42"; // Red background color
         tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
         tempDiv.style.border = "1px solid #020b42"; // Optional border
@@ -947,6 +951,17 @@ function Dashboard() {
         section.style.backgroundSize = 'cover'
         section.style.backgroundRepeat = "no-repeat"
         section.style.backgroundPosition = "center"
+      } else if (sectionId == "section4") {
+        const tempDiv = document.createElement("div");
+        // Set the width, height, and background color for the div
+        tempDiv.style.width = "1000px"; // Fixed width of 1000px
+        tempDiv.style.height = "200px"; // Fixed height of 500px
+        tempDiv.id = "standard_id";
+        tempDiv.style.backgroundColor = "#020b42"; // Red background color
+        // Optionally, add some additional styling for visibility
+        tempDiv.style.marginTop = "10px"; // Add spacing between sections and divs
+        // Insert the div after the current section
+        section.parentNode.insertBefore(tempDiv, section.nextElementSibling);
       }
       else {
         const tempDiv = document.createElement("div");
@@ -967,7 +982,7 @@ function Dashboard() {
       return;
     } else {
       dashboardElement.style.backgroundColor = "#020b42";
-    
+
     }
 
     // Initialize jsPDF
@@ -1105,7 +1120,7 @@ function Dashboard() {
   };
 
   const test = () => {
-    getRepartitionParType && getRepartitionParType(
+    getCouleurLastYear && getCouleurLastYear(
       Filtersupports,
       Filterfamilles,
       Filterclassesids,
@@ -1114,27 +1129,35 @@ function Dashboard() {
       Filterannonceursids,
       Filtermarquesids,
       Filterproduitsids,
-      date1,
-      date2,
+      date3,
+      date4,
       media,
       email,
-      "type",
       base,
     )
-    //console.log("getDiffusionParCreation", DiffusionParCreation,)
+    console.log("count last year", {
+      Filtersupports,
+      Filterfamilles,
+      Filterclassesids,
+      Filtersecteursids,
+      Filtervarietiesids,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      date3,
+      date4,
+      media,
+      email,
+    })
   }
   useEffect(() => {
     var decoded = jwtDecode(ParamToken.token);
     const currentTime = Math.floor(Date.now() / 1000);
     const isExpired = decoded.exp < currentTime;
-
     if (isExpired) {
-      //alert('Token expiré')
-      //console.log('Token expiré')
       window.location.href = 'https://adtrics.immar.dz/#/login';
       LougoutRestErrorMessages && LougoutRestErrorMessages(email)
     } else {
-      //console.log("token is valide")
     }
   }, [date1, date2, media, base,
 
@@ -1143,7 +1166,6 @@ function Dashboard() {
     if (!client) {
     }
   }, [client])
-
 
   if (!autoriseDash && client) {
     return (
@@ -1180,16 +1202,17 @@ function Dashboard() {
   const handleClosePopupDataUnavailable = () => {
     HandelErrorPopup && HandelErrorPopup(false)
   }
+  const [showldate, setShowldate] = useState(false)
+  const handelShowSecondDatePicker = () => {
+    setShowldate(!showldate)
+  }
 
   return (
-
-
     <div style={{
       height: "auto", width: "100%",
       paddingTop: "1%",
       marginTop: resStyle.marginTopAll,
       marginBottom: resStyle.marginTopAll,
-
     }}
       id="dashboard"
     >
@@ -1202,7 +1225,6 @@ function Dashboard() {
           justifyContent: 'space-between',
           marginLeft: "0px",
           marginLeft: '0px'
-
         }}>
           <Col style={{
             paddingRight: "0px", paddingLeft: "0px", paddingRight: "0px"
@@ -1221,8 +1243,28 @@ function Dashboard() {
                 <MultipleSelectMedia />
                 <MultipleSelectBase />
               </div>
-              <DateRangeTest />
+              <div style={{
+                display: "flex",
+                justifyContent: "center", alignItems: "center"
+              }}>
 
+
+                <DateRangeTest />
+                <Button onClick={handelShowSecondDatePicker} sx={{
+                  backgroundColor: "white",
+                  width: '50px', marginLeft: "2px",
+                  marginRight: "2px",
+                  fontSize:"20px",
+                  fontWeight:"bold",
+                  height: "40px",
+                  '&:hover': {
+                    backgroundColor: '#00a6e0',
+                  },
+                }}>VS</Button>
+
+                {showldate && (<DateRange2 />)}
+
+              </div>
             </div>
 
           </Col>
@@ -1289,7 +1331,6 @@ function Dashboard() {
         </Row>
 
         {show && (<div onClick={() => handeToggleSideBar()}>
-
           <Row className="" >
             {isCalculating && (<LoadingIndicator step={loadingStep}
               totalDuration={fetchDataTime} />)}
@@ -1298,26 +1339,22 @@ function Dashboard() {
             {(dashDisplay && !isCalculating &&
               !(Top20produits?.length === 0)) && (<div style={{ width: '100%' }}>
                 <div >
-
                   <Row className="mt-3" id="sectionwidget" style={{ marginTop: 20 }}  >
-                    {/* <WidgetShadcn
-                    
+                    {/* <WidgetShadcn                   
                     /> */}
                     <Widget
                       icon={iconVolume}
                       value={CountInK}
                       title="Volume publicitaire"
                       valueLastYear={CountInKLastYear}
-                      exactvalue={CountInK}
+                      exactvalue={CountBrut}
                       unite={" " + CountInK.split(' ')[1]}
-
                     />
                     <Widget
                       icon={iconAnnonceur}
                       value={AnnonceursActif}
                       title="Annonceurs actifs"
                       valueLastYear={AnnonceursActifLastYear}
-
                     />
                     <Widget
                       icon={iconCreation}
@@ -1325,16 +1362,18 @@ function Dashboard() {
                       title="Creations uniques"
                       valueLastYear={CreationUniquesLastYear}
                     />
-
                     <Widget
                       icon={iconBudget}
                       value={BudgetBrut}
                       unite={" " + BudgetBrut.split(' ')[1]}
-                      exactvalue={BudgetBrut}
+                      exactvalue={BudgetExact}
                       title="Budget Brut"
                       valueLastYear={BudgetBrutLastYear}
+                     
                     />
-
+                    
+                      
+                   
                     <Widget
                       icon={iconSupprt}
                       value={SupportDiffusion}
@@ -1348,8 +1387,6 @@ function Dashboard() {
                       valueLastYear={DiffusionParCreationLastYear}
                     />
                     {(media === 'presse') && (
-
-
                       <WidgetPresse
                         icon={iconPresse}
                         value={`${Couleur}/${NoireBlanc}`}
@@ -1357,16 +1394,12 @@ function Dashboard() {
                         valueLastYear={`${CouleurLastYear}/${NoireBlancLastYear}`}
                       />
                     )}
-
-
                     {(media === "radio" || media === "television") &&
                       <>
-
                         <Widget
                           icon={iconDuree}
                           value={DureeTotal}
                           unite={" " + DureeTotal?.split(' ')[1]}
-                          
                           title="Durée Pub Totale"
                           valueLastYear={DureeTotalLastYear}
                         />
@@ -1374,14 +1407,14 @@ function Dashboard() {
                           icon={iconTime}
                           value={DureeMoyenne}
                           unite={" " + DureeMoyenne?.split(' ')[1]}
-                          title="Durée moyenne par spot"
+                          title="Durée moyenne/spot"
                           valueLastYear={DureeMoyenneLastYear}
                         />
                         <Widget
                           icon={iconPis}
                           valuepic={`${PicCommunication?.interval_start.slice(0, -3)} à 
                           ${PicCommunication?.interval_end.slice(0, -3)}`}
-                          value={PicCommunication.count}
+                          value={PicCommunication?.count}
                           title="Pic publicitaire"
                           valueLastYear={`${PicCommunicationLastYear?.interval_start.slice(0, -3)} 
                           à ${PicCommunicationLastYear?.interval_end.slice(0, -3)}`}

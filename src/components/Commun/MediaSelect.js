@@ -5,16 +5,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';
 import Spinner from 'react-bootstrap/Spinner';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UsePigeDashboardStore } from 'store/dashboardStore/PigeDashboardStore';
 import { UseVeilleStore } from 'store/dashboardStore/VeilleMediaStore';
 import { UseLoginStore } from 'store/dashboardStore/useLoginStore';
-import RadioIcon from '@mui/icons-material/Radio';
-import { Button } from 'react-bootstrap';
-import './commun.css'
+import './commun.css';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -84,8 +81,8 @@ export default function MultipleSelectMedia() {
     }
   ]
   const [mediaList, setMediaList] = useState(media_array.filter((elem) => elem.auth == true))
-  useEffect(() => {
-    
+  
+  useEffect(() => {  
     ResetAllFilters && ResetAllFilters()
     setMediaValue && setMediaValue('')
     // if (location.hash.includes('/veille/veille_creations_publicitaires')) {
@@ -170,11 +167,7 @@ export default function MultipleSelectMedia() {
     //console.log("media in media", prevSelection)
     setPreviousSelection(prevSelection);
   }, [media]);
-
-
-
-
-
+ 
   return (
     <div style={{ position: "relative" }}>
       <FormControl sx={{

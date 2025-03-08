@@ -102,9 +102,9 @@ if(media==="presse"){
     } else {
       setDisable(false)
     }
-    console.log('LoacalBaseGraph', LoacalBaseGraph)
+   // console.log('LoacalBaseGraph', LoacalBaseGraph)
   }, [])
-console.log('b',b)
+//console.log('b',b)
   return (
     <div style={{ display: "flex", width:"" }}>
 
@@ -121,7 +121,7 @@ console.log('b',b)
         // }}
 
         >
-          
+           {!disable && (
           <span
            className="mx-2 px-2 border border-light rounded py-2 hover-effect"
             style={{
@@ -138,6 +138,7 @@ console.log('b',b)
             }}>
               {item.label}
           </span>
+           )}
         </div>
 
 

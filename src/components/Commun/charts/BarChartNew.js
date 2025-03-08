@@ -15,7 +15,7 @@ import html2canvas from "html2canvas";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
-import { styled } from "@mui/system";
+import { height, styled } from "@mui/system";
 import {
   ListSubheader,
   IconButton,
@@ -32,14 +32,16 @@ export const BarchartShadcn = ({
   filters,
   ChangeBaseFunction,
   parametre,
-  isloading }) => {
+  isloading,heightgraph }) => {
   const { graphColor, baseGraphs, setBaseGraphs } = UseGraphStore((state) => state)
-  const { base } = UseFiltersStore((state) => state)
+  const { base,date1,date2 } = UseFiltersStore((state) => state)
   const { formatDateToFrench } = UsePigeDashboardStore((state) => state)
   const [localColor, setLocalColor] = useState('#2196f3')
   const [chartData, setChartData] = useState(data);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [cololabels, setCololabels] = React.useState("white")
+ 
   useEffect(() => {
     setBaseGraphs && setBaseGraphs(parametre, base)
   }, [])
@@ -71,6 +73,10 @@ export const BarchartShadcn = ({
   };
 
   const GraphColor = colorMap[graphColor] || "#2196f3";
+  const calculateChartData = (data, options) => {
+    return data.filter((item) => options.includes(item.someKey));
+
+  };
   useEffect(() => {
 
     const updatedData = calculateChartData(data, options);
@@ -78,81 +84,83 @@ export const BarchartShadcn = ({
     setChartData(data);
     // setAverage(updatedData[0]?.average || 0);
   }, [options, data]);
-  const calculateChartData = (data, options) => {
-    return data.filter((item) => options.includes(item.someKey));
-
-  };
+ 
 
   //Download SVG PNG
   const handleDownloadClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleDownloadChart = () => {
-
+    setCololabels("black")
     const chartContainer = document.querySelector(`.${parametre}`);
     const AxisLabel = document.querySelector(".recharts-layer recharts-cartesian-axis-tick")
-    console.log("AxisLabel", chartContainer, AxisLabel)
+    // console.log("AxisLabel", chartContainer, AxisLabel)
     if (!chartContainer) return;
-
-    html2canvas(chartContainer, {
-      onclone: (clonedDoc) => {
-        // Find the cloned container and set its background to black
-        const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
-        if (clonedContainer) {
-          clonedContainer.style.backgroundColor = "black";
-
-        }
-      },
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
-      const link = document.createElement("a");
-      link.href = imgData;
-      link.download = "chart.png"; // Set the filename
-      link.click(); // Trigger the download
-    });
-
+    setTimeout(() => {
+      html2canvas(chartContainer, {
+        onclone: (clonedDoc) => {
+          // Find the cloned container and set its background to black
+          const clonedContainer = clonedDoc.querySelector(`.${parametre}`);
+          if (clonedContainer) {
+            //clonedContainer.style.backgroundColor = "black";
+          }
+        },
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "chart.png"; // Set the filename
+        link.click(); // Trigger the download
+      });
+      setCololabels('white')
+    }, 5000);
   };
   const handleDownloadSVG = () => {
     const chartContainer = document.querySelector(`.${parametre}`);
     if (!chartContainer) return;
-
+    setCololabels("black")
     // Find the SVG element within the container
-    const svgElement = chartContainer.querySelector("svg");
-    if (!svgElement) return;
+    setTimeout(() => {
 
-    // Serialize the original SVG content
-    const serializer = new XMLSerializer();
-    let svgString = serializer.serializeToString(svgElement);
 
-    // Extract the viewBox attributes to determine the dimensions
-    const viewBox = svgElement.getAttribute("viewBox").split(" ").map(Number);
-    const width = viewBox[2];
-    const height = viewBox[3];
+      const svgElement = chartContainer.querySelector("svg");
+      if (!svgElement) return;
 
-    // Wrap the original SVG content with a black background rectangle
-    const modifiedSvgString = `
+      // Serialize the original SVG content
+      const serializer = new XMLSerializer();
+      let svgString = serializer.serializeToString(svgElement);
+
+      // Extract the viewBox attributes to determine the dimensions
+      const viewBox = svgElement.getAttribute("viewBox").split(" ").map(Number);
+      const width = viewBox[2];
+      const height = viewBox[3];
+
+      // Wrap the original SVG content with a black background rectangle
+      const modifiedSvgString = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
         <!-- Black background rectangle -->
-        <rect width="${width}" height="${height}" fill="black" />
+        <rect width="${width}" height="${height}" fill="white" />
         <!-- Original SVG content -->
         ${svgString}
       </svg>
     `;
 
-    // Create a Blob and download the modified SVG
-    const blob = new Blob([modifiedSvgString], { type: "image/svg+xml;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
+      // Create a Blob and download the modified SVG
+      const blob = new Blob([modifiedSvgString], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "chart.svg";
-    link.click();
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "chart.svg";
+      link.click();
 
-    // Clean up the URL object
-    URL.revokeObjectURL(url);
+      // Clean up the URL object
+      URL.revokeObjectURL(url);
 
-    // Close the menu after download
-    handleClose();
+      // Close the menu after download
+      handleClose();
+      setCololabels('white')
+    }, 5000);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -188,11 +196,11 @@ export const BarchartShadcn = ({
       const imageId = generateUniqueId(); // Generate a unique ID for the image
       sessionStorage.setItem(`.${parametre}`, imgData); // Use sessionStorage for temporary storage
       sessionStorage.setItem('imageId', imageId)
-      console.log(`Image saved temporarily with ID: ${imageId}`);
+      //console.log(`Image saved temporarily with ID: ${imageId}`);
 
       return imageId;
     } catch (error) {
-      console.error("Error generating or saving the chart image:", error);
+      //console.error("Error generating or saving the chart image:", error);
     }
   };
 
@@ -203,7 +211,7 @@ export const BarchartShadcn = ({
   useEffect(() => {
     //handleDownloadChartPDF()
   }, [data])
-
+// console.log('heightgraph',heightgraph)
 
   return (
     <div style={{
@@ -234,7 +242,9 @@ export const BarchartShadcn = ({
           alignItems: "center",
 
         }}>
-        <ColorCheckboxes ChangeBaseFunction={ChangeBaseFunction} parametre={parametre} base={base} />
+        <ColorCheckboxes
+          ChangeBaseFunction={ChangeBaseFunction}
+          parametre={parametre} base={base} />
 
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           {/* <DownloadIcon onClick={handleDownloadChart} style={{ cursor: "pointer" }} /> */}
@@ -278,7 +288,11 @@ export const BarchartShadcn = ({
       }}>
 
 
-        <div style={{ fontWeight: "400", fontSize: "22px" }}>{title}</div>
+        <div style={{ fontWeight: "400", fontSize: "22px" }}>
+          {title}
+          <p>{formatDateToFrench(date1)}-{formatDateToFrench(date2)}</p>
+          </div>
+        
         <div >AVG ={Number(average).toFixed(2)}</div>
       </div>
       <div className="custom-scrollbar" style={{
@@ -287,19 +301,19 @@ export const BarchartShadcn = ({
         overflowY: "scroll",
       }}>
         <ResponsiveContainer width="100%"
-          height={700}
+          height={heightgraph}
           overflowY={scroll}
           className={`px-2 ${parametre}`}
           style={{
             padding: "10px",
 
-            // overflowY:"scroll",
+           // overflowY:"scroll",
           }}
         >
           <BarChart
             data={chartData}
             layout="vertical"
-            // height={800}
+            height={300}
             margin={{
               top: 5,
               right: 30,
@@ -321,7 +335,7 @@ export const BarchartShadcn = ({
                 dx: -230, // Adjust horizontal alignment (negative value moves labels to the left)
                 textAnchor: "start", // Align text to the start (left)
                 dominantBaseline: "middle", // Center vertically
-                fill: "white"
+                fill: cololabels
               }}
             />
             <XAxis type="number"
@@ -338,15 +352,16 @@ export const BarchartShadcn = ({
               }}
               labelStyle={{ color: "hsl(var(--foreground))" }}
             /> */}
-
             <Bar dataKey="total"
-
               fill={localColor}
+              barSize={20}
               radius={[10, 10, 10, 10]} >
               <LabelList dataKey="total"
                 position="right"
-                fill="white"
-                fontSize={10}
+                fill={cololabels}
+                fontSize={14}
+                barGap={1} // Controls spacing between bars in the same category
+
                 fontWeight="500"
               />
               <LabelList
@@ -358,21 +373,17 @@ export const BarchartShadcn = ({
               />
             </Bar>
           </BarChart>
-
         </ResponsiveContainer>
-
       </div>
-
-
       {/* <div className="text-gray-600">Showing total
              visitors for the last 6 months</div> */}
-<div style={{color:"#4c5479"}}>
-  {media === "budget"
-    ? "les valeurs affichées en Million"
-    : media === "duree"
-    ? "les valeurs affichées en Heures"
-    : ""}
-</div>
+      <div style={{ color: "#4c5479" }}>
+        {media === "budget"
+          ? "les valeurs affichées en Million"
+          : media === "duree"
+            ? "les valeurs affichées en Heures"
+            : ""}
+      </div>
     </div>
   );
 };
@@ -453,7 +464,7 @@ const MultiselectForGraph = ({ options, UpdatedGraphDisplay, media, SetOptionFun
   useEffect(() => {
     ModifyList()
   }, [])
-  
+
   const StyledSelect = styled(Select)(({ theme }) => ({
     "& .MuiOutlinedInput-notchedOutline": {
       border: "none", // Remove the default border
@@ -526,24 +537,24 @@ const TopOption = ({ options, UpdatedGraphDisplay, media, SetOptionFunction, fil
   useEffect(() => {
     setSelectedItems(optionList.slice(0, 10));
     SetOptionFunction && SetOptionFunction(optionList.slice(0, 10));
-    console.log("selectedItems",selectedItems,"baseGraphs",baseGraphs)
+    //console.log("selectedItems",selectedItems,"baseGraphs",baseGraphs)
   }, [Top20famillesSectorielles,
     Top20produits, Top20Annonceurs,
     Top20marques, CreationParAnnonceur,
-    AnnonceurParSupport,baseGraphs]);
+    AnnonceurParSupport, baseGraphs]);
 
   const ModifyList = (e) => {
-    console.log("e?.target?.value",e?.target?.value)
-    const newValue = Math.max(1, Math.min(20, parseInt(e?.target?.value, 10))); 
+    console.log("e?.target?.value", e?.target?.value)
+    const newValue = Math.max(1, Math.min(20, parseInt(e?.target?.value, 10)));
     // Clamp value between 1 and 100
     setOptionNumber(e?.target?.value);
-    console.log("newValue",newValue)
+    console.log("newValue", newValue)
   };
 
   useEffect(() => {
-    const newSelectedList = options.slice(0,optionNumber);
+    const newSelectedList = options.slice(0, optionNumber);
     setSelectedList(newSelectedList);
-    
+
     SetOptionFunction && SetOptionFunction(newSelectedList);
   }, [optionNumber]);
 

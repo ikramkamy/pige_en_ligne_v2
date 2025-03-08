@@ -72,10 +72,22 @@ export const UseFiltersStore = create((set, get) => ({
     set({ veille_diffusion: i[0] })
   },
   loadingshow: false,
+  date1fomated:"",
+  date2fomated:"",
   setDateRang: async (e, v) => {
     set({
       date1: e,
       date2: v,
+    })
+  },
+  date3:dayjs().format('YYYY-MM-DD'),
+  date4:dayjs().format('YYYY-MM-DD'),
+ 
+  setDateRangLast: async (e, v) => {
+    console.log("initial date",dayjs().format('YYYY-MM-DD'))
+    set({
+      date3: e,
+      date4: v,
     })
   },
   ResetAllFilters: () => {

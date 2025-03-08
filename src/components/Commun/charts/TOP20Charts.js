@@ -85,7 +85,8 @@ export default function GridDemo({ date1, date2, media, base }) {
   })
 
   const FormatRepartitionModified = FormatRepartition?.map((e) => {
-    return { name: e.Format, proportion: e.proportion, total:Number(e.total).toFixed(2), average: e.average }
+    return { name: e.Format, proportion: e.proportion,
+       total:Number(e.total).toFixed(2), average: e.average }
   })
   // console.log('FormatRepartitionModified', FormatRepartition, FormatRepartitionModified)
 
@@ -95,7 +96,7 @@ export default function GridDemo({ date1, date2, media, base }) {
   const RepartitionParVersionModified = RepartitionParVersion?.map((e) => {
     return { name: e.Version, proportion: e.proportion, total: Number(e.total).toFixed(2), average: e.average }
   })
-
+  
   return (
     <div>
       <InteractiveLineChart
@@ -117,6 +118,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="familles"
             parametre="top20famille"
             isloading={loadingFamille}
+            heightgraph={FamillesOptions.length*29.5 +10}
 
           />
         </Col>
@@ -133,11 +135,10 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="annonceurs"
             parametre="top20annonceur"
             isloading={loadingAnnonceur}
-
+            heightgraph={AnnonceurOptions.length*29.5 +10}
           />
         </Col>
       </Row>
-
       <Row id="section3" className='mt-4 mb-4 '>
         <Col md={6} >
           <BarchartShadcn date1={date1} date2={date2}
@@ -150,6 +151,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="marques"
             parametre="top20marque"
             isloading={loadingMarque}
+            heightgraph={MarqueOptions.length*29.5 +10}
           />
         </Col>
         <Col md={6} >
@@ -163,6 +165,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="produits"
             parametre="top20produit"
             isloading={loadingProduit}
+            heightgraph={ProduitsOptions.length*29.5 +10}
 
           />
         </Col>
@@ -179,6 +182,7 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="Annonceurs"
             parametre="annonceurparsupport"
             isloading={loadingAnnonceurSupport}
+            heightgraph={AnnonceurSupportOptions.length*29.5 +10}
             grapgname=""
           />
         </Col>
@@ -193,6 +197,8 @@ export default function GridDemo({ date1, date2, media, base }) {
             filters="Créations uniques"
             parametre="creationparannonceur"
             isloading={loagingCreationAnnonceur}
+            heightgraph={CreationParAnnonceurOptions.length*29.5 +10}
+            
 
           />
         </Col>
