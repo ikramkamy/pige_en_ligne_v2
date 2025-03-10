@@ -13,6 +13,7 @@ export const UseGraphStore = create((set, get) => ({
     MarqueOptions: [],
     ProduitsOptions: [],
     EvolutionData: [],
+    EvolutionDataLast:[],
     graphColor: "#2196f3",
     baseGraphs: {
         "evolution": "",
@@ -96,10 +97,53 @@ export const UseGraphStore = create((set, get) => ({
                 date_debut: date1,
                 date_fin: date2,
             })
-            console.log('resposne evolu', response)
+            console.log('evolu resposne ', response)
 
             set({ EvolutionData: response.data,
                 loadingEvolution:false,
+             })
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    loadingEvolutionLast:false,
+    getEvolutionDataLast:async(
+        supports,
+        familles,
+        classes,
+        secteurs,
+        varieties,
+        annonceurs,
+        marques,
+        produits,
+        date1,
+        date2,
+        media,
+        email,
+        parametre,
+        base) => {
+         set({loadingEvolutionLast:true})
+        try {
+
+            let response = await axios.post(`${PORT}/${media}/dashboard/${parametre}/${base}`, {
+                email: email,
+                familles: familles,
+                classes: classes,
+                supports: supports,
+                secteurs: secteurs,
+                varieties: varieties,
+                annonceurs: annonceurs,
+                marques: marques,
+                produits: produits,
+                date_debut: date1,
+                date_fin: date2,
+            })
+            console.log('evolu resposne  last', response)
+
+            set({ EvolutionDataLast: response.data,
+                loadingEvolutionLast:false,
              })
 
 

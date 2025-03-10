@@ -111,6 +111,8 @@ export default function MultipleSelectBase() {
     if (media && (selectedBase == "budget") && (isdate1inRamdan || isdate2inRamdan)) {
       setOpen(true)
       ResetBasedeCalucule && ResetBasedeCalucule()
+      setPreviousSelection([])
+      setBase && setBase("")
     } else {
       const prevSelection = bases.filter((elem) => elem.value == base)
       setPreviousSelection(prevSelection);

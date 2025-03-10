@@ -6,6 +6,7 @@ import { useState,useEffect } from 'react';
 import { UseFiltersStore } from 'store/dashboardStore/FiltersStore';
 import { UseLoginStore } from 'store/dashboardStore/useLoginStore';
 import { UseGraphStore } from 'store/GraphStore';
+import NetworkErrorPopup from 'components/Commun/popups/NetworkErrorPopup'
 // Define labels and their corresponding names
 
 
@@ -29,6 +30,27 @@ export default function ColorCheckboxes({ ChangeBaseFunction, baseKey, parametre
   
 
   } = UseFiltersStore((state) => state)
+  const [open, setOpen] = useState(false)
+
+  function isDateInRange(date1, startDate, endDate) {
+    // Helper function to parse a date string (YYYY-MM-DD) into a Date object
+    const parseDate = (dateStr) => {
+      const [year, month, day] = dateStr.split('-').map(Number);
+      return new Date(year, month - 1, day); // Month is 0-indexed in JavaScript
+    };
+ // Parse all dates
+    const d1 = parseDate(date1);
+    const start = parseDate(startDate);
+    const end = parseDate(endDate);
+
+    // Check if date1 is within the range [startDate, endDate]
+    return d1 >= start && d1 <= end;
+  }
+
+  const isdate1inRamdan = isDateInRange(date1, "2025-03-01", "2025-03-31")
+  const isdate2inRamdan = isDateInRange(date2, "2025-03-01", "2025-03-31")
+
+
   // const checkboxes = [
   //   { label: 'Volume', name: 'volume', value: 'volume', color: green[600], checkedColor: green[600], codeColor: "#43a047" },
   //   { label: 'Budget', name: 'budget', value: 'budget', color: blue[500], checkedColor: blue[500], codeColor: "#2196f3" },
@@ -57,25 +79,31 @@ if(media==="presse"){
     seCodeColor(checkboxes[value].value)
     // alert(`êtes-vous sûr de vouloir changer 
     //   de base en ${checkboxes[value].value} ${parametre}`)
-    setBaseGraphs && setBaseGraphs(parametre, checkboxes[value].value)
-    //console.log('LoacalBaseGraph',parametre, checkboxes[value].value, ChangeBaseFunction)
-    setB(checkboxes[value].value)
-    // alert(``)
-    ChangeBaseFunction(
-      Filtersupports,
-      Filterfamilles,
-      Filterclassesids,
-      Filtersecteursids,
-      Filtervarietiesids,
-      Filterannonceursids,
-      Filtermarquesids,
-      Filterproduitsids,
-      date1,
-      date2,
-      media,
-      email,
-      parametre,
-      checkboxes[value].value)
+    if(checkboxes[value].value =="budget" && (isdate1inRamdan || isdate2inRamdan)){
+      setOpen(true)
+    }else{
+      setBaseGraphs && setBaseGraphs(parametre, checkboxes[value].value)
+      //console.log('LoacalBaseGraph',parametre, checkboxes[value].value, ChangeBaseFunction)
+      setB(checkboxes[value].value)
+      // alert(``)
+  
+      ChangeBaseFunction(
+        Filtersupports,
+        Filterfamilles,
+        Filterclassesids,
+        Filtersecteursids,
+        Filtervarietiesids,
+        Filterannonceursids,
+        Filtermarquesids,
+        Filterproduitsids,
+        date1,
+        date2,
+        media,
+        email,
+        parametre,
+        checkboxes[value].value)
+    }
+   
   }
   // React.useEffect(()=>{
   //   ChangeBaseFunction(
@@ -102,9 +130,13 @@ if(media==="presse"){
     } else {
       setDisable(false)
     }
-   // console.log('LoacalBaseGraph', LoacalBaseGraph)
+
   }, [])
-//console.log('b',b)
+
+const HandeErrorFetchFiletrs = () => {
+  setOpen(false)
+
+}
   return (
     <div style={{ display: "flex", width:"" }}>
 
@@ -145,7 +177,11 @@ if(media==="presse"){
 
 
       ))}
-
+ <NetworkErrorPopup
+        OpenNetworkPopup={open}
+        handleCloseNetworkPopup={HandeErrorFetchFiletrs}
+        message="Les tarifs du mois de Ramadan 2025 ne sont pas encore appliqués"
+      />
     </div>
   );
 }

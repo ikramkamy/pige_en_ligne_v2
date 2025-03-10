@@ -43,7 +43,7 @@ import logo from "assets/Logo adtrics.png";
 import DateRange2 from "components/Commun/DateRangePicker2";
 function Dashboard() {
   document.title = 'ADTRICS - BY IMMAR'
-  const { getEvolutionData, MarcheOptions } = UseGraphStore((state) => state)
+  const { getEvolutionData, MarcheOptions ,getEvolutionDataLast} = UseGraphStore((state) => state)
   const [loadingPDF30sec, setLoadingPDF30sec] = useState(true)
   const ParamToken = useParams()
   useEffect(() => {
@@ -371,7 +371,22 @@ function Dashboard() {
       "evolution",
       base,
     )
-
+    getEvolutionDataLast && getEvolutionDataLast(
+      Filtersupports,
+      Filterfamilles,
+      Filterclassesids,
+      Filtersecteursids,
+      Filtervarietiesids,
+      Filterannonceursids,
+      Filtermarquesids,
+      Filterproduitsids,
+      date3,
+      date4,
+      media,
+      email,
+      "evolution",
+      base,
+    )
     if (media === 'presse' && !isCalculating) {
       getCouleur && getCouleur(
         Filterfamilles,
@@ -1370,10 +1385,7 @@ function Dashboard() {
                       title="Budget Brut"
                       valueLastYear={BudgetBrutLastYear}
                      
-                    />
-                    
-                      
-                   
+                    />                  
                     <Widget
                       icon={iconSupprt}
                       value={SupportDiffusion}
